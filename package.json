@@ -17,9 +17,12 @@
     "android:sync": "npm run build && cap sync android"
   },
   "dependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/core": "^8.5.2",
     "phaser": "^4.2.1"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.5.2",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.56.1",
     "@types/node": "^22.20.4",
