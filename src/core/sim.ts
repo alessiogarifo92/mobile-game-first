@@ -30,7 +30,7 @@ export interface GameState {
   /** Remaining shooters per column; index 0 is the front. */
   queues: Shooter[][];
   slots: (Shooter | null)[];
-  /** Shooters waiting to enter the belt, one per tick. */
+  /** Shooters waiting to enter the belt, at most one per tick and `boardGap` lanes apart. */
   pending: Shooter[];
   belt: Shooter[];
   status: Status;
@@ -38,13 +38,15 @@ export interface GameState {
   /** Shooters that could not return because every slot was full (rarely more than one). */
   jammed: Shooter[];
   extraSlotUsed: boolean;
+  /** Minimum lanes between consecutive shooters on the belt, so they never overlap on screen. */
+  boardGap: number;
   /** Hits produced by the last step, for rendering. */
   events: HitEvent[];
   /** Shooters that left the belt in the last step: to a slot (index) or emptied (null). */
   departures: { shooterId: number; slot: number | null }[];
 }
 
-export function createGame(level: Level): GameState {
+export function createGame(level: Level, options: { boardGap?: number } = {}): GameState {
   let nextId = 1;
   return {
     level,
@@ -58,6 +60,7 @@ export function createGame(level: Level): GameState {
     tick: 0,
     jammed: [],
     extraSlotUsed: false,
+    boardGap: Math.max(1, Math.floor(options.boardGap ?? 1)),
     events: [],
     departures: [],
   };
@@ -122,8 +125,9 @@ export function step(state: GameState): GameState {
   if (state.status !== 'playing') return state;
   state.tick += 1;
 
-  const entering = state.pending.shift();
-  if (entering) state.belt.push(entering);
+  if (state.pending.length > 0 && state.belt.every((s) => s.traveled >= state.boardGap)) {
+    state.belt.push(state.pending.shift()!);
+  }
 
   const length = beltLength(state);
   const stillOnBelt: Shooter[] = [];

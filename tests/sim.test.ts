@@ -87,6 +87,18 @@ describe('simulation', () => {
     expect(g.belt.length + g.pending.length).toBeLessThanOrEqual(2);
   });
 
+  it('keeps boardGap lanes between boarding shooters', () => {
+    const g = createGame(level(['RRRRRRRR'], [[[RED, 4]], [[RED, 4]]], { beltCapacity: 2 }), { boardGap: 3 });
+    for (let i = 0; i < 7; i++) g.paint[i] = RED; // keep the first shooter from emptying early
+    launchFromColumn(g, 0);
+    launchFromColumn(g, 1);
+    run(g, 3);
+    expect(g.belt).toHaveLength(1); // the second shooter waits for a 3-lane gap
+    step(g);
+    expect(g.belt).toHaveLength(2);
+    expect(g.belt[0]!.traveled - g.belt[1]!.traveled).toBe(3);
+  });
+
   it('rejects launches from empty columns, missing columns and empty slots', () => {
     const g = createGame(level(['R'], [[[RED, 1]]]));
     expect(launchFromColumn(g, 5)).toBe(false);
