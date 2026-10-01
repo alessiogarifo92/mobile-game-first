@@ -84,11 +84,12 @@ export class PlayScene extends Phaser.Scene {
     this.subtitle.setWordWrapWidth(VIEW.width - 2 * THEME.space.md).setOrigin(0.5, 0).setY(96);
     button(this, 60, 64, 84, 64, '◀', () => this.scene.start('menu'), { fill: THEME.belt, color: THEME.inkCss, name: 'home' });
     button(this, VIEW.width - 60, 64, 84, 64, '⟲', () => this.restart(), { fill: THEME.belt, color: THEME.inkCss, name: 'retry' });
-    const soundBtn = button(this, VIEW.width - 160, 64, 84, 64, getProgress().sound ? '♪' : '✕', () => {
+    // Muted keeps the same note, faded: a ✕ read as a close button. Spaced from ⟲ so the two are not mistaken.
+    const soundBtn = button(this, VIEW.width - 180, 64, 84, 64, '♪', () => {
       const on = !getProgress().sound;
       setSound(on);
       sfx.enabled = on;
-      (soundBtn.list[1] as Phaser.GameObjects.Text).setText(on ? '♪' : '✕');
+      (soundBtn.list[1] as Phaser.GameObjects.Text).setAlpha(on ? 1 : 0.3);
     }, { fill: THEME.belt, color: THEME.inkCss, name: 'sound' });
 
     // Static board: belt ring and canvas paper.
@@ -172,9 +173,8 @@ export class PlayScene extends Phaser.Scene {
     this.guideLayer?.destroy();
     this.guideLayer = null;
     const text = GUIDE_TEXT;
-    // While a column is highlighted the bubble carries the text; otherwise the subtitle line does.
-    const pointing = next === 'tap' || next === 'next';
-    this.subtitle.setText(pointing ? '' : t(text[next])).setColor(THEME.inkCss).setFontStyle('bold').setFontSize(THEME.type.xs);
+    // The text always sits on the subtitle line under the title: free space, away from the slots and the highlighted column.
+    this.subtitle.setText(t(text[next])).setColor(THEME.inkCss).setFontStyle('bold').setFontSize(THEME.type.xs);
     if (next === 'free') {
       this.guide = null;
       markTip('guide');
@@ -199,14 +199,11 @@ export class PlayScene extends Phaser.Scene {
     g.fillRect(target.x - pad, target.y - pad + boxH, target.w + 2 * pad, bottom - target.y + pad - boxH);
     g.lineStyle(6, THEME.white, 1);
     g.strokeRoundedRect(target.x - pad, target.y - pad, target.w + 2 * pad, boxH, THEME.radius.jar);
-    const bubble = label(this, VIEW.width / 2, target.y - 70, t(text[next]), THEME.type.sm, '#ffffff')
-      .setWordWrapWidth(VIEW.width - 120);
-    const bb = bubble.getBounds();
-    g.fillStyle(THEME.ink, 0.92);
-    g.fillRoundedRect(bb.x - 20, bb.y - 14, bb.width + 40, bb.height + 28, THEME.radius.panel);
-    const hand = label(this, target.x + target.w / 2 + 20, target.y + 120, '👆', 72);
-    this.tweens.add({ targets: hand, y: hand.y - 30, duration: 450, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
-    this.guideLayer = this.add.container(0, 0, [g, bubble, hand]).setDepth(8);
+    // The hand sits below the highlighted column: above it are the waiting slots, and over it it would hide the second bucket.
+    const below = target.y - pad + boxH;
+    const hand = label(this, target.x + target.w / 2, below + 60, '👆', 72);
+    this.tweens.add({ targets: hand, y: hand.y + 24, duration: 450, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    this.guideLayer = this.add.container(0, 0, [g, hand]).setDepth(8);
     this.publish();
   }
 

@@ -35,7 +35,8 @@ export const MAP = {
   /** Header band centre, above the last node of the previous stage: clears its boss star and the next node. */
   headerOffset: 125,
   bottomPad: 80,
-  topPad: 60,
+  /** Room above the top node: its boss star must clear the fixed title bar at scroll 0. */
+  topPad: 150,
   swing: 190,
   radius: 32,
   bossRadius: 44,

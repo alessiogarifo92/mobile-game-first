@@ -281,6 +281,7 @@ test('the level 1 guide is in Italian when the language is Italian', async ({ pa
   await openLevel(page, 1);
   expect(await mix(page, 'guide')).toBe('tap');
   expect(await mix<string>(page, 'guideText')).toBe('Tocca una colonna per mandare un secchiello sul nastro');
+  if (shots) await page.screenshot({ path: `${shots}/15-guida-it.png` });
   await play(page, (await mix<Move[]>(page, 'solution')).slice(0, 1));
   expect(await mix(page, 'guide')).toBe('next');
   expect(await mix<string>(page, 'guideText')).toBe('Manda il prossimo!');

@@ -81,22 +81,23 @@ export class HowToScene extends Phaser.Scene {
       g.lineStyle(6, THEME.ink, 0.6);
       g.lineBetween(cx, 600, cx - 60, 545);
     } else if (page === 1) {
-      this.pixel(g, cx - 200, 420, RED);
-      label(this, cx - 125, 420, '+', THEME.type.xl);
-      this.pixel(g, cx - 50, 420, YELLOW);
-      label(this, cx + 25, 420, '=', THEME.type.xl);
-      this.pixel(g, cx + 100, 420, ORANGE, 90, RED);
-      label(this, cx + 160, 420, '→', THEME.type.lg);
-      this.pixel(g, cx + 230, 420, ORANGE, 70);
+      // Whole row centred on the card, with room around the operators.
+      this.pixel(g, cx - 205, 420, RED);
+      label(this, cx - 140, 420, '+', THEME.type.xl);
+      this.pixel(g, cx - 75, 420, YELLOW);
+      label(this, cx - 10, 420, '=', THEME.type.xl);
+      this.pixel(g, cx + 55, 420, ORANGE, 90, RED);
+      label(this, cx + 135, 420, '→', THEME.type.lg);
+      this.pixel(g, cx + 215, 420, ORANGE, 70);
     } else {
       // Waiting slots, one free.
       for (let i = 0; i < 3; i++) {
         g.lineStyle(3, THEME.ink, 0.3);
-        g.strokeRoundedRect(cx - 150 + i * 105 - 42, 380, 84, 84, THEME.radius.jar);
+        g.strokeRoundedRect(cx - 105 + i * 105 - 42, 380, 84, 84, THEME.radius.jar);
       }
-      this.jar(g, cx - 150, 422, YELLOW);
-      this.jar(g, cx - 45, 422, BLUE);
-      label(this, cx + 60, 422, '?', THEME.type.lg, THEME.subCss);
+      this.jar(g, cx - 105, 422, YELLOW);
+      this.jar(g, cx, 422, BLUE);
+      label(this, cx + 105, 422, '?', THEME.type.lg, THEME.subCss);
     }
   }
 }
