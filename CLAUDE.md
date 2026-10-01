@@ -10,7 +10,7 @@ Le skill e le regole globali vivono nel repo privato `alessiogarifo92/claude-ski
 
 ## Comandi (dalla root del repo, shell host)
 - `npm ci` · `npm run dev` (http://localhost:5173) · `npm test` · `npm run test:coverage` · `npm run lint` · `npm run typecheck` · `npm run build`
-- `npm run gen:levels` rigenera `src/levels/levels.json`: ogni livello è accettato solo se il solver lo dimostra risolvibile e cade nella fascia di difficoltà della sua spec (`scripts/level-specs.ts`)
+- Livelli in stage da 10 (`scripts/stages/stage-NN.ts`). `npm run gen:levels` rigenera solo i livelli cambiati (`--check` in CI); ogni livello è accettato solo se il solver lo dimostra risolvibile e cade nella fascia di difficoltà della sua spec. `npm run preview:levels` disegna la pixel art di ogni stage in `docs/levels/`
 - `npm run test:e2e` (Playwright, Chromium preinstallato in `/opt/pw-browsers`)
 
 ## Regole

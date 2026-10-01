@@ -6,6 +6,8 @@ import { randomWinRate, solve } from './solver';
 export interface GenerateOptions {
   id: number;
   name: string;
+  stage?: number;
+  boss?: boolean;
   image: string[];
   columns: number;
   /** Preferred ammo per shooter; the last shooter of each color takes the remainder. */
@@ -52,6 +54,8 @@ export function generateLevel(opts: GenerateOptions): { def: LevelDef; seed: num
     const def: LevelDef = {
       id: opts.id,
       name: opts.name,
+      stage: opts.stage ?? 1,
+      ...(opts.boss ? { boss: true } : {}),
       image: opts.image,
       columns: columns.filter((c) => c.length > 0),
       slots: opts.slots,

@@ -45,21 +45,33 @@ const en = {
   'howto.3.body': 'Paint stops at the first unfinished pixel. Buckets with paint left wait in a slot — keep a slot free!',
   'howto.next': 'Next',
   'howto.done': 'Play',
-  'level.1': 'Heart',
-  'level.2': 'Sun',
-  'level.3': 'Mushroom',
-  'level.4': 'Orange',
-  'level.5': 'Leaf',
-  'level.6': 'Pumpkin',
-  'level.7': 'Grapes',
-  'level.8': 'Rainbow',
-  'level.9': 'Flower',
-  'level.10': 'Fish',
-  'level.11': 'Butterfly',
-  'level.12': 'Watermelon',
-  'level.13': 'Cat',
-  'level.14': 'Tree',
-  'level.15': 'Parrot',
+  'stage.atelier': 'Atelier',
+  'stage.fruit': 'Fruit',
+  'stage.animals': 'Animals',
+  'stage.garden': 'Garden',
+  'stage.sea': 'Sea',
+  'stage.city': 'City',
+  'stage.food': 'Food & sweets',
+  'stage.vehicles': 'Vehicles',
+  'stage.space': 'Space',
+  'stage.fantasy': 'Fantasy',
+  'map.stage': 'Stage {n}',
+  'map.progress': '{done}/{total}',
+  'level.heart': 'Heart',
+  'level.sun': 'Sun',
+  'level.mushroom': 'Mushroom',
+  'level.orange': 'Orange',
+  'level.leaf': 'Leaf',
+  'level.pumpkin': 'Pumpkin',
+  'level.grapes': 'Grapes',
+  'level.rainbow': 'Rainbow',
+  'level.flower': 'Flower',
+  'level.fish': 'Fish',
+  'level.butterfly': 'Butterfly',
+  'level.watermelon': 'Watermelon',
+  'level.cat': 'Cat',
+  'level.tree': 'Tree',
+  'level.parrot': 'Parrot',
 };
 
 export type MessageKey = keyof typeof en;
@@ -110,21 +122,33 @@ const it: Record<MessageKey, string> = {
   'howto.3.body': 'La vernice si ferma sul primo pixel non finito. I secchielli avanzati aspettano in uno slot: tienine uno libero!',
   'howto.next': 'Avanti',
   'howto.done': 'Gioca',
-  'level.1': 'Cuore',
-  'level.2': 'Sole',
-  'level.3': 'Fungo',
-  'level.4': 'Arancia',
-  'level.5': 'Foglia',
-  'level.6': 'Zucca',
-  'level.7': 'Uva',
-  'level.8': 'Arcobaleno',
-  'level.9': 'Fiore',
-  'level.10': 'Pesce',
-  'level.11': 'Farfalla',
-  'level.12': 'Anguria',
-  'level.13': 'Gatto',
-  'level.14': 'Albero',
-  'level.15': 'Pappagallo',
+  'stage.atelier': 'Atelier',
+  'stage.fruit': 'Frutta',
+  'stage.animals': 'Animali',
+  'stage.garden': 'Giardino',
+  'stage.sea': 'Mare',
+  'stage.city': 'Città',
+  'stage.food': 'Cibo e dolci',
+  'stage.vehicles': 'Veicoli',
+  'stage.space': 'Spazio',
+  'stage.fantasy': 'Fantasia',
+  'map.stage': 'Stage {n}',
+  'map.progress': '{done}/{total}',
+  'level.heart': 'Cuore',
+  'level.sun': 'Sole',
+  'level.mushroom': 'Fungo',
+  'level.orange': 'Arancia',
+  'level.leaf': 'Foglia',
+  'level.pumpkin': 'Zucca',
+  'level.grapes': 'Uva',
+  'level.rainbow': 'Arcobaleno',
+  'level.flower': 'Fiore',
+  'level.fish': 'Pesce',
+  'level.butterfly': 'Farfalla',
+  'level.watermelon': 'Anguria',
+  'level.cat': 'Gatto',
+  'level.tree': 'Albero',
+  'level.parrot': 'Pappagallo',
 };
 
 export const DICTIONARIES = { en, it } as const;
@@ -147,8 +171,16 @@ export function translate(language: string, key: string, params: Params = {}): s
   return template.replace(/\{(\w+)\}/g, (match, name: string) => (name in params ? String(params[name]) : match));
 }
 
-/** Translated level name; unknown ids fall back to the generic level title. */
-export function levelName(language: string, id: number): string {
-  const key = `level.${id}`;
-  return key in en ? translate(language, key) : translate(language, 'level.title', { n: id });
+/** Translated level name from its stable key (`level.<name>`); unknown keys show the key itself. */
+export function levelName(language: string, name: string): string {
+  return translate(language, `level.${name}`);
 }
+
+export function stageName(language: string, key: string): string {
+  return translate(language, `stage.${key}`);
+}
+
+/** Level name keys that have a translation, for validating stage files. */
+export const LEVEL_NAME_KEYS: ReadonlySet<string> = new Set(
+  Object.keys(en).filter((k) => k.startsWith('level.') && k !== 'level.title' && k !== 'level.waiting').map((k) => k.slice(6)),
+);

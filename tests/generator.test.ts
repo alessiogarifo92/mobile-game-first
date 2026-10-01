@@ -57,3 +57,17 @@ describe('generateLevel', () => {
     expect(() => generateLevel({ ...opts, attempts: 5, winRate: [1.1, 2] })).toThrow('no solvable deal');
   });
 });
+
+describe('generateLevel with a tiny solver budget', () => {
+  it('never ships a level the solver could not prove within budget', () => {
+    const opts = { id: 1, name: 'test', image: ['ROY', 'GBP', 'YOR'], columns: 2, ammoChunk: 2, slots: 3, beltCapacity: 3, seed: 7 };
+    expect(() => generateLevel({ ...opts, attempts: 3, nodeBudget: 1 })).toThrow('no solvable deal');
+  });
+
+  it('carries stage and boss into the definition', () => {
+    const opts = { id: 10, name: 'test', image: ['RR'], columns: 1, ammoChunk: 2, slots: 1, beltCapacity: 1, seed: 1 };
+    expect(generateLevel({ ...opts, stage: 3, boss: true }).def).toMatchObject({ stage: 3, boss: true });
+    expect(generateLevel(opts).def).toMatchObject({ stage: 1 });
+    expect(generateLevel(opts).def.boss).toBeUndefined();
+  });
+});

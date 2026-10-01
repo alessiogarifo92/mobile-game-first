@@ -1,4 +1,4 @@
-import { DEFAULT_LANGUAGE, levelName, translate, type Language, type MessageKey, type Params } from '../core/i18n';
+import { DEFAULT_LANGUAGE, levelName, stageName, translate, type Language, type MessageKey, type Params } from '../core/i18n';
 import { parseLevel, type Level, type LevelDef } from '../core/level';
 import {
   completeLevel, loadProgress, markTipSeen, saveProgress, type KeyValueStorage, type Progress,
@@ -62,7 +62,12 @@ export function t(key: MessageKey, params?: Params): string {
 }
 
 export function levelTitle(id: number): string {
-  return levelName(progress.language, id);
+  const level = LEVELS[id - 1];
+  return level ? levelName(progress.language, level.name) : translate(progress.language, 'level.title', { n: id });
+}
+
+export function stageTitle(key: string): string {
+  return stageName(progress.language, key);
 }
 
 /** Short subtitle hint for levels that introduce something; keys live in the dictionary as hint.<id>. */

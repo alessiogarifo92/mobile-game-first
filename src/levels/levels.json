@@ -1,7 +1,8 @@
 [
  {
   "id": 1,
-  "name": "Cuore",
+  "name": "heart",
+  "stage": 1,
   "image": [
    ".RR..RR.",
    "RRRRRRRR",
@@ -34,11 +35,13 @@
    ]
   ],
   "slots": 3,
-  "beltCapacity": 5
+  "beltCapacity": 5,
+  "specHash": "41b06d71"
  },
  {
   "id": 2,
-  "name": "Sole",
+  "name": "sun",
+  "stage": 1,
   "image": [
    "BBBBBBBB",
    "BBBYYBBB",
@@ -80,11 +83,13 @@
    ]
   ],
   "slots": 3,
-  "beltCapacity": 5
+  "beltCapacity": 5,
+  "specHash": "cf7057c9"
  },
  {
   "id": 3,
-  "name": "Fungo",
+  "name": "mushroom",
+  "stage": 1,
   "image": [
    "..RRRR..",
    ".RYRRYR.",
@@ -118,11 +123,13 @@
    ]
   ],
   "slots": 3,
-  "beltCapacity": 5
+  "beltCapacity": 5,
+  "specHash": "d51b3ddd"
  },
  {
   "id": 4,
-  "name": "Arancia",
+  "name": "orange",
+  "stage": 1,
   "image": [
    "...RR...",
    "..OOOO..",
@@ -163,11 +170,13 @@
    ]
   ],
   "slots": 2,
-  "beltCapacity": 5
+  "beltCapacity": 5,
+  "specHash": "ff83cc5d"
  },
  {
   "id": 5,
-  "name": "Foglia",
+  "name": "leaf",
+  "stage": 1,
   "image": [
    ".....GG.",
    "...GGGG.",
@@ -204,11 +213,13 @@
    ]
   ],
   "slots": 2,
-  "beltCapacity": 5
+  "beltCapacity": 5,
+  "specHash": "ee8efc92"
  },
  {
   "id": 6,
-  "name": "Zucca",
+  "name": "pumpkin",
+  "stage": 1,
   "image": [
    "...GG...",
    "..OGOO..",
@@ -268,11 +279,13 @@
    ]
   ],
   "slots": 3,
-  "beltCapacity": 5
+  "beltCapacity": 5,
+  "specHash": "71a63b24"
  },
  {
   "id": 7,
-  "name": "Uva",
+  "name": "grapes",
+  "stage": 1,
   "image": [
    "....GG..",
    "...GG...",
@@ -320,11 +333,13 @@
    ]
   ],
   "slots": 2,
-  "beltCapacity": 5
+  "beltCapacity": 5,
+  "specHash": "ca1027c3"
  },
  {
   "id": 8,
-  "name": "Arcobaleno",
+  "name": "rainbow",
+  "stage": 1,
   "image": [
    "RRRRRRRR",
    "OOOOOOOO",
@@ -366,11 +381,13 @@
    ]
   ],
   "slots": 2,
-  "beltCapacity": 5
+  "beltCapacity": 5,
+  "specHash": "b4b9dcb6"
  },
  {
   "id": 9,
-  "name": "Fiore",
+  "name": "flower",
+  "stage": 1,
   "image": [
    "..RR.RR.",
    ".RPPRPPR",
@@ -410,11 +427,14 @@
    ]
   ],
   "slots": 2,
-  "beltCapacity": 5
+  "beltCapacity": 5,
+  "specHash": "308d50f1"
  },
  {
   "id": 10,
-  "name": "Pesce",
+  "name": "fish",
+  "stage": 1,
+  "boss": true,
   "image": [
    "BBBBBBBBBB",
    "BBBOOOBBBB",
@@ -496,11 +516,13 @@
    ]
   ],
   "slots": 4,
-  "beltCapacity": 4
+  "beltCapacity": 4,
+  "specHash": "7b5845bc"
  },
  {
   "id": 11,
-  "name": "Farfalla",
+  "name": "butterfly",
+  "stage": 2,
   "image": [
    "PP......PP",
    "PPP....PPP",
@@ -554,11 +576,13 @@
    ]
   ],
   "slots": 2,
-  "beltCapacity": 4
+  "beltCapacity": 4,
+  "specHash": "f19082ba"
  },
  {
   "id": 12,
-  "name": "Anguria",
+  "name": "watermelon",
+  "stage": 2,
   "image": [
    "..........",
    "RRRRRRRRRR",
@@ -599,11 +623,13 @@
    ]
   ],
   "slots": 2,
-  "beltCapacity": 4
+  "beltCapacity": 4,
+  "specHash": "81bf5cc2"
  },
  {
   "id": 13,
-  "name": "Gatto",
+  "name": "cat",
+  "stage": 2,
   "image": [
    "BBBBBBBBBBBB",
    "BOBBBBBBBBOB",
@@ -717,11 +743,13 @@
    ]
   ],
   "slots": 4,
-  "beltCapacity": 3
+  "beltCapacity": 3,
+  "specHash": "f43efad6"
  },
  {
   "id": 14,
-  "name": "Albero",
+  "name": "tree",
+  "stage": 2,
   "image": [
    "....GGGG....",
    "..GGGGGGGG..",
@@ -819,11 +847,13 @@
    ]
   ],
   "slots": 2,
-  "beltCapacity": 3
+  "beltCapacity": 3,
+  "specHash": "32c4fac4"
  },
  {
   "id": 15,
-  "name": "Pappagallo",
+  "name": "parrot",
+  "stage": 2,
   "image": [
    "....RRRR....",
    "...RRRRRR...",
@@ -877,6 +907,7 @@
    ]
   ],
   "slots": 2,
-  "beltCapacity": 3
+  "beltCapacity": 3,
+  "specHash": "7d6f154c"
  }
 ]

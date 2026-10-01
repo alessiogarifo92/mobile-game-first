@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import levels from '../src/levels/levels.json';
+import { LEVEL_NAME_KEYS } from '../src/core/i18n';
 import { parseLevel, type LevelDef } from '../src/core/level';
 import { createRng } from '../src/core/rng';
 import { randomWinRate, solve } from '../src/core/solver';
@@ -7,8 +8,14 @@ import { randomWinRate, solve } from '../src/core/solver';
 const defs = levels as LevelDef[];
 
 describe('shipped levels', () => {
-  it('has 15 levels with sequential ids', () => {
-    expect(defs.map((d) => d.id)).toEqual(Array.from({ length: 15 }, (_, i) => i + 1));
+  it('has sequential ids, a stage on every level and a boss at the 10th of each stage', () => {
+    expect(defs.map((d) => d.id)).toEqual(Array.from({ length: defs.length }, (_, i) => i + 1));
+    for (const d of defs) {
+      expect(d.stage).toBe(Math.ceil(d.id / 10));
+      expect(!!d.boss).toBe(d.id % 10 === 0);
+      expect(LEVEL_NAME_KEYS.has(d.name)).toBe(true);
+      expect(d.specHash).toMatch(/^[0-9a-f]{8}$/);
+    }
   });
 
   it.each(defs.map((d) => [d.id, d.name, d] as const))('level %i (%s) is valid and solvable', (_id, _name, def) => {

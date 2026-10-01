@@ -7,6 +7,7 @@ export function level(image: string[], columns: [Primary, number][][], extra: Pa
   return parseLevel({
     id: 1,
     name: 'test',
+    stage: 1,
     image,
     columns: columns.map((c) => c.map(([color, ammo]) => ({ color, ammo }))),
     slots: 3,

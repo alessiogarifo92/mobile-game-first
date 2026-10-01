@@ -8,7 +8,13 @@ export interface ShooterSpec {
 /** Level as stored in JSON. Images are rows of `.RYBOGP` characters. */
 export interface LevelDef {
   id: number;
+  /** Translation key: the displayed name is `level.<name>`. */
   name: string;
+  stage: number;
+  /** The 10th level of a stage. */
+  boss?: boolean;
+  /** Hash of the spec this level was generated from (see stages.ts). */
+  specHash?: string;
   image: string[];
   columns: ShooterSpec[][];
   slots: number;
