@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { STORAGE_KEY, completeLevel, defaultProgress, loadProgress, saveProgress, type KeyValueStorage } from '../src/core/progress';
+import { STORAGE_KEY, completeLevel, defaultProgress, loadProgress, markTipSeen, saveProgress, type KeyValueStorage } from '../src/core/progress';
 
 function memory(initial?: string): KeyValueStorage & { data: Map<string, string> } {
   const data = new Map<string, string>();
@@ -20,7 +20,7 @@ describe('progress', () => {
 
   it('round-trips through storage', () => {
     const s = memory();
-    const p = { unlocked: 3, completed: [1, 2], sound: false };
+    const p = { unlocked: 3, completed: [1, 2], sound: false, language: 'it' as const, seenTips: ['guide'] };
     expect(saveProgress(s, p)).toBe(true);
     expect(loadProgress(s)).toEqual(p);
   });
@@ -49,6 +49,21 @@ describe('progress', () => {
   });
 
   it('replaying an old level never re-locks progress', () => {
-    expect(completeLevel({ unlocked: 5, completed: [1, 2, 3, 4], sound: true }, 2, 10).unlocked).toBe(5);
+    expect(completeLevel({ ...defaultProgress(), unlocked: 5, completed: [1, 2, 3, 4] }, 2, 10).unlocked).toBe(5);
+  });
+
+  it('defaults to English with no tips seen, also for saves from before v0.2', () => {
+    expect(defaultProgress()).toMatchObject({ language: 'en', seenTips: [] });
+    const old = loadProgress(memory('{"unlocked":4,"completed":[1,2,3],"sound":false}'));
+    expect(old).toMatchObject({ unlocked: 4, language: 'en', seenTips: [] });
+  });
+
+  it('rejects an unknown language and invalid tips', () => {
+    expect(loadProgress(memory('{"language":"xx","seenTips":["a",1,"a",null]}'))).toMatchObject({ language: 'en', seenTips: ['a'] });
+  });
+
+  it('records a seen tip once', () => {
+    const p = markTipSeen(markTipSeen(defaultProgress(), 'guide'), 'guide');
+    expect(p.seenTips).toEqual(['guide']);
   });
 });
