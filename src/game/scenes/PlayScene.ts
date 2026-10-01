@@ -5,15 +5,18 @@ import type { Level } from '../../core/level';
 import {
   continueWithExtraSlot, createGame, launchFromColumn, launchFromSlot, step, type GameState, type HitEvent, type Shooter,
 } from '../../core/sim';
+import { guideAllows, guideStep, needsGuide, tipOnLevelStart, tipOnReturn, type CardTip, type GuideStep } from '../../core/onboarding';
 import { solve } from '../../core/solver';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
-import { HINTS, LEVELS, getProgress, markCompleted, setSound } from '../store';
+import { LEVELS, getProgress, levelHint, levelTitle, markCompleted, markTip, setSound, t, tipSeen } from '../store';
+import { BLUE, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
 import { PAINT, SYMBOL, THEME } from '../theme';
 import { button, fullBackground, label, viewOffset } from '../ui';
 
 const TICK_MS = 85;
 const BELT_JAR = 54;
+const TIP_H = 620;
 
 export class PlayScene extends Phaser.Scene {
   private level!: Level;
@@ -29,6 +32,13 @@ export class PlayScene extends Phaser.Scene {
   private solution: ReturnType<typeof solve>['moves'] | undefined;
   private ended = false;
   private moves = 0;
+  private subtitle!: Phaser.GameObjects.Text;
+  /** Guided level 1: current step, or null when the player is on their own. */
+  private guide: GuideStep | null = null;
+  private guideLayer: Phaser.GameObjects.Container | null = null;
+  private tip: { id: CardTip; card: Phaser.GameObjects.Container } | null = null;
+  /** Ammo each shooter had when it was launched, to tell whether its loop hit anything. */
+  private launchAmmo = new Map<number, number>();
 
   constructor() {
     super('play');
@@ -44,17 +54,22 @@ export class PlayScene extends Phaser.Scene {
     this.ended = false;
     this.moves = 0;
     this.solution = undefined;
+    this.guide = null;
+    this.guideLayer = null;
+    this.tip = null;
+    this.launchAmmo = new Map();
   }
 
   create(): void {
     const { layout } = this;
     fullBackground(this, THEME.bg);
 
-    label(this, VIEW.width / 2, 62, `Livello ${this.level.id}`, THEME.type.lg);
-    const hint = HINTS[this.level.id];
+    label(this, VIEW.width / 2, 62, t('level.title', { n: this.level.id }), THEME.type.lg);
+    const hint = levelHint(this.level.id);
     // The hint takes the subtitle line; the level name is shown again on the win panel.
-    const subtitle = label(this, VIEW.width / 2, 110, hint ?? this.level.name, hint ? THEME.type.xs : THEME.type.sm, hint ? THEME.inkCss : THEME.subCss, !!hint);
-    subtitle.setWordWrapWidth(VIEW.width - 2 * THEME.space.md);
+    this.subtitle = label(this, VIEW.width / 2, 110, hint ?? levelTitle(this.level.id), hint ? THEME.type.xs : THEME.type.sm, hint ? THEME.inkCss : THEME.subCss, !!hint);
+    // Top-anchored so a two-line guide text grows down, away from the title.
+    this.subtitle.setWordWrapWidth(VIEW.width - 2 * THEME.space.md).setOrigin(0.5, 0).setY(96);
     button(this, 60, 64, 84, 64, '◀', () => this.scene.start('menu'), { fill: THEME.belt, color: THEME.inkCss, name: 'home' });
     button(this, VIEW.width - 60, 64, 84, 64, '⟲', () => this.restart(), { fill: THEME.belt, color: THEME.inkCss, name: 'retry' });
     const soundBtn = button(this, VIEW.width - 160, 64, 84, 64, getProgress().sound ? '♪' : '✕', () => {
@@ -78,7 +93,7 @@ export class PlayScene extends Phaser.Scene {
     board.fillStyle(THEME.paper, 1);
     board.fillRoundedRect(layout.canvas.x - 8, layout.canvas.y - 8, layout.canvas.w + 16, layout.canvas.h + 16, THEME.radius.cell * 2);
 
-    label(this, VIEW.width / 2, layout.slots[0]!.y - 20, 'ATTESA', THEME.type.xs * 0.8, THEME.subCss);
+    label(this, VIEW.width / 2, layout.slots[0]!.y - 20, t('level.waiting'), THEME.type.xs * 0.8, THEME.subCss);
     const columnFrames = this.add.graphics();
     columnFrames.fillStyle(THEME.belt, 0.35);
     for (const c of layout.columns) columnFrames.fillRoundedRect(c.x, c.y - 6, c.w, 3 * layout.columnStep + 20, THEME.radius.jar);
@@ -90,6 +105,12 @@ export class PlayScene extends Phaser.Scene {
     this.drawPixels();
 
     this.input.on('pointerdown', (p: Phaser.Input.Pointer) => this.tap(p.worldX, p.worldY));
+    const seen = getProgress().seenTips;
+    if (needsGuide(this.level, seen)) this.updateGuide();
+    else {
+      const tip = tipOnLevelStart(this.level, seen);
+      if (tip) this.time.delayedCall(350, () => this.showTip(tip));
+    }
     this.publish();
   }
 
@@ -99,28 +120,135 @@ export class PlayScene extends Phaser.Scene {
 
   private tap(x: number, y: number): void {
     sfx.unlock();
-    if (this.overlay || this.gs.status !== 'playing') return;
+    if (this.overlay || this.tip || this.gs.status !== 'playing') return;
     const pt = { x, y };
-    let launched = false;
-    this.layout.columns.forEach((r, i) => {
-      if (contains(r, pt)) launched = launchFromColumn(this.gs, i);
-    });
-    this.layout.slots.forEach((r, i) => {
-      if (!launched && contains(r, pt)) launched = launchFromSlot(this.gs, i);
-    });
-    if (launched) {
+    const column = this.layout.columns.findIndex((r) => contains(r, pt));
+    const slot = column < 0 ? this.layout.slots.findIndex((r) => contains(r, pt)) : -1;
+    if (this.guide && !guideAllows(this.guide, column >= 0 ? column : null, this.guideTarget() ?? -1)) return;
+    let shooter: Shooter | null | undefined = null;
+    if (column >= 0) {
+      shooter = this.gs.queues[column]?.[0];
+      if (!launchFromColumn(this.gs, column)) shooter = null;
+    } else if (slot >= 0) {
+      shooter = this.gs.slots[slot];
+      if (!launchFromSlot(this.gs, slot)) shooter = null;
+    }
+    if (shooter) {
+      this.launchAmmo.set(shooter.id, shooter.ammo);
       this.moves += 1;
       sfx.launch();
+      if (this.guide) this.updateGuide();
     }
   }
 
+  // ---------- onboarding ----------
+
+  /** Column the guide points at: the solver's first two moves, when they are column launches. */
+  private guideTarget(step: GuideStep | null = this.guide): number | null {
+    this.solution ??= solve(this.level).moves;
+    const move = this.solution[step === 'next' ? 1 : 0];
+    return move && move.from === 'column' ? move.index : null;
+  }
+
+  private updateGuide(): void {
+    let next: GuideStep = guideStep(this.moves, this.gs.belt.length + this.gs.pending.length > 0);
+    // If the solution's second move is a slot relaunch there is no column to point at.
+    if (next === 'next' && this.guideTarget('next') === null) next = 'free';
+    if (next === this.guide) return;
+    this.guide = next;
+    this.guideLayer?.destroy();
+    this.guideLayer = null;
+    const text = { tap: 'guide.tap', watch: 'guide.watch', next: 'guide.next', free: 'guide.free' } as const;
+    // While a column is highlighted the bubble carries the text; otherwise the subtitle line does.
+    const pointing = next === 'tap' || next === 'next';
+    this.subtitle.setText(pointing ? '' : t(text[next])).setColor(THEME.inkCss).setFontStyle('bold').setFontSize(THEME.type.xs);
+    if (next === 'free') {
+      this.guide = null;
+      markTip('guide');
+      this.publish();
+      return;
+    }
+    if (next === 'watch') {
+      this.publish();
+      return;
+    }
+    const target = this.layout.columns[this.guideTarget()!]!;
+    const g = this.add.graphics();
+    g.fillStyle(THEME.ink, 0.35);
+    const top = -viewOffset(this);
+    const bottom = this.scale.height - viewOffset(this);
+    const pad = 10;
+    // Dim everything except the target column.
+    g.fillRect(0, top, VIEW.width, target.y - pad - top);
+    g.fillRect(0, target.y - pad, target.x - pad, bottom - target.y + pad);
+    g.fillRect(target.x + target.w + pad, target.y - pad, VIEW.width - target.x - target.w - pad, bottom - target.y + pad);
+    const boxH = 3 * this.layout.columnStep + 30;
+    g.fillRect(target.x - pad, target.y - pad + boxH, target.w + 2 * pad, bottom - target.y + pad - boxH);
+    g.lineStyle(6, THEME.white, 1);
+    g.strokeRoundedRect(target.x - pad, target.y - pad, target.w + 2 * pad, boxH, THEME.radius.jar);
+    const bubble = label(this, VIEW.width / 2, target.y - 70, t(text[next]), THEME.type.sm, '#ffffff')
+      .setWordWrapWidth(VIEW.width - 120);
+    const bb = bubble.getBounds();
+    g.fillStyle(THEME.ink, 0.92);
+    g.fillRoundedRect(bb.x - 20, bb.y - 14, bb.width + 40, bb.height + 28, THEME.radius.panel);
+    const hand = label(this, target.x + target.w / 2 + 20, target.y + 120, '👆', 72);
+    this.tweens.add({ targets: hand, y: hand.y - 30, duration: 450, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    this.guideLayer = this.add.container(0, 0, [g, bubble, hand]).setDepth(8);
+    this.publish();
+  }
+
+  private showTip(id: CardTip): void {
+    if (this.tip || tipSeen(id) || this.gs.status !== 'playing') return;
+    const w = 600;
+    const h = TIP_H;
+    const x0 = (VIEW.width - w) / 2;
+    const y0 = (VIEW.height - h) / 2;
+    const shade = fullBackground(this, THEME.ink, 0.45).setInteractive();
+    const g = this.add.graphics();
+    g.fillStyle(THEME.bg, 1);
+    g.fillRoundedRect(x0, y0, w, h, THEME.radius.panel);
+    const card = this.add.container(0, 0, [shade, g]).setDepth(12);
+    card.add(label(this, VIEW.width / 2, y0 + 60, t(`tip.${id}.title` as const), THEME.type.lg));
+    if (id === 'mixing') {
+      // Visual equations: the whole tip in one glance.
+      const rows: [number, number, number][] = [[RED, YELLOW, ORANGE], [YELLOW, BLUE, GREEN], [RED, BLUE, PURPLE]];
+      rows.forEach(([a, b, c], i) => {
+        const y = y0 + 140 + i * 62;
+        [a, b, c].forEach((col, k) => {
+          g.fillStyle(PAINT[col]!, 1);
+          g.fillRoundedRect(VIEW.width / 2 - 150 + k * 120, y - 24, 48, 48, THEME.radius.cell);
+        });
+        card.add(label(this, VIEW.width / 2 - 66, y, '+', THEME.type.md));
+        card.add(label(this, VIEW.width / 2 + 54, y, '=', THEME.type.md));
+      });
+    }
+    const bodyY = id === 'mixing' ? y0 + 340 : y0 + 150;
+    card.add(label(this, VIEW.width / 2, bodyY, t(`tip.${id}.body` as const), THEME.type.sm, THEME.subCss, false)
+      .setWordWrapWidth(w - 60).setOrigin(0.5, 0));
+    card.add(button(this, VIEW.width / 2, y0 + h - 70, 300, 80, t('tip.gotIt'), () => {
+      markTip(id);
+      card.destroy();
+      this.tip = null;
+      this.publish();
+    }, { name: 'tip-ok' }));
+    this.tip = { id, card };
+    this.publish();
+  }
+
   update(_time: number, delta: number): void {
-    if (this.gs.status === 'playing') {
+    if (this.gs.status === 'playing' && !this.tip) {
       this.acc += Math.min(delta, 250);
       while (this.acc >= TICK_MS && this.gs.status === 'playing') {
         this.acc -= TICK_MS;
         step(this.gs);
         for (const e of this.gs.events) this.splash(e);
+        for (const d of this.gs.departures) {
+          if (d.slot === null) continue;
+          const back = this.gs.slots[d.slot];
+          const tip = tipOnReturn(back?.ammo !== this.launchAmmo.get(d.shooterId), getProgress().seenTips);
+          if (tip && !this.guide) this.showTip(tip);
+        }
+        if (this.guide) this.updateGuide();
         this.publish();
       }
     }
@@ -284,7 +412,7 @@ export class PlayScene extends Phaser.Scene {
   }
 
   private showWin(): void {
-    const c = this.panel('Capolavoro!', 760);
+    const c = this.panel(t('win.title'), 760);
     const top = (VIEW.height - 760) / 2;
     const size = 320;
     const cell = Math.floor(size / Math.max(this.level.width, this.level.height));
@@ -297,24 +425,24 @@ export class PlayScene extends Phaser.Scene {
       g.fillRect(ox + (i % this.level.width) * cell, oy + Math.floor(i / this.level.width) * cell, cell - 1, cell - 1);
     });
     c.add(g);
-    c.add(label(this, VIEW.width / 2, oy + size + 40, `"${this.level.name}" completato in ${this.moves} mosse`, THEME.type.sm, THEME.subCss, false));
+    c.add(label(this, VIEW.width / 2, oy + size + 40, t('win.summary', { name: levelTitle(this.level.id), moves: this.moves }), THEME.type.sm, THEME.subCss, false));
     const isLast = this.level.id >= LEVELS.length;
-    c.add(button(this, VIEW.width / 2, top + 600, 360, 88, isLast ? 'Mappa' : 'Avanti', () => {
+    c.add(button(this, VIEW.width / 2, top + 600, 360, 88, t(isLast ? 'win.map' : 'win.next'), () => {
       if (isLast) this.scene.start('menu');
       else this.scene.start('play', { levelId: this.level.id + 1 });
     }, { name: 'next' }));
-    c.add(button(this, VIEW.width / 2, top + 700, 260, 64, 'Mappa', () => this.scene.start('menu'), {
+    c.add(button(this, VIEW.width / 2, top + 700, 260, 64, t('win.map'), () => this.scene.start('menu'), {
       fill: THEME.belt, color: THEME.inkCss, size: THEME.type.sm, name: 'map',
     }));
     this.publish();
   }
 
   private showJam(): void {
-    const c = this.panel('Ingorgo!', 480);
+    const c = this.panel(t('jam.title'), 480);
     const top = (VIEW.height - 480) / 2;
-    c.add(label(this, VIEW.width / 2, top + 150, 'Un secchiello non trova posto\nnegli slot d\'attesa.', THEME.type.sm, THEME.subCss, false));
+    c.add(label(this, VIEW.width / 2, top + 150, t('jam.body'), THEME.type.sm, THEME.subCss, false));
     if (!this.gs.extraSlotUsed) {
-      c.add(button(this, VIEW.width / 2, top + 280, 420, 88, '+1 slot e continua', () => {
+      c.add(button(this, VIEW.width / 2, top + 280, 420, 88, t('jam.continue'), () => {
         continueWithExtraSlot(this.gs);
         this.layout = computeLayout(this.level.width, this.level.height, this.gs.slots.length, this.level.columns.length);
         this.drawSlotFrames();
@@ -324,7 +452,7 @@ export class PlayScene extends Phaser.Scene {
         this.publish();
       }, { name: 'continue' }));
     }
-    c.add(button(this, VIEW.width / 2, top + (this.gs.extraSlotUsed ? 300 : 385), 300, 80, 'Riprova', () => this.restart(), {
+    c.add(button(this, VIEW.width / 2, top + (this.gs.extraSlotUsed ? 300 : 385), 300, 80, t('jam.retry'), () => this.restart(), {
       fill: this.gs.extraSlotUsed ? THEME.ink : THEME.belt,
       color: this.gs.extraSlotUsed ? '#ffffff' : THEME.inkCss,
       name: 'retry-panel',
@@ -344,6 +472,9 @@ export class PlayScene extends Phaser.Scene {
       columns: this.layout.columns,
       slots: this.layout.slots,
       solution: this.solution ??= solve(this.level).moves,
+      tip: this.tip?.id ?? null,
+      tipButton: { x: VIEW.width / 2, y: (VIEW.height + TIP_H) / 2 - 70 },
+      guide: this.guide,
       painted: gs.paint.filter((p, i) => p && isComplete(this.level.targets[i]!, p)).length,
     });
   }

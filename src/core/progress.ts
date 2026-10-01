@@ -1,3 +1,5 @@
+import { DEFAULT_LANGUAGE, isLanguage, type Language } from './i18n';
+
 export interface KeyValueStorage {
   getItem(key: string): string | null;
   setItem(key: string, value: string): void;
@@ -8,12 +10,15 @@ export interface Progress {
   unlocked: number;
   completed: number[];
   sound: boolean;
+  language: Language;
+  /** Onboarding tips already shown (see onboarding.ts). */
+  seenTips: string[];
 }
 
 export const STORAGE_KEY = 'mix-and-splash/progress/v1';
 
 export function defaultProgress(): Progress {
-  return { unlocked: 1, completed: [], sound: true };
+  return { unlocked: 1, completed: [], sound: true, language: DEFAULT_LANGUAGE, seenTips: [] };
 }
 
 function sanitize(raw: unknown): Progress {
@@ -25,7 +30,10 @@ function sanitize(raw: unknown): Progress {
     ? [...new Set(r.completed.filter((n): n is number => Number.isInteger(n) && n >= 1))].sort((a, b) => a - b)
     : [];
   const sound = typeof r.sound === 'boolean' ? r.sound : base.sound;
-  return { unlocked, completed, sound };
+  // Saves from before v0.2 have no language or tips: they get English and the onboarding.
+  const language = isLanguage(r.language) ? r.language : base.language;
+  const seenTips = Array.isArray(r.seenTips) ? [...new Set(r.seenTips.filter((t): t is string => typeof t === 'string'))] : [];
+  return { unlocked, completed, sound, language, seenTips };
 }
 
 /** Never throws: missing, corrupt or inaccessible storage falls back to a fresh profile. */
@@ -56,4 +64,8 @@ export function completeLevel(progress: Progress, levelId: number, levelCount: n
     : [...progress.completed, levelId].sort((a, b) => a - b);
   const unlocked = Math.min(levelCount, Math.max(progress.unlocked, levelId + 1));
   return { ...progress, completed, unlocked };
+}
+
+export function markTipSeen(progress: Progress, tip: string): Progress {
+  return progress.seenTips.includes(tip) ? progress : { ...progress, seenTips: [...progress.seenTips, tip] };
 }

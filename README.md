@@ -14,10 +14,13 @@ npm ci
 npm run dev          # http://localhost:5173 — dal telefono sulla stessa rete: http://<IP-del-PC>:5173
 npm test             # unit test (logica in src/core)
 npm run test:coverage
-npm run test:e2e     # Playwright: mappa → livello 1 → vittoria, mixing, ingorgo
+npm run test:e2e     # Playwright: tutorial livello 1 → vittoria, mixing, ingorgo, lingua
 npm run lint && npm run typecheck
 npm run build        # build web + PWA in dist/
 ```
+
+## Lingue
+Inglese di default, italiano disponibile (Impostazioni ⚙ nella mappa). I testi stanno in `src/core/i18n.ts`: per aggiungere una lingua basta un nuovo dizionario con le stesse chiavi dell'inglese (lo verifica `tests/i18n.test.ts`).
 
 ## Livelli
 `npm run gen:levels` rigenera `src/levels/levels.json` da `scripts/level-specs.ts`. Un livello viene accettato solo se:

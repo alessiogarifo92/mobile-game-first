@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { VIEW } from './core/layout';
+import { HowToScene } from './game/scenes/HowToScene';
 import { MenuScene } from './game/scenes/MenuScene';
 import { PlayScene } from './game/scenes/PlayScene';
 import { THEME } from './game/theme';
@@ -19,5 +20,5 @@ new Phaser.Game({
     height,
   },
   input: { activePointers: 2 },
-  scene: [MenuScene, PlayScene],
+  scene: [MenuScene, PlayScene, HowToScene],
 });
