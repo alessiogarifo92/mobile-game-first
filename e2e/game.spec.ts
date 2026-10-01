@@ -23,7 +23,7 @@ async function tap(page: Page, x: number, y: number) {
 async function openLevel(page: Page, id: number) {
   const box = (await page.locator('canvas').boundingBox())!;
   const k = box.width / 720;
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 60; i++) {
     const node = (await mix<{ id: number; x: number; y: number }[]>(page, 'nodes')).find((n) => n.id === id)!;
     const [scroll, viewH, bar] = await Promise.all([mix<number>(page, 'scrollY'), mix<number>(page, 'viewHeight'), mix<number>(page, 'barHeight')]);
     const screenY = node.y - scroll;
@@ -33,12 +33,12 @@ async function openLevel(page: Page, id: number) {
       return;
     }
     // Drag by up to 500 logical px towards the node (a real swipe, slow enough to avoid a flick).
-    const delta = Math.max(-500, Math.min(500, (bar + viewH) / 2 - screenY));
+    const delta = Math.max(-700, Math.min(700, (bar + viewH) / 2 - screenY));
     const x = box.x + 40 * k, y0 = box.y + ((bar + viewH) / 2) * k;
     await page.mouse.move(x, y0);
     await page.mouse.down();
     for (let s = 1; s <= 10; s++) await page.mouse.move(x, y0 + (delta * k * s) / 10);
-    await page.waitForTimeout(150);
+    await page.waitForTimeout(120);
     await page.mouse.up();
     await page.waitForTimeout(300);
   }
@@ -67,7 +67,10 @@ async function play(page: Page, moves: Move[]): Promise<string[]> {
     const closed = await dismissTip(page);
     if (closed) tips.push(closed);
     const r = m.from === 'column' ? columns[m.index]! : (await mix<Rect[]>(page, 'slots'))[m.index]!;
+    const before = await mix<number>(page, 'moves');
     await tap(page, r.x + r.w / 2, r.y + 40);
+    // The scene publishes right after a launch, so the next wait sees the belt busy, never a stale snapshot.
+    expect(await mix<number>(page, 'moves')).toBe(before + 1);
     await page.waitForFunction(() => {
       const m = (window as unknown as { __mix: { beltBusy: boolean; status: string; tip: string | null } }).__mix;
       return !m.beltBusy || m.status !== 'playing' || m.tip !== null;
@@ -85,7 +88,7 @@ async function play(page: Page, moves: Move[]): Promise<string[]> {
   return tips;
 }
 
-const SEEN_ALL = JSON.stringify({ unlocked: 15, completed: [], sound: false, language: 'en', seenTips: ['guide', 'mixing', 'blocked', 'slots'] });
+const SEEN_ALL = JSON.stringify({ unlocked: 100, completed: [], sound: false, language: 'en', seenTips: ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden'] });
 
 /** Column launches (sequential play) that end in a jam, found offline with the core rules. */
 function jamSequence(def: LevelDef): Move[] | null {
@@ -158,8 +161,9 @@ test('a secondary colour is mixed on the canvas (level 4), after the one-time mi
 });
 
 test('a jam pauses the belt and +1 slot resumes play', async ({ page }) => {
-  const def = (levels as LevelDef[]).find((d) => jamSequence(d))!;
-  const moves = jamSequence(def)!;
+  // The shortest jam among the first stages keeps this test quick and stable.
+  const candidates = (levels as LevelDef[]).slice(0, 30).map((d) => ({ d, moves: jamSequence(d) })).filter((c) => c.moves);
+  const { d: def, moves } = candidates.sort((a, b) => a.moves!.length - b.moves!.length || a.d.id - b.d.id)[0]! as { d: LevelDef; moves: Move[] };
   await page.addInitScript((p) => localStorage.setItem('mix-and-splash/progress/v1', p), SEEN_ALL);
   await page.goto('/');
   await waitScene(page, 'menu');
@@ -205,6 +209,7 @@ test('the language is chosen in Settings and remembered; How to play pages throu
 });
 
 test('the map is split into stages and scrolls to far levels', async ({ page }) => {
+  test.setTimeout(300_000); // 100 levels of map to scroll with real drags
   await page.addInitScript((p) => localStorage.setItem('mix-and-splash/progress/v1', p), SEEN_ALL);
   await page.goto('/');
   await waitScene(page, 'menu');
@@ -218,4 +223,35 @@ test('the map is split into stages and scrolls to far levels', async ({ page }) 
   await openLevel(page, last); // needs real scrolling: the map opens at the bottom
   expect(await mix(page, 'levelId')).toBe(last);
   expect(before).toBeGreaterThan(0);
+});
+
+test('completing a stage unlocks its bucket style in the album', async ({ page }) => {
+  test.setTimeout(300_000); // plays the whole stage-1 boss
+  // Levels 1–9 done: winning level 10 (the boss) completes stage 1.
+  await page.addInitScript(() => localStorage.setItem('mix-and-splash/progress/v1', JSON.stringify({
+    unlocked: 10, completed: [1, 2, 3, 4, 5, 6, 7, 8, 9], sound: false, language: 'en',
+    seenTips: ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden'],
+  })));
+  await page.goto('/');
+  await waitScene(page, 'menu');
+  await openLevel(page, 10);
+  await play(page, await mix<Move[]>(page, 'solution'));
+  await page.waitForFunction(() => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'win');
+  expect(await mix(page, 'completedStage')).toBe(1);
+  if (shots) await page.screenshot({ path: `${shots}/13-stage-completato.png` });
+
+  const buttons = await mix<{ second: { x: number; y: number } }>(page, 'winButtons');
+  await tap(page, buttons.second.x, buttons.second.y);
+  await waitScene(page, 'album');
+  expect(await mix(page, 'stage')).toBe(1);
+  expect(await mix(page, 'complete')).toBe(true);
+  expect(await mix(page, 'unlocked')).toBe(true);
+  expect(await mix(page, 'activeSkin')).toBe('classic');
+  const use = await mix<{ x: number; y: number }>(page, 'useButton');
+  await tap(page, use.x, use.y);
+  await page.waitForFunction(() => (window as unknown as { __mix: { activeSkin: string } }).__mix.activeSkin === 'dots');
+  if (shots) await page.screenshot({ path: `${shots}/14-album-stage-1.png` });
+
+  // Saved before any reload (the init script would overwrite storage on the next navigation).
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('mix-and-splash/progress/v1')!).skin)).toBe('dots');
 });
