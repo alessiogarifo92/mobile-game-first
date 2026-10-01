@@ -220,6 +220,47 @@ test('the language is chosen in Settings and remembered; How to play pages throu
     await waitScene(page, i < 2 ? 'howto' : 'menu');
   }
 
+  // Swipe back and forth between pages, and a fresh visit starts on page 1 again.
+  const settings = await mix<{ x: number; y: number }>(page, 'settingsButton');
+  await tap(page, settings.x, settings.y);
+  await page.waitForFunction(() => (window as unknown as { __mix: { settingsOpen: boolean } }).__mix.settingsOpen);
+  const howto = (await mix<Record<string, { x: number; y: number }>>(page, 'settingsButtons')).howto!;
+  await tap(page, howto.x, howto.y);
+  await waitScene(page, 'howto');
+  expect(await mix(page, 'page')).toBe(0);
+  const box = (await page.locator('canvas').boundingBox())!;
+  const swipe = async (dx: number) => {
+    const y = box.y + box.height / 2;
+    await page.mouse.move(box.x + box.width / 2, y);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width / 2 + dx, y, { steps: 6 });
+    await page.mouse.up();
+  };
+  await swipe(-200);
+  await page.waitForFunction(() => (window as unknown as { __mix: { page: number } }).__mix.page === 1);
+  await swipe(-200);
+  await page.waitForFunction(() => (window as unknown as { __mix: { page: number } }).__mix.page === 2);
+  await swipe(200);
+  await page.waitForFunction(() => (window as unknown as { __mix: { page: number } }).__mix.page === 1);
+  await swipe(200);
+  await page.waitForFunction(() => (window as unknown as { __mix: { page: number } }).__mix.page === 0);
+  await swipe(200); // already on the first page: nothing happens
+  expect(await mix(page, 'page')).toBe(0);
+  // Leave from page 3, come back: it opens on page 1, not where it was left.
+  await swipe(-200);
+  await swipe(-200);
+  await page.waitForFunction(() => (window as unknown as { __mix: { page: number } }).__mix.page === 2);
+  await page.keyboard.press('ArrowLeft');
+  await page.keyboard.press('ArrowRight');
+  await page.waitForFunction(() => (window as unknown as { __mix: { page: number } }).__mix.page === 2);
+  await tap(page, 60, 64); // ◀ back to Settings
+  await waitScene(page, 'menu');
+  await page.waitForFunction(() => (window as unknown as { __mix: { settingsOpen: boolean } }).__mix.settingsOpen);
+  const again = (await mix<Record<string, { x: number; y: number }>>(page, 'settingsButtons')).howto!;
+  await tap(page, again.x, again.y);
+  await waitScene(page, 'howto');
+  expect(await mix(page, 'page')).toBe(0);
+
   await page.reload();
   await waitScene(page, 'menu');
   expect(await mix(page, 'language')).toBe('it'); // survives a reload

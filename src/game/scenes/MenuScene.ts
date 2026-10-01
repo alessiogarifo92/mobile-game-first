@@ -275,7 +275,7 @@ export class MenuScene extends Phaser.Scene {
       }, progress.sound === on);
     });
 
-    add('howto', VIEW.width / 2, y0 + 500, 420, 80, t('settings.howto'), () => this.scene.start('howto'), false);
+    add('howto', VIEW.width / 2, y0 + 500, 420, 80, t('settings.howto'), () => this.scene.start('howto', { page: 0 }), false);
     add('replay-tutorial', VIEW.width / 2, y0 + 600, 420, 80, t('settings.replayTutorial'), () => {
       resetTips();
       this.scene.start('play', { levelId: 1 });

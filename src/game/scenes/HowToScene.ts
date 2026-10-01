@@ -8,15 +8,27 @@ import { PAINT, SYMBOL, THEME } from '../theme';
 import { button, fullBackground, label, viewOffset } from '../ui';
 
 const PAGES = 3;
+/** Horizontal drag (logical units) that counts as a swipe. */
+const SWIPE = 70;
 
 /** "How to play": three illustrated cards, reachable from Settings. */
 export class HowToScene extends Phaser.Scene {
+  private pageNow = 0;
+
   constructor() {
     super('howto');
   }
 
+  /** Opens another page; out of range does nothing (first page has no "back", the last has no "next"). */
+  private go(target: number): void {
+    const current = this.pageNow;
+    if (target < 0 || target >= PAGES || target === current) return;
+    this.scene.restart({ page: target });
+  }
+
   create(data: { page?: number } = {}): void {
     const page = Math.min(Math.max(data.page ?? 0, 0), PAGES - 1);
+    this.pageNow = page;
     fullBackground(this, THEME.bg);
     label(this, VIEW.width / 2, 110, t('howto.title'), THEME.type.lg);
 
@@ -41,6 +53,16 @@ export class HowToScene extends Phaser.Scene {
       if (last) this.scene.start('menu');
       else this.scene.restart({ page: page + 1 });
     }, { name: 'howto-next' });
+    // Swipe or arrow keys move between pages; the dots are tappable too.
+    this.input.on('pointerup', (p: Phaser.Input.Pointer) => {
+      const dx = p.x - p.downX;
+      if (Math.abs(dx) > SWIPE && Math.abs(dx) > 1.5 * Math.abs(p.y - p.downY)) this.go(page + (dx < 0 ? 1 : -1));
+    });
+    this.input.keyboard?.on('keydown-LEFT', () => this.go(page - 1));
+    this.input.keyboard?.on('keydown-RIGHT', () => this.go(page + 1));
+    for (let i = 0; i < PAGES; i++) {
+      this.add.zone(VIEW.width / 2 + (i - 1) * 64, 1080, 64, 88).setInteractive({ useHandCursor: true }).on('pointerup', () => this.go(i));
+    }
     button(this, 60, 64, 84, 64, '◀', () => this.scene.start('menu', { settings: true }), {
       fill: THEME.belt, color: THEME.inkCss, name: 'home',
     });
