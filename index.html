@@ -10,14 +10,23 @@
     <title>Mix & Splash</title>
     <style>
       html, body { margin: 0; height: 100%; background: #FFF6E9; overflow: hidden; overscroll-behavior: none; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
-      #app { position: fixed; inset: 0; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+      #app { position: fixed; inset: 0; }
+      /* The game lives in the area the system leaves free: Capacitor (Android edge-to-edge) publishes the insets as
+         --safe-area-inset-*, browsers and iOS as env(); the larger of the two wins. */
+      #game {
+        position: absolute;
+        top: max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px));
+        right: max(env(safe-area-inset-right, 0px), var(--safe-area-inset-right, 0px));
+        bottom: max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px));
+        left: max(env(safe-area-inset-left, 0px), var(--safe-area-inset-left, 0px));
+      }
       /* Phone held sideways (PWA / web): the game is portrait-only, so ask to rotate instead of showing a sliver. */
       #rotate { display: none; position: fixed; inset: 0; z-index: 10; align-items: center; justify-content: center; text-align: center; background: #FFF6E9; color: #2B2D42; font: 700 20px system-ui, sans-serif; }
       @media (orientation: landscape) and (max-height: 500px) { #rotate { display: flex; } }
     </style>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app"><div id="game"></div></div>
     <div id="rotate">Ruota il telefono in verticale<br />Rotate your phone to portrait</div>
     <script type="module" src="/src/main.ts"></script>
   </body>

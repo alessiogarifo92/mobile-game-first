@@ -1,7 +1,10 @@
 import { VIEW } from './layout';
 
-/** Tallest game the layouts are designed for (about 9:21 phones and a bit beyond). */
-export const MAX_SCREEN_HEIGHT = 1900;
+/**
+ * Tallest game: 720 x 1700 is about 9:21. Taller screens get side bars instead of a stretched layout, so controls
+ * never end up far from the content and a measurement error cannot push them off the visible area.
+ */
+export const MAX_SCREEN_HEIGHT = 1700;
 
 /**
  * Logical height of the game for a window of the given size: 720 wide, as tall as the window's aspect ratio asks,

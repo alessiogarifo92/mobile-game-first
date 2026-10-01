@@ -97,3 +97,37 @@ for (const [name, width, height] of SCREENS) {
     });
   });
 }
+
+// Android edge-to-edge: the system bars are reported as --safe-area-inset-*; the game must stay between them.
+test.describe('safe areas', () => {
+  for (const [name, width, height] of [['360x640', 360, 640], ['412x915', 412, 915], ['390x844', 390, 844]] as const) {
+    test(`${name}: canvas and controls stay between a 48 px status bar and a 34 px gesture bar`, async ({ page }) => {
+      await page.setViewportSize({ width, height });
+      await page.addInitScript((p) => localStorage.setItem('mix-and-splash/progress/v1', p), SAVE);
+      await page.goto('/');
+      await waitScene(page, 'menu');
+      // The insets arrive after the start (Capacitor publishes them once the window is laid out): the game re-fits.
+      await page.addStyleTag({ content: ':root { --safe-area-inset-top: 48px; --safe-area-inset-bottom: 34px; }' });
+      await page.waitForFunction((h) => document.getElementById('game')!.clientHeight === h, height - 48 - 34);
+      await page.waitForFunction(() => (window as unknown as { __mix?: { screenHeight?: number; scene: string } }).__mix?.scene === 'menu');
+      await page.waitForTimeout(500);
+      const box = (await page.locator('canvas').boundingBox())!;
+      expect(box.y).toBeGreaterThanOrEqual(48 - 1);
+      expect(box.y + box.height).toBeLessThanOrEqual(height - 34 + 1);
+      // Real window height used for the game is the free area, not the whole window.
+      const game = await page.evaluate(() => document.getElementById('game')!.clientHeight);
+      expect(game).toBe(height - 48 - 34);
+      // A level: the bottom controls stay inside the canvas, which is inside the free area.
+      await page.keyboard.press('End');
+      await page.waitForFunction(() => (window as unknown as { __mix: { scrollY: number } }).__mix.scrollY > 0);
+      const first = (await mix<{ id: number; x: number; y: number }[]>(page, 'nodes')).find((n) => n.id === 1)!;
+      await tap(page, first.x, first.y);
+      await waitScene(page, 'play');
+      const screen = await mix<number>(page, 'screenHeight');
+      const columns = await mix<Rect[]>(page, 'columns');
+      for (const c of columns) expect(c.y + c.h).toBeLessThanOrEqual(screen);
+      const k = box.width / 720;
+      expect(box.y + screen * k).toBeLessThanOrEqual(height - 34 + 1);
+    });
+  }
+});

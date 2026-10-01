@@ -36,19 +36,20 @@ export class HowToScene extends Phaser.Scene {
     screenBackground(this, THEME.bg);
     label(this, VIEW.width / 2, 110, t('howto.title'), THEME.type.lg);
 
-    // Taller screens: the text and the buttons stay near the bottom edge (thumb), the card grows to fill the gap.
+    // Taller screens: the card grows a little, the text follows it and the button goes to the bottom edge (thumb).
     const off = this.scale.height - VIEW.height; // extra height on tall screens
     const g = this.add.graphics();
     g.fillStyle(THEME.paper, 1);
-    g.fillRoundedRect(60, 190, VIEW.width - 120, 560 + off, THEME.radius.panel);
+    g.fillRoundedRect(60, 190, VIEW.width - 120, 560 + off / 2, THEME.radius.panel);
     const first = this.children.length;
-    this.illustrate(g, page);
-    // The illustration sits in the middle of the (taller) card; the card itself is drawn by the same Graphics.
-    for (const child of this.children.list.slice(first)) (child as Phaser.GameObjects.Text).y += off / 2;
+    const art = this.add.graphics();
+    this.illustrate(art, page);
+    // The illustration sits in the middle of the (taller) card.
+    for (const child of this.children.list.slice(first)) (child as Phaser.GameObjects.Text).y += off / 4;
 
     const n = page + 1;
-    label(this, VIEW.width / 2, 820 + off, t(`howto.${n}.title` as MessageKey), THEME.type.lg);
-    label(this, VIEW.width / 2, 900 + off, t(`howto.${n}.body` as MessageKey), THEME.type.sm, THEME.subCss, false)
+    label(this, VIEW.width / 2, 820 + off / 2, t(`howto.${n}.title` as MessageKey), THEME.type.lg);
+    label(this, VIEW.width / 2, 900 + off / 2, t(`howto.${n}.body` as MessageKey), THEME.type.sm, THEME.subCss, false)
       .setWordWrapWidth(VIEW.width - 120)
       .setOrigin(0.5, 0);
 
@@ -56,7 +57,7 @@ export class HowToScene extends Phaser.Scene {
     const dots = this.add.graphics();
     for (let i = 0; i < PAGES; i++) {
       dots.fillStyle(THEME.ink, i === page ? 1 : 0.2);
-      dots.fillCircle(VIEW.width / 2 + (i - 1) * 32, 1080 + off, 9);
+      dots.fillCircle(VIEW.width / 2 + (i - 1) * 32, 1080 + off * 0.75, 9);
     }
     const last = page === PAGES - 1;
     button(this, VIEW.width / 2, 1170 + off, 360, 88, t(last ? 'howto.done' : 'howto.next'), () => {
@@ -71,7 +72,7 @@ export class HowToScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-LEFT', () => this.go(page - 1));
     this.input.keyboard?.on('keydown-RIGHT', () => this.go(page + 1));
     for (let i = 0; i < PAGES; i++) {
-      this.add.zone(VIEW.width / 2 + (i - 1) * 64, 1080 + off, 64, 88).setInteractive({ useHandCursor: true }).on('pointerup', () => this.go(i));
+      this.add.zone(VIEW.width / 2 + (i - 1) * 64, 1080 + off * 0.75, 64, 88).setInteractive({ useHandCursor: true }).on('pointerup', () => this.go(i));
     }
     button(this, 60, 64, 84, 64, '◀', () => this.scene.start('menu', { settings: true }), {
       fill: THEME.belt, color: THEME.inkCss, name: 'home',

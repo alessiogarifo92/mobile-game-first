@@ -285,6 +285,10 @@ export class MenuScene extends Phaser.Scene {
       this.scene.start('play', { levelId: 1 });
     }, false);
     add('progress', VIEW.width / 2, y0 + 660, 420, 80, t('settings.progress'), () => this.scene.start('data'), false);
+    // Screen diagnostics (to compare what the phone reports with what the game uses).
+    const host = document.getElementById('game');
+    const vv = window.visualViewport;
+    c.add(label(this, VIEW.width / 2, y0 + h - 14, `window ${window.innerWidth}×${window.innerHeight} · view ${Math.round(vv?.width ?? 0)}×${Math.round(vv?.height ?? 0)} · game ${host?.clientWidth}×${host?.clientHeight} → 720×${this.scale.height}`, 16, THEME.subCss, false));
     add('close', VIEW.width / 2, y0 + 750, 300, 80, t('settings.close'), () => {
       c.destroy();
       this.settings = null;

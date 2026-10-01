@@ -8,18 +8,22 @@ import { MenuScene } from './game/scenes/MenuScene';
 import { PlayScene } from './game/scenes/PlayScene';
 import { THEME } from './game/theme';
 
+/** The element the game lives in: the screen minus the safe areas (notch, status and navigation bars). */
+const host = document.getElementById('game')!;
+const hostHeight = () => screenHeight(host.clientWidth, host.clientHeight);
+
 // The logical width is always 720; the height follows the screen (1280 for 16:9, taller for tall phones), and
 // each scene lays itself out for it. Wider-than-tall screens (tablets, desktop windows) keep the portrait game
 // centred with side bars: bucket and board sizes stay comfortable instead of stretching across a landscape window.
 const game = new Phaser.Game({
   type: Phaser.AUTO,
-  parent: 'app',
+  parent: host,
   backgroundColor: THEME.bgCss,
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
     width: VIEW.width,
-    height: screenHeight(window.innerWidth, window.innerHeight),
+    height: hostHeight(),
   },
   input: { activePointers: 2 },
   scene: [MenuScene, PlayScene, HowToScene, AlbumScene, DataScene],
@@ -31,7 +35,7 @@ const game = new Phaser.Game({
  * level is over or left, so a resize never loses a game.
  */
 function applyResize(): void {
-  const wanted = screenHeight(window.innerWidth, window.innerHeight);
+  const wanted = hostHeight();
   if (wanted === game.scale.gameSize.height) return;
   const play = game.scene.getScene('play') as PlayScene;
   if (game.scene.isActive('play') && !play.canRelayout()) {
@@ -46,7 +50,8 @@ function applyResize(): void {
 }
 
 let resizeTimer: number | undefined;
-window.addEventListener('resize', () => {
+// Observing the host (not the window) also catches inset changes: system bars showing or hiding, a keyboard, split screen.
+new ResizeObserver(() => {
   window.clearTimeout(resizeTimer);
   resizeTimer = window.setTimeout(applyResize, 150);
-});
+}).observe(host);
