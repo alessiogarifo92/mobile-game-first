@@ -4,20 +4,7 @@ import { buildLanes, parseLevel, type LevelDef } from '../src/core/level';
 import { cloneBoard, createBoard, type Board } from '../src/core/rules';
 import { runLoop, type Move } from '../src/core/solver';
 
-type Rect = { x: number; y: number; w: number; h: number };
-const shots = process.env.SHOTS_DIR;
-
-async function mix<T = unknown>(page: Page, key: string): Promise<T> {
-  return page.evaluate((k) => (window as unknown as { __mix: Record<string, unknown> }).__mix[k], key) as Promise<T>;
-}
-
-/** Taps a point given in the game's logical coordinates. */
-async function tap(page: Page, x: number, y: number) {
-  const box = (await page.locator('canvas').boundingBox())!;
-  const k = box.width / 720;
-  const scroll = await mix<number>(page, 'scrollY');
-  await page.mouse.click(box.x + x * k, box.y + (y - scroll) * k);
-}
+import { mix, shots, tap, waitScene, type Rect } from './helpers';
 
 /** On the map, drags until the level's node is in the visible area below the title bar, then taps it. */
 async function openLevel(page: Page, id: number) {
@@ -43,10 +30,6 @@ async function openLevel(page: Page, id: number) {
     await page.waitForTimeout(300);
   }
   throw new Error(`could not scroll to level ${id}`);
-}
-
-async function waitScene(page: Page, scene: string) {
-  await page.waitForFunction((s) => (window as unknown as { __mix?: { scene: string } }).__mix?.scene === s, scene);
 }
 
 /** Closes an onboarding tip card if one is open; returns its id. */

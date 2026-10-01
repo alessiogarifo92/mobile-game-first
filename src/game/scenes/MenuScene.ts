@@ -39,6 +39,10 @@ export class MenuScene extends Phaser.Scene {
     super('menu');
   }
 
+  relayoutData(): { settings: boolean; scroll: number } {
+    return { settings: !!this.settings, scroll: this.scroll };
+  }
+
   private get viewHeight(): number {
     return this.scale.height;
   }
@@ -51,7 +55,7 @@ export class MenuScene extends Phaser.Scene {
     this.dragging = false;
     this.layout = computeMapLayout(LEVELS.map((l) => ({ id: l.id, stage: l.stage, boss: l.boss })), VIEW.width, this.viewHeight);
     const current = currentLevel(progress.unlocked, progress.completed, LEVELS.length);
-    this.scroll = data.scroll ?? scrollToLevel(this.layout, current, this.viewHeight);
+    this.scroll = clampScroll(data.scroll ?? scrollToLevel(this.layout, current, this.viewHeight), this.layout, this.viewHeight);
 
     this.cameras.main.setBackgroundColor(THEME.bg);
     this.cullable = [];
@@ -275,12 +279,13 @@ export class MenuScene extends Phaser.Scene {
       }, progress.sound === on);
     });
 
-    add('howto', VIEW.width / 2, y0 + 500, 420, 80, t('settings.howto'), () => this.scene.start('howto', { page: 0 }), false);
-    add('replay-tutorial', VIEW.width / 2, y0 + 600, 420, 80, t('settings.replayTutorial'), () => {
+    add('howto', VIEW.width / 2, y0 + 480, 420, 80, t('settings.howto'), () => this.scene.start('howto', { page: 0 }), false);
+    add('replay-tutorial', VIEW.width / 2, y0 + 570, 420, 80, t('settings.replayTutorial'), () => {
       resetTips();
       this.scene.start('play', { levelId: 1 });
     }, false);
-    add('close', VIEW.width / 2, y0 + 730, 300, 80, t('settings.close'), () => {
+    add('progress', VIEW.width / 2, y0 + 660, 420, 80, t('settings.progress'), () => this.scene.start('data'), false);
+    add('close', VIEW.width / 2, y0 + 750, 300, 80, t('settings.close'), () => {
       c.destroy();
       this.settings = null;
       this.publish();

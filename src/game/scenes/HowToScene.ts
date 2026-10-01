@@ -5,7 +5,7 @@ import type { MessageKey } from '../../core/i18n';
 import { publishDebug } from '../debug';
 import { t } from '../store';
 import { PAINT, SYMBOL, THEME } from '../theme';
-import { button, fullBackground, label, viewOffset } from '../ui';
+import { button, label, screenBackground } from '../ui';
 
 const PAGES = 3;
 /** Horizontal drag (logical units) that counts as a swipe. */
@@ -19,6 +19,10 @@ export class HowToScene extends Phaser.Scene {
     super('howto');
   }
 
+  relayoutData(): { page: number } {
+    return { page: this.pageNow };
+  }
+
   /** Opens another page; out of range does nothing (first page has no "back", the last has no "next"). */
   private go(target: number): void {
     const current = this.pageNow;
@@ -29,27 +33,33 @@ export class HowToScene extends Phaser.Scene {
   create(data: { page?: number } = {}): void {
     const page = Math.min(Math.max(data.page ?? 0, 0), PAGES - 1);
     this.pageNow = page;
-    fullBackground(this, THEME.bg);
+    screenBackground(this, THEME.bg);
     label(this, VIEW.width / 2, 110, t('howto.title'), THEME.type.lg);
 
+    // Taller screens: the text and the buttons stay near the bottom edge (thumb), the card grows to fill the gap.
+    const off = this.scale.height - VIEW.height; // extra height on tall screens
     const g = this.add.graphics();
     g.fillStyle(THEME.paper, 1);
-    g.fillRoundedRect(60, 190, VIEW.width - 120, 560, THEME.radius.panel);
+    g.fillRoundedRect(60, 190, VIEW.width - 120, 560 + off, THEME.radius.panel);
+    const first = this.children.length;
     this.illustrate(g, page);
+    // The illustration sits in the middle of the (taller) card; the card itself is drawn by the same Graphics.
+    for (const child of this.children.list.slice(first)) (child as Phaser.GameObjects.Text).y += off / 2;
 
     const n = page + 1;
-    label(this, VIEW.width / 2, 820, t(`howto.${n}.title` as MessageKey), THEME.type.lg);
-    label(this, VIEW.width / 2, 900, t(`howto.${n}.body` as MessageKey), THEME.type.sm, THEME.subCss, false)
+    label(this, VIEW.width / 2, 820 + off, t(`howto.${n}.title` as MessageKey), THEME.type.lg);
+    label(this, VIEW.width / 2, 900 + off, t(`howto.${n}.body` as MessageKey), THEME.type.sm, THEME.subCss, false)
       .setWordWrapWidth(VIEW.width - 120)
       .setOrigin(0.5, 0);
 
-    // Page dots.
+    // Page dots (their own Graphics: `g` was shifted with the illustration).
+    const dots = this.add.graphics();
     for (let i = 0; i < PAGES; i++) {
-      g.fillStyle(THEME.ink, i === page ? 1 : 0.2);
-      g.fillCircle(VIEW.width / 2 + (i - 1) * 32, 1080, 9);
+      dots.fillStyle(THEME.ink, i === page ? 1 : 0.2);
+      dots.fillCircle(VIEW.width / 2 + (i - 1) * 32, 1080 + off, 9);
     }
     const last = page === PAGES - 1;
-    button(this, VIEW.width / 2, 1170, 360, 88, t(last ? 'howto.done' : 'howto.next'), () => {
+    button(this, VIEW.width / 2, 1170 + off, 360, 88, t(last ? 'howto.done' : 'howto.next'), () => {
       if (last) this.scene.start('menu');
       else this.scene.restart({ page: page + 1 });
     }, { name: 'howto-next' });
@@ -61,12 +71,12 @@ export class HowToScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-LEFT', () => this.go(page - 1));
     this.input.keyboard?.on('keydown-RIGHT', () => this.go(page + 1));
     for (let i = 0; i < PAGES; i++) {
-      this.add.zone(VIEW.width / 2 + (i - 1) * 64, 1080, 64, 88).setInteractive({ useHandCursor: true }).on('pointerup', () => this.go(i));
+      this.add.zone(VIEW.width / 2 + (i - 1) * 64, 1080 + off, 64, 88).setInteractive({ useHandCursor: true }).on('pointerup', () => this.go(i));
     }
     button(this, 60, 64, 84, 64, '◀', () => this.scene.start('menu', { settings: true }), {
       fill: THEME.belt, color: THEME.inkCss, name: 'home',
     });
-    publishDebug({ scene: 'howto', page, offsetY: viewOffset(this), scrollY: this.cameras.main.scrollY, next: { x: VIEW.width / 2, y: 1170 } });
+    publishDebug({ scene: 'howto', page, offsetY: 0, scrollY: this.cameras.main.scrollY, next: { x: VIEW.width / 2, y: 1170 + off } });
   }
 
   private jar(g: Phaser.GameObjects.Graphics, x: number, y: number, color: number, size = 84): void {

@@ -33,7 +33,7 @@ jobs:
       - run: npx cap sync android
       - name: Build debug APK
         working-directory: android
-        run: ./gradlew assembleDebug --no-daemon
+        run: ./gradlew assembleDebug --no-daemon -PversionCode=$((GITHUB_RUN_NUMBER + 100))
       - uses: actions/upload-artifact@v4
         with:
           name: mix-and-splash-debug-apk

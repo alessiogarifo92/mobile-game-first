@@ -58,14 +58,8 @@ export function label(
     .setOrigin(0.5);
 }
 
-/** Logical content is 720x1280; taller screens get a taller game, and the camera centres the content. */
-export function viewOffset(scene: Phaser.Scene): number {
-  return (scene.scale.height - VIEW.height) / 2;
-}
-
-/** Centres the camera on the 1280-tall content and paints a background over the whole screen. */
-export function fullBackground(scene: Phaser.Scene, color: number, alpha = 1): Phaser.GameObjects.Rectangle {
-  const off = viewOffset(scene);
-  scene.cameras.main.setScroll(0, -off);
-  return scene.add.rectangle(0, -off, VIEW.width, scene.scale.height, color, alpha).setOrigin(0);
+/** Paints a background over the whole screen with the camera at the origin: play-space y runs 0 → screen height. */
+export function screenBackground(scene: Phaser.Scene, color: number, alpha = 1): Phaser.GameObjects.Rectangle {
+  scene.cameras.main.setScroll(0, 0);
+  return scene.add.rectangle(0, 0, VIEW.width, scene.scale.height, color, alpha).setOrigin(0);
 }

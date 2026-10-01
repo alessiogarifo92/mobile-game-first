@@ -6,6 +6,8 @@ playwright-report/
 test-results/
 .claude/worktrees/
 *.keystore
+# The public debug key is committed on purpose (stable signature for updates); release keys never are.
+!android/app/debug.keystore
 *.jks
 android/app/build/
 android/build/
