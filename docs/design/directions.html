@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mix & Splash — Direzioni</title>
+<style>
+  :root { --bg:#f4f1ec; --ink:#1d1d24; --muted:#6b6b76; --card:#fff; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#16161b; --ink:#ececf1; --muted:#9a9aa6; --card:#22222a; } }
+  :root[data-theme="dark"] { --bg:#16161b; --ink:#ececf1; --muted:#9a9aa6; --card:#22222a; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:24px 16px 48px; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui, sans-serif; }
+  h1 { margin:0 0 4px; font-size:24px; }
+  .lead { color:var(--muted); margin:0 0 24px; max-width:900px; }
+  .dir { background:var(--card); border-radius:16px; padding:20px; margin-bottom:28px; }
+  .dir h2 { margin:0; font-size:20px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .pick { font-size:12px; background:#2a9d8f; color:#fff; padding:2px 10px; border-radius:99px; }
+  .thesis { color:var(--muted); margin:4px 0 12px; }
+  .tokens { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; font-size:12px; }
+  .sw { display:flex; align-items:center; gap:4px; padding:2px 8px 2px 2px; border-radius:99px; background:rgba(127,127,127,.12); }
+  .sw i { width:16px; height:16px; border-radius:50%; display:inline-block; border:1px solid rgba(0,0,0,.15); }
+  .phones { display:flex; gap:16px; overflow-x:auto; padding-bottom:6px; }
+  .phone { flex:0 0 220px; height:440px; border-radius:28px; padding:10px; background:#111; }
+  .screen { width:100%; height:100%; border-radius:20px; overflow:hidden; position:relative; }
+  .cap { font-size:12px; color:var(--muted); text-align:center; margin-top:6px; }
+  .col { display:flex; flex-direction:column; }
+  svg { display:block; }
+</style>
+</head>
+<body>
+<h1>Mix & Splash — 3 direzioni visive</h1>
+<p class="lead">Stesse tre schermate per ogni direzione: <b>Gioco</b> (tela + nastro + coda), <b>Mappa livelli</b>, <b>Vittoria</b>. Ogni direzione porta i suoi token: scegliere una direzione significa scegliere i token che i ticket erediteranno (<code>src/game/theme.ts</code>).</p>
+<div id="root"></div>
+<script>
+const ART = [ // 8x8: R Y B O G P, . = vuoto
+  "..RR.RR.",
+  ".RPPRPPR",
+  ".RPPPPPR",
+  ".ROOOOOR",
+  "..ROYOR.",
+  "...RGR..",
+  "....G...",
+  "...GGG..",
+];
+const DIRS = [
+  { id:"A", name:"Gouache Studio", pick:true,
+    thesis:"Atelier di pittura: carta calda, colori a tempera leggermente desaturati, forme morbide come pennellate. Tipografia arrotondata e amichevole (Fredoka titoli / Nunito testo). Firma: macchie di vernice irregolari a ogni colpo e secchielli a forma di barattolo.",
+    why:"Il tema 'pittura' rinforza la meccanica di mixing, si distingue dai cloni flat/candy e su sfondo chiaro i 6 colori restano leggibili nei video.",
+    t:{ bg:"#FFF6E9", paper:"#FFFDF8", ink:"#2B2D42", sub:"#8D8A9B", belt:"#D9CBB4", R:"#E63946", Y:"#FFB703", B:"#3A86FF", O:"#FB8500", G:"#43AA8B", P:"#8E5BD9", empty:"#F1E7D8", accent:"#2B2D42", font:"'Fredoka','Nunito',ui-rounded,system-ui", radius:6, glow:false, face:false },
+    type:"Fredoka 600 (titoli) · Nunito 700 (UI) · scala 12/14/18/24/32 · spaziatura 4/8/12/16/24" },
+  { id:"B", name:"Neon Lab", pick:false,
+    thesis:"Laboratorio notturno: fondo scuro, colori saturi con bagliore, griglia tecnica, tipografia geometrica e stretta (Space Grotesk / Rubik). Densità alta, HUD da arcade. Firma: scie luminose dei colpi e pixel che 'si accendono'.",
+    why:"Molto d'impatto su TikTok, ma il bagliore suggerisce la mescolanza additiva (luce) mentre il gioco usa quella sottrattiva (vernice): rosso+giallo=arancione è meno intuitivo.",
+    t:{ bg:"#0F1020", paper:"#171A33", ink:"#E8EAFF", sub:"#7C80A8", belt:"#2A2F55", R:"#FF3D6E", Y:"#FFE14D", B:"#2EC5FF", O:"#FF8A3D", G:"#3DFFA2", P:"#B65CFF", empty:"#20244A", accent:"#2EC5FF", font:"'Space Grotesk','Rubik',system-ui", radius:2, glow:true, face:false },
+    type:"Space Grotesk 700 (titoli) · Rubik 500 (UI) · scala 11/13/16/22/28 · spaziatura 4/6/8/12/16" },
+  { id:"C", name:"Toy Pop", pick:false,
+    thesis:"Giocattolo: cielo pastello, colori pieni da caramella, contorni spessi, pulsanti 'gommosi' in rilievo. Tipografia bombata (Baloo 2). Gerarchia: il personaggio prima della tela. Firma: i secchielli hanno occhi e reagiscono (felici quando colpiscono, preoccupati all'ingorgo).",
+    why:"Più personalità e appeal per un pubblico ampio e giovane, ma visivamente vicino a molti hybrid-casual già sul mercato.",
+    t:{ bg:"#BDE0FE", paper:"#FFFFFF", ink:"#1B263B", sub:"#5C6F8A", belt:"#FFC8DD", R:"#FF4D4D", Y:"#FFD60A", B:"#2F6BFF", O:"#FF9F1C", G:"#2DC653", P:"#9B5DE5", empty:"#E8F1FB", accent:"#FF006E", font:"'Baloo 2',ui-rounded,system-ui", radius:10, glow:false, face:true },
+    type:"Baloo 2 800 (titoli) · Baloo 2 600 (UI) · scala 13/15/20/28/36 · spaziatura 6/10/14/20/28" },
+];
+function cell(t,c,x,y,s,done){ if(c===".")return ""; const col = done? t[c] : (c==="O"? (Math.random()<.5?t.R:t.empty) : c==="G"? (Math.random()<.4?t.Y:t.empty): c==="P"?(Math.random()<.5?t.B:t.empty): (Math.random()<.6?t[c]:t.empty));
+  const f = t.glow && col!==t.empty ? ` filter="url(#gl${t.id})"`:"";
+  return `<rect x="${x}" y="${y}" width="${s-1.5}" height="${s-1.5}" rx="${t.radius/3}" fill="${col}"${f}/>`; }
+function bucket(t,c,x,y,n,face){ const r=t.radius; let s=`<rect x="${x}" y="${y}" width="22" height="24" rx="${r}" fill="${t[c]}" stroke="${t.ink}" stroke-width="${face?2.5:1}"/>`;
+  if(face) s+=`<circle cx="${x+7}" cy="${y+9}" r="2" fill="${t.ink}"/><circle cx="${x+15}" cy="${y+9}" r="2" fill="${t.ink}"/><path d="M${x+7} ${y+15} q4 4 8 0" stroke="${t.ink}" fill="none" stroke-width="1.5"/>`;
+  else s+=`<text x="${x+11}" y="${y+16}" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">${n}</text>`;
+  return s; }
+function play(d){ const t=d.t; let s=`<svg viewBox="0 0 200 420" width="100%" height="100%"><defs><filter id="gl${d.id}"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="200" height="420" fill="${t.bg}"/>`;
+  s+=`<text x="16" y="34" font-family="${t.font}" font-size="15" font-weight="700" fill="${t.ink}">Livello 7</text><text x="184" y="34" font-family="${t.font}" font-size="11" text-anchor="end" fill="${t.sub}">⟲</text>`;
+  s+=`<rect x="14" y="52" width="172" height="172" rx="${t.radius*2}" fill="${t.belt}"/><rect x="30" y="68" width="140" height="140" rx="${t.radius}" fill="${t.paper}"/>`;
+  ART.forEach((row,j)=>[...row].forEach((c,i)=>{ s+=cell({...t,id:d.id},c,34+i*16.5,72+j*16.5,16.5,false); }));
+  s+=bucket(t,"R",40,200,7,t.face)+bucket(t,"B",160,120,4,t.face)+bucket(t,"Y",90,52,9,t.face);
+  if(t.glow) s+=`<line x1="51" y1="200" x2="51" y2="140" stroke="${t.R}" stroke-width="2" filter="url(#gl${d.id})"/>`;
+  else s+=`<circle cx="51" cy="150" r="7" fill="${t.R}" opacity=".85"/><circle cx="58" cy="146" r="3" fill="${t.R}"/><circle cx="45" cy="156" r="2.5" fill="${t.R}"/>`;
+  s+=`<text x="100" y="246" font-family="${t.font}" font-size="10" text-anchor="middle" fill="${t.sub}">ATTESA</text>`;
+  for(let i=0;i<5;i++){ s+=`<rect x="${27+i*30}" y="252" width="26" height="30" rx="${t.radius}" fill="none" stroke="${t.sub}" stroke-dasharray="3 3"/>`; }
+  s+=bucket(t,"Y",29,255,3,t.face);
+  const Q=[["R","B","Y","B"],["Y","R","B","R"],["B","Y","R","Y"]];
+  Q.forEach((col,ci)=>col.forEach((c,k)=>{ s+=bucket(t,c,50+ci*40,300+k*28,[10,10,20,10][k],t.face); }));
+  return s+"</svg>"; }
+function map(d){ const t=d.t; let s=`<svg viewBox="0 0 200 420" width="100%" height="100%"><rect width="200" height="420" fill="${t.bg}"/>`;
+  s+=`<text x="100" y="44" font-family="${t.font}" font-size="20" font-weight="800" text-anchor="middle" fill="${t.ink}">Mix &amp; Splash</text>`;
+  const pts=[]; for(let i=0;i<9;i++){ pts.push([100+Math.sin(i*1.1)*55, 380-i*36]); }
+  s+=`<polyline points="${pts.map(p=>p.join(",")).join(" ")}" fill="none" stroke="${t.belt}" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const cols=["R","Y","B","O","G","P","R","Y","B"];
+  pts.forEach((p,i)=>{ const done=i<6, cur=i===6; const f=done?t[cols[i]]:(cur?t.paper:t.empty);
+    s+=`<circle cx="${p[0]}" cy="${p[1]}" r="${cur?17:13}" fill="${f}" stroke="${cur?t.accent:t.ink}" stroke-width="${cur?3:(t.face?2.5:1)}" ${t.glow&&done?`filter="url(#gl${d.id})"`:""}/>`;
+    s+=`<text x="${p[0]}" y="${p[1]+4}" font-family="${t.font}" font-size="${cur?13:11}" font-weight="700" text-anchor="middle" fill="${done?"#fff":t.ink}">${i<8?i+1:"🔒"}</text>`; });
+  return s+`<defs><filter id="gl${d.id}"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs></svg>`; }
+function win(d){ const t=d.t; let s=`<svg viewBox="0 0 200 420" width="100%" height="100%"><defs><filter id="gl${d.id}"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="200" height="420" fill="${t.bg}"/>`;
+  s+=`<text x="100" y="70" font-family="${t.font}" font-size="24" font-weight="800" text-anchor="middle" fill="${t.ink}">Capolavoro!</text>`;
+  s+=`<rect x="36" y="96" width="128" height="128" rx="${t.radius}" fill="${t.paper}" stroke="${t.ink}" stroke-width="${t.face?3:1}"/>`;
+  ART.forEach((row,j)=>[...row].forEach((c,i)=>{ s+=cell({...t,id:d.id},c,40+i*15,100+j*15,15,true); }));
+  s+=`<text x="100" y="250" font-family="${t.font}" font-size="12" text-anchor="middle" fill="${t.sub}">Aggiunto alla galleria</text>`;
+  s+=`<rect x="40" y="290" width="120" height="44" rx="${t.radius*2+6}" fill="${t.accent}"/><text x="100" y="317" font-family="${t.font}" font-size="15" font-weight="700" text-anchor="middle" fill="${t.id==="B"?t.bg:"#fff"}">Avanti</text>`;
+  s+=`<text x="100" y="364" font-family="${t.font}" font-size="12" text-anchor="middle" fill="${t.sub}">Condividi ↗</text>`;
+  return s+"</svg>"; }
+const root=document.getElementById("root");
+DIRS.forEach(d=>{ const t=d.t; const el=document.createElement("section"); el.className="dir";
+  const sw=["bg","ink","R","Y","B","O","G","P","accent"].map(k=>`<span class="sw"><i style="background:${t[k]}"></i>${k} ${t[k]}</span>`).join("");
+  el.innerHTML=`<h2>${d.id} — ${d.name}${d.pick?'<span class="pick">Scelta</span>':''}</h2><p class="thesis">${d.thesis}</p><p class="thesis"><b>Valutazione:</b> ${d.why}</p><div class="tokens">${sw}<span class="sw">${d.type}</span></div>
+  <div class="phones">${[["Gioco",play],["Mappa livelli",map],["Vittoria",win]].map(([n,f])=>`<div class="col"><div class="phone"><div class="screen">${f({...d,t:{...t,id:d.id}})}</div></div><div class="cap">${n}</div></div>`).join("")}</div>`;
+  root.appendChild(el); });
+</script>
+</body>
+</html>
