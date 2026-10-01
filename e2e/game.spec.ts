@@ -1,10 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 import levels from '../src/levels/levels.json' with { type: 'json' };
-import { buildLanes, parseLevel, type LevelDef } from '../src/core/level';
-import { cloneBoard, createBoard, type Board } from '../src/core/rules';
-import { runLoop, type Move } from '../src/core/solver';
+import type { LevelDef } from '../src/core/level';
+import type { Move } from '../src/core/solver';
 
-import { mix, shots, tap, waitScene, type Rect } from './helpers';
+import { SEEN_ALL, jamSequence, mix, play, shots, tap, waitScene, waitSim, type Rect } from './helpers';
 
 /** On the map, drags until the level's node is in the visible area below the title bar, then taps it. */
 async function openLevel(page: Page, id: number) {
@@ -30,87 +29,6 @@ async function openLevel(page: Page, id: number) {
     await page.waitForTimeout(300);
   }
   throw new Error(`could not scroll to level ${id}`);
-}
-
-/** Closes an onboarding tip card if one is open; returns its id. */
-async function dismissTip(page: Page): Promise<string | null> {
-  const tip = await mix<string | null>(page, 'tip');
-  if (!tip) return null;
-  const b = await mix<{ x: number; y: number }>(page, 'tipButton');
-  await tap(page, b.x, b.y);
-  await page.waitForFunction(() => (window as unknown as { __mix: { tip: string | null } }).__mix.tip === null);
-  return tip;
-}
-
-/**
- * Waits until `done` holds in the page. Game time slows down when the machine is loaded, so instead of a fixed
- * real-time limit the wait only fails when the simulation itself stops advancing (`tick` frozen for 15 s).
- */
-async function waitSim(page: Page, done: () => boolean): Promise<void> {
-  let last = -1;
-  for (;;) {
-    try {
-      await page.waitForFunction(done, null, { timeout: 15_000 });
-      return;
-    } catch (e) {
-      const tick = await mix<number>(page, 'tick');
-      if (tick === last) throw e;
-      last = tick;
-    }
-  }
-}
-
-/** Plays moves with real taps, waiting for the belt to empty between moves; returns the tips it closed. */
-async function play(page: Page, moves: Move[]): Promise<string[]> {
-  const tips: string[] = [];
-  const columns = await mix<Rect[]>(page, 'columns');
-  for (const m of moves) {
-    const closed = await dismissTip(page);
-    if (closed) tips.push(closed);
-    const r = m.from === 'column' ? columns[m.index]! : (await mix<Rect[]>(page, 'slots'))[m.index]!;
-    const before = await mix<number>(page, 'moves');
-    await tap(page, r.x + r.w / 2, r.y + 40);
-    // The scene publishes right after a launch, so the next wait sees the belt busy, never a stale snapshot.
-    expect(await mix<number>(page, 'moves')).toBe(before + 1);
-    await waitSim(page, () => {
-      const m = (window as unknown as { __mix: { beltBusy: boolean; status: string; tip: string | null } }).__mix;
-      return !m.beltBusy || m.status !== 'playing' || m.tip !== null;
-    });
-    // A tip pauses the belt: close it and let the bucket finish its loop.
-    const late = await dismissTip(page);
-    if (late) {
-      tips.push(late);
-      await waitSim(page, () => {
-        const m = (window as unknown as { __mix: { beltBusy: boolean; status: string } }).__mix;
-        return !m.beltBusy || m.status !== 'playing';
-      });
-    }
-  }
-  return tips;
-}
-
-const SEEN_ALL = JSON.stringify({ unlocked: 100, completed: [], sound: false, language: 'en', seenTips: ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden'] });
-
-/** Column launches (sequential play) that end in a jam, found offline with the core rules. */
-function jamSequence(def: LevelDef): Move[] | null {
-  const level = parseLevel(def);
-  const lanes = buildLanes(level.width, level.height);
-  const search = (board: Board, heads: number[], slots: number, path: Move[]): Move[] | null => {
-    for (let c = 0; c < level.columns.length; c++) {
-      const s = level.columns[c]![heads[c]!];
-      if (!s) continue;
-      const next = cloneBoard(board);
-      const left = runLoop(level, lanes, next, s.color, s.ammo);
-      const move: Move = { from: 'column', index: c };
-      if (left > 0 && slots >= level.slots) return [...path, move];
-      const h = heads.slice();
-      h[c]! += 1;
-      const found = search(next, h, slots + (left > 0 ? 1 : 0), [...path, move]);
-      if (found) return found;
-    }
-    return null;
-  };
-  return search(createBoard(level), level.columns.map(() => 0), 0, []);
 }
 
 test('first launch: English, guided level 1 played to a win, level 2 unlocked', async ({ page }) => {

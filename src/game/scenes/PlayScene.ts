@@ -211,7 +211,8 @@ export class PlayScene extends Phaser.Scene {
     g.strokeRoundedRect(target.x - pad, target.y - pad, target.w + 2 * pad, boxH, THEME.radius.jar);
     // The hand sits below the highlighted column: above it are the waiting slots, and over it it would hide the second bucket.
     const below = target.y - pad + boxH;
-    const hand = label(this, target.x + target.w / 2, below + 60, '👆', 72);
+    // Never lower than the screen allows: the hand is 72 high and bobs 24 down.
+    const hand = label(this, target.x + target.w / 2, Math.min(below + 60, this.scale.height - 90), '👆', 72);
     this.tweens.add({ targets: hand, y: hand.y + 24, duration: 450, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     this.guideLayer = this.add.container(0, 0, [g, hand]).setDepth(8);
     this.publish();

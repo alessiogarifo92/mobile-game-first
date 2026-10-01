@@ -6,6 +6,7 @@ import { DataScene } from './game/scenes/DataScene';
 import { HowToScene } from './game/scenes/HowToScene';
 import { MenuScene } from './game/scenes/MenuScene';
 import { PlayScene } from './game/scenes/PlayScene';
+import type { DrawnBounds } from './game/debug';
 import { THEME } from './game/theme';
 
 /** The element the game lives in: the screen minus the safe areas (notch, status and navigation bars). */
@@ -55,3 +56,24 @@ new ResizeObserver(() => {
   window.clearTimeout(resizeTimer);
   resizeTimer = window.setTimeout(applyResize, 150);
 }).observe(host);
+
+/** Read-only: where everything visible is, so tests can prove nothing is drawn or tappable outside the screen. */
+window.__mixBounds = () => {
+  const out: DrawnBounds[] = [];
+  const kinds = new Set(['Text', 'Rectangle', 'Image', 'Zone', 'Arc']);
+  const visit = (o: Phaser.GameObjects.GameObject, scene: string, inherited = 0): void => {
+    const shown = o as Phaser.GameObjects.GameObject & { visible?: boolean; alpha?: number; depth?: number; list?: Phaser.GameObjects.GameObject[] };
+    if (shown.visible === false || shown.alpha === 0) return;
+    // Children count with the depth of the container they are in (the map's title bar and panels sit above the map).
+    const depth = Math.max(shown.depth ?? 0, inherited);
+    if (o.type === 'Container') {
+      for (const child of shown.list ?? []) visit(child, scene, depth);
+      return;
+    }
+    if (!kinds.has(o.type)) return;
+    const b = (o as Phaser.GameObjects.Text).getBounds();
+    out.push({ scene, type: o.type, depth, text: o.type === 'Text' ? (o as Phaser.GameObjects.Text).text : null, x: b.x, y: b.y, w: b.width, h: b.height });
+  };
+  for (const scene of game.scene.getScenes(true)) for (const o of scene.children.list) visit(o, scene.scene.key);
+  return out;
+};
