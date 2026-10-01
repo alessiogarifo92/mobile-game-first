@@ -1,7 +1,7 @@
 {
   "name": "mix-and-splash",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.3.0",
   "type": "module",
   "description": "Mix & Splash \u2014 conveyor color-mixing puzzle game",
   "scripts": {

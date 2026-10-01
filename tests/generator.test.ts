@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { generateLevel, splitAmmo } from '../src/core/generator';
+import { generateLevel, placeSpecial, splitAmmo } from '../src/core/generator';
 import { parseLevel } from '../src/core/level';
 import { createRng, shuffle } from '../src/core/rng';
 import { solve } from '../src/core/solver';
@@ -69,5 +69,50 @@ describe('generateLevel with a tiny solver budget', () => {
     expect(generateLevel({ ...opts, stage: 3, boss: true }).def).toMatchObject({ stage: 3, boss: true });
     expect(generateLevel(opts).def).toMatchObject({ stage: 1 });
     expect(generateLevel(opts).def.boss).toBeUndefined();
+  });
+});
+
+describe('placeSpecial', () => {
+  const image = ['RYBR', 'OGPB', 'RBYR', 'Y..B'];
+
+  it('puts ice only on primary pixels and hidden pixels next to a visible one', () => {
+    for (let seed = 0; seed < 20; seed++) {
+      const overlay = placeSpecial(image, { ice: 4, hidden: 3 }, createRng(seed));
+      const flat = overlay.join('');
+      const img = image.join('');
+      expect(flat.split('').filter((c) => c === 'i')).toHaveLength(4);
+      expect(flat.split('').filter((c) => c === 'h')).toHaveLength(3);
+      [...flat].forEach((c, i) => {
+        if (c === 'i') expect('RYB').toContain(img[i]);
+        if (c !== '.') expect(img[i]).not.toBe('.');
+        if (c === 'h') {
+          const x = i % 4, y = Math.floor(i / 4);
+          const around = [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]]
+            .filter(([a, b]) => a! >= 0 && a! < 4 && b! >= 0 && b! < 4)
+            .map(([a, b]) => b! * 4 + a!);
+          expect(around.some((n) => img[n] !== '.' && flat[n] !== 'h')).toBe(true);
+        }
+      });
+    }
+  });
+
+  it('is deterministic per seed and throws when the image has no room', () => {
+    expect(placeSpecial(image, { ice: 2 }, createRng(1))).toEqual(placeSpecial(image, { ice: 2 }, createRng(1)));
+    expect(() => placeSpecial(['OG'], { ice: 1 }, createRng(1))).toThrow('primary');
+    expect(() => placeSpecial(['R'], { hidden: 1 }, createRng(1))).toThrow('room');
+  });
+
+  it('feeds generated overlays into solvable levels with exact ammo', () => {
+    const { def } = generateLevel({ id: 1, name: 't', image: ['RRBB', 'RYYB', 'BYYR', 'BBRR'], columns: 2, ammoChunk: 4, slots: 3, beltCapacity: 3, seed: 3, special: { ice: 2, hidden: 2 } });
+    expect(def.overlay!.join('')).toMatch(/i.*i|h.*h/);
+    expect(solve(parseLevel(def)).solvable).toBe(true);
+  });
+});
+
+describe('minShooters', () => {
+  it('rejects settings that leave too few buckets', () => {
+    const opts = { id: 1, name: 't', image: ['RRRR', 'RRRR'], columns: 2, ammoChunk: 8, slots: 2, beltCapacity: 2, seed: 1 };
+    expect(() => generateLevel({ ...opts, minShooters: 2 })).toThrow('only 1 shooters');
+    expect(generateLevel({ ...opts, ammoChunk: 4, minShooters: 2 }).def.columns.flat()).toHaveLength(2);
   });
 });

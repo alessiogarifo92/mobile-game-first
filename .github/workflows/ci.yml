@@ -21,7 +21,8 @@ jobs:
         run: npm run gen:levels -- --check
       - run: npm run test:coverage
       - name: Coverage summary
-        if: always()
+        # Only when the coverage run produced a report (a failing test would otherwise add a second, misleading error).
+        if: always() && hashFiles('coverage/coverage-summary.json') != ''
         run: |
           echo '### Coverage (src/core)' >> "$GITHUB_STEP_SUMMARY"
           node -e "const s=require('./coverage/coverage-summary.json').total;for(const k of ['lines','statements','functions','branches'])console.log('- '+k+': '+s[k].pct+'%')" >> "$GITHUB_STEP_SUMMARY"

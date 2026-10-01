@@ -30,7 +30,10 @@ export const MAP = {
   /** Fixed title bar at the top of the screen; nodes scroll underneath it. */
   barHeight: 240,
   step: 112,
-  headerGap: 150,
+  /** Distance from the last node of a stage to the first node of the next one. */
+  headerGap: 230,
+  /** Header band centre, above the last node of the previous stage: clears its boss star and the next node. */
+  headerOffset: 125,
   bottomPad: 80,
   topPad: 60,
   swing: 190,
@@ -46,7 +49,7 @@ export function computeMapLayout(levels: readonly MapLevel[], width: number, vie
   let previousStage: number | null = null;
   for (const level of levels) {
     if (level.stage !== previousStage) {
-      headerAt.push({ stage: level.stage, d: d + MAP.headerGap / 2 - 20, count: 0 });
+      headerAt.push({ stage: level.stage, d: previousStage === null ? d + MAP.headerOffset - 60 : d + MAP.headerOffset, count: 0 });
       d += MAP.headerGap;
       previousStage = level.stage;
     } else {

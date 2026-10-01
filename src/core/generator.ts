@@ -1,4 +1,4 @@
-import { PRIMARIES, type Primary } from './colors';
+import { PRIMARIES, isPrimary, type Primary } from './colors';
 import { paintNeeds, parseImage, parseLevel, parseOverlay, type LevelDef, type ShooterSpec } from './level';
 import { createRng, shuffle } from './rng';
 import { randomWinRate, solve } from './solver';
@@ -21,6 +21,44 @@ export interface GenerateOptions {
   nodeBudget?: number;
   /** Accept only deals whose random-tapper win rate falls in [min, max] (difficulty band). */
   winRate?: [number, number];
+  /** Reject settings that leave fewer shooters than this: few huge buckets mean few decisions. */
+  minShooters?: number;
+  /** Instead of a hand-drawn overlay: how many ice and hidden pixels to place (seeded, per attempt). */
+  special?: { ice?: number; hidden?: number };
+}
+
+/**
+ * Places `ice` iced pixels (on primary pixels only) and `hidden` pixels (each with at least one
+ * orthogonal neighbour that is a visible pixel, so it can be revealed). Returns an overlay.
+ */
+export function placeSpecial(image: string[], counts: { ice?: number; hidden?: number }, rng: () => number): string[] {
+  const { width, height, targets } = parseImage(image);
+  const grid = targets.map(() => '.');
+  const cells = shuffle(targets.map((_, i) => i), rng);
+  let ice = counts.ice ?? 0;
+  for (const c of cells) {
+    if (ice === 0) break;
+    if (isPrimary(targets[c]!)) {
+      grid[c] = 'i';
+      ice -= 1;
+    }
+  }
+  if (ice > 0) throw new Error(`not enough primary pixels for ${counts.ice} ice`);
+  let hidden = counts.hidden ?? 0;
+  const neighbours = (c: number) => {
+    const x = c % width, y = Math.floor(c / width);
+    return [x > 0 ? c - 1 : -1, x < width - 1 ? c + 1 : -1, y > 0 ? c - width : -1, y < height - 1 ? c + width : -1]
+      .filter((n) => n >= 0 && targets[n] !== 0);
+  };
+  for (const c of cells) {
+    if (hidden === 0) break;
+    if (targets[c] === 0 || grid[c] !== '.') continue;
+    if (!neighbours(c).some((n) => grid[n] !== 'h')) continue;
+    grid[c] = 'h';
+    hidden -= 1;
+  }
+  if (hidden > 0) throw new Error(`not enough room for ${counts.hidden} hidden pixels`);
+  return Array.from({ length: height }, (_, y) => grid.slice(y * width, (y + 1) * width).join(''));
 }
 
 /** Splits each color's paint need into shooters of roughly `chunk` ammo. */
@@ -45,12 +83,19 @@ export function splitAmmo(needs: Record<Primary, number>, chunk: number): Shoote
  */
 export function generateLevel(opts: GenerateOptions): { def: LevelDef; seed: number; nodes: number; winRate: number } {
   const { width, targets } = parseImage(opts.image);
-  const { ice } = parseOverlay(opts.overlay, width, targets);
-  const shooters = splitAmmo(paintNeeds(targets, ice), opts.ammoChunk);
   const attempts = opts.attempts ?? 200;
+  let unsolvable = 0;
+  let lowest = Infinity;
+  let highest = -Infinity;
   for (let a = 0; a < attempts; a++) {
     const seed = opts.seed + a;
     const rng = createRng(seed);
+    const overlay = opts.special ? placeSpecial(opts.image, opts.special, rng) : opts.overlay;
+    const { ice } = parseOverlay(overlay, width, targets);
+    const shooters = splitAmmo(paintNeeds(targets, ice), opts.ammoChunk);
+    if (opts.minShooters && shooters.length < opts.minShooters) {
+      throw new Error(`only ${shooters.length} shooters with ammoChunk ${opts.ammoChunk}, minimum ${opts.minShooters}`);
+    }
     const columns: ShooterSpec[][] = Array.from({ length: opts.columns }, () => []);
     shuffle(shooters, rng).forEach((s, i) => columns[i % opts.columns]!.push(s));
     const def: LevelDef = {
@@ -59,17 +104,23 @@ export function generateLevel(opts: GenerateOptions): { def: LevelDef; seed: num
       stage: opts.stage ?? 1,
       ...(opts.boss ? { boss: true } : {}),
       image: opts.image,
-      ...(opts.overlay ? { overlay: opts.overlay } : {}),
+      ...(overlay ? { overlay } : {}),
       columns: columns.filter((c) => c.length > 0),
       slots: opts.slots,
       beltCapacity: opts.beltCapacity,
     };
     const level = parseLevel(def);
     const result = solve(level, opts.nodeBudget);
-    if (!result.solvable) continue;
+    if (!result.solvable) {
+      unsolvable += 1;
+      continue;
+    }
     const winRate = randomWinRate(level, 200, createRng(seed));
+    lowest = Math.min(lowest, winRate);
+    highest = Math.max(highest, winRate);
     if (opts.winRate && (winRate < opts.winRate[0] || winRate > opts.winRate[1])) continue;
     return { def, seed, nodes: result.nodes, winRate };
   }
-  throw new Error(`no solvable deal found for level ${opts.id} in ${attempts} attempts`);
+  const seen = lowest <= highest ? `; solvable deals had win rates ${lowest.toFixed(2)}–${highest.toFixed(2)}` : '';
+  throw new Error(`no solvable deal found for level ${opts.id} in ${attempts} attempts (${unsolvable} unsolvable${seen})`);
 }

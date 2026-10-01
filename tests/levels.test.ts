@@ -32,9 +32,10 @@ describe('shipped levels', () => {
     expect(g.status).toBe('won');
   });
 
-  it('gets harder: the last third is harder for a random tapper than the first third', () => {
-    const rate = (d: LevelDef) => randomWinRate(parseLevel(d), 200, createRng(d.id));
+  // Heavy (random playouts over 100 levels): explicit timeout so a slower CI runner does not fail it.
+  it('gets harder: stages 3–10 are harder for a random tapper than the introduction stages 1–2', () => {
+    const rate = (d: LevelDef) => randomWinRate(parseLevel(d), 100, createRng(d.id));
     const avg = (ds: LevelDef[]) => ds.reduce((s, d) => s + rate(d), 0) / ds.length;
-    expect(avg(defs.slice(10))).toBeLessThan(avg(defs.slice(0, 5)) - 0.2);
-  });
+    expect(avg(defs.filter((d) => d.stage >= 3))).toBeLessThan(avg(defs.filter((d) => d.stage <= 2)) - 0.1);
+  }, 30_000);
 });

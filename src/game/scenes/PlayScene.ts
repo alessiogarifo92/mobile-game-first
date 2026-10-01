@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { newlyCompletedStage } from '../../core/album';
 import { primariesOf } from '../../core/colors';
 import { cellDone } from '../../core/rules';
 import { VIEW, beltPoint, cellRect, computeLayout, contains, type Layout } from '../../core/layout';
@@ -13,6 +14,7 @@ import { publishDebug } from '../debug';
 import { LEVELS, getProgress, levelHint, levelTitle, markCompleted, markTip, setSound, t, tipSeen } from '../store';
 import { BLUE, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
 import { PAINT, SYMBOL, THEME, css } from '../theme';
+import { drawSkin } from '../skins';
 import { button, fullBackground, label, viewOffset } from '../ui';
 
 const TICK_MS = 85;
@@ -41,6 +43,8 @@ export class PlayScene extends Phaser.Scene {
   /** Ammo each shooter had when it was launched, to tell whether its loop hit anything. */
   private launchAmmo = new Map<number, number>();
   private hiddenMarks = new Map<number, Phaser.GameObjects.Text>();
+  /** Stage completed by this win (album reward), if any. */
+  private completedStage: number | null = null;
 
   constructor() {
     super('play');
@@ -56,6 +60,7 @@ export class PlayScene extends Phaser.Scene {
     this.ended = false;
     this.moves = 0;
     this.solution = undefined;
+    this.completedStage = null;
     this.guide = null;
     this.guideLayer = null;
     this.tip = null;
@@ -141,6 +146,7 @@ export class PlayScene extends Phaser.Scene {
       this.moves += 1;
       sfx.launch();
       if (this.guide) this.updateGuide();
+      this.publish();
     }
   }
 
@@ -372,6 +378,7 @@ export class PlayScene extends Phaser.Scene {
     g.fillRoundedRect(x - size / 2, y - size / 2, size, size, THEME.radius.jar);
     g.fillStyle(THEME.ink, 0.25 * alpha);
     g.fillRoundedRect(x - size / 2 + 6, y - size / 2 - 6, size - 12, 12, 5); // lid
+    drawSkin(g, getProgress().skin, x, y, size, alpha);
     g.lineStyle(3, THEME.ink, alpha);
     g.strokeRoundedRect(x - size / 2, y - size / 2, size, size, THEME.radius.jar);
     if (alpha > 0.5) {
@@ -467,6 +474,7 @@ export class PlayScene extends Phaser.Scene {
   private finish(): void {
     this.ended = true;
     if (this.gs.status === 'won') {
+      this.completedStage = newlyCompletedStage(LEVELS, getProgress().completed, this.level.id);
       markCompleted(this.level.id);
       this.time.delayedCall(450, () => {
         sfx.win();
@@ -504,15 +512,19 @@ export class PlayScene extends Phaser.Scene {
       g.fillRect(ox + (i % this.level.width) * cell, oy + Math.floor(i / this.level.width) * cell, cell - 1, cell - 1);
     });
     c.add(g);
-    c.add(label(this, VIEW.width / 2, oy + size + 40, t('win.summary', { name: levelTitle(this.level.id), moves: this.moves }), THEME.type.sm, THEME.subCss, false));
+    const summary = this.completedStage ? t('win.stageComplete') : t('win.summary', { name: levelTitle(this.level.id), moves: this.moves });
+    c.add(label(this, VIEW.width / 2, oy + size + 40, summary, THEME.type.sm, this.completedStage ? THEME.inkCss : THEME.subCss, !!this.completedStage)
+      .setWordWrapWidth(520));
     const isLast = this.level.id >= LEVELS.length;
     c.add(button(this, VIEW.width / 2, top + 600, 360, 88, t(isLast ? 'win.map' : 'win.next'), () => {
       if (isLast) this.scene.start('menu');
       else this.scene.start('play', { levelId: this.level.id + 1 });
     }, { name: 'next' }));
-    c.add(button(this, VIEW.width / 2, top + 700, 260, 64, t('win.map'), () => this.scene.start('menu'), {
-      fill: THEME.belt, color: THEME.inkCss, size: THEME.type.sm, name: 'map',
-    }));
+    const stage = this.completedStage;
+    c.add(button(this, VIEW.width / 2, top + 700, 260, 64, t(stage ? 'win.album' : 'win.map'), () => {
+      if (stage) this.scene.start('album', { stage });
+      else this.scene.start('menu');
+    }, { fill: THEME.belt, color: THEME.inkCss, size: THEME.type.sm, name: stage ? 'album' : 'map' }));
     this.publish();
   }
 
@@ -548,11 +560,14 @@ export class PlayScene extends Phaser.Scene {
       levelId: this.level.id,
       status: gs.status,
       overlay: this.overlay ? (gs.status === 'won' ? 'win' : 'jam') : null,
+      completedStage: this.completedStage,
+      winButtons: { next: { x: VIEW.width / 2, y: (VIEW.height - 760) / 2 + 600 }, second: { x: VIEW.width / 2, y: (VIEW.height - 760) / 2 + 700 } },
       beltBusy: gs.belt.length + gs.pending.length > 0,
       columns: this.layout.columns,
       slots: this.layout.slots,
       solution: this.solution ??= solve(this.level).moves,
       tip: this.tip?.id ?? null,
+      moves: this.moves,
       tipButton: { x: VIEW.width / 2, y: (VIEW.height + TIP_H) / 2 - 70 },
       guide: this.guide,
       painted: this.level.targets.filter((t, i) => t && cellDone(this.level, gs, i)).length,

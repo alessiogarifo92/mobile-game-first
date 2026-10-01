@@ -20,7 +20,7 @@ describe('progress', () => {
 
   it('round-trips through storage', () => {
     const s = memory();
-    const p = { unlocked: 3, completed: [1, 2], sound: false, language: 'it' as const, seenTips: ['guide'] };
+    const p = { unlocked: 3, completed: [1, 2], sound: false, language: 'it' as const, seenTips: ['guide'], skin: 'gold' as const };
     expect(saveProgress(s, p)).toBe(true);
     expect(loadProgress(s)).toEqual(p);
   });
@@ -56,6 +56,10 @@ describe('progress', () => {
     expect(defaultProgress()).toMatchObject({ language: 'en', seenTips: [] });
     const old = loadProgress(memory('{"unlocked":4,"completed":[1,2,3],"sound":false}'));
     expect(old).toMatchObject({ unlocked: 4, language: 'en', seenTips: [] });
+  });
+
+  it('falls back to the classic skin for unknown values', () => {
+    expect(loadProgress(memory('{"skin":"plaid"}')).skin).toBe('classic');
   });
 
   it('rejects an unknown language and invalid tips', () => {

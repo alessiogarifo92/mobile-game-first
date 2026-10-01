@@ -3,11 +3,20 @@ name: Android APK
 on:
   push:
     branches: ['**']
+    # A version tag (e.g. v0.3.0-rc.1) also publishes a pre-release with the APK attached.
+    tags: ['v*']
   workflow_dispatch:
+    inputs:
+      prerelease:
+        description: 'Version tag of a test pre-release to publish with the APK (e.g. v0.3.0-rc.1); empty = APK artifact only'
+        required: false
+        default: ''
 
 jobs:
   apk:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # only used by the release step
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -30,3 +39,17 @@ jobs:
           name: mix-and-splash-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
+      - name: Publish pre-release with the APK
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.prerelease != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.prerelease != '' && inputs.prerelease || github.ref_name }}
+        run: |
+          VERSION="${TAG#v}"
+          APK="mix-and-splash-${TAG}-debug.apk"
+          cp android/app/build/outputs/apk/debug/app-debug.apk "$APK"
+          # Release notes: the CHANGELOG section of this version (without the -rc suffix).
+          awk -v v="## ${VERSION%%-*}" 'index($0, v) == 1 {on=1; next} /^## / {on=0} on' CHANGELOG.md > notes.md
+          printf '\n---\nBuild di test (debug): per installarla, apri il file .apk dal telefono e consenti le origini sconosciute.\n' >> notes.md
+          # On a manual run the tag is created on the commit that was built.
+          gh release create "$TAG" "$APK" --prerelease --target "$GITHUB_SHA" --title "Mix & Splash ${TAG} (test)" --notes-file notes.md

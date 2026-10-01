@@ -1,14 +1,15 @@
 import type { StageSpec } from './types';
 
 /**
- * Stage 1. Holds levels 1–10 in their original MVP order; ticket #30 rebuilds it around the Atelier theme.
- * Difficulty bands are the random-tapper win rate (see randomWinRate); frames of another colour
- * are what makes a level hard, because they block every lane until they are painted.
+ * Stage 1 — Atelier (primi colori) (ticket #30).
+ * Primari, poi un secondario alla volta (arancione al 4, verde al 5, viola al 7). Livello 1 guidato.
+ * winRate = difficulty band for a random tapper (see randomWinRate); `special` places ice/hidden pixels.
  */
 const stage: StageSpec = {
   stage: 1,
+  complete: true,
   levels: [
-    { name: 'heart', columns: 2, ammoChunk: 10, slots: 3, beltCapacity: 5, seed: 100, image: [
+    { name: 'heart', columns: 2, ammoChunk: 10, slots: 4, beltCapacity: 5, seed: 1000, image: [
       '.RR..RR.',
       'RRRRRRRR',
       'RRRRRRRR',
@@ -17,7 +18,7 @@ const stage: StageSpec = {
       '..RRRR..',
       '...RR...',
     ] },
-    { name: 'sun', columns: 2, ammoChunk: 10, slots: 3, beltCapacity: 5, seed: 200, image: [
+    { name: 'sun', columns: 2, ammoChunk: 10, slots: 4, beltCapacity: 5, seed: 1037, image: [
       'BBBBBBBB',
       'BBBYYBBB',
       'BBYYYYBB',
@@ -27,7 +28,7 @@ const stage: StageSpec = {
       'BBBYYBBB',
       'BBBBBBBB',
     ] },
-    { name: 'mushroom', columns: 2, ammoChunk: 14, slots: 3, beltCapacity: 5, winRate: [0.85, 1], seed: 300, image: [
+    { name: 'mushroom', columns: 2, ammoChunk: 10, slots: 4, beltCapacity: 5, seed: 1074, image: [
       '..RRRR..',
       '.RYRRYR.',
       'RRRRRRRR',
@@ -37,47 +38,46 @@ const stage: StageSpec = {
       '..YYYY..',
       '..YYYY..',
     ] },
-    // 4-6: first secondaries,
-    { name: 'orange', columns: 2, ammoChunk: 10, slots: 2, beltCapacity: 5, winRate: [0.8, 1], seed: 400, image: [
+    { name: 'flame', columns: 2, ammoChunk: 10, slots: 3, beltCapacity: 5, winRate: [0.5, 1], seed: 1111, image: [
+      '...R....',
+      '..RR....',
+      '..ROR.R.',
+      '.ROOORR.',
+      '.ROYYOR.',
+      'ROYYYYOR',
+      'ROYYYYOR',
+      '.ROOOOR.',
+    ] },
+    { name: 'clover', columns: 2, ammoChunk: 10, slots: 3, beltCapacity: 5, winRate: [0.5, 1], seed: 1148, image: [
+      '.GG..GG.',
+      'GGGGGGGG',
+      'GGGGGGGG',
+      '.GGYYGG.',
+      '.GGYYGG.',
+      'GGGGGGGG',
+      'GGGGGGGG',
+      '.GG..GG.',
+    ] },
+    { name: 'balloon', columns: 2, ammoChunk: 10, slots: 3, beltCapacity: 5, winRate: [0.5, 1], seed: 1185, image: [
+      '..RRRR..',
+      '.RRRRRR.',
+      '.RYRRRR.',
+      '.RRRRRR.',
+      '..RRRR..',
       '...RR...',
-      '..OOOO..',
-      '.OOYOOO.',
-      '.OYOOOO.',
-      '.OOOOOO.',
-      '.OOOOOO.',
-      '..OOOO..',
+      '....Y...',
+      '...Y....',
     ] },
-    { name: 'leaf', columns: 2, ammoChunk: 10, slots: 2, beltCapacity: 5, winRate: [0.8, 1], seed: 500, image: [
-      '.....GG.',
-      '...GGGG.',
-      '..GGYGG.',
-      '.GGYGGG.',
-      '.GYGGG..',
-      '.YGGG...',
-      'Y.......',
-    ] },
-    { name: 'pumpkin', columns: 3, ammoChunk: 10, slots: 3, beltCapacity: 5, winRate: [0.75, 0.95], seed: 600, image: [
-      '...GG...',
-      '..OGOO..',
-      '.OOOOOO.',
-      'OOYOOYOO',
-      'OOOOOOOO',
-      'OOYYYYOO',
-      '.OOOOOO.',
-      '..OOOO..',
-    ] },
-    // 7-9: purple and every secondary, 3 columns,
-    { name: 'grapes', columns: 3, ammoChunk: 10, slots: 2, beltCapacity: 5, winRate: [0.85, 1], seed: 700, image: [
-      '....GG..',
-      '...GG...',
-      '.PP.PP..',
-      'PPPPPPP.',
-      '.PPPPPP.',
+    { name: 'gem', columns: 2, ammoChunk: 10, slots: 3, beltCapacity: 5, winRate: [0.4, 1], seed: 1222, image: [
       '..PPPP..',
-      '..PPP...',
-      '...P....',
+      '.PBPPBP.',
+      'PPPPPPPP',
+      'RPPPPPPR',
+      '.RPPPPR.',
+      '..RPPR..',
+      '...RR...',
     ] },
-    { name: 'rainbow', columns: 3, ammoChunk: 10, slots: 2, beltCapacity: 5, winRate: [0.4, 0.7], seed: 800, image: [
+    { name: 'rainbow', columns: 2, ammoChunk: 10, slots: 3, beltCapacity: 5, winRate: [0.4, 1], seed: 1259, image: [
       'RRRRRRRR',
       'OOOOOOOO',
       'YYYYYYYY',
@@ -85,28 +85,27 @@ const stage: StageSpec = {
       'BBBBBBBB',
       'PPPPPPPP',
     ] },
-    { name: 'flower', columns: 3, ammoChunk: 10, slots: 2, beltCapacity: 5, winRate: [0.55, 0.8], seed: 900, image: [
-      '..RR.RR.',
-      '.RPPRPPR',
-      '.RPPPPPR',
-      '.ROOOOOR',
-      '..ROYOR.',
-      '...RGR..',
-      '....G...',
-      '...GGG..',
+    { name: 'crayons', columns: 2, ammoChunk: 10, slots: 3, beltCapacity: 5, winRate: [0.4, 1], seed: 1296, image: [
+      'R.O.Y.G.',
+      'RROOYYGG',
+      'RROOYYGG',
+      'RROOYYGG',
+      'RROOYYGG',
+      'RROOYYGG',
+      'BBBBBBBB',
+      'BBBBBBBB',
     ] },
-    // 10-12: 10x10, smaller ammo, fewer slots,
-    { name: 'fish', columns: 3, ammoChunk: 10, slots: 4, beltCapacity: 4, winRate: [0.5, 0.85], seed: 1000, image: [
-      'BBBBBBBBBB',
-      'BBBOOOBBBB',
-      'BBOOYOOBOB',
-      'BOOBOOOOOB',
-      'BOOOOOOOOB',
-      'BBOOYOOBOB',
-      'BBBOOOBBBB',
-      'BBBBBBBBBB',
-      'GGBBBBBGGB',
-      'GGGGGGGGGG',
+    { name: 'palette', columns: 3, ammoChunk: 10, slots: 3, beltCapacity: 5, winRate: [0.3, 1], seed: 1333, image: [
+      '..OOOOOO..',
+      '.OOOOOOOO.',
+      'OORROOYYOO',
+      'OORROOYYOO',
+      'OOOOOOOOOO',
+      'OOBBOO..OO',
+      'OOBBOO..OO',
+      'OOOOOOOOO.',
+      '.OOGGOOPP.',
+      '..OOOOOO..',
     ] },
   ],
 };

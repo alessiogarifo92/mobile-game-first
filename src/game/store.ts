@@ -1,3 +1,4 @@
+import { unlockedSkins, type Skin } from '../core/album';
 import { DEFAULT_LANGUAGE, levelName, stageName, translate, type Language, type MessageKey, type Params } from '../core/i18n';
 import { parseLevel, type Level, type LevelDef } from '../core/level';
 import {
@@ -50,6 +51,14 @@ export function tipSeen(tip: string): boolean {
 
 export function markTip(tip: string): void {
   update(markTipSeen(progress, tip));
+}
+
+export function setSkin(skin: Skin): void {
+  update({ ...progress, skin });
+}
+
+export function skinsUnlocked(): Skin[] {
+  return unlockedSkins(LEVELS, progress.completed);
 }
 
 export function resetTips(): void {
