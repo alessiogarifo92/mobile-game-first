@@ -54,7 +54,7 @@ Ogni colore ha anche un simbolo (● rosso, ▲ giallo, ■ blu), così il gioco
 
 Android chiederà di consentire l'installazione da "origini sconosciute" per l'app usata (Files o Chrome): consentila solo per questa installazione.
 
-Per pubblicare una nuova pre-release basta un tag di versione: `git tag v0.4.0-rc.1 && git push origin v0.4.0-rc.1`. Il workflow compila l'APK e crea la release con le note della sezione corrispondente di `CHANGELOG.md`.
+Per pubblicare una nuova pre-release: GitHub → Actions → *Android APK* → **Run workflow**, scegli il branch e scrivi la versione (es. `v0.4.0-rc.1`); in alternativa pusha un tag di versione. Il workflow compila l'APK e crea la release con le note della sezione corrispondente di `CHANGELOG.md`.
 
 È una build di **debug** (firmata con la chiave di debug): va bene per i test, non per il Play Store.
 

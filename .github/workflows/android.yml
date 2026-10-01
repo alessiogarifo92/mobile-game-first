@@ -6,6 +6,11 @@ on:
     # A version tag (e.g. v0.3.0-rc.1) also publishes a pre-release with the APK attached.
     tags: ['v*']
   workflow_dispatch:
+    inputs:
+      prerelease:
+        description: 'Version tag of a test pre-release to publish with the APK (e.g. v0.3.0-rc.1); empty = APK artifact only'
+        required: false
+        default: ''
 
 jobs:
   apk:
@@ -34,13 +39,7 @@ jobs:
           name: mix-and-splash-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
-      - name: Publish pre-release with the APK
-        if: startsWith(github.ref, 'refs/tags/v')
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-          APK="mix-and-splash-${GITHUB_REF_NAME}-debug.apk"
+XX
           cp android/app/build/outputs/apk/debug/app-debug.apk "$APK"
           # Release notes: the CHANGELOG section of this version (without the -rc suffix).
           awk -v v="## ${VERSION%%-*}" 'index($0, v) == 1 {on=1; next} /^## / {on=0} on' CHANGELOG.md > notes.md
