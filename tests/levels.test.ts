@@ -3,6 +3,7 @@ import levels from '../src/levels/levels.json';
 import { LEVEL_NAME_KEYS } from '../src/core/i18n';
 import { parseLevel, type LevelDef } from '../src/core/level';
 import { createRng } from '../src/core/rng';
+import { createGame, launchFromColumn, launchFromSlot, step } from '../src/core/sim';
 import { randomWinRate, solve } from '../src/core/solver';
 
 const defs = levels as LevelDef[];
@@ -18,9 +19,17 @@ describe('shipped levels', () => {
     }
   });
 
-  it.each(defs.map((d) => [d.id, d.name, d] as const))('level %i (%s) is valid and solvable', (_id, _name, def) => {
-    const result = solve(parseLevel(def));
+  it.each(defs.map((d) => [d.id, d.name, d] as const))('level %i (%s) is solvable and its solution wins in the game', (_id, _name, def) => {
+    const level = parseLevel(def);
+    const result = solve(level);
     expect(result).toMatchObject({ solvable: true, exhaustive: true });
+    // Replay the solution in the real simulation, one shooter at a time.
+    const g = createGame(level);
+    for (const m of result.moves) {
+      expect(m.from === 'column' ? launchFromColumn(g, m.index) : launchFromSlot(g, m.index)).toBe(true);
+      do step(g); while ((g.belt.length || g.pending.length) && g.status === 'playing');
+    }
+    expect(g.status).toBe('won');
   });
 
   it('gets harder: the last third is harder for a random tapper than the first third', () => {

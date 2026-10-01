@@ -12,6 +12,7 @@ export const THEME = {
   inkCss: '#2B2D42',
   subCss: '#8D8A9B',
   white: 0xffffff,
+  ice: 0xcfe8f7,
   font: 'ui-rounded, "Nunito", "Fredoka", system-ui, sans-serif',
   type: { xs: 24, sm: 28, md: 36, lg: 48, xl: 64 },
   space: { xs: 8, sm: 16, md: 24, lg: 32, xl: 48 },

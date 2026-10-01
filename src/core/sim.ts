@@ -1,5 +1,6 @@
-import { accepts, isComplete, type Primary } from './colors';
+import type { Primary } from './colors';
 import { buildLanes, type Level } from './level';
+import { applyHit, boardDone, createBoard, findTarget, type Board } from './rules';
 
 export interface Shooter {
   id: number;
@@ -21,12 +22,14 @@ export interface HitEvent {
   /** Paint state of the cell after the hit. */
   paint: number;
   completed: boolean;
+  brokeIce: boolean;
+  revealed: number[];
 }
 
-export interface GameState {
+/** The game state is a Board (paint, ice, hidden) plus the belt and the shooters. */
+export interface GameState extends Board {
   level: Level;
   lanes: number[][];
-  paint: number[];
   /** Remaining shooters per column; index 0 is the front. */
   queues: Shooter[][];
   slots: (Shooter | null)[];
@@ -51,7 +54,7 @@ export function createGame(level: Level, options: { boardGap?: number } = {}): G
   return {
     level,
     lanes: buildLanes(level.width, level.height),
-    paint: level.targets.map(() => 0),
+    ...createBoard(level),
     queues: level.columns.map((col) => col.map((s) => ({ ...s, id: nextId++, pos: 0, traveled: 0 }))),
     slots: Array.from({ length: level.slots }, () => null),
     pending: [],
@@ -104,18 +107,11 @@ export function continueWithExtraSlot(state: GameState): boolean {
 
 /** Cell a shooter of `color` would hit from `lane`, or -1 when the lane is blocked or empty. */
 export function targetCell(state: GameState, lane: number, color: Primary): number {
-  const cells = state.lanes[lane]!;
-  const { targets } = state.level;
-  for (const cell of cells) {
-    const target = targets[cell]!;
-    if (isComplete(target, state.paint[cell]!)) continue;
-    return accepts(target, state.paint[cell]!, color) ? cell : -1;
-  }
-  return -1;
+  return findTarget(state.level, state, state.lanes[lane]!, color);
 }
 
 export function isWon(state: GameState): boolean {
-  return state.level.targets.every((t, i) => isComplete(t, state.paint[i]!));
+  return boardDone(state.level, state);
 }
 
 /** Advances the simulation by one tick. Deterministic: same inputs, same result. */
@@ -134,7 +130,7 @@ export function step(state: GameState): GameState {
   for (const shooter of state.belt) {
     const cell = targetCell(state, shooter.pos, shooter.color);
     if (cell >= 0) {
-      state.paint[cell]! |= shooter.color;
+      const hit = applyHit(state.level, state, cell, shooter.color);
       shooter.ammo -= 1;
       state.events.push({
         shooterId: shooter.id,
@@ -142,7 +138,7 @@ export function step(state: GameState): GameState {
         lane: shooter.pos,
         cell,
         paint: state.paint[cell]!,
-        completed: isComplete(state.level.targets[cell]!, state.paint[cell]!),
+        ...hit,
       });
     }
     if (shooter.ammo === 0) {

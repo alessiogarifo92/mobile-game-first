@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import levels from '../src/levels/levels.json' with { type: 'json' };
 import { buildLanes, parseLevel, type LevelDef } from '../src/core/level';
+import { cloneBoard, createBoard, type Board } from '../src/core/rules';
 import { runLoop, type Move } from '../src/core/solver';
 
 type Rect = { x: number; y: number; w: number; h: number };
@@ -90,11 +91,11 @@ const SEEN_ALL = JSON.stringify({ unlocked: 15, completed: [], sound: false, lan
 function jamSequence(def: LevelDef): Move[] | null {
   const level = parseLevel(def);
   const lanes = buildLanes(level.width, level.height);
-  const search = (paint: number[], heads: number[], slots: number, path: Move[]): Move[] | null => {
+  const search = (board: Board, heads: number[], slots: number, path: Move[]): Move[] | null => {
     for (let c = 0; c < level.columns.length; c++) {
       const s = level.columns[c]![heads[c]!];
       if (!s) continue;
-      const next = paint.slice();
+      const next = cloneBoard(board);
       const left = runLoop(level, lanes, next, s.color, s.ammo);
       const move: Move = { from: 'column', index: c };
       if (left > 0 && slots >= level.slots) return [...path, move];
@@ -105,7 +106,7 @@ function jamSequence(def: LevelDef): Move[] | null {
     }
     return null;
   };
-  return search(level.targets.map(() => 0), level.columns.map(() => 0), 0, []);
+  return search(createBoard(level), level.columns.map(() => 0), 0, []);
 }
 
 test('first launch: English, guided level 1 played to a win, level 2 unlocked', async ({ page }) => {
