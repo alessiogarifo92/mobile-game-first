@@ -36,6 +36,8 @@ const game = new Phaser.Game({
  * level is over or left, so a resize never loses a game.
  */
 function applyResize(): void {
+  // Phaser only listens to the window: when just the host changes (system bars, insets) it must be told to re-fit.
+  game.scale.refresh();
   const wanted = hostHeight();
   if (wanted === game.scale.gameSize.height) return;
   const play = game.scene.getScene('play') as PlayScene;
