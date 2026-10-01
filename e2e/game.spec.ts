@@ -14,8 +14,34 @@ async function mix<T = unknown>(page: Page, key: string): Promise<T> {
 async function tap(page: Page, x: number, y: number) {
   const box = (await page.locator('canvas').boundingBox())!;
   const k = box.width / 720;
-  const off = await mix<number>(page, 'offsetY');
-  await page.mouse.click(box.x + x * k, box.y + (y + off) * k);
+  const scroll = await mix<number>(page, 'scrollY');
+  await page.mouse.click(box.x + x * k, box.y + (y - scroll) * k);
+}
+
+/** On the map, drags until the level's node is in the visible area below the title bar, then taps it. */
+async function openLevel(page: Page, id: number) {
+  const box = (await page.locator('canvas').boundingBox())!;
+  const k = box.width / 720;
+  for (let i = 0; i < 20; i++) {
+    const node = (await mix<{ id: number; x: number; y: number }[]>(page, 'nodes')).find((n) => n.id === id)!;
+    const [scroll, viewH, bar] = await Promise.all([mix<number>(page, 'scrollY'), mix<number>(page, 'viewHeight'), mix<number>(page, 'barHeight')]);
+    const screenY = node.y - scroll;
+    if (screenY >= bar + 40 && screenY <= viewH - 40) {
+      await tap(page, node.x, node.y);
+      await waitScene(page, 'play');
+      return;
+    }
+    // Drag by up to 500 logical px towards the node (a real swipe, slow enough to avoid a flick).
+    const delta = Math.max(-500, Math.min(500, (bar + viewH) / 2 - screenY));
+    const x = box.x + 40 * k, y0 = box.y + ((bar + viewH) / 2) * k;
+    await page.mouse.move(x, y0);
+    await page.mouse.down();
+    for (let s = 1; s <= 10; s++) await page.mouse.move(x, y0 + (delta * k * s) / 10);
+    await page.waitForTimeout(150);
+    await page.mouse.up();
+    await page.waitForTimeout(300);
+  }
+  throw new Error(`could not scroll to level ${id}`);
 }
 
 async function waitScene(page: Page, scene: string) {
@@ -91,8 +117,7 @@ test('first launch: English, guided level 1 played to a win, level 2 unlocked', 
 
   const nodes = await mix<{ id: number; x: number; y: number; unlocked: boolean }[]>(page, 'nodes');
   expect(nodes.filter((n) => n.unlocked).map((n) => n.id)).toEqual([1]);
-  await tap(page, nodes[0]!.x, nodes[0]!.y);
-  await waitScene(page, 'play');
+  await openLevel(page, 1);
   expect(await mix(page, 'levelId')).toBe(1);
   expect(await mix(page, 'guide')).toBe('tap');
   expect(await page.evaluate(() => document.documentElement.lang)).toBe('en');
@@ -123,9 +148,7 @@ test('a secondary colour is mixed on the canvas (level 4), after the one-time mi
   await page.addInitScript(() => localStorage.setItem('mix-and-splash/progress/v1', JSON.stringify({ unlocked: 15, completed: [], sound: false, seenTips: ['guide'] })));
   await page.goto('/');
   await waitScene(page, 'menu');
-  const nodes = await mix<{ id: number; x: number; y: number }[]>(page, 'nodes');
-  await tap(page, nodes[3]!.x, nodes[3]!.y);
-  await waitScene(page, 'play');
+  await openLevel(page, 4);
   await page.waitForFunction(() => (window as unknown as { __mix: { tip: string | null } }).__mix.tip === 'mixing');
   if (shots) await page.screenshot({ path: `${shots}/05-suggerimento-mixing.png` });
   await play(page, await mix<Move[]>(page, 'solution'));
@@ -139,9 +162,7 @@ test('a jam pauses the belt and +1 slot resumes play', async ({ page }) => {
   await page.addInitScript((p) => localStorage.setItem('mix-and-splash/progress/v1', p), SEEN_ALL);
   await page.goto('/');
   await waitScene(page, 'menu');
-  const nodes = await mix<{ id: number; x: number; y: number }[]>(page, 'nodes');
-  await tap(page, nodes[def.id - 1]!.x, nodes[def.id - 1]!.y);
-  await waitScene(page, 'play');
+  await openLevel(page, def.id);
   await play(page, moves);
   await page.waitForFunction(() => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'jam');
   if (shots) await page.screenshot({ path: `${shots}/07-ingorgo.png` });
@@ -180,4 +201,20 @@ test('the language is chosen in Settings and remembered; How to play pages throu
   await page.reload();
   await waitScene(page, 'menu');
   expect(await mix(page, 'language')).toBe('it'); // survives a reload
+});
+
+test('the map is split into stages and scrolls to far levels', async ({ page }) => {
+  await page.addInitScript((p) => localStorage.setItem('mix-and-splash/progress/v1', p), SEEN_ALL);
+  await page.goto('/');
+  await waitScene(page, 'menu');
+  const headers = await mix<{ stage: number }[]>(page, 'headers');
+  expect(headers.map((h) => h.stage)).toEqual([...new Set((levels as LevelDef[]).map((d) => d.stage))]);
+  const nodes = await mix<{ id: number; boss: boolean }[]>(page, 'nodes');
+  expect(nodes.filter((n) => n.boss).map((n) => n.id)).toEqual((levels as LevelDef[]).filter((d) => d.boss).map((d) => d.id));
+  const before = await mix<number>(page, 'scrollY');
+  const last = (levels as LevelDef[]).length;
+  if (shots) await page.screenshot({ path: `${shots}/10-mappa-stage.png` });
+  await openLevel(page, last); // needs real scrolling: the map opens at the bottom
+  expect(await mix(page, 'levelId')).toBe(last);
+  expect(before).toBeGreaterThan(0);
 });

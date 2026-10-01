@@ -44,7 +44,7 @@ export class HowToScene extends Phaser.Scene {
     button(this, 60, 64, 84, 64, '◀', () => this.scene.start('menu', { settings: true }), {
       fill: THEME.belt, color: THEME.inkCss, name: 'home',
     });
-    publishDebug({ scene: 'howto', page, offsetY: viewOffset(this), next: { x: VIEW.width / 2, y: 1170 } });
+    publishDebug({ scene: 'howto', page, offsetY: viewOffset(this), scrollY: this.cameras.main.scrollY, next: { x: VIEW.width / 2, y: 1170 } });
   }
 
   private jar(g: Phaser.GameObjects.Graphics, x: number, y: number, color: number, size = 84): void {

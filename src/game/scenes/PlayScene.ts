@@ -465,6 +465,7 @@ export class PlayScene extends Phaser.Scene {
     publishDebug({
       scene: 'play',
       offsetY: viewOffset(this),
+      scrollY: this.cameras.main.scrollY,
       levelId: this.level.id,
       status: gs.status,
       overlay: this.overlay ? (gs.status === 'won' ? 'win' : 'jam') : null,
