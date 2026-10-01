@@ -1,12 +1,15 @@
 import { PRIMARIES, type Primary } from './colors';
-import { paintNeeds, parseImage, parseLevel, type LevelDef, type ShooterSpec } from './level';
+import { paintNeeds, parseImage, parseLevel, parseOverlay, type LevelDef, type ShooterSpec } from './level';
 import { createRng, shuffle } from './rng';
 import { randomWinRate, solve } from './solver';
 
 export interface GenerateOptions {
   id: number;
   name: string;
+  stage?: number;
+  boss?: boolean;
   image: string[];
+  overlay?: string[];
   columns: number;
   /** Preferred ammo per shooter; the last shooter of each color takes the remainder. */
   ammoChunk: number;
@@ -41,8 +44,9 @@ export function splitAmmo(needs: Record<Primary, number>, chunk: number): Shoote
  * Throws when no attempt is solvable, so an unplayable level can never ship.
  */
 export function generateLevel(opts: GenerateOptions): { def: LevelDef; seed: number; nodes: number; winRate: number } {
-  const { targets } = parseImage(opts.image);
-  const shooters = splitAmmo(paintNeeds(targets), opts.ammoChunk);
+  const { width, targets } = parseImage(opts.image);
+  const { ice } = parseOverlay(opts.overlay, width, targets);
+  const shooters = splitAmmo(paintNeeds(targets, ice), opts.ammoChunk);
   const attempts = opts.attempts ?? 200;
   for (let a = 0; a < attempts; a++) {
     const seed = opts.seed + a;
@@ -52,7 +56,10 @@ export function generateLevel(opts: GenerateOptions): { def: LevelDef; seed: num
     const def: LevelDef = {
       id: opts.id,
       name: opts.name,
+      stage: opts.stage ?? 1,
+      ...(opts.boss ? { boss: true } : {}),
       image: opts.image,
+      ...(opts.overlay ? { overlay: opts.overlay } : {}),
       columns: columns.filter((c) => c.length > 0),
       slots: opts.slots,
       beltCapacity: opts.beltCapacity,

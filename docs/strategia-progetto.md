@@ -36,6 +36,12 @@ Perché questa e non un clone:
 - **Tutorial interattivo, non testo**: il livello 1 è guidato (colonna evidenziata, mano animata, una riga di testo; i tap fuori dal bersaglio sono ignorati finché il primo secchiello non parte). Poi suggerimenti una tantum quando compare una meccanica nuova: mixing, corsia bloccata, slot d'attesa. "Come si gioca" (3 schede) resta consultabile dalle Impostazioni, con "Rivedi il tutorial". Motivo: negli hybrid-casual si impara giocando, i muri di testo vengono saltati (ticket #20).
 - **Lingue**: inglese di default, italiano disponibile; scelta nelle Impostazioni, salvata nei progressi. Aggiungere una lingua = un dizionario in `src/core/i18n.ts`; un test verifica che abbia tutte le chiavi dell'inglese (ticket #19).
 
+### 100 livelli in 10 stage tematici (v0.3, epic #22)
+- 10 stage da 10 livelli, ognuno con un tema (Atelier, Frutta, Animali, Giardino, Mare, Città, Cibo, Veicoli, Spazio, Fantasia); il 10° di ogni stage è il boss.
+- Le meccaniche nuove arrivano ogni ~2 stage, indipendenti dal tema: **ghiaccio** (stage 4: pixel primario da colpire due volte con il suo colore) e **pixel nascosti** (stage 6: "?" che blocca la corsia finché un vicino non è completo).
+- Formato livello: `overlay` opzionale sopra l'immagine (`i` ghiaccio, `h` nascosto). Le regole di colpo stanno in `src/core/rules.ts`, condivise da simulazione e solver.
+- I 10 quadri di uno stage formano una pagina d'album (#40).
+
 ### Meta leggero
 - MVP: mappa livelli con sblocco progressivo, salvataggio locale, schermate vittoria/sconfitta.
 - Post-MVP: skin dei secchielli, collezione "galleria" dei quadri completati (si condividono come immagine → viralità), streak giornaliera, livello del giorno.

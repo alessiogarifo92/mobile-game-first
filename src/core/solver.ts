@@ -1,5 +1,6 @@
-import { isComplete, type Primary } from './colors';
+import type { Primary } from './colors';
 import { buildLanes, type Level } from './level';
+import { applyHit, boardDone, cloneBoard, createBoard, findTarget, type Board } from './rules';
 
 /** A move in sequential play: launch a column's front shooter or a slot shooter. */
 export type Move = { from: 'column'; index: number } | { from: 'slot'; index: number };
@@ -18,34 +19,33 @@ interface Waiting {
 }
 
 interface Node {
-  paint: number[];
+  board: Board;
   heads: number[];
-  slots: Waiting[];
+  /** Waiting slots by position, exactly like the game: a returning shooter takes the first free one. */
+  slots: (Waiting | null)[];
 }
 
 /**
  * One full loop of a lone shooter: fires at every lane in belt order, exactly like `step` does
- * when the belt holds a single shooter. Mutates `paint`, returns the ammo left.
+ * when the belt holds a single shooter. Mutates `board`, returns the ammo left.
  */
-export function runLoop(level: Level, lanes: number[][], paint: number[], color: Primary, ammo: number): number {
+export function runLoop(level: Level, lanes: number[][], board: Board, color: Primary, ammo: number): number {
   for (const lane of lanes) {
     if (ammo === 0) break;
-    for (const cell of lane) {
-      const target = level.targets[cell]!;
-      if (isComplete(target, paint[cell]!)) continue;
-      if ((target & color) !== 0 && (paint[cell]! & color) === 0) {
-        paint[cell]! |= color;
-        ammo -= 1;
-      }
-      break;
+    const cell = findTarget(level, board, lane, color);
+    if (cell >= 0) {
+      applyHit(level, board, cell, color);
+      ammo -= 1;
     }
   }
   return ammo;
 }
 
 function key(node: Node): string {
-  const slots = node.slots.map((s) => `${s.color}:${s.ammo}`).sort().join(',');
-  return `${node.paint.join('')}|${node.heads.join(',')}|${slots}`;
+  // Positions don't change what can still be solved, so equal multisets of waiting shooters share a key.
+  const slots = node.slots.filter((s): s is Waiting => s !== null).map((s) => `${s.color}:${s.ammo}`).sort().join(',');
+  const b = node.board;
+  return `${b.paint.join('')}|${b.ice.join('')}|${b.hidden.map(Number).join('')}|${node.heads.join(',')}|${slots}`;
 }
 
 /**
@@ -58,10 +58,9 @@ export function solve(level: Level, nodeBudget = 200_000): SolveResult {
   let nodes = 0;
   let exhausted = false;
 
-  const done = (paint: number[]) => level.targets.every((t, i) => isComplete(t, paint[i]!));
 
   const dfs = (node: Node, path: Move[]): Move[] | null => {
-    if (done(node.paint)) return path;
+    if (boardDone(level, node.board)) return path;
     if (nodes >= nodeBudget) {
       exhausted = true;
       return null;
@@ -73,16 +72,17 @@ export function solve(level: Level, nodeBudget = 200_000): SolveResult {
 
     const candidates: { move: Move; next: Node; hits: number }[] = [];
     const tryShooter = (move: Move, shooter: Waiting, base: Node) => {
-      const paint = base.paint.slice();
-      const left = runLoop(level, lanes, paint, shooter.color, shooter.ammo);
+      const board = cloneBoard(base.board);
+      const left = runLoop(level, lanes, board, shooter.color, shooter.ammo);
       const hits = shooter.ammo - left;
       if (move.from === 'slot' && hits === 0) return; // relaunching a blocked shooter changes nothing
       const slots = base.slots.slice();
       if (left > 0) {
-        if (slots.length >= level.slots) return; // would jam
-        slots.push({ color: shooter.color, ammo: left });
+        const free = slots.indexOf(null);
+        if (free < 0) return; // would jam
+        slots[free] = { color: shooter.color, ammo: left };
       }
-      candidates.push({ move, next: { paint, heads: base.heads, slots }, hits });
+      candidates.push({ move, next: { board, heads: base.heads, slots }, hits });
     };
 
     level.columns.forEach((column, c) => {
@@ -93,8 +93,9 @@ export function solve(level: Level, nodeBudget = 200_000): SolveResult {
       tryShooter({ from: 'column', index: c }, shooter, { ...node, heads });
     });
     node.slots.forEach((shooter, s) => {
+      if (!shooter) return;
       const slots = node.slots.slice();
-      slots.splice(s, 1);
+      slots[s] = null;
       tryShooter({ from: 'slot', index: s }, shooter, { ...node, slots });
     });
 
@@ -106,7 +107,7 @@ export function solve(level: Level, nodeBudget = 200_000): SolveResult {
     return null;
   };
 
-  const start: Node = { paint: level.targets.map(() => 0), heads: level.columns.map(() => 0), slots: [] };
+  const start: Node = { board: createBoard(level), heads: level.columns.map(() => 0), slots: Array.from({ length: level.slots }, () => null) };
   const moves = dfs(start, []);
   return { solvable: moves !== null, exhaustive: !exhausted, moves: moves ?? [], nodes };
 }
@@ -119,12 +120,12 @@ export function randomWinRate(level: Level, playouts: number, rng: () => number)
   const lanes = buildLanes(level.width, level.height);
   let wins = 0;
   for (let p = 0; p < playouts; p++) {
-    const paint = level.targets.map(() => 0);
+    const board = createBoard(level);
     const heads = level.columns.map(() => 0);
     const slots: Waiting[] = [];
     // Guard against a random tapper relaunching blocked slot shooters forever.
     for (let moves = 0; moves < 10_000; moves++) {
-      if (level.targets.every((t, i) => isComplete(t, paint[i]!))) {
+      if (boardDone(level, board)) {
         wins += 1;
         break;
       }
@@ -136,7 +137,7 @@ export function randomWinRate(level: Level, playouts: number, rng: () => number)
       slots.forEach((_, i) => options.push(() => slots.splice(i, 1)[0]!));
       if (options.length === 0) break;
       const shooter = options[Math.floor(rng() * options.length)]!();
-      const left = runLoop(level, lanes, paint, shooter.color, shooter.ammo);
+      const left = runLoop(level, lanes, board, shooter.color, shooter.ammo);
       if (left > 0) {
         if (slots.length >= level.slots) break; // jam
         slots.push({ color: shooter.color, ammo: left });

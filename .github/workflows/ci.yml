@@ -17,6 +17,8 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
+      - name: Levels match their stage specs
+        run: npm run gen:levels -- --check
       - run: npm run test:coverage
       - name: Coverage summary
         if: always()

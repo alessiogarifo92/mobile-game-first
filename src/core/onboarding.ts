@@ -3,7 +3,7 @@ import type { Level } from './level';
 
 /** One-time onboarding tips, shown the first time the mechanic they explain shows up. */
 /** Tips shown as a card; 'guide' is the guided level 1 instead. */
-export type CardTip = 'mixing' | 'blocked' | 'slots';
+export type CardTip = 'mixing' | 'blocked' | 'slots' | 'ice' | 'hidden';
 export type TipId = 'guide' | CardTip;
 
 /** Level 1 is played as a guided tutorial until the player has seen it once. */
@@ -11,10 +11,17 @@ export function needsGuide(level: Level, seen: readonly string[]): boolean {
   return level.id === 1 && !seen.includes('guide');
 }
 
-/** Tip to show when a level starts: mixing, the first time a level contains secondary colours. */
+/**
+ * Tip to show when a level starts, the first time it contains something new: secondary colours,
+ * ice or hidden pixels. One tip per level start, in that order.
+ */
 export function tipOnLevelStart(level: Level, seen: readonly string[]): CardTip | null {
-  const hasSecondary = level.targets.some((t) => t !== 0 && !isPrimary(t));
-  return hasSecondary && !seen.includes('mixing') ? 'mixing' : null;
+  const present: [CardTip, boolean][] = [
+    ['mixing', level.targets.some((t) => t !== 0 && !isPrimary(t))],
+    ['ice', level.ice.some((n) => n > 0)],
+    ['hidden', level.hidden.some(Boolean)],
+  ];
+  return present.find(([tip, here]) => here && !seen.includes(tip))?.[0] ?? null;
 }
 
 /**

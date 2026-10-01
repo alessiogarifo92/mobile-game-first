@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { buildLanes } from '../src/core/level';
+import { buildLanes, parseLevel, type LevelDef } from '../src/core/level';
 import { createGame, launchFromColumn, launchFromSlot, step } from '../src/core/sim';
+import { createBoard } from '../src/core/rules';
 import { runLoop, solve, type Move } from '../src/core/solver';
 import { BLUE, RED, YELLOW, level } from './helpers';
 
@@ -18,12 +19,12 @@ function replay(l: ReturnType<typeof level>, moves: Move[]) {
 describe('solver', () => {
   it('runLoop matches a lone shooter in the simulation', () => {
     const l = level(['OR', 'PY'], [[[RED, 3]], [[YELLOW, 2]], [[BLUE, 1]]]);
-    const paint = l.targets.map(() => 0);
-    const left = runLoop(l, buildLanes(2, 2), paint, RED, 3);
+    const board = createBoard(l);
+    const left = runLoop(l, buildLanes(2, 2), board, RED, 3);
     const g = createGame(l);
     launchFromColumn(g, 0);
     for (let i = 0; i < 8; i++) step(g);
-    expect(paint).toEqual(g.paint);
+    expect(board.paint).toEqual(g.paint);
     expect(left).toBe(g.slots[0]?.ammo ?? 0);
   });
 
@@ -61,5 +62,24 @@ describe('randomWinRate', () => {
     const image = ['BBBBB', 'BRBRB', 'BBBBB'];
     const trap = level(image, [[[RED, 1], [RED, 1], [BLUE, 13]]], { slots: 1, beltCapacity: 1 });
     expect(randomWinRate(trap, 20, createRng(1))).toBe(0);
+  });
+});
+
+describe('solver slot positions', () => {
+  // Found while building ice/hidden pixels: a solution that relaunches from a waiting slot after
+  // another slot was freed. The solver used to number slots as a compact list, the game by position.
+  const def = {
+    id: 16, name: 'test', stage: 2, slots: 4, beltCapacity: 3,
+    image: ["BBBBBBBB", "BRRBBRRB", "RRRRRRRR", "RRYRRYRR", "BRRRRRRB", "BBRRRRBB", "BBBRRBBB", "GGGGGGGG"],
+    overlay: ["........", ".ii..ii.", "........", "..h..h..", "........", "...ii...", "........", "........"],
+    columns: [[{ color: 2, ammo: 10 }, { color: 4, ammo: 8 }, { color: 1, ammo: 4 }, { color: 4, ammo: 8 }], [{ color: 1, ammo: 8 }, { color: 1, ammo: 8 }, { color: 1, ammo: 8 }], [{ color: 4, ammo: 8 }, { color: 1, ammo: 8 }, { color: 4, ammo: 8 }]],
+  };
+
+  it('returns moves whose slot indices are the slot positions in the game', () => {
+    const l = parseLevel(def as LevelDef);
+    const result = solve(l);
+    expect(result.solvable).toBe(true);
+    expect(result.moves.some((m) => m.from === 'slot')).toBe(true);
+    expect(replay(l, result.moves).status).toBe('won');
   });
 });

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_LANGUAGE, DICTIONARIES, LANGUAGES, LANGUAGE_NAMES, isLanguage, levelName, translate } from '../src/core/i18n';
+import { DEFAULT_LANGUAGE, DICTIONARIES, LANGUAGES, LANGUAGE_NAMES, LEVEL_NAME_KEYS, isLanguage, levelName, stageName, translate } from '../src/core/i18n';
+import { STAGES } from '../src/core/stages';
 
 describe('i18n', () => {
   it('defaults to English', () => {
@@ -37,9 +38,16 @@ describe('i18n', () => {
     expect(isLanguage(3)).toBe(false);
   });
 
-  it('names levels, with a generic title for unknown ids', () => {
-    expect(levelName('en', 1)).toBe('Heart');
-    expect(levelName('it', 1)).toBe('Cuore');
-    expect(levelName('en', 99)).toBe('Level 99');
+  it('names levels and stages by stable key', () => {
+    expect(levelName('en', 'heart')).toBe('Heart');
+    expect(levelName('it', 'heart')).toBe('Cuore');
+    expect(levelName('en', 'nope')).toBe('level.nope');
+    expect(stageName('it', 'fruit')).toBe('Frutta');
+    expect(LEVEL_NAME_KEYS.has('parrot')).toBe(true);
+    expect(LEVEL_NAME_KEYS.has('title')).toBe(false);
+  });
+
+  it('names every stage in every language', () => {
+    for (const s of STAGES) for (const lang of LANGUAGES) expect(stageName(lang, s.key)).not.toBe(`stage.${s.key}`);
   });
 });

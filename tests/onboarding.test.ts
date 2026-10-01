@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { guideAllows, guideStep, needsGuide, tipOnLevelStart, tipOnReturn } from '../src/core/onboarding';
-import { RED, YELLOW, level } from './helpers';
+import { BLUE, RED, YELLOW, level } from './helpers';
 
 describe('onboarding', () => {
   const first = level(['RR'], [[[RED, 2]]], { id: 1 });
@@ -16,6 +16,15 @@ describe('onboarding', () => {
     expect(tipOnLevelStart(first, [])).toBeNull();
     expect(tipOnLevelStart(mixed, [])).toBe('mixing');
     expect(tipOnLevelStart(mixed, ['mixing'])).toBeNull();
+  });
+
+  it('explains ice and hidden pixels the first time they appear, one tip per level start', () => {
+    const iced = level(['RO'], [[[RED, 3]], [[YELLOW, 1]]], { id: 31, overlay: ['i.'] });
+    const hidden = level(['RB'], [[[RED, 1]], [[BLUE, 1]]], { id: 51, overlay: ['.h'] });
+    expect(tipOnLevelStart(iced, [])).toBe('mixing');
+    expect(tipOnLevelStart(iced, ['mixing'])).toBe('ice');
+    expect(tipOnLevelStart(iced, ['mixing', 'ice'])).toBeNull();
+    expect(tipOnLevelStart(hidden, [])).toBe('hidden');
   });
 
   it('explains blocked lanes before slots when a bucket could not shoot', () => {

@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
-import { isComplete, primariesOf } from '../../core/colors';
+import { primariesOf } from '../../core/colors';
+import { cellDone } from '../../core/rules';
 import { VIEW, beltPoint, cellRect, computeLayout, contains, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
 import {
@@ -11,7 +12,7 @@ import { sfx } from '../audio';
 import { publishDebug } from '../debug';
 import { LEVELS, getProgress, levelHint, levelTitle, markCompleted, markTip, setSound, t, tipSeen } from '../store';
 import { BLUE, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
-import { PAINT, SYMBOL, THEME } from '../theme';
+import { PAINT, SYMBOL, THEME, css } from '../theme';
 import { button, fullBackground, label, viewOffset } from '../ui';
 
 const TICK_MS = 85;
@@ -39,6 +40,7 @@ export class PlayScene extends Phaser.Scene {
   private tip: { id: CardTip; card: Phaser.GameObjects.Container } | null = null;
   /** Ammo each shooter had when it was launched, to tell whether its loop hit anything. */
   private launchAmmo = new Map<number, number>();
+  private hiddenMarks = new Map<number, Phaser.GameObjects.Text>();
 
   constructor() {
     super('play');
@@ -102,6 +104,7 @@ export class PlayScene extends Phaser.Scene {
 
     this.pixels = this.add.graphics();
     this.dynamic = this.add.graphics();
+    this.createHiddenMarks();
     this.drawPixels();
 
     this.input.on('pointerdown', (p: Phaser.Input.Pointer) => this.tap(p.worldX, p.worldY));
@@ -209,20 +212,51 @@ export class PlayScene extends Phaser.Scene {
     g.fillRoundedRect(x0, y0, w, h, THEME.radius.panel);
     const card = this.add.container(0, 0, [shade, g]).setDepth(12);
     card.add(label(this, VIEW.width / 2, y0 + 60, t(`tip.${id}.title` as const), THEME.type.lg));
+    const sq = (gx: number, gy: number, fill: number, alpha = 1) => {
+      g.fillStyle(fill, alpha);
+      g.fillRoundedRect(gx - 24, gy - 24, 48, 48, THEME.radius.cell);
+    };
+    const cracks = (gx: number, gy: number) => {
+      g.fillStyle(THEME.ice, 0.6);
+      g.fillRoundedRect(gx - 24, gy - 24, 48, 48, THEME.radius.cell);
+      g.lineStyle(2, THEME.white, 0.9);
+      g.lineBetween(gx - 14, gy - 12, gx, gy);
+      g.lineBetween(gx, gy, gx - 2, gy + 18);
+      g.lineBetween(gx, gy, gx + 16, gy - 4);
+    };
+    const cx = VIEW.width / 2;
     if (id === 'mixing') {
       // Visual equations: the whole tip in one glance.
       const rows: [number, number, number][] = [[RED, YELLOW, ORANGE], [YELLOW, BLUE, GREEN], [RED, BLUE, PURPLE]];
       rows.forEach(([a, b, c], i) => {
         const y = y0 + 140 + i * 62;
-        [a, b, c].forEach((col, k) => {
-          g.fillStyle(PAINT[col]!, 1);
-          g.fillRoundedRect(VIEW.width / 2 - 150 + k * 120, y - 24, 48, 48, THEME.radius.cell);
-        });
-        card.add(label(this, VIEW.width / 2 - 66, y, '+', THEME.type.md));
-        card.add(label(this, VIEW.width / 2 + 54, y, '=', THEME.type.md));
+        [a, b, c].forEach((col, k) => sq(cx - 126 + k * 120, y, PAINT[col]!));
+        card.add(label(this, cx - 66, y, '+', THEME.type.md));
+        card.add(label(this, cx + 54, y, '=', THEME.type.md));
       });
+    } else if (id === 'ice') {
+      // Frozen → ice broken → painted.
+      const y = y0 + 200;
+      sq(cx - 160, y, THEME.emptyPixel);
+      sq(cx - 160, y, PAINT[RED]!, 0.3);
+      cracks(cx - 160, y);
+      sq(cx, y, THEME.emptyPixel);
+      sq(cx, y, PAINT[RED]!, 0.3);
+      sq(cx + 160, y, PAINT[RED]!);
+      card.add(label(this, cx - 80, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
+      card.add(label(this, cx + 80, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
+    } else if (id === 'hidden') {
+      // "?" next to a pixel: finish the neighbour, the colour shows.
+      const y = y0 + 200;
+      sq(cx - 200, y, PAINT[RED]!, 0.3);
+      sq(cx - 140, y, THEME.beltDark);
+      card.add(label(this, cx - 140, y, '?', THEME.type.md, '#ffffff'));
+      card.add(label(this, cx - 30, y, '→', THEME.type.lg));
+      sq(cx + 80, y, PAINT[RED]!);
+      sq(cx + 140, y, THEME.emptyPixel);
+      sq(cx + 140, y, PAINT[BLUE]!, 0.3);
     }
-    const bodyY = id === 'mixing' ? y0 + 340 : y0 + 150;
+    const bodyY = id === 'mixing' ? y0 + 340 : y0 + 290;
     card.add(label(this, VIEW.width / 2, bodyY, t(`tip.${id}.body` as const), THEME.type.sm, THEME.subCss, false)
       .setWordWrapWidth(w - 60).setOrigin(0.5, 0));
     card.add(button(this, VIEW.width / 2, y0 + h - 70, 300, 80, t('tip.gotIt'), () => {
@@ -268,7 +302,15 @@ export class PlayScene extends Phaser.Scene {
       const r = cellRect(this.layout, this.level.width, i);
       const x = r.x + inset, y = r.y + inset, w = r.w - 2 * inset, h = r.h - 2 * inset;
       const paint = this.gs.paint[i]!;
-      if (isComplete(target, paint)) {
+      if (this.gs.hidden[i]) {
+        // Hidden: no hint of the colour, just a "?" (text drawn once in createHiddenMarks).
+        g.fillStyle(THEME.beltDark, 1);
+        g.fillRoundedRect(x, y, w, h, THEME.radius.cell);
+        return;
+      }
+      this.hiddenMarks.get(i)?.destroy();
+      this.hiddenMarks.delete(i);
+      if (cellDone(this.level, this.gs, i)) {
         g.fillStyle(PAINT[target]!, 1);
         g.fillRoundedRect(x, y, w, h, THEME.radius.cell);
         return;
@@ -283,8 +325,27 @@ export class PlayScene extends Phaser.Scene {
         g.fillStyle(PAINT[paint]!, 1);
         g.fillTriangle(x, y, x + w, y, x, y + h);
       }
+      if (this.gs.ice[i]! > 0) {
+        // Ice: frosted cover with cracks.
+        g.fillStyle(THEME.ice, 0.6);
+        g.fillRoundedRect(x, y, w, h, THEME.radius.cell);
+        g.lineStyle(2, THEME.white, 0.9);
+        g.lineBetween(x + w * 0.2, y + h * 0.25, x + w * 0.5, y + h * 0.5);
+        g.lineBetween(x + w * 0.5, y + h * 0.5, x + w * 0.45, y + h * 0.85);
+        g.lineBetween(x + w * 0.5, y + h * 0.5, x + w * 0.85, y + h * 0.4);
+      }
     });
   }
+
+  private createHiddenMarks(): void {
+    this.hiddenMarks = new Map();
+    this.gs.hidden.forEach((hidden, i) => {
+      if (!hidden) return;
+      const r = cellRect(this.layout, this.level.width, i);
+      this.hiddenMarks.set(i, label(this, r.x + r.w / 2, r.y + r.h / 2, '?', r.w * 0.55, '#ffffff').setDepth(3));
+    });
+  }
+
 
   private drawSlotFrames(): void {
     this.slotFrames.clear();
@@ -374,6 +435,24 @@ export class PlayScene extends Phaser.Scene {
             duration: 260 + Math.random() * 120,
             onComplete: () => spot.destroy(),
           });
+        }
+        if (e.brokeIce) {
+          for (let k = 0; k < 6; k++) {
+            const shard = this.add.rectangle(to.x, to.y, 6, 10, THEME.ice).setDepth(4).setAngle(Math.random() * 180);
+            this.tweens.add({
+              targets: shard,
+              x: to.x + (Math.random() - 0.5) * r.w * 1.6,
+              y: to.y + (Math.random() - 0.5) * r.h * 1.6,
+              alpha: 0,
+              duration: 320,
+              onComplete: () => shard.destroy(),
+            });
+          }
+        }
+        for (const cell of e.revealed) {
+          const rr = cellRect(this.layout, this.level.width, cell);
+          const pop = this.add.circle(rr.x + rr.w / 2, rr.y + rr.h / 2, rr.w / 2, THEME.white, 0.8).setDepth(4);
+          this.tweens.add({ targets: pop, scale: 1.6, alpha: 0, duration: 300, onComplete: () => pop.destroy() });
         }
         if (e.completed && primariesOf(e.paint).length === 2) {
           const ring = this.add.circle(to.x, to.y, r.w / 2, blotColor, 0).setStrokeStyle(4, blotColor).setDepth(4);
@@ -465,6 +544,7 @@ export class PlayScene extends Phaser.Scene {
     publishDebug({
       scene: 'play',
       offsetY: viewOffset(this),
+      scrollY: this.cameras.main.scrollY,
       levelId: this.level.id,
       status: gs.status,
       overlay: this.overlay ? (gs.status === 'won' ? 'win' : 'jam') : null,
@@ -475,7 +555,9 @@ export class PlayScene extends Phaser.Scene {
       tip: this.tip?.id ?? null,
       tipButton: { x: VIEW.width / 2, y: (VIEW.height + TIP_H) / 2 - 70 },
       guide: this.guide,
-      painted: gs.paint.filter((p, i) => p && isComplete(this.level.targets[i]!, p)).length,
+      painted: this.level.targets.filter((t, i) => t && cellDone(this.level, gs, i)).length,
+      ice: gs.ice.reduce((a, b) => a + b, 0),
+      hidden: gs.hidden.filter(Boolean).length,
     });
   }
 

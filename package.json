@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Mix & Splash — conveyor color-mixing puzzle game",
+  "description": "Mix & Splash \u2014 conveyor color-mixing puzzle game",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc --noEmit && vite build",
@@ -14,7 +14,8 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "gen:levels": "tsx scripts/gen-levels.ts",
-    "android:sync": "npm run build && cap sync android"
+    "android:sync": "npm run build && cap sync android",
+    "preview:levels": "tsx scripts/preview-levels.ts"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.2",
