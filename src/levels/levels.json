@@ -1,0 +1,882 @@
+[
+ {
+  "id": 1,
+  "name": "Cuore",
+  "image": [
+   ".RR..RR.",
+   "RRRRRRRR",
+   "RRRRRRRR",
+   "RRRRRRRR",
+   ".RRRRRR.",
+   "..RRRR..",
+   "...RR..."
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 3,
+  "beltCapacity": 5
+ },
+ {
+  "id": 2,
+  "name": "Sole",
+  "image": [
+   "BBBBBBBB",
+   "BBBYYBBB",
+   "BBYYYYBB",
+   "BYYYYYYB",
+   "BYYYYYYB",
+   "BBYYYYBB",
+   "BBBYYBBB",
+   "BBBBBBBB"
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    }
+   ]
+  ],
+  "slots": 3,
+  "beltCapacity": 5
+ },
+ {
+  "id": 3,
+  "name": "Fungo",
+  "image": [
+   "..RRRR..",
+   ".RYRRYR.",
+   "RRRRRRRR",
+   "RYRRRRYR",
+   "..YYYY..",
+   "..YBBY..",
+   "..YYYY..",
+   "..YYYY.."
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 18
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 8
+    },
+    {
+     "color": 4,
+     "ammo": 2
+    }
+   ]
+  ],
+  "slots": 3,
+  "beltCapacity": 5
+ },
+ {
+  "id": 4,
+  "name": "Arancia",
+  "image": [
+   "...RR...",
+   "..OOOO..",
+   ".OOYOOO.",
+   ".OYOOOO.",
+   ".OOOOOO.",
+   ".OOOOOO.",
+   "..OOOO.."
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 12
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 12
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 5
+ },
+ {
+  "id": 5,
+  "name": "Foglia",
+  "image": [
+   ".....GG.",
+   "...GGGG.",
+   "..GGYGG.",
+   ".GGYGGG.",
+   ".GYGGG..",
+   ".YGGG...",
+   "Y......."
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 12
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 7
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 5
+ },
+ {
+  "id": 6,
+  "name": "Zucca",
+  "image": [
+   "...GG...",
+   "..OGOO..",
+   ".OOOOOO.",
+   "OOYOOYOO",
+   "OOOOOOOO",
+   "OOYYYYOO",
+   ".OOOOOO.",
+   "..OOOO.."
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 3
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 7
+    },
+    {
+     "color": 2,
+     "ammo": 6
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 3,
+  "beltCapacity": 5
+ },
+ {
+  "id": 7,
+  "name": "Uva",
+  "image": [
+   "....GG..",
+   "...GG...",
+   ".PP.PP..",
+   "PPPPPPP.",
+   ".PPPPPP.",
+   "..PPPP..",
+   "..PPP...",
+   "...P...."
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 4
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 5
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 5
+ },
+ {
+  "id": 8,
+  "name": "Arcobaleno",
+  "image": [
+   "RRRRRRRR",
+   "OOOOOOOO",
+   "YYYYYYYY",
+   "GGGGGGGG",
+   "BBBBBBBB",
+   "PPPPPPPP"
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 5
+ },
+ {
+  "id": 9,
+  "name": "Fiore",
+  "image": [
+   "..RR.RR.",
+   ".RPPRPPR",
+   ".RPPPPPR",
+   ".ROOOOOR",
+   "..ROYOR.",
+   "...RGR..",
+   "....G...",
+   "...GGG.."
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 11
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 13
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 5
+ },
+ {
+  "id": 10,
+  "name": "Pesce",
+  "image": [
+   "BBBBBBBBBB",
+   "BBBOOOBBBB",
+   "BBOOYOOBOB",
+   "BOOBOOOOOB",
+   "BOOOOOOOOB",
+   "BBOOYOOBOB",
+   "BBBOOOBBBB",
+   "BBBBBBBBBB",
+   "GGBBBBBGGB",
+   "GGGGGGGGGG"
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 11
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 7
+    },
+    {
+     "color": 4,
+     "ammo": 7
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 4,
+  "beltCapacity": 4
+ },
+ {
+  "id": 11,
+  "name": "Farfalla",
+  "image": [
+   "PP......PP",
+   "PPP....PPP",
+   "PYPP..PPYP",
+   "PPPPRRPPPP",
+   ".PPPRRPPP.",
+   "..OOROOO..",
+   ".OOORROOO.",
+   "OOYOR.ROYO",
+   "OOO......O",
+   ".O........"
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 16
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 11
+    },
+    {
+     "color": 1,
+     "ammo": 18
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 4
+ },
+ {
+  "id": 12,
+  "name": "Anguria",
+  "image": [
+   "..........",
+   "RRRRRRRRRR",
+   "RRBRRRBRRR",
+   ".RRRRBRRR.",
+   ".RRBRRRRB.",
+   "..RRRRRR..",
+   "..YYYYYY..",
+   "...GGGG...",
+   "....GG...."
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 12
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 11
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 4
+ },
+ {
+  "id": 13,
+  "name": "Gatto",
+  "image": [
+   "BBBBBBBBBBBB",
+   "BOBBBBBBBBOB",
+   "BOOBBBBBBOOB",
+   "BOOOOOOOOOOB",
+   "BOOGOOOOGOOB",
+   "BOOGOOOOGOOB",
+   "BOOOOPPOOOOB",
+   "BYOOOOOOOOYB",
+   "BBOOOYYOOOBB",
+   "BBBOOOOOOBBB",
+   "BBBBBBBBBBBB",
+   "GGGGGGGGGGGG"
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 12
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 4,
+  "beltCapacity": 3
+ },
+ {
+  "id": 14,
+  "name": "Albero",
+  "image": [
+   "....GGGG....",
+   "..GGGGGGGG..",
+   ".GGGRGGGGGG.",
+   "GGGGGGGGRGGG",
+   "GGRGGGGGGGGG",
+   "GGGGGGRGGGGG",
+   ".GGGGGGGGGG.",
+   "..GGGGGGGG..",
+   ".....OO.....",
+   ".....OO.....",
+   ".....OO.....",
+   "GGGGGOOGGGGG"
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 12
+    },
+    {
+     "color": 1,
+     "ammo": 12
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 3
+ },
+ {
+  "id": 15,
+  "name": "Pappagallo",
+  "image": [
+   "....RRRR....",
+   "...RRRRRR...",
+   "..RRYBRRRR..",
+   "..RRRRRRYY..",
+   "..RRRRRRYYY.",
+   "...RRRRR.Y..",
+   "...GGRRR....",
+   "..GGGGRR....",
+   "..BGGGGR....",
+   "..BBGGGG....",
+   "...BBPGG....",
+   ".....PP....."
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 11
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 3
+ }
+]
