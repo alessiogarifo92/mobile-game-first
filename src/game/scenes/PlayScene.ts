@@ -20,6 +20,7 @@ import { button, fullBackground, label, viewOffset } from '../ui';
 const TICK_MS = 85;
 const BELT_JAR = 54;
 const TIP_H = 620;
+const GUIDE_TEXT = { tap: 'guide.tap', watch: 'guide.watch', next: 'guide.next', free: 'guide.free' } as const;
 
 export class PlayScene extends Phaser.Scene {
   private level!: Level;
@@ -30,6 +31,9 @@ export class PlayScene extends Phaser.Scene {
   private dynamic!: Phaser.GameObjects.Graphics;
   private texts: Phaser.GameObjects.Text[] = [];
   private textIndex = 0;
+  /** Pixels changed since the last redraw: several hits in one frame cost a single redraw. */
+  private pixelsDirty = false;
+  private textState = new WeakMap<Phaser.GameObjects.Text, { value: string; size: number; color: string }>();
   private overlay: Phaser.GameObjects.Container | null = null;
   private slotFrames!: Phaser.GameObjects.Graphics;
   private solution: ReturnType<typeof solve>['moves'] | undefined;
@@ -65,6 +69,7 @@ export class PlayScene extends Phaser.Scene {
     this.guideLayer = null;
     this.tip = null;
     this.launchAmmo = new Map();
+    this.pixelsDirty = false;
   }
 
   create(): void {
@@ -79,11 +84,12 @@ export class PlayScene extends Phaser.Scene {
     this.subtitle.setWordWrapWidth(VIEW.width - 2 * THEME.space.md).setOrigin(0.5, 0).setY(96);
     button(this, 60, 64, 84, 64, '◀', () => this.scene.start('menu'), { fill: THEME.belt, color: THEME.inkCss, name: 'home' });
     button(this, VIEW.width - 60, 64, 84, 64, '⟲', () => this.restart(), { fill: THEME.belt, color: THEME.inkCss, name: 'retry' });
-    const soundBtn = button(this, VIEW.width - 160, 64, 84, 64, getProgress().sound ? '♪' : '✕', () => {
+    // Muted keeps the same note, faded: a ✕ read as a close button. Spaced from ⟲ so the two are not mistaken.
+    const soundBtn = button(this, VIEW.width - 180, 64, 84, 64, '♪', () => {
       const on = !getProgress().sound;
       setSound(on);
       sfx.enabled = on;
-      (soundBtn.list[1] as Phaser.GameObjects.Text).setText(on ? '♪' : '✕');
+      (soundBtn.list[1] as Phaser.GameObjects.Text).setAlpha(on ? 1 : 0.3);
     }, { fill: THEME.belt, color: THEME.inkCss, name: 'sound' });
 
     // Static board: belt ring and canvas paper.
@@ -100,7 +106,7 @@ export class PlayScene extends Phaser.Scene {
     board.fillStyle(THEME.paper, 1);
     board.fillRoundedRect(layout.canvas.x - 8, layout.canvas.y - 8, layout.canvas.w + 16, layout.canvas.h + 16, THEME.radius.cell * 2);
 
-    label(this, VIEW.width / 2, layout.slots[0]!.y - 20, t('level.waiting'), THEME.type.xs * 0.8, THEME.subCss);
+    label(this, VIEW.width / 2, layout.slots[0]!.y - 20, t('level.waiting'), THEME.type.xs, THEME.subCss);
     const columnFrames = this.add.graphics();
     columnFrames.fillStyle(THEME.belt, 0.35);
     for (const c of layout.columns) columnFrames.fillRoundedRect(c.x, c.y - 6, c.w, 3 * layout.columnStep + 20, THEME.radius.jar);
@@ -154,8 +160,7 @@ export class PlayScene extends Phaser.Scene {
 
   /** Column the guide points at: the solver's first two moves, when they are column launches. */
   private guideTarget(step: GuideStep | null = this.guide): number | null {
-    this.solution ??= solve(this.level).moves;
-    const move = this.solution[step === 'next' ? 1 : 0];
+    const move = this.solutionMoves()[step === 'next' ? 1 : 0];
     return move && move.from === 'column' ? move.index : null;
   }
 
@@ -167,10 +172,9 @@ export class PlayScene extends Phaser.Scene {
     this.guide = next;
     this.guideLayer?.destroy();
     this.guideLayer = null;
-    const text = { tap: 'guide.tap', watch: 'guide.watch', next: 'guide.next', free: 'guide.free' } as const;
-    // While a column is highlighted the bubble carries the text; otherwise the subtitle line does.
-    const pointing = next === 'tap' || next === 'next';
-    this.subtitle.setText(pointing ? '' : t(text[next])).setColor(THEME.inkCss).setFontStyle('bold').setFontSize(THEME.type.xs);
+    const text = GUIDE_TEXT;
+    // The text always sits on the subtitle line under the title: free space, away from the slots and the highlighted column.
+    this.subtitle.setText(t(text[next])).setColor(THEME.inkCss).setFontStyle('bold').setFontSize(THEME.type.xs);
     if (next === 'free') {
       this.guide = null;
       markTip('guide');
@@ -195,14 +199,11 @@ export class PlayScene extends Phaser.Scene {
     g.fillRect(target.x - pad, target.y - pad + boxH, target.w + 2 * pad, bottom - target.y + pad - boxH);
     g.lineStyle(6, THEME.white, 1);
     g.strokeRoundedRect(target.x - pad, target.y - pad, target.w + 2 * pad, boxH, THEME.radius.jar);
-    const bubble = label(this, VIEW.width / 2, target.y - 70, t(text[next]), THEME.type.sm, '#ffffff')
-      .setWordWrapWidth(VIEW.width - 120);
-    const bb = bubble.getBounds();
-    g.fillStyle(THEME.ink, 0.92);
-    g.fillRoundedRect(bb.x - 20, bb.y - 14, bb.width + 40, bb.height + 28, THEME.radius.panel);
-    const hand = label(this, target.x + target.w / 2 + 20, target.y + 120, '👆', 72);
-    this.tweens.add({ targets: hand, y: hand.y - 30, duration: 450, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
-    this.guideLayer = this.add.container(0, 0, [g, bubble, hand]).setDepth(8);
+    // The hand sits below the highlighted column: above it are the waiting slots, and over it it would hide the second bucket.
+    const below = target.y - pad + boxH;
+    const hand = label(this, target.x + target.w / 2, below + 60, '👆', 72);
+    this.tweens.add({ targets: hand, y: hand.y + 24, duration: 450, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    this.guideLayer = this.add.container(0, 0, [g, hand]).setDepth(8);
     this.publish();
   }
 
@@ -255,7 +256,7 @@ export class PlayScene extends Phaser.Scene {
       // "?" next to a pixel: finish the neighbour, the colour shows.
       const y = y0 + 200;
       sq(cx - 200, y, PAINT[RED]!, 0.3);
-      sq(cx - 140, y, THEME.beltDark);
+      sq(cx - 140, y, THEME.hidden);
       card.add(label(this, cx - 140, y, '?', THEME.type.md, '#ffffff'));
       card.add(label(this, cx - 30, y, '→', THEME.type.lg));
       sq(cx + 80, y, PAINT[RED]!);
@@ -293,6 +294,10 @@ export class PlayScene extends Phaser.Scene {
       }
     }
     if (!this.ended && this.gs.status !== 'playing') this.finish();
+    if (this.pixelsDirty) {
+      this.pixelsDirty = false;
+      this.drawPixels();
+    }
     this.drawDynamic(this.gs.status === 'playing' ? this.acc / TICK_MS : 0);
   }
 
@@ -310,7 +315,7 @@ export class PlayScene extends Phaser.Scene {
       const paint = this.gs.paint[i]!;
       if (this.gs.hidden[i]) {
         // Hidden: no hint of the colour, just a "?" (text drawn once in createHiddenMarks).
-        g.fillStyle(THEME.beltDark, 1);
+        g.fillStyle(THEME.hidden, 1);
         g.fillRoundedRect(x, y, w, h, THEME.radius.cell);
         return;
       }
@@ -348,7 +353,7 @@ export class PlayScene extends Phaser.Scene {
     this.gs.hidden.forEach((hidden, i) => {
       if (!hidden) return;
       const r = cellRect(this.layout, this.level.width, i);
-      this.hiddenMarks.set(i, label(this, r.x + r.w / 2, r.y + r.h / 2, '?', r.w * 0.55, '#ffffff').setDepth(3));
+      this.hiddenMarks.set(i, label(this, r.x + r.w / 2, r.y + r.h / 2, '?', Math.max(r.w * 0.55, 22), '#ffffff').setDepth(3));
     });
   }
 
@@ -359,6 +364,7 @@ export class PlayScene extends Phaser.Scene {
     for (const s of this.layout.slots) this.slotFrames.strokeRoundedRect(s.x, s.y, s.w, s.h, THEME.radius.jar);
   }
 
+  /** Pooled text. Phaser re-rasterises and re-uploads a text on every setText/setFontSize/setColor, so only changes are applied. */
   private text(x: number, y: number, value: string, size: number, color = '#ffffff'): void {
     let t = this.texts[this.textIndex];
     if (!t) {
@@ -366,7 +372,12 @@ export class PlayScene extends Phaser.Scene {
       this.texts.push(t);
     }
     this.textIndex += 1;
-    t.setVisible(true).setPosition(x, y).setText(value).setFontSize(size).setColor(color);
+    const shown = this.textState.get(t);
+    t.setVisible(true).setPosition(x, y);
+    if (shown?.value !== value) t.setText(value);
+    if (shown?.size !== size) t.setFontSize(size);
+    if (shown?.color !== color) t.setColor(color);
+    this.textState.set(t, { value, size, color });
   }
 
   private jar(x: number, y: number, size: number, shooter: Shooter, alpha = 1): void {
@@ -382,8 +393,10 @@ export class PlayScene extends Phaser.Scene {
     g.lineStyle(3, THEME.ink, alpha);
     g.strokeRoundedRect(x - size / 2, y - size / 2, size, size, THEME.radius.jar);
     if (alpha > 0.5) {
-      this.text(x, y - size * 0.18, SYMBOL[shooter.color]!, size * 0.26);
-      this.text(x, y + size * 0.16, String(shooter.ammo), size * 0.36);
+      // Floors keep the numbers legible (≥ 12 px on a 360 px phone) on the small belt jars.
+      const small = size < 70;
+      this.text(x, y - size * (small ? 0.27 : 0.18), SYMBOL[shooter.color]!, Math.max(size * 0.26, 18));
+      this.text(x, y + size * (small ? 0.2 : 0.16), String(shooter.ammo), Math.max(size * 0.36, 24));
     }
   }
 
@@ -425,7 +438,7 @@ export class PlayScene extends Phaser.Scene {
       duration: 110,
       onComplete: () => {
         drop.destroy();
-        this.drawPixels();
+        this.pixelsDirty = true;
         sfx.splat(e.color, e.completed);
         // Signature: an irregular paint blot with droplets.
         const blotColor = e.completed ? PAINT[e.paint]! : color;
@@ -551,8 +564,13 @@ export class PlayScene extends Phaser.Scene {
     this.publish();
   }
 
+  private solutionMoves(): ReturnType<typeof solve>['moves'] {
+    return (this.solution ??= solve(this.level).moves);
+  }
+
   private publish(): void {
     const gs = this.gs;
+    const solutionOf = () => this.solutionMoves();
     publishDebug({
       scene: 'play',
       offsetY: viewOffset(this),
@@ -565,7 +583,17 @@ export class PlayScene extends Phaser.Scene {
       beltBusy: gs.belt.length + gs.pending.length > 0,
       columns: this.layout.columns,
       slots: this.layout.slots,
-      solution: this.solution ??= solve(this.level).moves,
+      // Solved on demand (only the guide and tests read it), not at every level start.
+      get solution() {
+        return solutionOf();
+      },
+      tick: gs.tick,
+      subtitle: this.subtitle.text,
+      guideText: this.guide ? t(GUIDE_TEXT[this.guide]) : null,
+      jamButtons: {
+        continue: gs.extraSlotUsed ? null : { x: VIEW.width / 2, y: (VIEW.height - 480) / 2 + 280 },
+        retry: { x: VIEW.width / 2, y: (VIEW.height - 480) / 2 + (gs.extraSlotUsed ? 300 : 385) },
+      },
       tip: this.tip?.id ?? null,
       moves: this.moves,
       tipButton: { x: VIEW.width / 2, y: (VIEW.height + TIP_H) / 2 - 70 },

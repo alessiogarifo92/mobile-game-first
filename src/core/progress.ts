@@ -1,4 +1,4 @@
-import { isSkin, type Skin } from './album';
+import { isSkin, unlockedSkins, type Skin } from './album';
 import { DEFAULT_LANGUAGE, isLanguage, type Language } from './i18n';
 
 export interface KeyValueStorage {
@@ -24,27 +24,37 @@ export function defaultProgress(): Progress {
   return { unlocked: 1, completed: [], sound: true, language: DEFAULT_LANGUAGE, seenTips: [], skin: 'classic' };
 }
 
-function sanitize(raw: unknown): Progress {
+/** Level ids and stages of the game: lets a loaded save be checked against what really exists. */
+export type LevelRef = { id: number; stage: number };
+
+function sanitize(raw: unknown, levels?: readonly LevelRef[]): Progress {
   const base = defaultProgress();
   if (!raw || typeof raw !== 'object') return base;
   const r = raw as Record<string, unknown>;
-  const unlocked = Number.isInteger(r.unlocked) && (r.unlocked as number) >= 1 ? (r.unlocked as number) : 1;
-  const completed = Array.isArray(r.completed)
-    ? [...new Set(r.completed.filter((n): n is number => Number.isInteger(n) && n >= 1))].sort((a, b) => a - b)
-    : [];
+  const count = levels?.length ?? Infinity;
+  const inRange = (n: unknown): n is number => Number.isInteger(n) && (n as number) >= 1 && (n as number) <= count;
+  // Without the level list only the shape is checked; a hard cap still stops an oversized array.
+  const ids = Array.isArray(r.completed) ? r.completed.slice(0, 10_000) : [];
+  const completed = [...new Set(ids.filter(inRange))].sort((a, b) => a - b);
+  // Whatever is completed must be reachable: unlocked is at least the next level after the highest completed one.
+  const claimed = Number.isInteger(r.unlocked) && (r.unlocked as number) >= 1 ? (r.unlocked as number) : 1;
+  const unlocked = Math.min(count, Math.max(claimed, (completed.at(-1) ?? 0) + 1));
   const sound = typeof r.sound === 'boolean' ? r.sound : base.sound;
   // Saves from before v0.2 have no language or tips: they get English and the onboarding.
   const language = isLanguage(r.language) ? r.language : base.language;
-  const seenTips = Array.isArray(r.seenTips) ? [...new Set(r.seenTips.filter((t): t is string => typeof t === 'string'))] : [];
-  const skin = isSkin(r.skin) ? r.skin : base.skin;
+  const seenTips = Array.isArray(r.seenTips)
+    ? [...new Set(r.seenTips.slice(0, 100).filter((t): t is string => typeof t === 'string'))]
+    : [];
+  // A skin is only kept if the player has earned it (a hand-edited save cannot grant "gold").
+  const skin = isSkin(r.skin) && (!levels || unlockedSkins(levels, completed).includes(r.skin)) ? r.skin : base.skin;
   return { unlocked, completed, sound, language, seenTips, skin };
 }
 
 /** Never throws: missing, corrupt or inaccessible storage falls back to a fresh profile. */
-export function loadProgress(storage: KeyValueStorage | undefined): Progress {
+export function loadProgress(storage: KeyValueStorage | undefined, levels?: readonly LevelRef[]): Progress {
   try {
     const text = storage?.getItem(STORAGE_KEY);
-    return text ? sanitize(JSON.parse(text)) : defaultProgress();
+    return text ? sanitize(JSON.parse(text), levels) : defaultProgress();
   } catch {
     return defaultProgress();
   }

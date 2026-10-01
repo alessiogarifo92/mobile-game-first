@@ -4,7 +4,11 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig({
   // Relative base so the same build works on any static host and inside Capacitor's WebView.
   base: './',
-  build: { chunkSizeWarningLimit: 2000 },
+  build: {
+    chunkSizeWarningLimit: 2000,
+    // Phaser (~1.4 MB) changes rarely: its own chunk is cached across game updates and parsed apart from the game code.
+    rollupOptions: { output: { manualChunks: (id) => (id.includes('node_modules/phaser') ? 'phaser' : undefined) } },
+  },
   plugins: [
     VitePWA({
       registerType: 'autoUpdate',

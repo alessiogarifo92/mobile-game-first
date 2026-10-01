@@ -16,7 +16,7 @@ function storage(): KeyValueStorage | undefined {
   }
 }
 
-let progress: Progress = loadProgress(storage());
+let progress: Progress = loadProgress(storage(), LEVELS);
 applyDocumentLanguage();
 
 function update(next: Progress): void {
