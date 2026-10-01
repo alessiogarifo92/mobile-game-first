@@ -24,6 +24,15 @@ describe('map layout', () => {
     });
   });
 
+  it('keeps every header band clear of the boss star below and the first node above', () => {
+    layout.headers.forEach((h) => {
+      const above = layout.nodes.find((n) => n.stage === h.stage)!;
+      const below = layout.nodes.filter((n) => n.stage === h.stage - 1).at(-1);
+      expect(h.y - 34 - (above.y + above.r)).toBeGreaterThan(10);
+      if (below) expect(below.y - below.r - 32 - (h.y + 34)).toBeGreaterThan(5); // star drawn ~32px above the node
+    });
+  });
+
   it('draws bosses bigger', () => {
     expect(layout.nodes[9]!.r).toBe(MAP.bossRadius);
     expect(layout.nodes[8]!.r).toBe(MAP.radius);

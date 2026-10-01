@@ -1,3 +1,4 @@
+import { isSkin, type Skin } from './album';
 import { DEFAULT_LANGUAGE, isLanguage, type Language } from './i18n';
 
 export interface KeyValueStorage {
@@ -13,12 +14,14 @@ export interface Progress {
   language: Language;
   /** Onboarding tips already shown (see onboarding.ts). */
   seenTips: string[];
+  /** Bucket skin in use (unlocked by completing stages, see album.ts). */
+  skin: Skin;
 }
 
 export const STORAGE_KEY = 'mix-and-splash/progress/v1';
 
 export function defaultProgress(): Progress {
-  return { unlocked: 1, completed: [], sound: true, language: DEFAULT_LANGUAGE, seenTips: [] };
+  return { unlocked: 1, completed: [], sound: true, language: DEFAULT_LANGUAGE, seenTips: [], skin: 'classic' };
 }
 
 function sanitize(raw: unknown): Progress {
@@ -33,7 +36,8 @@ function sanitize(raw: unknown): Progress {
   // Saves from before v0.2 have no language or tips: they get English and the onboarding.
   const language = isLanguage(r.language) ? r.language : base.language;
   const seenTips = Array.isArray(r.seenTips) ? [...new Set(r.seenTips.filter((t): t is string => typeof t === 'string'))] : [];
-  return { unlocked, completed, sound, language, seenTips };
+  const skin = isSkin(r.skin) ? r.skin : base.skin;
+  return { unlocked, completed, sound, language, seenTips, skin };
 }
 
 /** Never throws: missing, corrupt or inaccessible storage falls back to a fresh profile. */

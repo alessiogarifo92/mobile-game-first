@@ -85,7 +85,15 @@ export class MenuScene extends Phaser.Scene {
       g.fillRoundedRect(80, h.y - 34, VIEW.width - 160, 68, 34);
       label(this, 120, h.y, `${t('map.stage', { n: h.stage })} · ${info ? stageTitle(info.key) : ''}`, THEME.type.sm, '#ffffff')
         .setOrigin(0, 0.5);
-      label(this, VIEW.width - 120, h.y, t('map.progress', { done, total: h.count }), THEME.type.sm, '#ffffff').setOrigin(1, 0.5);
+      label(this, VIEW.width - 120, h.y, `${t('map.progress', { done, total: h.count })}  ▸`, THEME.type.sm, '#ffffff').setOrigin(1, 0.5);
+      // Tapping a stage band opens its album page.
+      this.add
+        .zone(VIEW.width / 2, h.y, VIEW.width - 160, 68)
+        .setInteractive({ useHandCursor: true })
+        .on('pointerup', () => {
+          if (this.settings || this.dragMoved) return;
+          this.scene.start('album', { stage: h.stage });
+        });
     }
   }
 
@@ -155,12 +163,15 @@ export class MenuScene extends Phaser.Scene {
       this.lastT = now;
       this.applyScroll();
     });
-    this.input.on('pointerup', () => {
-      if (!this.dragging) return;
-      this.dragging = false;
-      if (!this.dragMoved) this.velocity = 0;
-      this.publish();
-    });
+    this.input.on('pointerup', () => this.endDrag());
+    this.input.on('pointerupoutside', () => this.endDrag());
+  }
+
+  private endDrag(): void {
+    if (!this.dragging) return;
+    this.dragging = false;
+    if (!this.dragMoved) this.velocity = 0;
+    this.publish();
   }
 
   private applyScroll(): void {
@@ -169,6 +180,9 @@ export class MenuScene extends Phaser.Scene {
   }
 
   update(_time: number, delta: number): void {
+    // The scene's pointerup is not delivered when the finger lifts over an interactive zone,
+    // so a drag also ends whenever no pointer is down any more.
+    if (this.dragging && !this.input.activePointer.isDown) this.endDrag();
     if (this.dragging || this.velocity === 0 || this.settings) return;
     const next = inertia(this.scroll, this.velocity, Math.min(delta, 50), this.layout, this.viewHeight);
     this.scroll = next.scroll;
