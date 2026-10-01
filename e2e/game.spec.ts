@@ -59,6 +59,24 @@ async function dismissTip(page: Page): Promise<string | null> {
   return tip;
 }
 
+/**
+ * Waits until `done` holds in the page. Game time slows down when the machine is loaded, so instead of a fixed
+ * real-time limit the wait only fails when the simulation itself stops advancing (`tick` frozen for 15 s).
+ */
+async function waitSim(page: Page, done: () => boolean): Promise<void> {
+  let last = -1;
+  for (;;) {
+    try {
+      await page.waitForFunction(done, null, { timeout: 15_000 });
+      return;
+    } catch (e) {
+      const tick = await mix<number>(page, 'tick');
+      if (tick === last) throw e;
+      last = tick;
+    }
+  }
+}
+
 /** Plays moves with real taps, waiting for the belt to empty between moves; returns the tips it closed. */
 async function play(page: Page, moves: Move[]): Promise<string[]> {
   const tips: string[] = [];
@@ -71,18 +89,18 @@ async function play(page: Page, moves: Move[]): Promise<string[]> {
     await tap(page, r.x + r.w / 2, r.y + 40);
     // The scene publishes right after a launch, so the next wait sees the belt busy, never a stale snapshot.
     expect(await mix<number>(page, 'moves')).toBe(before + 1);
-    await page.waitForFunction(() => {
+    await waitSim(page, () => {
       const m = (window as unknown as { __mix: { beltBusy: boolean; status: string; tip: string | null } }).__mix;
       return !m.beltBusy || m.status !== 'playing' || m.tip !== null;
-    }, null, { timeout: 20_000 });
+    });
     // A tip pauses the belt: close it and let the bucket finish its loop.
     const late = await dismissTip(page);
     if (late) {
       tips.push(late);
-      await page.waitForFunction(() => {
+      await waitSim(page, () => {
         const m = (window as unknown as { __mix: { beltBusy: boolean; status: string } }).__mix;
         return !m.beltBusy || m.status !== 'playing';
-      }, null, { timeout: 20_000 });
+      });
     }
   }
   return tips;
@@ -131,14 +149,13 @@ test('first launch: English, guided level 1 played to a win, level 2 unlocked', 
   // The guide ignores taps outside the highlighted column.
   const columns = await mix<Rect[]>(page, 'columns');
   const other = columns.findIndex((_, i) => i !== solution[0]!.index);
-  if (other >= 0) {
-    await tap(page, columns[other]!.x + columns[other]!.w / 2, columns[other]!.y + 40);
-    expect(await mix(page, 'beltBusy')).toBe(false);
-  }
+  expect(other).toBeGreaterThanOrEqual(0); // level 1 has more than one column, or this check proves nothing
+  await tap(page, columns[other]!.x + columns[other]!.w / 2, columns[other]!.y + 40);
+  expect(await mix(page, 'beltBusy')).toBe(false);
   await play(page, solution.slice(0, 1));
   if (shots) await page.screenshot({ path: `${shots}/03-livello1-in-corso.png` });
   await play(page, solution.slice(1));
-  await page.waitForFunction(() => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'win');
+  await waitSim(page, () => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'win');
   if (shots) await page.screenshot({ path: `${shots}/04-vittoria.png` });
 
   await page.reload();
@@ -156,7 +173,7 @@ test('a secondary colour is mixed on the canvas (level 4), after the one-time mi
   await page.waitForFunction(() => (window as unknown as { __mix: { tip: string | null } }).__mix.tip === 'mixing');
   if (shots) await page.screenshot({ path: `${shots}/05-suggerimento-mixing.png` });
   await play(page, await mix<Move[]>(page, 'solution'));
-  await page.waitForFunction(() => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'win');
+  await waitSim(page, () => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'win');
   if (shots) await page.screenshot({ path: `${shots}/06-livello4-arancione.png` });
 });
 
@@ -169,11 +186,11 @@ test('a jam pauses the belt and +1 slot resumes play', async ({ page }) => {
   await waitScene(page, 'menu');
   await openLevel(page, def.id);
   await play(page, moves);
-  await page.waitForFunction(() => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'jam');
+  await waitSim(page, () => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'jam');
   if (shots) await page.screenshot({ path: `${shots}/07-ingorgo.png` });
   const slotsBefore = (await mix<Rect[]>(page, 'slots')).length;
-  // "+1 slot e continua" sits at panel top + 280 (see PlayScene.showJam).
-  await tap(page, 360, (1280 - 480) / 2 + 280);
+  const jam = await mix<{ continue: { x: number; y: number } | null }>(page, 'jamButtons');
+  await tap(page, jam.continue!.x, jam.continue!.y);
   await page.waitForFunction(() => (window as unknown as { __mix: { overlay: string | null } }).__mix.overlay === null);
   expect(await mix(page, 'status')).toBe('playing');
   expect((await mix<Rect[]>(page, 'slots')).length).toBe(slotsBefore + 1);
@@ -236,7 +253,7 @@ test('completing a stage unlocks its bucket style in the album', async ({ page }
   await waitScene(page, 'menu');
   await openLevel(page, 10);
   await play(page, await mix<Move[]>(page, 'solution'));
-  await page.waitForFunction(() => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'win');
+  await waitSim(page, () => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'win');
   expect(await mix(page, 'completedStage')).toBe(1);
   if (shots) await page.screenshot({ path: `${shots}/13-stage-completato.png` });
 
@@ -254,4 +271,32 @@ test('completing a stage unlocks its bucket style in the album', async ({ page }
 
   // Saved before any reload (the init script would overwrite storage on the next navigation).
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('mix-and-splash/progress/v1')!).skin)).toBe('dots');
+});
+
+test('the level 1 guide is in Italian when the language is Italian', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('mix-and-splash/progress/v1', JSON.stringify({ unlocked: 1, completed: [], sound: false, language: 'it', seenTips: [] })));
+  await page.goto('/');
+  await waitScene(page, 'menu');
+  expect(await page.evaluate(() => document.documentElement.lang)).toBe('it');
+  await openLevel(page, 1);
+  expect(await mix(page, 'guide')).toBe('tap');
+  expect(await mix<string>(page, 'guideText')).toBe('Tocca una colonna per mandare un secchiello sul nastro');
+  await play(page, (await mix<Move[]>(page, 'solution')).slice(0, 1));
+  expect(await mix(page, 'guide')).toBe('next');
+  expect(await mix<string>(page, 'guideText')).toBe('Manda il prossimo!');
+});
+
+test('the map scrolls with the mouse wheel and the keyboard', async ({ page }) => {
+  await page.goto('/');
+  await waitScene(page, 'menu');
+  const box = (await page.locator('canvas').boundingBox())!;
+  const start = await mix<number>(page, 'scrollY');
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.wheel(0, -300);
+  await page.waitForFunction((y) => (window as unknown as { __mix: { scrollY: number } }).__mix.scrollY < y, start);
+  const up = await mix<number>(page, 'scrollY');
+  await page.keyboard.press('PageDown');
+  await page.waitForFunction((y) => (window as unknown as { __mix: { scrollY: number } }).__mix.scrollY > y, up);
+  await page.keyboard.press('Home');
+  await page.waitForFunction(() => (window as unknown as { __mix: { scrollY: number } }).__mix.scrollY === 0);
 });

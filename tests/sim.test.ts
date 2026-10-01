@@ -70,6 +70,28 @@ describe('simulation', () => {
     expect(continueWithExtraSlot(g)).toBe(false); // only once
   });
 
+  it('a second jam after the extra slot cannot be continued again', () => {
+    const g = createGame(level(['R'], [[[RED, 1]]], { slots: 1 }));
+    g.status = 'jammed';
+    g.jammed = [{ id: 7, color: RED, ammo: 1, pos: 0, traveled: 0 }];
+    g.extraSlotUsed = true; // the one continue was already spent
+    expect(continueWithExtraSlot(g)).toBe(false);
+    expect(g.status).toBe('jammed');
+    expect(g.jammed).toHaveLength(1);
+  });
+
+  it('several buckets ride the belt at once and each paints its own pixel', () => {
+    const g = createGame(level(['RRR'], [[[RED, 1]], [[RED, 1]], [[RED, 1]]], { beltCapacity: 3 }));
+    expect(launchFromColumn(g, 0)).toBe(true);
+    expect(launchFromColumn(g, 1)).toBe(true);
+    expect(launchFromColumn(g, 2)).toBe(true);
+    run(g, 2);
+    expect(g.belt.length + g.pending.length).toBeGreaterThan(1); // really in parallel
+    run(g, 12);
+    expect(g.status).toBe('won');
+    expect(g.belt).toHaveLength(0);
+  });
+
   it('refuses a continue when not jammed', () => {
     const g = createGame(level(['R'], [[[RED, 1]]]));
     expect(continueWithExtraSlot(g)).toBe(false);

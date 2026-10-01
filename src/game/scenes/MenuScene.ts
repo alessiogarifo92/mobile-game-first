@@ -30,6 +30,8 @@ export class MenuScene extends Phaser.Scene {
   private lastY = 0;
   private lastT = 0;
   private bar!: Phaser.GameObjects.Container;
+  /** Map labels created on first view and hidden when off screen: keeps draw calls to what is visible. */
+  private cullable: { y: number; make: () => Phaser.GameObjects.Text; text?: Phaser.GameObjects.Text }[] = [];
   private settings: Phaser.GameObjects.Container | null = null;
   private settingsButtons: Record<string, { x: number; y: number }> = {};
 
@@ -51,7 +53,8 @@ export class MenuScene extends Phaser.Scene {
     const current = currentLevel(progress.unlocked, progress.completed, LEVELS.length);
     this.scroll = data.scroll ?? scrollToLevel(this.layout, current, this.viewHeight);
 
-    this.add.rectangle(0, 0, VIEW.width, this.layout.height, THEME.bg).setOrigin(0);
+    this.cameras.main.setBackgroundColor(THEME.bg);
+    this.cullable = [];
     this.drawPath();
     this.drawHeaders(progress.completed);
     this.drawNodes(progress.completed, progress.unlocked, current);
@@ -76,57 +79,74 @@ export class MenuScene extends Phaser.Scene {
     path.strokePath();
   }
 
+  /** Registers a label that is only created while its row is on (or near) the screen. */
+  private lazy(y: number, make: () => Phaser.GameObjects.Text): void {
+    this.cullable.push({ y, make });
+  }
+
   private drawHeaders(completed: readonly number[]): void {
+    const g = this.add.graphics();
     for (const h of this.layout.headers) {
       const info = stageInfo(h.stage);
       const done = LEVELS.filter((l) => l.stage === h.stage && completed.includes(l.id)).length;
-      const g = this.add.graphics();
       g.fillStyle(PAINT[info?.color ?? 1]!, 1);
       g.fillRoundedRect(80, h.y - 34, VIEW.width - 160, 68, 34);
-      label(this, 120, h.y, `${t('map.stage', { n: h.stage })} · ${info ? stageTitle(info.key) : ''}`, THEME.type.sm, '#ffffff')
-        .setOrigin(0, 0.5);
-      label(this, VIEW.width - 120, h.y, `${t('map.progress', { done, total: h.count })}  ▸`, THEME.type.sm, '#ffffff').setOrigin(1, 0.5);
-      // Tapping a stage band opens its album page.
-      this.add
-        .zone(VIEW.width / 2, h.y, VIEW.width - 160, 68)
-        .setInteractive({ useHandCursor: true })
-        .on('pointerup', () => {
-          if (this.settings || this.dragMoved) return;
-          this.scene.start('album', { stage: h.stage });
-        });
+      this.lazy(h.y, () => label(this, 120, h.y, `${t('map.stage', { n: h.stage })} · ${info ? stageTitle(info.key) : ''}`, THEME.type.sm, '#ffffff')
+        .setOrigin(0, 0.5));
+      this.lazy(h.y, () => label(this, VIEW.width - 120, h.y, `${t('map.progress', { done, total: h.count })}  ▸`, THEME.type.sm, '#ffffff').setOrigin(1, 0.5));
     }
   }
 
+  /** The whole map shares a few Graphics and one tap handler instead of one object and one zone per node. */
   private drawNodes(completed: readonly number[], unlocked: number, current: number): void {
+    const g = this.add.graphics();
     for (const n of this.layout.nodes) {
       const level = LEVELS[n.id - 1]!;
       const done = completed.includes(n.id);
       const open = n.id <= unlocked;
       const isCurrent = n.id === current && !done;
       const r = isCurrent ? n.r + 4 : n.r;
-      const g = this.add.graphics();
-      g.fillStyle(done ? PAINT[dominantColor(level.targets)]! : isCurrent ? THEME.paper : THEME.emptyPixel, 1);
-      g.fillCircle(n.x, n.y, r);
-      g.lineStyle(isCurrent ? 6 : 3, THEME.ink, open ? 1 : 0.3);
-      g.strokeCircle(n.x, n.y, r);
-      if (n.boss) label(this, n.x, n.y - r - 18, '★', THEME.type.md, open ? THEME.inkCss : THEME.subCss);
-      label(this, n.x, n.y, String(n.id), isCurrent ? THEME.type.md : THEME.type.sm, done ? '#ffffff' : THEME.inkCss)
-        .setAlpha(open ? 1 : 0.35);
+      // The current node pulses, so it lives in its own Graphics.
+      const target = isCurrent ? this.add.graphics() : g;
+      target.fillStyle(done ? PAINT[dominantColor(level.targets)]! : isCurrent ? THEME.paper : THEME.emptyPixel, 1);
+      target.fillCircle(n.x, n.y, r);
+      target.lineStyle(isCurrent ? 6 : 3, THEME.ink, open ? 1 : 0.3);
+      target.strokeCircle(n.x, n.y, r);
+      if (n.boss) this.lazy(n.y, () => label(this, n.x, n.y - r - 18, '★', THEME.type.md, open ? THEME.inkCss : THEME.subCss));
+      this.lazy(n.y, () => label(this, n.x, n.y, String(n.id), isCurrent ? THEME.type.md : THEME.type.sm, done ? '#ffffff' : THEME.inkCss)
+        .setAlpha(open ? 1 : 0.35));
       if (isCurrent) {
-        label(this, n.x + (n.x < VIEW.width / 2 ? 140 : -140), n.y, levelTitle(n.id), THEME.type.sm, THEME.inkCss);
-        this.tweens.add({ targets: g, alpha: 0.75, duration: 700, yoyo: true, repeat: -1 });
-      }
-      if (open) {
-        this.add
-          .zone(n.x, n.y, r * 2.4, r * 2.4)
-          .setInteractive({ useHandCursor: true })
-          .on('pointerup', () => {
-            if (this.settings || this.dragMoved) return;
-            sfx.unlock();
-            this.scene.start('play', { levelId: n.id });
-          });
+        this.lazy(n.y, () => label(this, n.x + (n.x < VIEW.width / 2 ? 140 : -140), n.y, levelTitle(n.id), THEME.type.sm, THEME.inkCss));
+        this.tweens.add({ targets: target, alpha: 0.75, duration: 700, yoyo: true, repeat: -1 });
       }
     }
+  }
+
+  /** Creates labels that came into view and hides the ones that left it. */
+  private cull(): void {
+    const margin = 140;
+    const top = this.scroll - margin;
+    const bottom = this.scroll + this.viewHeight + margin;
+    for (const item of this.cullable) {
+      const visible = item.y >= top && item.y <= bottom;
+      if (visible && !item.text) item.text = item.make();
+      item.text?.setVisible(visible);
+    }
+  }
+
+  /** A tap (touch that did not turn into a drag) on a level node or on a stage band. */
+  private tapAt(x: number, worldY: number): void {
+    if (this.settings) return;
+    const unlocked = getProgress().unlocked;
+    // Touch area at least 48 units around the node centre, whatever the drawn size.
+    const node = this.layout.nodes.find((n) => n.id <= unlocked && Math.hypot(n.x - x, n.y - worldY) <= Math.max(n.r * 1.2, 56));
+    if (node) {
+      sfx.unlock();
+      this.scene.start('play', { levelId: node.id });
+      return;
+    }
+    const header = this.layout.headers.find((h) => Math.abs(h.y - worldY) <= 44 && x >= 80 && x <= VIEW.width - 80);
+    if (header) this.scene.start('album', { stage: header.stage });
   }
 
   /** Title bar that stays put while the map scrolls under it (re-positioned every frame). */
@@ -163,8 +183,25 @@ export class MenuScene extends Phaser.Scene {
       this.lastT = now;
       this.applyScroll();
     });
-    this.input.on('pointerup', () => this.endDrag());
+    this.input.on('pointerup', (p: Phaser.Input.Pointer) => {
+      const tapped = this.dragging && !this.dragMoved;
+      this.endDrag();
+      if (tapped) this.tapAt(p.x, p.worldY);
+    });
     this.input.on('pointerupoutside', () => this.endDrag());
+    // Desktop / PWA: mouse wheel and keyboard scroll the map too.
+    this.input.on('wheel', (_p: Phaser.Input.Pointer, _o: unknown, _dx: number, dy: number) => this.scrollBy(dy));
+    const page = this.viewHeight - MAP.barHeight;
+    const keys: [string, number][] = [['UP', -120], ['DOWN', 120], ['PAGE_UP', -page], ['PAGE_DOWN', page], ['HOME', -Infinity], ['END', Infinity]];
+    for (const [key, dy] of keys) this.input.keyboard?.on(`keydown-${key}`, () => this.scrollBy(dy));
+  }
+
+  private scrollBy(dy: number): void {
+    if (this.settings) return;
+    this.velocity = 0;
+    this.scroll = clampScroll(this.scroll + dy, this.layout, this.viewHeight);
+    this.applyScroll();
+    this.publish();
   }
 
   private endDrag(): void {
@@ -177,6 +214,7 @@ export class MenuScene extends Phaser.Scene {
   private applyScroll(): void {
     this.cameras.main.setScroll(0, this.scroll);
     this.bar.setY(this.scroll);
+    this.cull();
   }
 
   update(_time: number, delta: number): void {

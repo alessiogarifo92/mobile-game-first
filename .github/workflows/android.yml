@@ -3,7 +3,7 @@ name: Android APK
 on:
   push:
     branches: ['**']
-    # A version tag (e.g. v0.3.0-rc.1) also publishes a pre-release with the APK attached.
+    # A version tag also publishes a release with the APK: v0.3.0-rc.1 → pre-release, v0.3.0 → normal release.
     tags: ['v*']
   workflow_dispatch:
     inputs:
@@ -39,7 +39,7 @@ jobs:
           name: mix-and-splash-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
-      - name: Publish pre-release with the APK
+      - name: Publish release with the APK
         if: startsWith(github.ref, 'refs/tags/v') || inputs.prerelease != ''
         env:
           GH_TOKEN: ${{ github.token }}
@@ -51,5 +51,13 @@ jobs:
           # Release notes: the CHANGELOG section of this version (without the -rc suffix).
           awk -v v="## ${VERSION%%-*}" 'index($0, v) == 1 {on=1; next} /^## / {on=0} on' CHANGELOG.md > notes.md
           printf '\n---\nBuild di test (debug): per installarla, apri il file .apk dal telefono e consenti le origini sconosciute.\n' >> notes.md
-          # On a manual run the tag is created on the commit that was built.
-          gh release create "$TAG" "$APK" --prerelease --target "$GITHUB_SHA" --title "Mix & Splash ${TAG} (test)" --notes-file notes.md
+          # A tag with a suffix (v0.3.0-rc.1) is a test pre-release; a plain version tag (v0.3.0) is a normal, latest release.
+          if [[ "$TAG" == *-* ]]; then FLAGS=(--prerelease); TITLE="Mix & Splash ${TAG} (test)"; else FLAGS=(--latest); TITLE="Mix & Splash ${TAG}"; fi
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            # Re-running for an existing release updates it instead of failing.
+            gh release edit "$TAG" --title "$TITLE" --notes-file notes.md "${FLAGS[@]}"
+            gh release upload "$TAG" "$APK" --clobber
+          else
+            # On a manual run the tag is created on the commit that was built.
+            gh release create "$TAG" "$APK" "${FLAGS[@]}" --target "$GITHUB_SHA" --title "$TITLE" --notes-file notes.md
+          fi

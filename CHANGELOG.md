@@ -1,5 +1,15 @@
 # Changelog
 
+## Non rilasciato — prestazioni e QA (epic #44)
+
+- **Mappa più fluida su APK** (#60, #46): nodi e fasce in pochi `Graphics`, etichette create solo quando entrano nello schermo e nascoste fuori, un solo hit-test sul tocco al posto di ~110 zone interattive.
+- **Gioco**: i testi dei secchielli si aggiornano solo se cambiano (#45); i pixel si ridisegnano una volta per frame (#48); la soluzione si calcola solo quando serve (#48).
+- Avvio: Phaser in un chunk separato (#47).
+- Salvataggi: `unlocked` riconciliato con i livelli completati e limitato a 1–100, id fuori range e array enormi scartati, stile non sbloccato ignorato (#53, #54).
+- Mappa: scroll con rotella e tastiera (#51); zone di tocco dei pulsanti ≥ 88 unità (#49); testi piccoli e contrasto migliorati (#50).
+- Test: attese e2e legate ai tick di simulazione (#55), config Playwright/CI con report, trace e retry (#56), nuovi test (italiano, rotella, secchielli in parallelo, secondo ingorgo) e soglie di coverage alzate (#58).
+- Release: un tag senza `-rc` crea una release normale, e una già esistente viene aggiornata (#59).
+
 ## 0.3.0 — 100 livelli in 10 stage (1 ottobre 2026)
 
 ### Novità di gioco

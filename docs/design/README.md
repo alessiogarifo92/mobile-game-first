@@ -12,7 +12,7 @@ Unica fonte di verità in codice: `src/game/theme.ts`.
 | Sfondo | `#FFF6E9` (carta calda) |
 | Tela | `#FFFDF8` · pixel vuoto `#F1E7D8` |
 | Nastro | `#D9CBB4` |
-| Inchiostro / accento | `#2B2D42` · testo secondario `#8D8A9B` |
+| Inchiostro / accento | `#2B2D42` · testo secondario `#66637A` |
 | Rosso R | `#E63946` |
 | Giallo Y | `#FFB703` |
 | Blu B | `#3A86FF` |

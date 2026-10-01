@@ -20,7 +20,7 @@ describe('progress', () => {
 
   it('round-trips through storage', () => {
     const s = memory();
-    const p = { unlocked: 3, completed: [1, 2], sound: false, language: 'it' as const, seenTips: ['guide'], skin: 'gold' as const };
+    const p = { unlocked: 3, completed: [1, 2], sound: false, language: 'it' as const, seenTips: ['guide'], skin: 'classic' as const };
     expect(saveProgress(s, p)).toBe(true);
     expect(loadProgress(s)).toEqual(p);
   });
@@ -69,5 +69,31 @@ describe('progress', () => {
   it('records a seen tip once', () => {
     const p = markTipSeen(markTipSeen(defaultProgress(), 'guide'), 'guide');
     expect(p.seenTips).toEqual(['guide']);
+  });
+
+  describe('against the real level list', () => {
+    // 3 stages of 10 levels: stage 1 completes with levels 1-10 and unlocks the 'dots' skin.
+    const levels = Array.from({ length: 30 }, (_, i) => ({ id: i + 1, stage: Math.floor(i / 10) + 1 }));
+    const load = (o: object) => loadProgress(memory(JSON.stringify(o)), levels);
+
+    it('raises unlocked above the highest completed level', () => {
+      expect(load({ unlocked: 1, completed: [1, 2, 3, 4, 5] }).unlocked).toBe(6);
+    });
+
+    it('caps unlocked and drops ids outside 1..levels', () => {
+      expect(load({ unlocked: 1e308, completed: [2, 31, 999] })).toMatchObject({ unlocked: 30, completed: [2] });
+      expect(load({ unlocked: 99, completed: [] }).unlocked).toBe(30);
+      expect(load({ unlocked: 30, completed: [30] }).unlocked).toBe(30);
+    });
+
+    it('truncates an oversized completed array', () => {
+      const big = Array.from({ length: 50_000 }, (_, i) => i + 1);
+      expect(load({ completed: big }).completed.length).toBe(30);
+    });
+
+    it('ignores a skin the player has not unlocked', () => {
+      expect(load({ skin: 'gold', completed: [] }).skin).toBe('classic');
+      expect(load({ skin: 'dots', completed: levels.slice(0, 10).map((l) => l.id) }).skin).toBe('dots');
+    });
   });
 });

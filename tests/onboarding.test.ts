@@ -10,6 +10,7 @@ describe('onboarding', () => {
     expect(needsGuide(first, [])).toBe(true);
     expect(needsGuide(first, ['guide'])).toBe(false);
     expect(needsGuide(mixed, [])).toBe(false);
+    expect(needsGuide(level(['RR'], [[[RED, 2]]], { id: 2 }), [])).toBe(false); // only level 1 is guided
   });
 
   it('explains mixing on the first level with secondaries, once', () => {

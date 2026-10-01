@@ -8,9 +8,11 @@ export const THEME = {
   emptyPixel: 0xf1e7d8,
   belt: 0xd9cbb4,
   beltDark: 0xc4b498,
+  /** Hidden-pixel cover: dark enough for a white "?" to reach 4.5:1 contrast. */
+  hidden: 0x756a55,
   ink: 0x2b2d42,
   inkCss: '#2B2D42',
-  subCss: '#8D8A9B',
+  subCss: '#66637A',
   white: 0xffffff,
   ice: 0xcfe8f7,
   font: 'ui-rounded, "Nunito", "Fredoka", system-ui, sans-serif',

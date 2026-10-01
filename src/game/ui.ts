@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import { VIEW } from '../core/layout';
 import { THEME } from './theme';
 
+const MIN_TOUCH = 88;
+
 export interface ButtonOptions {
   fill?: number;
   color?: string;
@@ -31,7 +33,8 @@ export function button(
       color: opts.color ?? '#ffffff',
     })
     .setOrigin(0.5);
-  const zone = scene.add.zone(0, 0, w, h).setInteractive({ useHandCursor: true });
+  // Touch area is at least 88 logical units (44 px on a 360 px wide phone) even when the drawing is smaller.
+  const zone = scene.add.zone(0, 0, Math.max(w, MIN_TOUCH), Math.max(h, MIN_TOUCH)).setInteractive({ useHandCursor: true });
   zone.on('pointerup', (_p: Phaser.Input.Pointer, _x: number, _y: number, e: Phaser.Types.Input.EventData) => {
     e.stopPropagation();
     onClick();
