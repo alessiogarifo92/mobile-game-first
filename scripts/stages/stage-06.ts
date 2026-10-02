@@ -3,13 +3,14 @@ import type { StageSpec } from './types';
 /**
  * Stage 6 — Città ed edifici (ticket #35).
  * Introduce i pixel nascosti: da 2 fino a 5.
- * winRate = difficulty band for a random tapper (see randomWinRate); `special` places ice/hidden pixels.
+ * Nastro 3 nei primi cinque livelli, poi 2 (#75).
+ * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places ice/hidden pixels.
  */
 const stage: StageSpec = {
   stage: 6,
   complete: true,
   levels: [
-    { name: 'house', columns: 4, ammoChunk: 10, slots: 3, beltCapacity: 4, special: { hidden: 2 }, winRate: [0.39, 1], seed: 6000, image: [
+    { name: 'house', columns: 4, ammoChunk: 10, slots: 3, beltCapacity: 3, special: { hidden: 2 }, winRate: [0.78, 1], seed: 6000, image: [
       '.....RR.....',
       '....RRRR....',
       '...RRRRRR...',
@@ -23,7 +24,7 @@ const stage: StageSpec = {
       '..OOOYYOOO..',
       'GGGGGGGGGGGG',
     ] },
-    { name: 'streetlamp', columns: 4, ammoChunk: 10, slots: 3, beltCapacity: 4, special: { hidden: 2 }, winRate: [0.39, 1], seed: 6037, image: [
+    { name: 'streetlamp', columns: 4, ammoChunk: 10, slots: 3, beltCapacity: 3, special: { hidden: 2 }, winRate: [0.75, 1], seed: 6037, image: [
       '....YYYY....',
       '...YYYYYY...',
       '....BBBB....',
@@ -37,7 +38,7 @@ const stage: StageSpec = {
       '...BBBBBB...',
       'GGGGGGGGGGGG',
     ] },
-    { name: 'trafficlight', columns: 4, ammoChunk: 10, slots: 3, beltCapacity: 4, special: { hidden: 2 }, winRate: [0.39, 1], seed: 6074, image: [
+    { name: 'trafficlight', columns: 4, ammoChunk: 5, slots: 2, beltCapacity: 3, special: { hidden: 2 }, winRate: [0.69, 0.89], seed: 6074, image: [
       '....BBBB....',
       '...BRRRRB...',
       '...BRRRRB...',
@@ -51,7 +52,7 @@ const stage: StageSpec = {
       '.....BB.....',
       '.....BB.....',
     ] },
-    { name: 'shop', columns: 4, ammoChunk: 10, slots: 3, beltCapacity: 4, special: { hidden: 3 }, winRate: [0.24, 0.85], seed: 6111, image: [
+    { name: 'shop', columns: 4, ammoChunk: 15, slots: 3, beltCapacity: 3, special: { hidden: 3 }, winRate: [0.67, 0.87], seed: 6111, image: [
       'RYRYRYRYRYRY',
       'RYRYRYRYRYRY',
       '.RYRYRYRYRY.',
@@ -65,7 +66,7 @@ const stage: StageSpec = {
       'OOOOPPPPOOOO',
       'GGGGGGGGGGGG',
     ] },
-    { name: 'apartment', columns: 4, ammoChunk: 10, slots: 3, beltCapacity: 4, special: { hidden: 3 }, winRate: [0.24, 0.85], seed: 6148, image: [
+    { name: 'apartment', columns: 4, ammoChunk: 15, slots: 3, beltCapacity: 3, special: { hidden: 3 }, winRate: [0.64, 0.84], seed: 6148, image: [
       'PPPPPPPPPPPP',
       'PYYPPYYPPYYP',
       'PYYPPYYPPYYP',
@@ -79,7 +80,7 @@ const stage: StageSpec = {
       'PPPPPOOPPPPP',
       'PPPPPOOPPPPP',
     ] },
-    { name: 'bridge', columns: 4, ammoChunk: 10, slots: 3, beltCapacity: 4, special: { hidden: 3 }, winRate: [0.24, 0.85], seed: 6185, image: [
+    { name: 'bridge', columns: 4, ammoChunk: 10, slots: 3, beltCapacity: 2, special: { hidden: 3 }, winRate: [0.97, 1], seed: 6185, image: [
       'R..........R',
       'RR........RR',
       'R.R......R.R',
@@ -91,7 +92,7 @@ const stage: StageSpec = {
       'BBBBBBBBBBBB',
       'BYBBBBBYBBBB',
     ] },
-    { name: 'fountain', columns: 4, ammoChunk: 10, slots: 3, beltCapacity: 4, special: { hidden: 4 }, winRate: [0.24, 0.85], seed: 6222, image: [
+    { name: 'fountain', columns: 4, ammoChunk: 10, slots: 3, beltCapacity: 2, special: { hidden: 4 }, winRate: [0.97, 1], seed: 6222, image: [
       '.....BB.....',
       '....B..B....',
       '...B.BB.B...',
@@ -103,7 +104,7 @@ const stage: StageSpec = {
       '.OOOOOOOOOO.',
       '..OOOOOOOO..',
     ] },
-    { name: 'clocktower', columns: 4, ammoChunk: 10, slots: 3, beltCapacity: 4, special: { hidden: 4 }, winRate: [0.15, 0.76], seed: 6259, image: [
+    { name: 'clocktower', columns: 4, ammoChunk: 15, slots: 2, beltCapacity: 2, special: { hidden: 4 }, winRate: [0.61, 0.78], seed: 6259, image: [
       '.....RR.....',
       '....RRRR....',
       '...RRRRRR...',
@@ -119,7 +120,7 @@ const stage: StageSpec = {
       '..OOOOOOOO..',
       'GGGGGGGGGGGG',
     ] },
-    { name: 'skyscraper', columns: 4, ammoChunk: 10, slots: 3, beltCapacity: 4, special: { hidden: 4 }, winRate: [0.15, 0.76], seed: 6296, image: [
+    { name: 'skyscraper', columns: 4, ammoChunk: 15, slots: 2, beltCapacity: 2, special: { hidden: 4 }, winRate: [0.61, 0.75], seed: 6296, image: [
       'PPPPPBBPPPPP',
       'PPPPPBBPPPPP',
       'PPPPBBBBPPPP',
@@ -135,7 +136,7 @@ const stage: StageSpec = {
       'PPBBBBBBBBPP',
       'GGGGGGGGGGGG',
     ] },
-    { name: 'skyline', columns: 4, ammoChunk: 10, slots: 3, beltCapacity: 4, special: { hidden: 5 }, winRate: [0.11, 0.66], seed: 6333, image: [
+    { name: 'skyline', columns: 4, ammoChunk: 15, slots: 2, beltCapacity: 2, special: { hidden: 5 }, winRate: [0.5, 0.6], seed: 6333, image: [
       '..........Y.',
       'P....P....YY',
       'PP..PPP...Y.',

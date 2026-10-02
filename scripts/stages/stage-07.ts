@@ -3,13 +3,14 @@ import type { StageSpec } from './types';
 /**
  * Stage 7 — Cibo e dolci (ticket #36).
  * Ghiaccio e pixel nascosti insieme, 4 colonne.
- * winRate = difficulty band for a random tapper (see randomWinRate); `special` places ice/hidden pixels.
+ * Nastro 3 nei primi cinque livelli, poi 2 (#75).
+ * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places ice/hidden pixels.
  */
 const stage: StageSpec = {
   stage: 7,
   complete: true,
   levels: [
-    { name: 'lollipop', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 4, special: { ice: 2, hidden: 1 }, winRate: [0.35, 1], seed: 7000, image: [
+    { name: 'lollipop', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 3, special: { ice: 2, hidden: 1 }, winRate: [0.74, 1], seed: 7000, image: [
       '...RRRRR....',
       '..RYYYYYR...',
       '.RYRRRRRYR..',
@@ -23,7 +24,7 @@ const stage: StageSpec = {
       '.....O......',
       '.....O......',
     ] },
-    { name: 'candy', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 4, special: { ice: 2, hidden: 2 }, winRate: [0.35, 1], seed: 7037, image: [
+    { name: 'candy', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 3, special: { ice: 2, hidden: 2 }, winRate: [0.71, 1], seed: 7037, image: [
       'RR........RR',
       'RRR.PPPP.RRR',
       'RRRPPYYPPRRR',
@@ -32,7 +33,7 @@ const stage: StageSpec = {
       'RRR.PPPP.RRR',
       'RR........RR',
     ] },
-    { name: 'popsicle', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 4, special: { ice: 3, hidden: 2 }, winRate: [0.35, 1], seed: 7074, image: [
+    { name: 'popsicle', columns: 4, ammoChunk: 18, slots: 2, beltCapacity: 3, special: { ice: 3, hidden: 2 }, winRate: [0.65, 0.85], seed: 7074, image: [
       '...PPPPPP...',
       '..PPPPPPPP..',
       '..PPRPPRPP..',
@@ -46,7 +47,7 @@ const stage: StageSpec = {
       '.....OO.....',
       '.....OO.....',
     ] },
-    { name: 'donut', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 4, special: { ice: 3, hidden: 2 }, winRate: [0.21, 0.83], seed: 7111, image: [
+    { name: 'donut', columns: 4, ammoChunk: 18, slots: 2, beltCapacity: 3, special: { ice: 3, hidden: 2 }, winRate: [0.63, 0.83], seed: 7111, image: [
       '...PPPPPP...',
       '..PPRPPYPP..',
       '.PPYPPPPRPP.',
@@ -57,7 +58,7 @@ const stage: StageSpec = {
       '..OOOOOOOO..',
       '...OOOOOO...',
     ] },
-    { name: 'cookie', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 4, special: { ice: 3, hidden: 3 }, winRate: [0.21, 0.83], seed: 7148, image: [
+    { name: 'cookie', columns: 4, ammoChunk: 8, slots: 2, beltCapacity: 3, special: { ice: 3, hidden: 3 }, winRate: [0.6, 0.8], seed: 7148, image: [
       '...OOOOOO...',
       '..OOBOOOOO..',
       '.OOOOOOOBOO.',
@@ -68,7 +69,7 @@ const stage: StageSpec = {
       '..OOOOOBOO..',
       '...OOOOOO...',
     ] },
-    { name: 'icecream', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 4, special: { ice: 4, hidden: 3 }, winRate: [0.21, 0.83], seed: 7185, image: [
+    { name: 'icecream', columns: 4, ammoChunk: 18, slots: 3, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.59, 0.79], seed: 7185, image: [
       '....PPPP....',
       '...PPPPPP...',
       '..PPRPPRPP..',
@@ -82,7 +83,7 @@ const stage: StageSpec = {
       '....OYO.....',
       '.....O......',
     ] },
-    { name: 'pizza', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 4, special: { ice: 4, hidden: 3 }, winRate: [0.21, 0.83], seed: 7222, image: [
+    { name: 'pizza', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.97, 1], seed: 7222, image: [
       'OOOOOOOOOOOO',
       '.YYYYYYYYYY.',
       '.YRYYYYGYY..',
@@ -94,7 +95,7 @@ const stage: StageSpec = {
       '....YY......',
       '.....Y......',
     ] },
-    { name: 'burger', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 4, special: { ice: 4, hidden: 3 }, winRate: [0.12, 0.74], seed: 7259, image: [
+    { name: 'burger', columns: 4, ammoChunk: 18, slots: 2, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.57, 0.74], seed: 7259, image: [
       '...OOOOOO...',
       '..OOYOOOYO..',
       '.OOOOOYOOOO.',
@@ -105,7 +106,7 @@ const stage: StageSpec = {
       '.OOOOOOOOOO.',
       '..OOOOOOOO..',
     ] },
-    { name: 'cupcake', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 4, special: { ice: 4, hidden: 4 }, winRate: [0.12, 0.74], seed: 7296, image: [
+    { name: 'cupcake', columns: 4, ammoChunk: 6, slots: 2, beltCapacity: 2, special: { ice: 4, hidden: 4 }, winRate: [0.57, 0.71], seed: 7296, image: [
       '.....R......',
       '....PPPP....',
       '...PPPPPP...',
@@ -116,7 +117,7 @@ const stage: StageSpec = {
       '..BOBOBOBO..',
       '...BOBOBO...',
     ] },
-    { name: 'cake', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 4, special: { ice: 5, hidden: 4 }, winRate: [0.1, 0.64], seed: 7333, image: [
+    { name: 'cake', columns: 4, ammoChunk: 12, slots: 2, beltCapacity: 2, special: { ice: 5, hidden: 4 }, winRate: [0.46, 0.56], seed: 7333, image: [
       '.....R......',
       '.....Y......',
       '..PPPPPPPP..',

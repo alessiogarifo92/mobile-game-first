@@ -3,13 +3,14 @@ import type { StageSpec } from './types';
 /**
  * Stage 10 — Fantasia (ticket #39).
  * Finale: tele grandi, tutte le meccaniche; il 100 è il drago.
- * winRate = difficulty band for a random tapper (see randomWinRate); `special` places ice/hidden pixels.
+ * Nastro 2 in tutto lo stage (#75).
+ * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places ice/hidden pixels.
  */
 const stage: StageSpec = {
   stage: 10,
   complete: true,
   levels: [
-    { name: 'crown', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 3, special: { ice: 4, hidden: 3 }, winRate: [0.25, 1], seed: 10000, image: [
+    { name: 'crown', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.64, 1], seed: 10000, image: [
       'Y....Y....Y.',
       'YY..YYY..YY.',
       'YYY.YYY.YYY.',
@@ -18,7 +19,7 @@ const stage: StageSpec = {
       'YYYYYYYYYYYY',
       'OOOOOOOOOOOO',
     ] },
-    { name: 'potion', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 3, special: { ice: 4, hidden: 3 }, winRate: [0.25, 1], seed: 10037, image: [
+    { name: 'potion', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.61, 1], seed: 10037, image: [
       '.....OO.....',
       '.....OO.....',
       '....BBBB....',
@@ -31,7 +32,7 @@ const stage: StageSpec = {
       '...BPPPPB...',
       '....BBBB....',
     ] },
-    { name: 'chest', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 3, special: { ice: 4, hidden: 3 }, winRate: [0.25, 1], seed: 10074, image: [
+    { name: 'chest', columns: 4, ammoChunk: 21, slots: 2, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.55, 0.75], seed: 10074, image: [
       '..OOOOOOOO..',
       '.OYOOOOOOYO.',
       'OOOOOOOOOOOO',
@@ -41,7 +42,7 @@ const stage: StageSpec = {
       'OOOOOOOOOOOO',
       '.YYYYYYYYYY.',
     ] },
-    { name: 'wizardhat', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 3, special: { ice: 5, hidden: 3 }, winRate: [0.12, 0.77], seed: 10111, image: [
+    { name: 'wizardhat', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { ice: 5, hidden: 3 }, winRate: [0.53, 0.73], seed: 10111, image: [
       '......P.....',
       '.....PP.....',
       '.....PPP....',
@@ -53,7 +54,7 @@ const stage: StageSpec = {
       '..BBBBBBBBB.',
       'PPPPPPPPPPPP',
     ] },
-    { name: 'mushroomhouse', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 3, special: { ice: 5, hidden: 4 }, winRate: [0.12, 0.77], seed: 10148, image: [
+    { name: 'mushroomhouse', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { ice: 5, hidden: 4 }, winRate: [0.82, 1], seed: 10148, image: [
       '....RRRRR...',
       '..RRYRRRYRR.',
       '.RRRRRRRRRRR',
@@ -65,7 +66,7 @@ const stage: StageSpec = {
       '...YYYYOY...',
       'GGGGGGGGGGGG',
     ] },
-    { name: 'shield', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 3, special: { ice: 5, hidden: 4 }, winRate: [0.12, 0.77], seed: 10185, image: [
+    { name: 'shield', columns: 4, ammoChunk: 9, slots: 2, beltCapacity: 2, special: { ice: 5, hidden: 4 }, winRate: [0.49, 0.69], seed: 10185, image: [
       'BBBBBBBBBBBB',
       'BYYBBBBBBYYB',
       'BYYBBRRBBYYB',
@@ -78,7 +79,7 @@ const stage: StageSpec = {
       '....BBBB....',
       '.....BB.....',
     ] },
-    { name: 'dragonegg', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 3, special: { ice: 5, hidden: 4 }, winRate: [0.12, 0.77], seed: 10222, image: [
+    { name: 'dragonegg', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { ice: 5, hidden: 4 }, winRate: [0.47, 0.67], seed: 10222, image: [
       '....GGGG....',
       '...GYGGPG...',
       '..GGGGYGGG..',
@@ -90,7 +91,7 @@ const stage: StageSpec = {
       '...GGGGGG...',
       'OOOOOOOOOOOO',
     ] },
-    { name: 'spellbook', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 3, special: { ice: 6, hidden: 4 }, winRate: [0.07, 0.68], seed: 10259, image: [
+    { name: 'spellbook', columns: 4, ammoChunk: 21, slots: 3, beltCapacity: 2, special: { ice: 6, hidden: 4 }, winRate: [0.47, 0.64], seed: 10259, image: [
       'PPPPPPPPPPP.',
       'PYYYYYYYYYP.',
       'PYBBBBBBBYPO',
@@ -102,7 +103,7 @@ const stage: StageSpec = {
       'PPPPPPPPPPPO',
       '.OOOOOOOOOOO',
     ] },
-    { name: 'castle', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 3, special: { ice: 6, hidden: 5 }, winRate: [0.07, 0.68], seed: 10296, image: [
+    { name: 'castle', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { ice: 6, hidden: 5 }, winRate: [0.47, 0.61], seed: 10296, image: [
       '..R.......R...',
       '..RR......RR..',
       '..BB......BB..',
@@ -117,7 +118,7 @@ const stage: StageSpec = {
       'GGGGGGGGGGGGGG',
       'BBBBBBBBBBBBBB',
     ] },
-    { name: 'dragon', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 3, special: { ice: 7, hidden: 5 }, winRate: [0.05, 0.58], seed: 10333, image: [
+    { name: 'dragon', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { ice: 7, hidden: 5 }, winRate: [0.36, 0.46], seed: 10333, image: [
       '......GG......',
       '.....GGGG..OO.',
       '....GBGGGGOYO.',

@@ -248,7 +248,7 @@ test.describe('full belt on a 360x640 phone', () => {
   test.use({ viewport: { width: 360, height: 640 } });
 
   test('a full belt refuses a launch: the indicator shows why and the belt tip explains it once', async ({ page }) => {
-    // Level 71 is the first with a belt of 2 and has more columns than that.
+    // Level 71 opens stage 8, where every level has a belt of 2, and has more columns than that.
     await page.addInitScript((p) => localStorage.setItem('mix-and-splash/progress/v1', p), SEEN_ALL);
     await page.goto('/');
     await waitScene(page, 'menu');

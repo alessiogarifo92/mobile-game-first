@@ -3,13 +3,14 @@ import type { StageSpec } from './types';
 /**
  * Stage 9 — Spazio (ticket #38).
  * Tutte le meccaniche, tele fino a 14×14.
- * winRate = difficulty band for a random tapper (see randomWinRate); `special` places ice/hidden pixels.
+ * Nastro 2 in tutto lo stage (#75).
+ * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places ice/hidden pixels.
  */
 const stage: StageSpec = {
   stage: 9,
   complete: true,
   levels: [
-    { name: 'star', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 3, special: { ice: 3, hidden: 2 }, winRate: [0.28, 1], seed: 9000, image: [
+    { name: 'star', columns: 4, ammoChunk: 8, slots: 3, beltCapacity: 2, special: { ice: 3, hidden: 2 }, winRate: [0.68, 1], seed: 9000, image: [
       '.....YY.....',
       '.....YY.....',
       '....YYYY....',
@@ -21,7 +22,7 @@ const stage: StageSpec = {
       '.YYY....YYY.',
       'YY........YY',
     ] },
-    { name: 'moon', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 3, special: { ice: 3, hidden: 2 }, winRate: [0.28, 1], seed: 9037, image: [
+    { name: 'moon', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 2, special: { ice: 3, hidden: 2 }, winRate: [0.65, 1], seed: 9037, image: [
       'BBBYYYYBBBBB',
       'BBYYYYBBBBBB',
       'BYYYYBBBBBBB',
@@ -33,7 +34,7 @@ const stage: StageSpec = {
       'BYYYYYYYYYBB',
       'BBYYYYYYYBBB',
     ] },
-    { name: 'planet', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 3, special: { ice: 3, hidden: 2 }, winRate: [0.28, 1], seed: 9074, image: [
+    { name: 'planet', columns: 4, ammoChunk: 12, slots: 2, beltCapacity: 2, special: { ice: 3, hidden: 2 }, winRate: [0.59, 0.79], seed: 9074, image: [
       '....OOOO....',
       '..OOOOOOOO..',
       '.OOYYOOOOOO.',
@@ -43,7 +44,7 @@ const stage: StageSpec = {
       '..OOOOOOOO..',
       '....OOOO....',
     ] },
-    { name: 'rocket', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 3, special: { ice: 4, hidden: 3 }, winRate: [0.15, 0.79], seed: 9111, image: [
+    { name: 'rocket', columns: 4, ammoChunk: 8, slots: 3, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.97, 1], seed: 9111, image: [
       '.....RR.....',
       '....RRRR....',
       '....BBBB....',
@@ -56,7 +57,7 @@ const stage: StageSpec = {
       '.....YY.....',
       '.....O......',
     ] },
-    { name: 'ufo', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 3, special: { ice: 4, hidden: 3 }, winRate: [0.15, 0.79], seed: 9148, image: [
+    { name: 'ufo', columns: 4, ammoChunk: 12, slots: 2, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.54, 0.74], seed: 9148, image: [
       '.....GG.....',
       '....GBBG....',
       '...GBBBBG...',
@@ -66,7 +67,7 @@ const stage: StageSpec = {
       '...Y.Y..Y...',
       '..Y..Y...Y..',
     ] },
-    { name: 'comet', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 3, special: { ice: 4, hidden: 3 }, winRate: [0.15, 0.79], seed: 9185, image: [
+    { name: 'comet', columns: 4, ammoChunk: 18, slots: 2, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.53, 0.73], seed: 9185, image: [
       'YYBBBBBBBBBB',
       'BYYYBBBBBBBB',
       'BBOYYYBBBBBB',
@@ -78,7 +79,7 @@ const stage: StageSpec = {
       'BBBBBBBBYYYY',
       'BBBBBBBBBYYB',
     ] },
-    { name: 'satellite', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 3, special: { ice: 4, hidden: 3 }, winRate: [0.15, 0.79], seed: 9222, image: [
+    { name: 'satellite', columns: 4, ammoChunk: 12, slots: 2, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.51, 0.71], seed: 9222, image: [
       'BBBPPPPPBBBP',
       'BBBPPPPPBBBP',
       'BBBOOPOOBBBP',
@@ -88,7 +89,7 @@ const stage: StageSpec = {
       'PPPPOPOPPPPP',
       'PPPOPPPOPPPP',
     ] },
-    { name: 'alien', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 3, special: { ice: 5, hidden: 4 }, winRate: [0.07, 0.7], seed: 9259, image: [
+    { name: 'alien', columns: 4, ammoChunk: 18, slots: 2, beltCapacity: 2, special: { ice: 5, hidden: 4 }, winRate: [0.51, 0.68], seed: 9259, image: [
       '..G......G..',
       '...G....G...',
       '...GGGGGG...',
@@ -101,7 +102,7 @@ const stage: StageSpec = {
       '..PPPPPPPP..',
       '.PP.PPPP.PP.',
     ] },
-    { name: 'astronaut', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 3, special: { ice: 5, hidden: 4 }, winRate: [0.07, 0.7], seed: 9296, image: [
+    { name: 'astronaut', columns: 4, ammoChunk: 6, slots: 2, beltCapacity: 2, special: { ice: 5, hidden: 4 }, winRate: [0.51, 0.65], seed: 9296, image: [
       '...BBBBBB...',
       '..BBBBBBBB..',
       '..BYYYYYYB..',
@@ -115,7 +116,7 @@ const stage: StageSpec = {
       '...BB..BB...',
       '..BBB..BBB..',
     ] },
-    { name: 'galaxy', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 3, special: { ice: 6, hidden: 5 }, winRate: [0.07, 0.6], seed: 9333, image: [
+    { name: 'galaxy', columns: 4, ammoChunk: 18, slots: 3, beltCapacity: 2, special: { ice: 6, hidden: 5 }, winRate: [0.4, 0.5], seed: 9333, image: [
       '....PPPPPP....',
       '..PPBBBBBBPP..',
       '.PBBBPPPPBBBP.',
