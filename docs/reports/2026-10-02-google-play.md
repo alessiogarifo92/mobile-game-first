@@ -28,6 +28,8 @@ Data: 2 ottobre 2026 · Ambito: account, firma, requisiti tecnici, scheda store,
 
 **Tempi.** Le pagine ufficiali non indicano quanto dura la verifica dell'identità (**non verificato**): conviene avviarla subito. La verifica del dispositivo dura meno di un minuto. Quella del telefono si può fare solo **dopo** la verifica d'identità e quella del dispositivo ([fonte](https://support.google.com/googleplay/android-developer/answer/10841920?hl=en)).
 
+> **Decisione (2 ottobre 2026): il package aspetta il nome definitivo (#16)**, quindi l'app in Play Console si crea solo dopo #16.
+>
 > **Package name definitivo.** `com.alessiogarifo.mixsplash` (`capacitor.config.ts`) diventa **permanente** al primo upload e viene registrato a nostro nome. Il *titolo* della scheda si può cambiare dopo, il package no. Il ticket #16 (nome definitivo) non blocca la pubblicazione se va bene un package neutro rispetto al marchio. Va però deciso prima di creare l'app in Play Console.
 
 ## 2. Regola del test chiuso per gli account personali nuovi
@@ -105,7 +107,7 @@ Le dichiarazioni si compilano in **Policy and programs → App content**. Sono r
 | **App governative, funzioni finanziarie, salute, notizie** | "No" a tutte, ma vanno comunque compilate | [Financial features declaration](https://support.google.com/googleplay/android-developer/answer/13849271?hl=en), [Prepare your app for review](https://support.google.com/googleplay/android-developer/answer/9859455?hl=en) |
 | **Status di "trader" UE (Digital Services Act)** | **Non verificato**: non ho trovato una pagina ufficiale raggiungibile che lo descriva per gli account personali. Se la console lo chiede, per un gioco gratuito senza monetizzazione la risposta tipica è "non trader". Con la monetizzazione (#13) va rivalutato | — |
 
-**Decisione sul pubblico di destinazione.** Consiglio **13+**: le fasce 13–15, 16–17 e 18+, senza minori di 13 anni. Così si evitano i requisiti Families finché non c'è una scelta voluta su ads e analytics (#13, #14), e la scheda resta senza immagini o parole rivolte ai bambini. L'alternativa "anche bambini" è possibile oggi, perché non raccogliamo dati. Però vincola #13 (solo SDK certificati per famiglie, niente annunci personalizzati) e #14 (Firebase Analytics con limitazioni). È una scelta di prodotto, **da confermare con l'utente**.
+**Decisione sul pubblico di destinazione (confermata dall'utente il 2 ottobre 2026: 13+).** Consiglio **13+**: le fasce 13–15, 16–17 e 18+, senza minori di 13 anni. Così si evitano i requisiti Families finché non c'è una scelta voluta su ads e analytics (#13, #14), e la scheda resta senza immagini o parole rivolte ai bambini. L'alternativa "anche bambini" è possibile oggi, perché non raccogliamo dati. Però vincola #13 (solo SDK certificati per famiglie, niente annunci personalizzati) e #14 (Firebase Analytics con limitazioni). Scelta confermata: **13+**.
 
 ## 8. Revisione e tempi di pubblicazione
 Fonti: [Publish your app](https://support.google.com/googleplay/android-developer/answer/9859751?hl=en), [Control when app changes are reviewed and published](https://support.google.com/googleplay/android-developer/answer/9859654?hl=en).
@@ -163,8 +165,19 @@ Proposta (ticket R1, R2, R4):
 - **Il conteggio del test chiuso si azzera** se un tester esce: per questo il margine di 15–20 tester.
 - **Monetizzazione (#13) e analytics (#14)** cambiano Data safety, privacy policy, dichiarazione annunci, eventualmente il pubblico e i 16 KB (SDK nativi). Prevederli come "aggiornamento dichiarazioni" in quei ticket.
 
-## 12. Ticket di implementazione proposti (non ancora creati)
-Testi pronti da aprire nella milestone **Store release** dopo la conferma. R1, R2, R3 e R6 sono quelli che servono per pubblicare. R4 è facoltativo. R5 è una decisione. R7 è il ticket operativo dell'utente per i passi in Play Console.
+## 12. Ticket di implementazione
+Aperti nella milestone **Store release** il 2 ottobre 2026:
+
+| Report | Ticket |
+|---|---|
+| R1 — firma di release | #79 |
+| R2 — workflow AAB | #80 |
+| R3 — privacy policy | #81 |
+| R5 — APK debug e verifica sviluppatori (research) | #83 |
+| R6 — asset della scheda | #82 |
+| R7 — passi manuali in Play Console | #84 |
+
+R4 (upload automatico) non è aperto: va aperto dopo il primo upload manuale. Il testo dei ticket sotto è la versione proposta; quella su GitHub fa fede.
 
 ---
 
