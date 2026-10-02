@@ -1,13 +1,13 @@
 /**
- * Difficulty curve of the shipped levels (ticket #29): per-level metrics as JSON and a chart.
+ * Difficulty curve of the shipped levels (tickets #29, #75): per-level metrics as JSON and a chart.
+ * `randomWin` is levelWinRate: random playouts with the game's own rules, so `belt` and `slots` weigh in.
  *   npx tsx scripts/difficulty-report.ts
  */
 import { writeFileSync } from 'node:fs';
 import { chromium } from '@playwright/test';
 import levelsJson from '../src/levels/levels.json' with { type: 'json' };
 import { parseLevel, type LevelDef } from '../src/core/level';
-import { createRng } from '../src/core/rng';
-import { randomWinRate, solve } from '../src/core/solver';
+import { levelWinRate, solve } from '../src/core/solver';
 
 const rows = (levelsJson as LevelDef[]).map((def) => {
   const l = parseLevel(def);
@@ -24,7 +24,7 @@ const rows = (levelsJson as LevelDef[]).map((def) => {
     belt: l.beltCapacity,
     ice: l.ice.reduce((a, b) => a + b, 0),
     hidden: l.hidden.filter(Boolean).length,
-    randomWin: Number(randomWinRate(l, 400, createRng(l.id)).toFixed(3)),
+    randomWin: Number(levelWinRate(l).toFixed(3)),
     solutionMoves: solve(l).moves.length,
   };
 });
@@ -64,5 +64,9 @@ await browser.close();
 for (let s = 1; s <= 10; s++) {
   const st = rows.filter((r) => r.stage === s);
   const avg = (f: (r: (typeof rows)[number]) => number) => (st.reduce((a, r) => a + f(r), 0) / st.length).toFixed(2);
-  console.log(`| ${s} | ${avg((r) => r.randomWin)} | ${Math.min(...st.map((r) => r.randomWin)).toFixed(2)} | ${avg((r) => r.shooters)} | ${avg((r) => r.ice)} | ${avg((r) => r.hidden)} | ${st.find((r) => r.boss)?.randomWin ?? '-'} |`);
+  const span = (f: (r: (typeof rows)[number]) => number) => {
+    const [lo, hi] = [Math.min(...st.map(f)), Math.max(...st.map(f))];
+    return lo === hi ? `${lo}` : `${lo}–${hi}`;
+  };
+  console.log(`| ${s} | ${avg((r) => r.randomWin)} | ${Math.min(...st.map((r) => r.randomWin)).toFixed(2)} | ${span((r) => r.belt)} | ${span((r) => r.slots)} | ${avg((r) => r.shooters)} | ${avg((r) => r.ice)} | ${avg((r) => r.hidden)} | ${st.find((r) => r.boss)?.randomWin ?? '-'} |`);
 }
