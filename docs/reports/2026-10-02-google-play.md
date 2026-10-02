@@ -9,6 +9,8 @@ Data: 2 ottobre 2026 · Ambito: account, firma, requisiti tecnici, scheda store,
 - Dove una cosa **non** è stata confermata da una fonte ufficiale, è scritto "non verificato".
 
 ## In breve
+> **Decisione (2 ottobre 2026): nessuna spesa finché il gioco non convince.** L'account Play (25 $) si apre solo dopo il playtest (#42). Fino ad allora si fanno solo i passi a costo zero.
+
 1. **Si parte subito con l'account** (25 $, verifica identità e dispositivo) e con la **ricerca di 12+ tester**: sono le due cose con i tempi più lunghi e non dipendono dal codice.
 2. **Il percorso minimo dura circa 4–5 settimane** dalla creazione dell'account: test chiuso di 14 giorni pieni, poi la revisione della richiesta di accesso alla produzione (di solito fino a 7 giorni), poi la revisione dell'app (fino a 7 giorni per gli account nuovi).
 3. **Lato tecnico siamo già quasi in regola.** `targetSdkVersion = 36` (`android/variables.gradle`) soddisfa il requisito in vigore dal 31 agosto 2026. Il gioco non raccoglie dati, quindi Data safety risponde "nessun dato raccolto". Mancano la firma di release (AAB + chiave di upload nei secrets), la privacy policy online e gli asset grafici della scheda.
