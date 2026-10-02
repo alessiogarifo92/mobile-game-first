@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { guideAllows, guideStep, needsGuide, tipOnLevelStart, tipOnReturn } from '../src/core/onboarding';
+import { guideAllows, guideStep, needsGuide, tipOnFullBelt, tipOnLevelStart, tipOnReturn } from '../src/core/onboarding';
 import { BLUE, RED, YELLOW, level } from './helpers';
 
 describe('onboarding', () => {
@@ -33,6 +33,12 @@ describe('onboarding', () => {
     expect(tipOnReturn(true, [])).toBe('slots');
     expect(tipOnReturn(false, ['blocked'])).toBe('slots');
     expect(tipOnReturn(false, ['blocked', 'slots'])).toBeNull();
+  });
+
+  it('explains the belt limit the first time a full belt refuses a launch, once', () => {
+    expect(tipOnFullBelt([])).toBe('belt');
+    expect(tipOnFullBelt(['guide', 'slots'])).toBe('belt');
+    expect(tipOnFullBelt(['belt'])).toBeNull();
   });
 
   it('walks the guided steps', () => {

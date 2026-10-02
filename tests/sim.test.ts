@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  continueWithExtraSlot, createGame, launchFromColumn, launchFromSlot, remainingShooters, step, targetCell,
+  beltFull, beltLoad, continueWithExtraSlot, createGame, launchFromColumn, launchFromSlot, remainingShooters, step, targetCell,
   type GameState,
 } from '../src/core/sim';
 import { BLUE, RED, YELLOW, level } from './helpers';
@@ -107,6 +107,21 @@ describe('simulation', () => {
     expect(g.pending).toHaveLength(1);
     step(g);
     expect(g.belt.length + g.pending.length).toBeLessThanOrEqual(2);
+  });
+
+  it('reports the belt load, pending buckets included, and frees a place when a bucket leaves', () => {
+    const g = createGame(level(['RRR'], [[[RED, 1]], [[RED, 1]], [[RED, 1]]], { beltCapacity: 2 }));
+    expect(beltLoad(g)).toEqual({ used: 0, capacity: 2 });
+    expect(beltFull(g)).toBe(false);
+    launchFromColumn(g, 0);
+    expect(beltLoad(g).used).toBe(1); // still pending, but it already takes a place
+    launchFromColumn(g, 1);
+    expect(beltFull(g)).toBe(true);
+    expect(launchFromColumn(g, 2)).toBe(false);
+    step(g); // the first bucket boards and empties on its only pixel
+    expect(beltLoad(g).used).toBe(1);
+    expect(beltFull(g)).toBe(false);
+    expect(launchFromColumn(g, 2)).toBe(true);
   });
 
   it('keeps boardGap lanes between boarding shooters', () => {

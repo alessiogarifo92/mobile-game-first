@@ -73,8 +73,24 @@ export function beltLength(state: GameState): number {
   return state.lanes.length;
 }
 
+export interface BeltLoad {
+  /** Buckets riding the belt or waiting to board. */
+  used: number;
+  capacity: number;
+}
+
+/** How full the belt is: shown to the player, so a refused launch is not a silent tap. */
+export function beltLoad(state: GameState): BeltLoad {
+  return { used: state.belt.length + state.pending.length, capacity: state.level.beltCapacity };
+}
+
+export function beltFull(state: GameState): boolean {
+  const { used, capacity } = beltLoad(state);
+  return used >= capacity;
+}
+
 function canBoard(state: GameState): boolean {
-  return state.status === 'playing' && state.belt.length + state.pending.length < state.level.beltCapacity;
+  return state.status === 'playing' && !beltFull(state);
 }
 
 /** Sends the front shooter of a column to the belt. Returns false when the move is not allowed. */
