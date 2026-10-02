@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { MIN_TOUCH_PX, SLOT_HIT_PAD, VIEW, computeLayout, inflate, slotAt, type Rect } from '../src/core/layout';
-import { MAX_SCREEN_HEIGHT, screenHeight } from '../src/core/screen';
+import { MAX_SCREEN_HEIGHT, relayoutAction, screenHeight } from '../src/core/screen';
 
 /** Window sizes (CSS px) of the device matrix in issue #62. */
 const WINDOWS: [string, number, number][] = [
@@ -115,5 +115,17 @@ describe('slotAt', () => {
 
   it('caps the margin so a huge minimum cannot swallow the screen', () => {
     expect(at(100 - 41, 842, 10_000)).toBe(-1);
+  });
+});
+
+describe('relayoutAction', () => {
+  it('does nothing when the height is unchanged', () => {
+    expect(relayoutAction(1280, 1280, true)).toBe('none');
+    expect(relayoutAction(1280, 1280, false)).toBe('none');
+  });
+
+  it('rebuilds right away when nothing is in progress, and waits during a level', () => {
+    expect(relayoutAction(1280, 1500, true)).toBe('apply');
+    expect(relayoutAction(1280, 1500, false)).toBe('wait');
   });
 });

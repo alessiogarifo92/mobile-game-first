@@ -61,3 +61,48 @@ jobs:
             # On a manual run the tag is created on the commit that was built.
             gh release create "$TAG" "$APK" "${FLAGS[@]}" --target "$GITHUB_SHA" --title "$TITLE" --notes-file notes.md
           fi
+
+  # Starts the APK on an Android emulator: it must reach the map, fit the screen, and an in-place update (same package,
+  # same signature) must keep the saved progress. Also checks the APK is signed with the committed debug key.
+  smoke:
+    needs: apk
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: mix-and-splash-debug-apk
+          path: apk
+      - name: The APK is signed with the committed debug key
+        run: |
+          BT="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)"
+          APK_SHA=$("$BT/apksigner" verify --print-certs apk/app-debug.apk | grep 'SHA-256 digest' | head -1 | sed 's/.*: //' | tr -d ':' | tr 'A-F' 'a-f')
+          KEY_SHA=$(keytool -list -v -keystore android/app/debug.keystore -storepass android -alias androiddebugkey | grep 'SHA256:' | head -1 | sed 's/.*SHA256: //' | tr -d ':' | tr 'A-F' 'a-f')
+          echo "apk $APK_SHA"; echo "key $KEY_SHA"
+          test -n "$APK_SHA" && test "$APK_SHA" = "$KEY_SHA"
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Start on an emulator, update in place
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          profile: pixel_6
+          disable-animations: true
+          script: bash scripts/apk-smoke.sh apk/app-debug.apk
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: apk-smoke
+          path: smoke-out
+          retention-days: 7

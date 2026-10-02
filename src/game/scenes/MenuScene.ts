@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { LANGUAGES, LANGUAGE_NAMES } from '../../core/i18n';
 import { VIEW } from '../../core/layout';
 import {
-  MAP, clampScroll, computeMapLayout, currentLevel, inertia, scrollToLevel, type MapLayout,
+  MAP, clampScroll, computeMapLayout, currentLevel, inertia, keyScrollDelta, mapTapTarget, scrollToLevel, type MapLayout,
 } from '../../core/mapLayout';
 import { stageInfo } from '../../core/stages';
 import { sfx } from '../audio';
@@ -141,16 +141,13 @@ export class MenuScene extends Phaser.Scene {
   /** A tap (touch that did not turn into a drag) on a level node or on a stage band. */
   private tapAt(x: number, worldY: number): void {
     if (this.settings) return;
-    const unlocked = getProgress().unlocked;
-    // Touch area at least 48 units around the node centre, whatever the drawn size.
-    const node = this.layout.nodes.find((n) => n.id <= unlocked && Math.hypot(n.x - x, n.y - worldY) <= Math.max(n.r * 1.2, 56));
-    if (node) {
+    const target = mapTapTarget(this.layout, getProgress().unlocked, x, worldY);
+    if (target?.kind === 'level') {
       sfx.unlock();
-      this.scene.start('play', { levelId: node.id });
-      return;
+      this.scene.start('play', { levelId: target.id });
+    } else if (target?.kind === 'stage') {
+      this.scene.start('album', { stage: target.stage });
     }
-    const header = this.layout.headers.find((h) => Math.abs(h.y - worldY) <= 44 && x >= 80 && x <= VIEW.width - 80);
-    if (header) this.scene.start('album', { stage: header.stage });
   }
 
   /** Title bar that stays put while the map scrolls under it (re-positioned every frame). */
@@ -195,9 +192,9 @@ export class MenuScene extends Phaser.Scene {
     this.input.on('pointerupoutside', () => this.endDrag());
     // Desktop / PWA: mouse wheel and keyboard scroll the map too.
     this.input.on('wheel', (_p: Phaser.Input.Pointer, _o: unknown, _dx: number, dy: number) => this.scrollBy(dy));
-    const page = this.viewHeight - MAP.barHeight;
-    const keys: [string, number][] = [['UP', -120], ['DOWN', 120], ['PAGE_UP', -page], ['PAGE_DOWN', page], ['HOME', -Infinity], ['END', Infinity]];
-    for (const [key, dy] of keys) this.input.keyboard?.on(`keydown-${key}`, () => this.scrollBy(dy));
+    for (const key of ['UP', 'DOWN', 'PAGE_UP', 'PAGE_DOWN', 'HOME', 'END']) {
+      this.input.keyboard?.on(`keydown-${key}`, () => this.scrollBy(keyScrollDelta(key, this.viewHeight) ?? 0));
+    }
   }
 
   private scrollBy(dy: number): void {
@@ -285,10 +282,6 @@ export class MenuScene extends Phaser.Scene {
       this.scene.start('play', { levelId: 1 });
     }, false);
     add('progress', VIEW.width / 2, y0 + 660, 420, 80, t('settings.progress'), () => this.scene.start('data'), false);
-    // Screen diagnostics (to compare what the phone reports with what the game uses).
-    const host = document.getElementById('game');
-    const vv = window.visualViewport;
-    c.add(label(this, VIEW.width / 2, y0 + h - 14, `window ${window.innerWidth}×${window.innerHeight} · view ${Math.round(vv?.width ?? 0)}×${Math.round(vv?.height ?? 0)} · game ${host?.clientWidth}×${host?.clientHeight} → 720×${this.scale.height}`, 16, THEME.subCss, false));
     add('close', VIEW.width / 2, y0 + 750, 300, 80, t('settings.close'), () => {
       c.destroy();
       this.settings = null;

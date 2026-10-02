@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { BLUE, ORANGE, RED, YELLOW } from '../../core/colors';
+import { HOWTO_PAGES, clampPage, pageAfterSwipe } from '../../core/howto';
 import { VIEW } from '../../core/layout';
 import type { MessageKey } from '../../core/i18n';
 import { publishDebug } from '../debug';
@@ -7,9 +8,7 @@ import { t } from '../store';
 import { PAINT, SYMBOL, THEME } from '../theme';
 import { button, label, screenBackground } from '../ui';
 
-const PAGES = 3;
-/** Horizontal drag (logical units) that counts as a swipe. */
-const SWIPE = 70;
+const PAGES = HOWTO_PAGES;
 
 /** "How to play": three illustrated cards, reachable from Settings. */
 export class HowToScene extends Phaser.Scene {
@@ -31,7 +30,7 @@ export class HowToScene extends Phaser.Scene {
   }
 
   create(data: { page?: number } = {}): void {
-    const page = Math.min(Math.max(data.page ?? 0, 0), PAGES - 1);
+    const page = clampPage(data.page ?? 0);
     this.pageNow = page;
     screenBackground(this, THEME.bg);
     label(this, VIEW.width / 2, 110, t('howto.title'), THEME.type.lg);
@@ -66,8 +65,7 @@ export class HowToScene extends Phaser.Scene {
     }, { name: 'howto-next' });
     // Swipe or arrow keys move between pages; the dots are tappable too.
     this.input.on('pointerup', (p: Phaser.Input.Pointer) => {
-      const dx = p.x - p.downX;
-      if (Math.abs(dx) > SWIPE && Math.abs(dx) > 1.5 * Math.abs(p.y - p.downY)) this.go(page + (dx < 0 ? 1 : -1));
+      this.go(pageAfterSwipe(page, p.x - p.downX, p.y - p.downY));
     });
     this.input.keyboard?.on('keydown-LEFT', () => this.go(page - 1));
     this.input.keyboard?.on('keydown-RIGHT', () => this.go(page + 1));

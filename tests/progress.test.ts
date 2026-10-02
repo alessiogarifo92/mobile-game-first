@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { STORAGE_KEY, completeLevel, defaultProgress, loadProgress, markTipSeen, saveProgress, type KeyValueStorage } from '../src/core/progress';
+import { STORAGE_KEY, completeLevel, defaultProgress, loadProgress, markTipSeen, resetProgress, saveProgress, type KeyValueStorage } from '../src/core/progress';
 
 function memory(initial?: string): KeyValueStorage & { data: Map<string, string> } {
   const data = new Map<string, string>();
@@ -95,5 +95,10 @@ describe('progress', () => {
       expect(load({ skin: 'gold', completed: [] }).skin).toBe('classic');
       expect(load({ skin: 'dots', completed: levels.slice(0, 10).map((l) => l.id) }).skin).toBe('dots');
     });
+  });
+
+  it('reset erases levels, tips and skin but keeps language and sound', () => {
+    const played = { ...defaultProgress(), unlocked: 40, completed: [1, 2, 3], seenTips: ['guide'], skin: 'dots' as const, language: 'it' as const, sound: false };
+    expect(resetProgress(played)).toEqual({ ...defaultProgress(), language: 'it', sound: false });
   });
 });

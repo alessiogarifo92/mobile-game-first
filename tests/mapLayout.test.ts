@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { MAP, clampScroll, computeMapLayout, currentLevel, inertia, maxScroll, scrollToLevel } from '../src/core/mapLayout';
+import {
+  HEADER_TOUCH_HALF_HEIGHT, MAP, NODE_TOUCH_RADIUS, clampScroll, computeMapLayout, currentLevel, inertia, keyScrollDelta, mapTapTarget, maxScroll, scrollToLevel,
+} from '../src/core/mapLayout';
 
 const levels = Array.from({ length: 100 }, (_, i) => ({ id: i + 1, stage: Math.floor(i / 10) + 1, boss: (i + 1) % 10 === 0 }));
 const VIEW_H = 1500;
@@ -75,5 +77,55 @@ describe('map layout', () => {
     expect(s.velocity).toBeLessThan(2);
     expect(inertia(10, -5, 16, layout, VIEW_H)).toEqual({ scroll: 0, velocity: 0 });
     expect(inertia(500, 0.01, 16, layout, VIEW_H).velocity).toBe(0);
+  });
+});
+
+describe('map taps and keys', () => {
+  const layout = computeMapLayout(levels, 720, VIEW_H);
+  const node = (id: number) => layout.nodes.find((n) => n.id === id)!;
+
+  it('a tap on an unlocked node opens its level', () => {
+    expect(mapTapTarget(layout, 5, node(3).x, node(3).y)).toEqual({ kind: 'level', id: 3 });
+    expect(mapTapTarget(layout, 5, node(5).x + 10, node(5).y - 10)).toEqual({ kind: 'level', id: 5 });
+  });
+
+  it('a locked node is not tappable', () => {
+    expect(mapTapTarget(layout, 5, node(6).x, node(6).y)).toBeNull();
+  });
+
+  it('the touch radius is at least NODE_TOUCH_RADIUS, even for the small nodes', () => {
+    const n = node(2);
+    expect(n.r * 1.2).toBeLessThan(NODE_TOUCH_RADIUS);
+    expect(mapTapTarget(layout, 100, n.x + NODE_TOUCH_RADIUS - 1, n.y)).toEqual({ kind: 'level', id: 2 });
+    expect(mapTapTarget(layout, 100, n.x + NODE_TOUCH_RADIUS + 20, n.y)).toBeNull();
+  });
+
+  it('a boss node is tapped within the same minimum radius', () => {
+    const boss = node(10);
+    expect(boss.r).toBeGreaterThan(node(2).r);
+    expect(mapTapTarget(layout, 100, boss.x, boss.y + NODE_TOUCH_RADIUS - 1)).toEqual({ kind: 'level', id: 10 });
+  });
+
+  it('a tap on a stage band opens that stage, only inside the band', () => {
+    const h = layout.headers[1]!;
+    expect(mapTapTarget(layout, 1, 360, h.y)).toEqual({ kind: 'stage', stage: h.stage });
+    expect(mapTapTarget(layout, 1, 360, h.y + HEADER_TOUCH_HALF_HEIGHT - 1)).toEqual({ kind: 'stage', stage: h.stage });
+    expect(mapTapTarget(layout, 1, 360, h.y + HEADER_TOUCH_HALF_HEIGHT + 30)).toBeNull();
+    expect(mapTapTarget(layout, 1, 40, h.y)).toBeNull(); // left of the band
+    expect(mapTapTarget(layout, 1, 700, h.y)).toBeNull(); // right of the band
+  });
+
+  it('empty space is not a target', () => {
+    expect(mapTapTarget(layout, 100, 5, 5)).toBeNull();
+  });
+
+  it('keys scroll by lines, pages and to the ends', () => {
+    expect(keyScrollDelta('UP', 1500)).toBe(-120);
+    expect(keyScrollDelta('DOWN', 1500)).toBe(120);
+    expect(keyScrollDelta('PAGE_UP', 1500)).toBe(-(1500 - MAP.barHeight));
+    expect(keyScrollDelta('PAGE_DOWN', 1500)).toBe(1500 - MAP.barHeight);
+    expect(keyScrollDelta('HOME', 1500)).toBe(-Infinity);
+    expect(keyScrollDelta('END', 1500)).toBe(Infinity);
+    expect(keyScrollDelta('A', 1500)).toBeNull();
   });
 });

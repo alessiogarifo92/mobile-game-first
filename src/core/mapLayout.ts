@@ -103,3 +103,28 @@ export function inertia(scroll: number, velocity: number, dtMs: number, layout: 
   const stopped = Math.abs(decayed) < 0.02 || next === 0 || next === maxScroll(layout, viewHeight);
   return { scroll: next, velocity: stopped ? 0 : decayed };
 }
+
+export type MapTap = { kind: 'level'; id: number } | { kind: 'stage'; stage: number };
+
+/** Smallest touch radius around a level node, in logical units (≈ 28 px on a 360 px phone), whatever the drawn size. */
+export const NODE_TOUCH_RADIUS = 56;
+/** Half-height of a stage band's touch area. */
+export const HEADER_TOUCH_HALF_HEIGHT = 44;
+
+/**
+ * What a tap at (x, worldY) hits on the map: an unlocked level node, else a stage band (which opens its album page).
+ * Locked nodes are not tappable, so a tap on one falls through to whatever is under it.
+ */
+export function mapTapTarget(layout: MapLayout, unlocked: number, x: number, worldY: number): MapTap | null {
+  const node = layout.nodes.find((n) => n.id <= unlocked && Math.hypot(n.x - x, n.y - worldY) <= Math.max(n.r * 1.2, NODE_TOUCH_RADIUS));
+  if (node) return { kind: 'level', id: node.id };
+  const header = layout.headers.find((h) => Math.abs(h.y - worldY) <= HEADER_TOUCH_HALF_HEIGHT && x >= 80 && x <= layout.width - 80);
+  return header ? { kind: 'stage', stage: header.stage } : null;
+}
+
+/** Scroll change for a key on the map (desktop / PWA), or null for other keys. Home / End go to the very ends. */
+export function keyScrollDelta(key: string, viewHeight: number): number | null {
+  const page = viewHeight - MAP.barHeight;
+  const deltas: Record<string, number> = { UP: -120, DOWN: 120, PAGE_UP: -page, PAGE_DOWN: page, HOME: -Infinity, END: Infinity };
+  return deltas[key] ?? null;
+}
