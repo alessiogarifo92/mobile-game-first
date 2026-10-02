@@ -2,9 +2,10 @@ import { describe, expect, it } from 'vitest';
 import levels from '../src/levels/levels.json';
 import { LEVEL_NAME_KEYS } from '../src/core/i18n';
 import { parseLevel, type LevelDef } from '../src/core/level';
-import { createRng } from '../src/core/rng';
 import { createGame, launchFromColumn, launchFromSlot, step } from '../src/core/sim';
-import { randomWinRate, solve } from '../src/core/solver';
+import { levelWinRate, solve } from '../src/core/solver';
+import { assignIds } from '../src/core/stages';
+import { STAGE_SPECS } from '../scripts/stages';
 
 const defs = levels as LevelDef[];
 
@@ -32,10 +33,32 @@ describe('shipped levels', () => {
     expect(g.status).toBe('won');
   });
 
-  // Heavy (random playouts over 100 levels): explicit timeout so a slower CI runner does not fail it.
-  it('gets harder: stages 3–10 are harder for a random tapper than the introduction stages 1–2', () => {
-    const rate = (d: LevelDef) => randomWinRate(parseLevel(d), 100, createRng(d.id));
-    const avg = (ds: LevelDef[]) => ds.reduce((s, d) => s + rate(d), 0) / ds.length;
-    expect(avg(defs.filter((d) => d.stage >= 3))).toBeLessThan(avg(defs.filter((d) => d.stage <= 2)) - 0.1);
-  }, 30_000);
+  // Heavy (random playouts over 100 levels, computed once): explicit timeouts so a slower CI runner does not fail.
+  const specs = assignIds(STAGE_SPECS);
+  let rates: number[] | undefined;
+  const winRates = () => (rates ??= defs.map((d) => levelWinRate(parseLevel(d))));
+
+  it('every level sits in the difficulty band of its spec, measured with belt and slots', () => {
+    const out = defs.filter((_, i) => {
+      const band = specs[i]!.winRate;
+      return band && (winRates()[i]! < band[0] || winRates()[i]! > band[1]);
+    });
+    expect(out.map((d) => `#${d.id} ${d.name}`)).toEqual([]);
+  }, 60_000);
+
+  it('gets harder: the introduction is easiest, then stages 3–5, 6–8 and 9–10 get harder in turn', () => {
+    const avg = (from: number, to: number) => {
+      const r = winRates().filter((_, i) => defs[i]!.stage >= from && defs[i]!.stage <= to);
+      return r.reduce((a, b) => a + b, 0) / r.length;
+    };
+    expect(avg(3, 10)).toBeLessThan(avg(1, 2) - 0.1);
+    expect(avg(6, 8)).toBeLessThan(avg(3, 5) - 0.05);
+    expect(avg(9, 10)).toBeLessThan(avg(6, 8) - 0.05);
+  }, 60_000);
+
+  it('never gives a bigger belt back: the largest belt of a stage never grows from one stage to the next', () => {
+    const maxBelt = Array.from({ length: 10 }, (_, s) => Math.max(...defs.filter((d) => d.stage === s + 1).map((d) => d.beltCapacity)));
+    for (let s = 1; s < maxBelt.length; s++) expect(maxBelt[s]!).toBeLessThanOrEqual(maxBelt[s - 1]!);
+    expect(maxBelt.slice(7)).toEqual([2, 2, 2]);
+  });
 });

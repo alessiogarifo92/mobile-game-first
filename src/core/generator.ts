@@ -1,7 +1,7 @@
 import { PRIMARIES, isPrimary, type Primary } from './colors';
 import { paintNeeds, parseImage, parseLevel, parseOverlay, type LevelDef, type ShooterSpec } from './level';
 import { createRng, shuffle } from './rng';
-import { randomWinRate, solve } from './solver';
+import { levelWinRate, solve } from './solver';
 
 export interface GenerateOptions {
   id: number;
@@ -115,7 +115,7 @@ export function generateLevel(opts: GenerateOptions): { def: LevelDef; seed: num
       unsolvable += 1;
       continue;
     }
-    const winRate = randomWinRate(level, 200, createRng(seed));
+    const winRate = levelWinRate(level);
     lowest = Math.min(lowest, winRate);
     highest = Math.max(highest, winRate);
     if (opts.winRate && (winRate < opts.winRate[0] || winRate > opts.winRate[1])) continue;
