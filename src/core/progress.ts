@@ -80,6 +80,11 @@ export function completeLevel(progress: Progress, levelId: number, levelCount: n
   return { ...progress, completed, unlocked };
 }
 
+/** A fresh profile that keeps the player's language and sound setting: the one way progress is erased. */
+export function resetProgress(progress: Progress): Progress {
+  return { ...defaultProgress(), language: progress.language, sound: progress.sound };
+}
+
 export function markTipSeen(progress: Progress, tip: string): Progress {
   return progress.seenTips.includes(tip) ? progress : { ...progress, seenTips: [...progress.seenTips, tip] };
 }

@@ -14,3 +14,12 @@ export function screenHeight(windowWidth: number, windowHeight: number): number 
   const aspect = windowHeight / Math.max(1, windowWidth);
   return Math.round(Math.min(MAX_SCREEN_HEIGHT, Math.max(VIEW.height, VIEW.width * aspect)));
 }
+
+/**
+ * What to do when the window changed shape: nothing if the game height is the same, rebuild the open scene now, or
+ * wait (a level in progress is never rebuilt under the player's fingers).
+ */
+export function relayoutAction(currentHeight: number, wantedHeight: number, canRelayout: boolean): 'none' | 'apply' | 'wait' {
+  if (currentHeight === wantedHeight) return 'none';
+  return canRelayout ? 'apply' : 'wait';
+}

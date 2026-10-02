@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { VIEW } from './core/layout';
-import { screenHeight } from './core/screen';
+import { relayoutAction, screenHeight } from './core/screen';
 import { AlbumScene } from './game/scenes/AlbumScene';
 import { DataScene } from './game/scenes/DataScene';
 import { HowToScene } from './game/scenes/HowToScene';
@@ -40,9 +40,10 @@ function applyResize(): void {
   // and a window resize event is the one path that re-reads the host size before fitting the canvas.
   window.dispatchEvent(new Event('resize'));
   const wanted = hostHeight();
-  if (wanted === game.scale.gameSize.height) return;
   const play = game.scene.getScene('play') as PlayScene;
-  if (game.scene.isActive('play') && !play.canRelayout()) {
+  const action = relayoutAction(game.scale.gameSize.height, wanted, !game.scene.isActive('play') || play.canRelayout());
+  if (action === 'none') return;
+  if (action === 'wait') {
     window.setTimeout(applyResize, 500);
     return;
   }
