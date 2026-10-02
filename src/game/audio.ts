@@ -40,6 +40,11 @@ export class Sfx {
     this.tone(520, 0.06, 'square', 0.025);
   }
 
+  /** Soft low blip: the tap was heard, but the belt is full. */
+  refuse(): void {
+    this.tone(180, 0.08, 'triangle', 0.04);
+  }
+
   win(): void {
     [523, 659, 784, 1047].forEach((f, i) => this.tone(f, 0.25, 'triangle', 0.07, i * 0.11));
   }

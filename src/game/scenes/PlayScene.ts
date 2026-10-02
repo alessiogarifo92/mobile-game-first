@@ -5,9 +5,11 @@ import { cellDone } from '../../core/rules';
 import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, slotAt, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
 import {
-  continueWithExtraSlot, createGame, launchFromColumn, launchFromSlot, step, type GameState, type HitEvent, type Shooter,
+  beltFull, beltLoad, continueWithExtraSlot, createGame, launchFromColumn, launchFromSlot, step, type GameState, type HitEvent, type Shooter,
 } from '../../core/sim';
-import { guideAllows, guideStep, needsGuide, tipOnLevelStart, tipOnReturn, type CardTip, type GuideStep } from '../../core/onboarding';
+import {
+  guideAllows, guideStep, needsGuide, tipOnFullBelt, tipOnLevelStart, tipOnReturn, type CardTip, type GuideStep,
+} from '../../core/onboarding';
 import { solve } from '../../core/solver';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
@@ -20,6 +22,12 @@ import { button, label, screenBackground } from '../ui';
 const TICK_MS = 85;
 const BELT_JAR = 54;
 const TIP_H = 620;
+/** How long a refused tap shakes its column and highlights the belt indicator. */
+const REFUSE_MS = 450;
+/** Belt-load pips: one per bucket the belt holds, drawn only while they fit beside the "waiting" label. */
+const PIP = 16;
+const PIP_GAP = 6;
+const MAX_PIPS = 6;
 const GUIDE_TEXT = { tap: 'guide.tap', watch: 'guide.watch', next: 'guide.next', free: 'guide.free' } as const;
 
 export class PlayScene extends Phaser.Scene {
@@ -49,6 +57,10 @@ export class PlayScene extends Phaser.Scene {
   private hiddenMarks = new Map<number, Phaser.GameObjects.Text>();
   /** Stage completed by this win (album reward), if any. */
   private completedStage: number | null = null;
+  private beltText!: Phaser.GameObjects.Text;
+  /** Last launch refused because the belt was full: the tapped column or slot shakes for a moment. */
+  private refused: { column: number; slot: number; at: number } | null = null;
+  private refusals = 0;
 
   constructor() {
     super('play');
@@ -70,6 +82,8 @@ export class PlayScene extends Phaser.Scene {
     this.tip = null;
     this.launchAmmo = new Map();
     this.pixelsDirty = false;
+    this.refused = null;
+    this.refusals = 0;
   }
 
   create(): void {
@@ -107,6 +121,8 @@ export class PlayScene extends Phaser.Scene {
     board.fillRoundedRect(layout.canvas.x - 8, layout.canvas.y - 8, layout.canvas.w + 16, layout.canvas.h + 16, THEME.radius.cell * 2);
 
     label(this, VIEW.width / 2, layout.slots[0]!.y - 20, t('level.waiting'), THEME.type.xs, THEME.subCss);
+    // Belt load on the same row, at the left, under the belt entry: the number, plus pips drawn with the buckets.
+    this.beltText = label(this, THEME.space.md, layout.slots[0]!.y - 20, '', THEME.type.xs, THEME.subCss).setOrigin(0, 0.5);
     const columnFrames = this.add.graphics();
     columnFrames.fillStyle(THEME.belt, 0.35);
     for (const c of layout.columns) columnFrames.fillRoundedRect(c.x, c.y - 6, c.w, 3 * layout.columnStep + 20, THEME.radius.jar);
@@ -149,21 +165,29 @@ export class PlayScene extends Phaser.Scene {
     // Logical units per real pixel: a tap target is never smaller than 44 px, however small the screen.
     const slot = column < 0 ? slotAt(this.layout.slots, pt, MIN_TOUCH_PX * this.scale.displayScale.x) : -1;
     if (this.guide && !guideAllows(this.guide, column >= 0 ? column : null, this.guideTarget() ?? -1)) return;
-    let shooter: Shooter | null | undefined = null;
-    if (column >= 0) {
-      shooter = this.gs.queues[column]?.[0];
-      if (!launchFromColumn(this.gs, column)) shooter = null;
-    } else if (slot >= 0) {
-      shooter = this.gs.slots[slot];
-      if (!launchFromSlot(this.gs, slot)) shooter = null;
+    const wanted: Shooter | null | undefined = column >= 0 ? this.gs.queues[column]?.[0] : slot >= 0 ? this.gs.slots[slot] : null;
+    if (!wanted) return;
+    if (beltFull(this.gs)) {
+      this.refuse(column, slot);
+      return;
     }
-    if (shooter) {
-      this.launchAmmo.set(shooter.id, shooter.ammo);
-      this.moves += 1;
-      sfx.launch();
-      if (this.guide) this.updateGuide();
-      this.publish();
-    }
+    if (column >= 0 ? !launchFromColumn(this.gs, column) : !launchFromSlot(this.gs, slot)) return;
+    this.launchAmmo.set(wanted.id, wanted.ammo);
+    this.moves += 1;
+    sfx.launch();
+    if (this.guide) this.updateGuide();
+    this.publish();
+  }
+
+  /** A tap the full belt cannot take: shake what was tapped, light up the belt indicator, explain once. */
+  private refuse(column: number, slot: number): void {
+    this.refused = { column, slot, at: this.time.now };
+    this.refusals += 1;
+    sfx.refuse();
+    const tip = tipOnFullBelt(getProgress().seenTips);
+    // A short delay lets the shake and the indicator be seen before the card covers them.
+    if (tip && !this.guide) this.time.delayedCall(REFUSE_MS, () => this.showTip(tip));
+    this.publish();
   }
 
   // ---------- onboarding ----------
@@ -263,6 +287,15 @@ export class PlayScene extends Phaser.Scene {
       sq(cx + 160, y, PAINT[RED]!);
       card.add(label(this, cx - 80, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
       card.add(label(this, cx + 80, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
+    } else if (id === 'belt') {
+      // As many buckets as the belt holds, then one more that cannot board.
+      const n = Math.min(this.level.beltCapacity, 5);
+      const y = y0 + 200;
+      const colors = [RED, YELLOW, BLUE];
+      const left = cx - (n * 80) / 2;
+      for (let k = 0; k < n; k++) sq(left + k * 80, y, PAINT[colors[k % 3]!]!);
+      sq(left + n * 80, y, PAINT[colors[n % 3]!]!, 0.3);
+      card.add(label(this, left + n * 80, y, '✕', THEME.type.md, THEME.inkCss));
     } else if (id === 'hidden') {
       // "?" next to a pixel: finish the neighbour, the colour shows.
       const y = y0 + 200;
@@ -275,7 +308,7 @@ export class PlayScene extends Phaser.Scene {
       sq(cx + 140, y, PAINT[BLUE]!, 0.3);
     }
     const bodyY = id === 'mixing' ? y0 + 340 : y0 + 290;
-    card.add(label(this, VIEW.width / 2, bodyY, t(`tip.${id}.body` as const), THEME.type.sm, THEME.subCss, false)
+    card.add(label(this, VIEW.width / 2, bodyY, t(`tip.${id}.body` as const, { n: this.level.beltCapacity }), THEME.type.sm, THEME.subCss, false)
       .setWordWrapWidth(w - 60).setOrigin(0.5, 0));
     card.add(button(this, VIEW.width / 2, y0 + h - 70, 300, 80, t('tip.gotIt'), () => {
       markTip(id);
@@ -421,19 +454,51 @@ export class PlayScene extends Phaser.Scene {
       const p = beltPoint(layout, s.pos - 1 + alpha);
       this.jar(p.x, p.y, BELT_JAR, s);
     }
+    const since = this.refused ? this.time.now - this.refused.at : Infinity;
+    const flashing = since < REFUSE_MS;
+    // Decaying side-to-side shake of whatever was tapped.
+    const shake = flashing ? Math.sin(since / 25) * 8 * (1 - since / REFUSE_MS) : 0;
+    this.drawBeltLoad(flashing);
     gs.slots.forEach((s, i) => {
       const r = layout.slots[i];
-      if (s && r) this.jar(r.x + r.w / 2, r.y + r.h / 2, r.w - 8, s);
+      const dx = this.refused?.slot === i ? shake : 0;
+      if (s && r) this.jar(r.x + r.w / 2 + dx, r.y + r.h / 2, r.w - 8, s);
     });
     gs.queues.forEach((queue, c) => {
       const r = layout.columns[c]!;
+      const dx = this.refused?.column === c ? shake : 0;
       queue.slice(0, 3).forEach((s, k) => {
-        this.jar(r.x + r.w / 2, r.y + layout.jar / 2 + 6 + k * layout.columnStep, k === 0 ? layout.jar : layout.jar - 14, s, k === 0 ? 1 : 0.55);
+        this.jar(r.x + r.w / 2 + dx, r.y + layout.jar / 2 + 6 + k * layout.columnStep, k === 0 ? layout.jar : layout.jar - 14, s, k === 0 ? 1 : 0.55);
       });
       if (queue.length > 3) this.text(r.x + r.w / 2, r.y + 3 * layout.columnStep + 36, `+${queue.length - 3}`, THEME.type.sm, THEME.subCss);
     });
 
     for (let i = this.textIndex; i < this.texts.length; i++) this.texts[i]!.setVisible(false);
+  }
+
+  /** "BELT 1/2" and one pip per place, filled when taken; darker when full or just refused a tap. */
+  private drawBeltLoad(flashing: boolean): void {
+    const { used, capacity } = beltLoad(this.gs);
+    const full = used >= capacity;
+    const value = t('play.belt', { used, capacity });
+    const color = full || flashing ? THEME.inkCss : THEME.subCss;
+    if (this.beltText.text !== value) this.beltText.setText(value);
+    if (this.beltText.style.color !== color) this.beltText.setColor(color);
+    if (capacity > MAX_PIPS) return;
+    const g = this.dynamic;
+    const x0 = this.beltText.x + this.beltText.width + THEME.space.sm;
+    const y = this.beltText.y - PIP / 2;
+    const grow = flashing ? 3 : 0;
+    for (let i = 0; i < capacity; i++) {
+      const x = x0 + i * (PIP + PIP_GAP) - grow / 2;
+      if (i < used) {
+        g.fillStyle(THEME.ink, full ? 1 : 0.6);
+        g.fillRoundedRect(x, y - grow / 2, PIP + grow, PIP + grow, 4);
+      } else {
+        g.lineStyle(2, THEME.ink, 0.4);
+        g.strokeRoundedRect(x, y - grow / 2, PIP + grow, PIP + grow, 4);
+      }
+    }
   }
 
   private splash(e: HitEvent): void {
@@ -593,6 +658,8 @@ export class PlayScene extends Phaser.Scene {
       completedStage: this.completedStage,
       winButtons: { next: { x: VIEW.width / 2, y: (this.scale.height - 760) / 2 + 600 }, second: { x: VIEW.width / 2, y: (this.scale.height - 760) / 2 + 700 } },
       beltBusy: gs.belt.length + gs.pending.length > 0,
+      belt: beltLoad(gs),
+      refusals: this.refusals,
       columns: this.layout.columns,
       slots: this.layout.slots,
       // Solved on demand (only the guide and tests read it), not at every level start.

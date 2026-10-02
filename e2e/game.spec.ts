@@ -3,7 +3,7 @@ import levels from '../src/levels/levels.json' with { type: 'json' };
 import type { LevelDef } from '../src/core/level';
 import type { Move } from '../src/core/solver';
 
-import { SEEN_ALL, jamSequence, mix, play, shots, tap, waitScene, waitSim, type Rect } from './helpers';
+import { SEEN_ALL, dismissTip, jamSequence, mix, play, shots, tap, waitScene, waitSim, type Rect } from './helpers';
 
 /** On the map, drags until the level's node is in the visible area below the title bar, then taps it. */
 async function openLevel(page: Page, id: number) {
@@ -242,4 +242,46 @@ test('the map scrolls with the mouse wheel and the keyboard', async ({ page }) =
   await page.waitForFunction((y) => (window as unknown as { __mix: { scrollY: number } }).__mix.scrollY > y, up);
   await page.keyboard.press('Home');
   await page.waitForFunction(() => (window as unknown as { __mix: { scrollY: number } }).__mix.scrollY === 0);
+});
+
+test.describe('full belt on a 360x640 phone', () => {
+  test.use({ viewport: { width: 360, height: 640 } });
+
+  test('a full belt refuses a launch: the indicator shows why and the belt tip explains it once', async ({ page }) => {
+    // Level 71 is the first with a belt of 2 and has more columns than that.
+    await page.addInitScript((p) => localStorage.setItem('mix-and-splash/progress/v1', p), SEEN_ALL);
+    await page.goto('/');
+    await waitScene(page, 'menu');
+    await openLevel(page, 71);
+    const { capacity } = await mix<{ used: number; capacity: number }>(page, 'belt');
+    expect(capacity).toBe(2);
+    const columns = await mix<Rect[]>(page, 'columns');
+    expect(columns.length).toBeGreaterThan(capacity);
+
+    // The indicator sits on the "waiting" row without touching its label.
+    const texts = (await page.evaluate(() => window.__mixBounds!())).filter((o) => o.type === 'Text');
+    const belt = texts.find((o) => o.text === 'BELT 0/2')!;
+    const waiting = texts.find((o) => o.text === 'WAITING')!;
+    expect(belt).toBeTruthy();
+    expect(belt.x + belt.w).toBeLessThan(waiting.x);
+
+    const tapColumn = (c: number) => tap(page, columns[c]!.x + columns[c]!.w / 2, columns[c]!.y + 40);
+    // Taps in quick succession until the belt is full and refuses one: on a slow machine a bucket may finish its loop
+    // between two taps, so the test does not assume which tap is refused.
+    let refusedAt = -1;
+    for (let i = 0; i < 12 && refusedAt < 0; i++) {
+      const before = await mix<number>(page, 'moves');
+      await tapColumn(i % columns.length);
+      if ((await mix<number>(page, 'refusals')) === 0) continue;
+      refusedAt = i;
+      expect(await mix(page, 'moves')).toBe(before); // nothing launched
+    }
+    expect(refusedAt).toBeGreaterThanOrEqual(capacity);
+    await page.waitForFunction(() => (window as unknown as { __mix: { tip: string | null } }).__mix.tip === 'belt');
+    if (shots) await page.screenshot({ path: `${shots}/09-suggerimento-nastro.png` });
+    expect(await dismissTip(page)).toBe('belt');
+    if (shots) await page.screenshot({ path: `${shots}/10-indicatore-nastro.png` });
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('mix-and-splash/progress/v1')!).seenTips as string[]);
+    expect(saved).toContain('belt'); // shown once: remembered with the other tips
+  });
 });

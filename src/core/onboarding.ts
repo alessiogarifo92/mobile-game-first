@@ -3,7 +3,7 @@ import type { Level } from './level';
 
 /** One-time onboarding tips, shown the first time the mechanic they explain shows up. */
 /** Tips shown as a card; 'guide' is the guided level 1 instead. */
-export type CardTip = 'mixing' | 'blocked' | 'slots' | 'ice' | 'hidden';
+export type CardTip = 'mixing' | 'blocked' | 'slots' | 'ice' | 'hidden' | 'belt';
 export type TipId = 'guide' | CardTip;
 
 /** Level 1 is played as a guided tutorial until the player has seen it once. */
@@ -32,6 +32,14 @@ export function tipOnReturn(hadHits: boolean, seen: readonly string[]): CardTip 
   if (!hadHits && !seen.includes('blocked')) return 'blocked';
   if (!seen.includes('slots')) return 'slots';
   return null;
+}
+
+/**
+ * Tip to show when a launch is refused because the belt is full: every level has a limit, and the first time it
+ * stops a tap is when the player needs to know it exists.
+ */
+export function tipOnFullBelt(seen: readonly string[]): CardTip | null {
+  return seen.includes('belt') ? null : 'belt';
 }
 
 export type GuideStep = 'tap' | 'watch' | 'next' | 'free';
