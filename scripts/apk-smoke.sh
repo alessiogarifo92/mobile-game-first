@@ -11,7 +11,14 @@ mkdir -p "$OUT"
 launch() {
   adb shell am force-stop "$PKG"
   adb logcat -c || true
+  # The emulator image shows "not responding" dialogs from Google apps while it settles; they take the foreground.
+  adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS > /dev/null || true
+  adb shell input keyevent KEYCODE_WAKEUP || true
+  adb shell wm dismiss-keyguard || true
   adb shell monkey -p "$PKG" -c android.intent.category.LAUNCHER 1 > /dev/null
+  sleep 5
+  adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS > /dev/null || true
+  echo "foreground: $(adb shell dumpsys activity activities | tr -d '\r' | grep -m1 -E 'mResumedActivity|topResumedActivity' || echo unknown)"
   # The debug WebView exposes a DevTools socket named after the app's pid.
   local sock=""
   for _ in $(seq 1 60); do

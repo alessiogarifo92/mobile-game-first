@@ -57,6 +57,16 @@ try {
     await sleep(1000);
   }
 
+  // The page must be laid out (the app in the foreground, the WebView with a size) before anything is measured.
+  const laidOut = Date.now() + 60_000;
+  while (!(await evaluate('window.innerWidth > 0 && window.innerHeight > 0 && document.querySelector("canvas")?.getBoundingClientRect().width > 0'))) {
+    if (Date.now() > laidOut) {
+      console.log('page size', await evaluate('JSON.stringify({ w: window.innerWidth, h: window.innerHeight, vis: document.visibilityState })'));
+      throw new Error('the WebView has no size after 60 s: the app is not in the foreground');
+    }
+    await sleep(1000);
+  }
+
   const info = await evaluate(`(() => {
     const c = document.querySelector('canvas').getBoundingClientRect();
     const h = document.getElementById('game').getBoundingClientRect();
