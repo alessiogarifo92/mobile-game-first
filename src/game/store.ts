@@ -2,7 +2,7 @@ import { unlockedSkins, type Skin } from '../core/album';
 import { DEFAULT_LANGUAGE, levelName, stageName, translate, type Language, type MessageKey, type Params } from '../core/i18n';
 import { parseLevel, type Level, type LevelDef } from '../core/level';
 import {
-  completeLevel, loadProgress, markTipSeen, saveProgress, type KeyValueStorage, type Progress,
+  completeLevel, defaultProgress, loadProgress, markTipSeen, saveProgress, type KeyValueStorage, type Progress,
 } from '../core/progress';
 import levelsJson from '../levels/levels.json';
 
@@ -59,6 +59,17 @@ export function setSkin(skin: Skin): void {
 
 export function skinsUnlocked(): Skin[] {
   return unlockedSkins(LEVELS, progress.completed);
+}
+
+/** Replaces the whole save (a loaded save code). */
+export function replaceProgress(next: Progress): void {
+  update(next);
+  applyDocumentLanguage();
+}
+
+/** The one way progress is erased: levels, album, skin and tips go; language and sound stay. */
+export function resetProgress(): void {
+  replaceProgress({ ...defaultProgress(), language: progress.language, sound: progress.sound });
 }
 
 export function resetTips(): void {

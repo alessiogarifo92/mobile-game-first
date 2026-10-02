@@ -27,7 +27,7 @@ export function defaultProgress(): Progress {
 /** Level ids and stages of the game: lets a loaded save be checked against what really exists. */
 export type LevelRef = { id: number; stage: number };
 
-function sanitize(raw: unknown, levels?: readonly LevelRef[]): Progress {
+export function sanitize(raw: unknown, levels?: readonly LevelRef[]): Progress {
   const base = defaultProgress();
   if (!raw || typeof raw !== 'object') return base;
   const r = raw as Record<string, unknown>;

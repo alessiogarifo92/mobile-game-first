@@ -4,9 +4,23 @@
  */
 export type DebugInfo = Record<string, unknown> & { scene: string };
 
+/** Bounds (world coordinates) of something drawn or tappable on the active scene. */
+export interface DrawnBounds {
+  scene: string;
+  type: string;
+  depth: number;
+  text: string | null;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
 declare global {
   interface Window {
     __mix?: DebugInfo;
+    /** Everything visible (texts, shapes, images, tap zones) on the active scenes, to check nothing is off screen. */
+    __mixBounds?: () => DrawnBounds[];
   }
 }
 

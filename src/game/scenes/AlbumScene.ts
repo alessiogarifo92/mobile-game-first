@@ -6,7 +6,7 @@ import { publishDebug } from '../debug';
 import { LEVELS, getProgress, setSkin, skinsUnlocked, stageTitle, t } from '../store';
 import { drawSkin } from '../skins';
 import { PAINT, THEME } from '../theme';
-import { button, fullBackground, label, viewOffset } from '../ui';
+import { button, label, screenBackground } from '../ui';
 
 /** One album page per stage: its ten paintings (silhouettes until painted) and the bucket skin it unlocks. */
 export class AlbumScene extends Phaser.Scene {
@@ -14,12 +14,19 @@ export class AlbumScene extends Phaser.Scene {
     super('album');
   }
 
+  private stageNow = 1;
+
+  relayoutData(): { stage: number } {
+    return { stage: this.stageNow };
+  }
+
   create(data: { stage?: number } = {}): void {
     const stage = Math.min(Math.max(data.stage ?? 1, 1), STAGES.length);
+    this.stageNow = stage;
     const info = stageInfo(stage)!;
     const progress = getProgress();
     const p = stageProgress(LEVELS, progress.completed).find((s) => s.stage === stage) ?? { done: 0, total: 0, complete: false };
-    fullBackground(this, THEME.bg);
+    screenBackground(this, THEME.bg);
 
     button(this, 60, 64, 84, 64, '◀', () => this.scene.start('menu'), { fill: THEME.belt, color: THEME.inkCss, name: 'home' });
     label(this, VIEW.width / 2, 64, t('album.title'), THEME.type.lg);
@@ -52,7 +59,9 @@ export class AlbumScene extends Phaser.Scene {
     // Reward: the bucket skin of this stage.
     const skin = stageSkin(stage);
     const unlocked = skin !== null && skinsUnlocked().includes(skin);
-    const ry = 660;
+    // Taller screens: the reward panel moves down a little, the pager goes to the bottom edge.
+    const off = this.scale.height - VIEW.height; // extra height on tall screens
+    const ry = 660 + off / 2;
     const panel = this.add.graphics();
     panel.fillStyle(THEME.paper, 1);
     panel.fillRoundedRect(60, ry, VIEW.width - 120, 330, THEME.radius.panel);
@@ -82,13 +91,13 @@ export class AlbumScene extends Phaser.Scene {
     }
 
     // Page through the stages.
-    if (stage > 1) button(this, 140, 1100, 160, 80, '‹', () => this.scene.restart({ stage: stage - 1 }), { fill: THEME.belt, color: THEME.inkCss, name: 'prev' });
-    if (stage < STAGES.length) button(this, VIEW.width - 140, 1100, 160, 80, '›', () => this.scene.restart({ stage: stage + 1 }), { fill: THEME.belt, color: THEME.inkCss, name: 'next-stage' });
-    label(this, VIEW.width / 2, 1100, `${stage} / ${STAGES.length}`, THEME.type.sm, THEME.subCss);
+    if (stage > 1) button(this, 140, 1100 + off, 160, 80, '‹', () => this.scene.restart({ stage: stage - 1 }), { fill: THEME.belt, color: THEME.inkCss, name: 'prev' });
+    if (stage < STAGES.length) button(this, VIEW.width - 140, 1100 + off, 160, 80, '›', () => this.scene.restart({ stage: stage + 1 }), { fill: THEME.belt, color: THEME.inkCss, name: 'next-stage' });
+    label(this, VIEW.width / 2, 1100 + off, `${stage} / ${STAGES.length}`, THEME.type.sm, THEME.subCss);
 
     publishDebug({
       scene: 'album', stage, done: p.done, complete: p.complete, skin, unlocked, activeSkin: progress.skin,
-      useButton: action, scrollY: this.cameras.main.scrollY, offsetY: viewOffset(this),
+      useButton: action, scrollY: this.cameras.main.scrollY, offsetY: 0,
     });
   }
 }

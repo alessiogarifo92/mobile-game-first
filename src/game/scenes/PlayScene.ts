@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { newlyCompletedStage } from '../../core/album';
 import { primariesOf } from '../../core/colors';
 import { cellDone } from '../../core/rules';
-import { VIEW, beltPoint, cellRect, computeLayout, contains, type Layout } from '../../core/layout';
+import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, slotAt, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
 import {
   continueWithExtraSlot, createGame, launchFromColumn, launchFromSlot, step, type GameState, type HitEvent, type Shooter,
@@ -15,7 +15,7 @@ import { LEVELS, getProgress, levelHint, levelTitle, markCompleted, markTip, set
 import { BLUE, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
 import { PAINT, SYMBOL, THEME, css } from '../theme';
 import { drawSkin } from '../skins';
-import { button, fullBackground, label, viewOffset } from '../ui';
+import { button, label, screenBackground } from '../ui';
 
 const TICK_MS = 85;
 const BELT_JAR = 54;
@@ -56,7 +56,7 @@ export class PlayScene extends Phaser.Scene {
 
   init(data: { levelId?: number }): void {
     this.level = LEVELS[(data.levelId ?? 1) - 1] ?? LEVELS[0]!;
-    this.layout = computeLayout(this.level.width, this.level.height, this.level.slots, this.level.columns.length);
+    this.layout = computeLayout(this.level.width, this.level.height, this.level.slots, this.level.columns.length, this.scale.height);
     this.gs = createGame(this.level, { boardGap: Math.ceil((BELT_JAR + 4) / this.layout.cell) });
     this.acc = 0;
     this.texts = [];
@@ -74,7 +74,7 @@ export class PlayScene extends Phaser.Scene {
 
   create(): void {
     const { layout } = this;
-    fullBackground(this, THEME.bg);
+    screenBackground(this, THEME.bg);
 
     label(this, VIEW.width / 2, 62, t('level.title', { n: this.level.id }), THEME.type.lg);
     const hint = levelHint(this.level.id);
@@ -128,6 +128,15 @@ export class PlayScene extends Phaser.Scene {
     this.publish();
   }
 
+  /** A resize may rebuild the level only before the first move and with no panel open. */
+  canRelayout(): boolean {
+    return this.moves === 0 && !this.overlay;
+  }
+
+  relayoutData(): { levelId: number } {
+    return { levelId: this.level.id };
+  }
+
   private restart(): void {
     this.scene.restart({ levelId: this.level.id });
   }
@@ -137,7 +146,8 @@ export class PlayScene extends Phaser.Scene {
     if (this.overlay || this.tip || this.gs.status !== 'playing') return;
     const pt = { x, y };
     const column = this.layout.columns.findIndex((r) => contains(r, pt));
-    const slot = column < 0 ? this.layout.slots.findIndex((r) => contains(r, pt)) : -1;
+    // Logical units per real pixel: a tap target is never smaller than 44 px, however small the screen.
+    const slot = column < 0 ? slotAt(this.layout.slots, pt, MIN_TOUCH_PX * this.scale.displayScale.x) : -1;
     if (this.guide && !guideAllows(this.guide, column >= 0 ? column : null, this.guideTarget() ?? -1)) return;
     let shooter: Shooter | null | undefined = null;
     if (column >= 0) {
@@ -188,8 +198,8 @@ export class PlayScene extends Phaser.Scene {
     const target = this.layout.columns[this.guideTarget()!]!;
     const g = this.add.graphics();
     g.fillStyle(THEME.ink, 0.35);
-    const top = -viewOffset(this);
-    const bottom = this.scale.height - viewOffset(this);
+    const top = 0;
+    const bottom = this.scale.height;
     const pad = 10;
     // Dim everything except the target column.
     g.fillRect(0, top, VIEW.width, target.y - pad - top);
@@ -201,7 +211,8 @@ export class PlayScene extends Phaser.Scene {
     g.strokeRoundedRect(target.x - pad, target.y - pad, target.w + 2 * pad, boxH, THEME.radius.jar);
     // The hand sits below the highlighted column: above it are the waiting slots, and over it it would hide the second bucket.
     const below = target.y - pad + boxH;
-    const hand = label(this, target.x + target.w / 2, below + 60, '👆', 72);
+    // Never lower than the screen allows: the hand is 72 high and bobs 24 down.
+    const hand = label(this, target.x + target.w / 2, Math.min(below + 60, this.scale.height - 90), '👆', 72);
     this.tweens.add({ targets: hand, y: hand.y + 24, duration: 450, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     this.guideLayer = this.add.container(0, 0, [g, hand]).setDepth(8);
     this.publish();
@@ -212,8 +223,8 @@ export class PlayScene extends Phaser.Scene {
     const w = 600;
     const h = TIP_H;
     const x0 = (VIEW.width - w) / 2;
-    const y0 = (VIEW.height - h) / 2;
-    const shade = fullBackground(this, THEME.ink, 0.45).setInteractive();
+    const y0 = (this.scale.height - h) / 2;
+    const shade = screenBackground(this, THEME.ink, 0.45).setInteractive();
     const g = this.add.graphics();
     g.fillStyle(THEME.bg, 1);
     g.fillRoundedRect(x0, y0, w, h, THEME.radius.panel);
@@ -500,10 +511,10 @@ export class PlayScene extends Phaser.Scene {
   }
 
   private panel(title: string, height: number): Phaser.GameObjects.Container {
-    const shade = fullBackground(this, THEME.ink, 0.45).setInteractive();
+    const shade = screenBackground(this, THEME.ink, 0.45).setInteractive();
     const g = this.add.graphics();
     const w = 600;
-    const y = (VIEW.height - height) / 2;
+    const y = (this.scale.height - height) / 2;
     g.fillStyle(THEME.bg, 1);
     g.fillRoundedRect((VIEW.width - w) / 2, y, w, height, THEME.radius.panel);
     const t = label(this, VIEW.width / 2, y + 70, title, THEME.type.xl);
@@ -513,7 +524,7 @@ export class PlayScene extends Phaser.Scene {
 
   private showWin(): void {
     const c = this.panel(t('win.title'), 760);
-    const top = (VIEW.height - 760) / 2;
+    const top = (this.scale.height - 760) / 2;
     const size = 320;
     const cell = Math.floor(size / Math.max(this.level.width, this.level.height));
     const ox = VIEW.width / 2 - (cell * this.level.width) / 2;
@@ -543,12 +554,12 @@ export class PlayScene extends Phaser.Scene {
 
   private showJam(): void {
     const c = this.panel(t('jam.title'), 480);
-    const top = (VIEW.height - 480) / 2;
+    const top = (this.scale.height - 480) / 2;
     c.add(label(this, VIEW.width / 2, top + 150, t('jam.body'), THEME.type.sm, THEME.subCss, false));
     if (!this.gs.extraSlotUsed) {
       c.add(button(this, VIEW.width / 2, top + 280, 420, 88, t('jam.continue'), () => {
         continueWithExtraSlot(this.gs);
-        this.layout = computeLayout(this.level.width, this.level.height, this.gs.slots.length, this.level.columns.length);
+        this.layout = computeLayout(this.level.width, this.level.height, this.gs.slots.length, this.level.columns.length, this.scale.height);
         this.drawSlotFrames();
         this.overlay?.destroy();
         this.overlay = null;
@@ -573,13 +584,14 @@ export class PlayScene extends Phaser.Scene {
     const solutionOf = () => this.solutionMoves();
     publishDebug({
       scene: 'play',
-      offsetY: viewOffset(this),
+      offsetY: 0,
+      screenHeight: this.scale.height,
       scrollY: this.cameras.main.scrollY,
       levelId: this.level.id,
       status: gs.status,
       overlay: this.overlay ? (gs.status === 'won' ? 'win' : 'jam') : null,
       completedStage: this.completedStage,
-      winButtons: { next: { x: VIEW.width / 2, y: (VIEW.height - 760) / 2 + 600 }, second: { x: VIEW.width / 2, y: (VIEW.height - 760) / 2 + 700 } },
+      winButtons: { next: { x: VIEW.width / 2, y: (this.scale.height - 760) / 2 + 600 }, second: { x: VIEW.width / 2, y: (this.scale.height - 760) / 2 + 700 } },
       beltBusy: gs.belt.length + gs.pending.length > 0,
       columns: this.layout.columns,
       slots: this.layout.slots,
@@ -591,12 +603,12 @@ export class PlayScene extends Phaser.Scene {
       subtitle: this.subtitle.text,
       guideText: this.guide ? t(GUIDE_TEXT[this.guide]) : null,
       jamButtons: {
-        continue: gs.extraSlotUsed ? null : { x: VIEW.width / 2, y: (VIEW.height - 480) / 2 + 280 },
-        retry: { x: VIEW.width / 2, y: (VIEW.height - 480) / 2 + (gs.extraSlotUsed ? 300 : 385) },
+        continue: gs.extraSlotUsed ? null : { x: VIEW.width / 2, y: (this.scale.height - 480) / 2 + 280 },
+        retry: { x: VIEW.width / 2, y: (this.scale.height - 480) / 2 + (gs.extraSlotUsed ? 300 : 385) },
       },
       tip: this.tip?.id ?? null,
       moves: this.moves,
-      tipButton: { x: VIEW.width / 2, y: (VIEW.height + TIP_H) / 2 - 70 },
+      tipButton: { x: VIEW.width / 2, y: (this.scale.height + TIP_H) / 2 - 70 },
       guide: this.guide,
       painted: this.level.targets.filter((t, i) => t && cellDone(this.level, gs, i)).length,
       ice: gs.ice.reduce((a, b) => a + b, 0),
