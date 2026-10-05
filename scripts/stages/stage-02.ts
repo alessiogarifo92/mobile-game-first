@@ -3,7 +3,7 @@ import type { StageSpec } from './types';
 /**
  * Stage 2 — Frutta (ticket #31).
  * Mixing più spinto, 3 colonne.
- * winRate = difficulty band for a random tapper (see randomWinRate); `special` places ice/hidden pixels.
+ * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places ice/hidden pixels.
  */
 const stage: StageSpec = {
   stage: 2,

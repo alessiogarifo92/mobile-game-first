@@ -2,14 +2,14 @@ import type { StageSpec } from './types';
 
 /**
  * Stage 3 — Animali (ticket #32).
- * Slot d'attesa ridotti a 2 dopo i primi livelli.
- * winRate = difficulty band for a random tapper (see randomWinRate); `special` places ice/hidden pixels.
+ * Nastro 3 (2 nel boss), slot d'attesa 2–3 (#75).
+ * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places ice/hidden pixels.
  */
 const stage: StageSpec = {
   stage: 3,
   complete: true,
   levels: [
-    { name: 'chick', columns: 3, ammoChunk: 12, slots: 3, beltCapacity: 4, winRate: [0.49, 1], seed: 3000, image: [
+    { name: 'chick', columns: 3, ammoChunk: 12, slots: 3, beltCapacity: 3, winRate: [0.9, 1], seed: 3000, image: [
       '...YYYY...',
       '..YYYYYY..',
       '..YBYYBY..',
@@ -21,7 +21,7 @@ const stage: StageSpec = {
       '..YYYYYY..',
       '...O..O...',
     ] },
-    { name: 'frog', columns: 3, ammoChunk: 12, slots: 3, beltCapacity: 4, winRate: [0.49, 1], seed: 3037, image: [
+    { name: 'frog', columns: 3, ammoChunk: 12, slots: 3, beltCapacity: 3, winRate: [0.87, 1], seed: 3037, image: [
       '.GGG..GGG.',
       'GYBGGGGBYG',
       'GGGGGGGGGG',
@@ -32,7 +32,7 @@ const stage: StageSpec = {
       '..GG..GG..',
       'GGG....GGG',
     ] },
-    { name: 'bee', columns: 3, ammoChunk: 12, slots: 2, beltCapacity: 4, winRate: [0.49, 1], seed: 3074, image: [
+    { name: 'bee', columns: 3, ammoChunk: 8, slots: 2, beltCapacity: 3, winRate: [0.83, 1], seed: 3074, image: [
       '..BB..BB..',
       '.BBBBBBBB.',
       '..BYYBYY..',
@@ -41,7 +41,7 @@ const stage: StageSpec = {
       '.YYBYYBYY.',
       '..YYBYY...',
     ] },
-    { name: 'snail', columns: 3, ammoChunk: 12, slots: 2, beltCapacity: 4, winRate: [0.33, 0.91], seed: 3111, image: [
+    { name: 'snail', columns: 3, ammoChunk: 12, slots: 2, beltCapacity: 3, winRate: [0.83, 1], seed: 3111, image: [
       '......Y.Y.',
       '......Y.Y.',
       '..OOO.YYY.',
@@ -52,7 +52,7 @@ const stage: StageSpec = {
       '.OOOOYYYYY',
       'YYYYYYYYYY',
     ] },
-    { name: 'fox', columns: 3, ammoChunk: 12, slots: 2, beltCapacity: 4, winRate: [0.33, 0.91], seed: 3148, image: [
+    { name: 'fox', columns: 3, ammoChunk: 18, slots: 2, beltCapacity: 3, winRate: [0.83, 0.96], seed: 3148, image: [
       'O........O',
       'OO......OO',
       'OOO....OOO',
@@ -64,7 +64,7 @@ const stage: StageSpec = {
       '...YYYY...',
       '....YY....',
     ] },
-    { name: 'butterfly', columns: 3, ammoChunk: 12, slots: 2, beltCapacity: 4, winRate: [0.33, 0.91], seed: 3185, image: [
+    { name: 'butterfly', columns: 3, ammoChunk: 18, slots: 2, beltCapacity: 3, winRate: [0.83, 0.95], seed: 3185, image: [
       'PP......PP',
       'PPP....PPP',
       'PYPP..PPYP',
@@ -76,7 +76,7 @@ const stage: StageSpec = {
       'OOO......O',
       '.O........',
     ] },
-    { name: 'owl', columns: 3, ammoChunk: 12, slots: 2, beltCapacity: 4, winRate: [0.33, 0.91], seed: 3222, image: [
+    { name: 'owl', columns: 3, ammoChunk: 18, slots: 2, beltCapacity: 3, winRate: [0.83, 0.93], seed: 3222, image: [
       'P........P',
       'PP......PP',
       'PPPPPPPPPP',
@@ -89,7 +89,7 @@ const stage: StageSpec = {
       '.PPPPPPPP.',
       '.O.O..O.O.',
     ] },
-    { name: 'dog', columns: 3, ammoChunk: 12, slots: 2, beltCapacity: 4, winRate: [0.22, 0.82], seed: 3259, image: [
+    { name: 'dog', columns: 3, ammoChunk: 12, slots: 2, beltCapacity: 3, winRate: [0.97, 1], seed: 3259, image: [
       'OO......OO',
       'OOOYYYYOOO',
       'OOYYYYYYOO',
@@ -100,7 +100,7 @@ const stage: StageSpec = {
       '...YYYY...',
       '..YY..YY..',
     ] },
-    { name: 'cat', columns: 3, ammoChunk: 12, slots: 2, beltCapacity: 4, winRate: [0.22, 0.82], seed: 3296, image: [
+    { name: 'cat', columns: 3, ammoChunk: 14, slots: 3, beltCapacity: 3, winRate: [0.83, 0.93], seed: 3296, image: [
       'BBBBBBBBBBBB',
       'BOBBBBBBBBOB',
       'BOOBBBBBBOOB',
@@ -114,7 +114,7 @@ const stage: StageSpec = {
       'BBBBBBBBBBBB',
       'GGGGGGGGGGGG',
     ] },
-    { name: 'parrot', columns: 3, ammoChunk: 12, slots: 2, beltCapacity: 4, winRate: [0.16, 0.72], seed: 3333, image: [
+    { name: 'parrot', columns: 4, ammoChunk: 16, slots: 2, beltCapacity: 2, winRate: [0.72, 0.82], seed: 3333, image: [
       '....RRRR....',
       '...RRRRRR...',
       '..RRYBRRRR..',

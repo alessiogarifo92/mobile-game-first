@@ -1,6 +1,8 @@
 import type { Primary } from './colors';
 import { buildLanes, type Level } from './level';
+import { createRng } from './rng';
 import { applyHit, boardDone, cloneBoard, createBoard, findTarget, type Board } from './rules';
+import { beltFull, createGame, launchFromColumn, launchFromSlot, step } from './sim';
 
 /** A move in sequential play: launch a column's front shooter or a slot shooter. */
 export type Move = { from: 'column'; index: number } | { from: 'slot'; index: number };
@@ -112,37 +114,42 @@ export function solve(level: Level, nodeBudget = 200_000): SolveResult {
   return { solvable: moves !== null, exhaustive: !exhausted, moves: moves ?? [], nodes };
 }
 
+/** Upper bound on ticks for one random playout: guards against relaunching blocked shooters forever. */
+export function playoutTickLimit(level: Level): number {
+  const shooters = level.columns.reduce((n, c) => n + c.length, 0);
+  return shooters * buildLanes(level.width, level.height).length * 30;
+}
+
 /**
- * Difficulty probe: share of random sequential playthroughs that win. A level a random tapper
- * clears 100% of the time has no puzzle in it; a low rate means order really matters.
+ * Difficulty probe: share of random playouts that win, played tick by tick with the game's own rules
+ * (`sim.ts`): an "eager" tapper launches a shooter picked at random among the column fronts and the
+ * occupied slots whenever the belt has room, so belt capacity and waiting slots both weigh in (a
+ * shooter riding the belt does not hold a slot). A playout is lost on a jam or at the tick limit.
+ * A level a random tapper clears 100% of the time has no puzzle in it; a low rate means order matters.
  */
 export function randomWinRate(level: Level, playouts: number, rng: () => number): number {
-  const lanes = buildLanes(level.width, level.height);
+  const limit = playoutTickLimit(level);
   let wins = 0;
   for (let p = 0; p < playouts; p++) {
-    const board = createBoard(level);
-    const heads = level.columns.map(() => 0);
-    const slots: Waiting[] = [];
-    // Guard against a random tapper relaunching blocked slot shooters forever.
-    for (let moves = 0; moves < 10_000; moves++) {
-      if (boardDone(level, board)) {
-        wins += 1;
-        break;
+    const g = createGame(level, { boardGap: 1 });
+    while (g.status === 'playing' && g.tick < limit) {
+      if (!beltFull(g)) {
+        const options: (() => boolean)[] = [];
+        g.queues.forEach((q, c) => q.length > 0 && options.push(() => launchFromColumn(g, c)));
+        g.slots.forEach((s, i) => s && options.push(() => launchFromSlot(g, i)));
+        if (options.length > 0) options[Math.floor(rng() * options.length)]!();
       }
-      const options: (() => Waiting)[] = [];
-      level.columns.forEach((column, c) => {
-        const s = column[heads[c]!];
-        if (s) options.push(() => ((heads[c]! += 1), { ...s }));
-      });
-      slots.forEach((_, i) => options.push(() => slots.splice(i, 1)[0]!));
-      if (options.length === 0) break;
-      const shooter = options[Math.floor(rng() * options.length)]!();
-      const left = runLoop(level, lanes, board, shooter.color, shooter.ammo);
-      if (left > 0) {
-        if (slots.length >= level.slots) break; // jam
-        slots.push({ color: shooter.color, ammo: left });
-      }
+      step(g);
     }
+    if (g.status === 'won') wins += 1;
   }
   return wins / playouts;
+}
+
+/** Playouts behind every shipped difficulty figure: generator bands, tests and the difficulty report. */
+export const WIN_RATE_PLAYOUTS = 200;
+
+/** A level's difficulty: `randomWinRate` with a fixed sample and the level id as seed, so anyone can reproduce it. */
+export function levelWinRate(level: Level): number {
+  return randomWinRate(level, WIN_RATE_PLAYOUTS, createRng(level.id));
 }

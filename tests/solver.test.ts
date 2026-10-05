@@ -2,8 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { buildLanes, parseLevel, type LevelDef } from '../src/core/level';
 import { createGame, launchFromColumn, launchFromSlot, step } from '../src/core/sim';
 import { createBoard } from '../src/core/rules';
-import { runLoop, solve, type Move } from '../src/core/solver';
+import { createRng } from '../src/core/rng';
+import { levelWinRate, playoutTickLimit, randomWinRate, runLoop, solve, type Move } from '../src/core/solver';
+import levels from '../src/levels/levels.json';
 import { BLUE, RED, YELLOW, level } from './helpers';
+
+const shipped = (id: number) => (levels as LevelDef[])[id - 1]!;
 
 /** Replays solver moves in the real simulation, waiting for the belt to empty between moves. */
 function replay(l: ReturnType<typeof level>, moves: Move[]) {
@@ -55,13 +59,44 @@ describe('solver', () => {
 });
 
 describe('randomWinRate', () => {
-  it('is 1 for a level with no wrong move and 0 for a level that always jams', async () => {
-    const { createRng } = await import('../src/core/rng');
-    const { randomWinRate } = await import('../src/core/solver');
+  const trap = () => level(['BBBBB', 'BRBRB', 'BBBBB'], [[[RED, 1], [RED, 1], [BLUE, 13]]], { slots: 1, beltCapacity: 1 });
+
+  it('is 1 for a level with no wrong move and 0 for a level that always jams', () => {
     expect(randomWinRate(level(['RR'], [[[RED, 2]]]), 20, createRng(1))).toBe(1);
-    const image = ['BBBBB', 'BRBRB', 'BBBBB'];
-    const trap = level(image, [[[RED, 1], [RED, 1], [BLUE, 13]]], { slots: 1, beltCapacity: 1 });
-    expect(randomWinRate(trap, 20, createRng(1))).toBe(0);
+    expect(randomWinRate(trap(), 20, createRng(1))).toBe(0);
+  });
+
+  it('is deterministic: same level and seed, same rate', () => {
+    const l = parseLevel(shipped(76));
+    expect(randomWinRate(l, 50, createRng(7))).toBe(randomWinRate(l, 50, createRng(7)));
+    expect(levelWinRate(l)).toBe(levelWinRate(l));
+  });
+
+  it('counts a game that never ends as lost, at the tick limit', () => {
+    // Both pixels stay hidden forever: every bucket loops, returns to a slot and is relaunched, nothing jams.
+    const stuck = level(['RB'], [[[RED, 1]], [[BLUE, 1]]], { overlay: ['hh'] });
+    expect(playoutTickLimit(stuck)).toBe(2 * buildLanes(2, 1).length * 30);
+    expect(randomWinRate(stuck, 5, createRng(1))).toBe(0);
+  });
+
+  // Sampling noise aside (same seed, 300 playouts), a smaller belt or fewer slots never make a level easier.
+  const NOISE = 0.03;
+  const rate = (def: LevelDef, beltCapacity: number, slots: number) =>
+    randomWinRate(parseLevel({ ...def, beltCapacity, slots }), 300, createRng(def.id));
+
+  it.each([44, 59, 76, 88])('level %i: less belt or fewer slots is never easier', (id) => {
+    const def = shipped(id);
+    const byBelt = [1, 2, 3, 4].map((b) => rate(def, b, 2));
+    const bySlots = [1, 2, 3, 4].map((s) => rate(def, 2, s));
+    for (const rates of [byBelt, bySlots]) {
+      for (let i = 1; i < rates.length; i++) expect(rates[i - 1]!).toBeLessThanOrEqual(rates[i]! + NOISE);
+    }
+  }, 20_000);
+
+  it('weighs belt capacity and slots separately: changing either one alone changes the rate', () => {
+    const def = shipped(59);
+    expect(rate(def, 4, 2) - rate(def, 1, 2)).toBeGreaterThan(0.1);
+    expect(rate(def, 2, 4) - rate(def, 2, 1)).toBeGreaterThan(0.1);
   });
 });
 

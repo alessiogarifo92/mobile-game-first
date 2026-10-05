@@ -17,8 +17,8 @@ Perché questa e non un clone:
 - **Pixel**: parte bianco; ogni colpo aggiunge un primario. È *completo* quando i primari ricevuti = bersaglio. Un secondario richiede **due colpi di colori diversi**, in qualsiasi ordine.
 - **Nastro**: percorre il perimetro della tela (sotto → destra → sopra → sinistra). Ogni secchiello ha un colore primario e un numero di colpi. A ogni corsia (colonna o riga) guarda verso l'interno: la vernice **vola sopra i pixel completi** e colpisce il **primo pixel non completo**. Se quel pixel accetta il suo colore (lo contiene e non l'ha già) → colpo (-1 munizione). Altrimenti la corsia è **bloccata** e il secchiello non spara.
 - **Strategia**: un pixel viola in prima fila blocca tutta la sua corsia finché non arrivano *sia* rosso *sia* blu. Bisogna scegliere l'ordine dei secchielli.
-- **Coda**: 2–4 colonne di secchielli in basso; tocchi una colonna → il primo secchiello entra sul nastro (capienza nastro limitata).
-- **Giro completo**: se il secchiello ha ancora colpi va in uno **slot d'attesa** (3–5 slot); da lì lo puoi rilanciare. Se esaurisce i colpi sparisce.
+- **Coda**: 2–4 colonne di secchielli in basso; tocchi una colonna → il primo secchiello entra sul nastro, se c'è posto (capienza del nastro: 5 → 2 secondo lo stage).
+- **Giro completo**: se il secchiello ha ancora colpi va in uno **slot d'attesa** (2–4 slot); da lì lo puoi rilanciare. Se esaurisce i colpi sparisce.
 - **Vittoria**: tutti i pixel completi. **Sconfitta**: un secchiello deve tornare ma gli slot sono pieni (*ingorgo*).
 - **Anti-frustrazione** (lezione negativa di Pixel Flow): all'ingorgo il nastro si ferma e propone *+1 slot* (gratis 1 volta/livello nell'MVP; in futuro rewarded ad) o *riprova*. Le munizioni totali per colore sono esattamente quelle necessarie e **ogni livello rilasciato è verificato risolvibile da un solver** nei test.
 
@@ -29,8 +29,25 @@ Perché questa e non un clone:
 | 4–6 | Primo secondario (arancione), poi verde |
 | 7–9 | Viola + tutti i secondari, 3 colonne |
 | 10–12 | Tele 10×10, munizioni più piccole, meno slot |
-| 13–15 | Tele 12×12, 4 colonne, nastro con capienza ridotta |
+| 13–15 | Tele 12×12, 4 colonne, nastro con capienza ridotta (vedi sotto) |
 | post-MVP | Pixel speciali: ghiaccio (2 colpi), "fango" da lavare, pixel nascosti, boss level |
+
+### Nastro e slot: le due leve della difficoltà (#75)
+Capienza del nastro e slot d'attesa sono **tutte e due leve di difficoltà** e vanno lette **insieme**: un secchiello che gira sul nastro non occupa uno slot, quindi lo spazio che evita l'ingorgo (l'unica sconfitta) è nastro + slot.
+
+- **Nastro (capienza)** — quanti secchielli possono girare insieme. Per chi gioca: con un nastro grande si tocca a raffica e i secchielli in volo consumano colpi prima di tornare; con un nastro piccolo bisogna **aspettare** che uno finisca prima di lanciare il successivo e si vede l'effetto di ogni scelta. Un tocco a nastro pieno non lancia (la colonna scuote, l'indicatore "NASTRO n/N" lo spiega).
+- **Slot d'attesa** — dove tornano i secchielli che non hanno finito i colpi. Per chi gioca: meno slot = meno margine per secchielli lanciati "a vuoto"; conviene finire i secchielli che aspettano prima di lanciarne di nuovi.
+- **Misura**: `levelWinRate` in `src/core/solver.ts` gioca 200 partite con le regole vere (`sim.ts`) toccando a caso appena il nastro ha posto; la fascia `winRate` di ogni livello è su questa misura (report: `docs/reports/2026-10-02-curva-nastro-slot.md`).
+
+| Stage | Nastro | Slot | Vittorie casuali (media) | Per chi gioca |
+|---|---|---|---|---|
+| 1 | 5 | 3–4 | 100% | Tocca pure a raffica: si impara il colore |
+| 2 | 4 | 3 | 100% | Ancora introduzione |
+| 3–4 | 3 (boss 2) | 2–3 | 91–94% | Primo limite vero; il boss chiede di aspettare il nastro |
+| 5–7 | 3, poi 2 a metà stage | 2–3 | 77–90% | Il nastro si stringe verso il boss |
+| 8–10 | 2 | 2–3 | 69–83% | Un secchiello alla volta conta; pochi slot |
+
+Ogni stage inizia con 1–3 livelli "di respiro" e il boss è il livello più duro (eccezione: stage 5, vedi report). La capienza non torna mai a crescere dopo lo stage 8 (test in `tests/levels.test.ts`).
 
 ### Primo accesso e lingue (v0.2)
 - **Tutorial interattivo, non testo**: il livello 1 è guidato (colonna evidenziata, mano animata, una riga di testo; i tap fuori dal bersaglio sono ignorati finché il primo secchiello non parte). Poi suggerimenti una tantum quando compare una meccanica nuova: mixing, corsia bloccata, slot d'attesa. "Come si gioca" (3 schede) resta consultabile dalle Impostazioni, con "Rivedi il tutorial". Motivo: negli hybrid-casual si impara giocando, i muri di testo vengono saltati (ticket #20).
