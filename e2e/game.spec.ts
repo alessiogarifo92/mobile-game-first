@@ -249,11 +249,11 @@ test.describe('full belt on a 360x640 phone', () => {
 
   test('a full belt refuses a launch: the indicator shows why and the belt tip explains it once', async ({ page }) => {
     // Level 71 opens stage 8, where every level has a belt of 2, and has more columns than that.
-    await throttleCpu(page);
     await page.addInitScript((p) => localStorage.setItem('mix-and-splash/progress/v1', p), SEEN_ALL);
     await page.goto('/');
     await waitScene(page, 'menu');
     await openLevel(page, 71);
+    await throttleCpu(page); // only from here: scrolling the map under throttling is slow and not what this test is about
     const { capacity } = await mix<{ used: number; capacity: number }>(page, 'belt');
     expect(capacity).toBe(2);
     const columns = await mix<Rect[]>(page, 'columns');
