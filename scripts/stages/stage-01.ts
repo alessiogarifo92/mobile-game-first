@@ -3,7 +3,7 @@ import type { StageSpec } from './types';
 /**
  * Stage 1 — Atelier (primi colori) (ticket #30).
  * Primari, poi un secondario alla volta (arancione al 4, verde al 5, viola al 7). Livello 1 guidato.
- * winRate = difficulty band for a random tapper (see randomWinRate); `special` places ice/hidden pixels.
+ * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places ice/hidden pixels.
  */
 const stage: StageSpec = {
   stage: 1,

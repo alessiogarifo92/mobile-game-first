@@ -2,14 +2,14 @@ import type { StageSpec } from './types';
 
 /**
  * Stage 8 — Veicoli (ticket #37).
- * Nastro con capienza 2: un secchiello alla volta conta.
- * winRate = difficulty band for a random tapper (see randomWinRate); `special` places ice/hidden pixels.
+ * Nastro con capienza 2: un secchiello alla volta conta (#75).
+ * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places ice/hidden pixels.
  */
 const stage: StageSpec = {
   stage: 8,
   complete: true,
   levels: [
-    { name: 'car', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 2, winRate: [0.32, 1], seed: 8000, image: [
+    { name: 'car', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 2, winRate: [0.71, 1], seed: 8000, image: [
       '...RRRRR....',
       '..RBBRBBR...',
       '.RRBBRBBRR..',
@@ -20,7 +20,7 @@ const stage: StageSpec = {
       '.BYB....BYB.',
       '..B......B..',
     ] },
-    { name: 'bus', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 2, special: { ice: 2 }, winRate: [0.32, 1], seed: 8037, image: [
+    { name: 'bus', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 2, special: { ice: 2 }, winRate: [0.68, 1], seed: 8037, image: [
       'YYYYYYYYYYYY',
       'YBBYBBYBBYBY',
       'YBBYBBYBBYBY',
@@ -30,7 +30,7 @@ const stage: StageSpec = {
       '.BB......BB.',
       '.BB......BB.',
     ] },
-    { name: 'truck', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 2, special: { ice: 2, hidden: 1 }, winRate: [0.32, 1], seed: 8074, image: [
+    { name: 'truck', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 2, special: { ice: 2, hidden: 1 }, winRate: [0.97, 1], seed: 8074, image: [
       'BBBBBBB.....',
       'BBBBBBB.RRR.',
       'BBBBBBB.RBBR',
@@ -40,7 +40,7 @@ const stage: StageSpec = {
       '.PP....PP...',
       '.PP....PP...',
     ] },
-    { name: 'tractor', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 2, special: { ice: 2, hidden: 2 }, winRate: [0.18, 0.81], seed: 8111, image: [
+    { name: 'tractor', columns: 4, ammoChunk: 18, slots: 2, beltCapacity: 2, special: { ice: 2, hidden: 2 }, winRate: [0.47, 0.6], seed: 8111, image: [
       '......RRR...',
       '......RBR...',
       '.GGGGGRBR...',
@@ -51,7 +51,7 @@ const stage: StageSpec = {
       '.OBBO..OBBO.',
       '.OOOO..OOOO.',
     ] },
-    { name: 'train', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 2, special: { ice: 3, hidden: 2 }, winRate: [0.18, 0.81], seed: 8148, image: [
+    { name: 'train', columns: 4, ammoChunk: 12, slots: 2, beltCapacity: 2, special: { ice: 3, hidden: 2 }, winRate: [0.96, 1], seed: 8148, image: [
       '..YY........',
       '..YY..RRRRRR',
       'RRRRRRRBBRBR',
@@ -61,7 +61,7 @@ const stage: StageSpec = {
       'BBBBBBBBBBBB',
       '.OO.OO..OO.O',
     ] },
-    { name: 'plane', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 2, special: { ice: 3, hidden: 2 }, winRate: [0.18, 0.81], seed: 8185, image: [
+    { name: 'plane', columns: 4, ammoChunk: 12, slots: 2, beltCapacity: 2, special: { ice: 3, hidden: 2 }, winRate: [0.45, 0.58], seed: 8185, image: [
       'OOOOOBOOOOOO',
       'OOOOOBBOOOOO',
       'BOOOOBBBOOOO',
@@ -73,7 +73,7 @@ const stage: StageSpec = {
       'OOOOOBBOOOOO',
       'OOOOOBOOOOOO',
     ] },
-    { name: 'helicopter', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 2, special: { ice: 3, hidden: 3 }, winRate: [0.18, 0.81], seed: 8222, image: [
+    { name: 'helicopter', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 2, special: { ice: 3, hidden: 3 }, winRate: [0.97, 1], seed: 8222, image: [
       'RRRRRRRRRRRR',
       '.....R......',
       '....RRRR....',
@@ -84,7 +84,7 @@ const stage: StageSpec = {
       '..O....O....',
       '.OOOOOOOO...',
     ] },
-    { name: 'scooter', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.1, 0.72], seed: 8259, image: [
+    { name: 'scooter', columns: 4, ammoChunk: 8, slots: 2, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.96, 1], seed: 8259, image: [
       '........B...',
       '........B...',
       '.......BB...',
@@ -94,7 +94,7 @@ const stage: StageSpec = {
       '.OO.....OO..',
       '.OO.....OO..',
     ] },
-    { name: 'submarine', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.1, 0.72], seed: 8296, image: [
+    { name: 'submarine', columns: 4, ammoChunk: 18, slots: 2, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.69, 0.8], seed: 8296, image: [
       'BBBBBYYBBBBB',
       'BBBBBYYBBBBB',
       'BBBBYYYYBBBB',
@@ -104,7 +104,7 @@ const stage: StageSpec = {
       'BYYYYYYYYYYB',
       'BBBBBBBBBBBB',
     ] },
-    { name: 'firetruck', columns: 4, ammoChunk: 12, slots: 3, beltCapacity: 2, special: { ice: 4, hidden: 4 }, winRate: [0.08, 0.62], seed: 8333, image: [
+    { name: 'firetruck', columns: 4, ammoChunk: 18, slots: 2, beltCapacity: 2, special: { ice: 4, hidden: 4 }, winRate: [0.43, 0.53], seed: 8333, image: [
       '....Y.Y.....',
       '...BBBBB....',
       'OOOOOOOOO...',

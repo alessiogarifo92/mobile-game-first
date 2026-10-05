@@ -1,5 +1,13 @@
 # Changelog
 
+## Non rilasciato — difficoltà con nastro e slot, curva ricalibrata (#75)
+
+- **Misura nuova**: la difficoltà di un livello (`levelWinRate`) si misura con 200 partite giocate tick per tick con le regole vere del gioco: un giocatore casuale lancia appena il nastro ha posto. Capienza del nastro e slot d'attesa ora pesano insieme; prima si simulava un secchiello alla volta (come un nastro da 1).
+- **Curva nuova**: nastro e slot scendono a gradini per stage — stage 3–4 nastro 3 (boss 2), stage 5–7 nastro 3 e poi 2 verso il boss, stage 8–10 nastro 2; slot mai sotto 2. Con la misura nuova la media di vittorie casuali scende da 94% (piatta negli stage 3–10) a 94% → 69% (stage 3 → 10), con livelli di respiro a inizio stage.
+- **Livelli rigenerati dagli stage 3 in poi**: stesse immagini, stessi id e nomi, quindi **i progressi restano validi**; cambiano però gli **inventari dei secchielli** (colori, colpi e ordine nelle colonne), la capienza del nastro e in diversi livelli gli slot. Stage 1–2 identici.
+- Test: misura deterministica, nastro più piccolo o meno slot mai più facili, ogni livello nella fascia della sua spec, curva che sale a gruppi di stage, nastro che non torna a crescere. Report prima/dopo: `docs/reports/2026-10-02-curva-nastro-slot.md`.
+- Limite: il giocatore casuale non è una persona; la difficoltà percepita va confermata con i playtest (#66, #42).
+
 ## Non rilasciato — capienza del nastro visibile (#76)
 
 - **Indicatore del nastro** sulla riga "Attesa", a sinistra: "NASTRO 1/2" più un segnaposto per posto (pieno/vuoto: forma e numero, non solo colore), più scuro quando il nastro è pieno. L'occupazione (`beltLoad`, `beltFull`) viene da `src/core/sim.ts`.

@@ -3,13 +3,14 @@ import type { StageSpec } from './types';
 /**
  * Stage 5 — Mare (ticket #34).
  * Ghiaccio con slot ridotti.
- * winRate = difficulty band for a random tapper (see randomWinRate); `special` places ice/hidden pixels.
+ * Nastro 3 nei primi cinque livelli, poi 2 (#75). Il faro (boss) resta facile per il giocatore casuale: vedi report.
+ * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places ice/hidden pixels.
  */
 const stage: StageSpec = {
   stage: 5,
   complete: true,
   levels: [
-    { name: 'fish', columns: 3, ammoChunk: 10, slots: 3, beltCapacity: 4, special: { ice: 3 }, winRate: [0.42, 1], seed: 5000, image: [
+    { name: 'fish', columns: 3, ammoChunk: 15, slots: 4, beltCapacity: 3, special: { ice: 3 }, winRate: [0.82, 1], seed: 5000, image: [
       'BBBBBBBBBB',
       'BBBOOOBBBB',
       'BBOOYOOBOB',
@@ -21,7 +22,7 @@ const stage: StageSpec = {
       'GGBBBBBGGB',
       'GGGGGGGGGG',
     ] },
-    { name: 'crab', columns: 3, ammoChunk: 10, slots: 3, beltCapacity: 4, special: { ice: 3 }, winRate: [0.42, 1], seed: 5037, image: [
+    { name: 'crab', columns: 3, ammoChunk: 10, slots: 3, beltCapacity: 3, special: { ice: 3 }, winRate: [0.79, 1], seed: 5037, image: [
       'R.R....R.R',
       'RRR....RRR',
       '.R.YRRY.R.',
@@ -31,7 +32,7 @@ const stage: StageSpec = {
       '.RRRRRRRR.',
       'R.R.RR.R.R',
     ] },
-    { name: 'shell', columns: 3, ammoChunk: 10, slots: 3, beltCapacity: 4, special: { ice: 3 }, winRate: [0.42, 1], seed: 5074, image: [
+    { name: 'shell', columns: 3, ammoChunk: 10, slots: 2, beltCapacity: 3, special: { ice: 3 }, winRate: [0.73, 1], seed: 5074, image: [
       '...OOOO...',
       '..OYOYOO..',
       '.OYOYOYOO.',
@@ -41,7 +42,7 @@ const stage: StageSpec = {
       '.OOOOOOOO.',
       '...OOOO...',
     ] },
-    { name: 'starfish', columns: 3, ammoChunk: 10, slots: 2, beltCapacity: 4, special: { ice: 4 }, winRate: [0.27, 0.87], seed: 5111, image: [
+    { name: 'starfish', columns: 3, ammoChunk: 15, slots: 3, beltCapacity: 3, special: { ice: 4 }, winRate: [0.71, 0.91], seed: 5111, image: [
       'BBBBOOBBBB',
       'BBBBOOBBBB',
       'BBBOOOOBBB',
@@ -52,7 +53,7 @@ const stage: StageSpec = {
       'BOOBBBBOOB',
       'OOBBBBBBOO',
     ] },
-    { name: 'octopus', columns: 3, ammoChunk: 10, slots: 2, beltCapacity: 4, special: { ice: 4 }, winRate: [0.27, 0.87], seed: 5148, image: [
+    { name: 'octopus', columns: 3, ammoChunk: 10, slots: 2, beltCapacity: 3, special: { ice: 4 }, winRate: [0.68, 0.88], seed: 5148, image: [
       '...PPPP...',
       '..PPPPPP..',
       '.PPPPPPPP.',
@@ -63,7 +64,7 @@ const stage: StageSpec = {
       'P.P.PP.P.P',
       '.P.P..P.P.',
     ] },
-    { name: 'jellyfish', columns: 4, ammoChunk: 10, slots: 2, beltCapacity: 4, special: { ice: 4 }, winRate: [0.27, 0.87], seed: 5185, image: [
+    { name: 'jellyfish', columns: 4, ammoChunk: 15, slots: 2, beltCapacity: 2, special: { ice: 4 }, winRate: [0.67, 0.87], seed: 5185, image: [
       '..PPPPPP..',
       '.PPPPPPPP.',
       'PPYPPPPYPP',
@@ -74,7 +75,7 @@ const stage: StageSpec = {
       '.B.B..B.B.',
       'B...B...B.',
     ] },
-    { name: 'boat', columns: 4, ammoChunk: 10, slots: 2, beltCapacity: 4, special: { ice: 5 }, winRate: [0.27, 0.87], seed: 5222, image: [
+    { name: 'boat', columns: 4, ammoChunk: 10, slots: 2, beltCapacity: 2, special: { ice: 5 }, winRate: [0.95, 1], seed: 5222, image: [
       '....R.....',
       '....RY....',
       '....RYY...',
@@ -86,7 +87,7 @@ const stage: StageSpec = {
       'BBBBBBBBBB',
       'BBBBBBBBBB',
     ] },
-    { name: 'turtle', columns: 4, ammoChunk: 10, slots: 2, beltCapacity: 4, special: { ice: 5 }, winRate: [0.17, 0.78], seed: 5259, image: [
+    { name: 'turtle', columns: 4, ammoChunk: 15, slots: 2, beltCapacity: 2, special: { ice: 5 }, winRate: [0.62, 0.82], seed: 5259, image: [
       '...GGGG...',
       '..GOGOGG..',
       '.GOGOGOGG.',
@@ -95,7 +96,7 @@ const stage: StageSpec = {
       '.YY.YY..YY',
       '.YY.YY....',
     ] },
-    { name: 'whale', columns: 4, ammoChunk: 10, slots: 2, beltCapacity: 4, special: { ice: 5 }, winRate: [0.17, 0.78], seed: 5296, image: [
+    { name: 'whale', columns: 4, ammoChunk: 10, slots: 2, beltCapacity: 2, special: { ice: 5 }, winRate: [0.59, 1], seed: 5296, image: [
       'GGBGBGGGGGGG',
       'GGGBGGGGGGGG',
       'GGBBBBBBBGGG',
@@ -105,7 +106,7 @@ const stage: StageSpec = {
       'BYYYYYYYBBGG',
       'GYYYYYYBGGGG',
     ] },
-    { name: 'lighthouse', columns: 4, ammoChunk: 10, slots: 2, beltCapacity: 4, special: { ice: 6 }, winRate: [0.12, 0.68], seed: 5333, image: [
+    { name: 'lighthouse', columns: 4, ammoChunk: 15, slots: 2, beltCapacity: 2, special: { ice: 6 }, winRate: [0.84, 0.92], seed: 5333, image: [
       '.....RR.....',
       '....YYYY....',
       '...YYYYYY...',
