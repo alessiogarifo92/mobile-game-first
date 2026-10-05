@@ -3,7 +3,7 @@ import levels from '../src/levels/levels.json' with { type: 'json' };
 import type { LevelDef } from '../src/core/level';
 import type { Move } from '../src/core/solver';
 
-import { SEEN_ALL, dismissTip, jamSequence, mix, play, shots, tap, waitScene, waitSim, type Rect } from './helpers';
+import { SEEN_ALL, dismissTip, jamSequence, mix, play, shots, tap, throttleCpu, waitScene, waitSim, type Rect } from './helpers';
 
 /** On the map, drags until the level's node is in the visible area below the title bar, then taps it. */
 async function openLevel(page: Page, id: number) {
@@ -249,6 +249,7 @@ test.describe('full belt on a 360x640 phone', () => {
 
   test('a full belt refuses a launch: the indicator shows why and the belt tip explains it once', async ({ page }) => {
     // Level 71 opens stage 8, where every level has a belt of 2, and has more columns than that.
+    await throttleCpu(page);
     await page.addInitScript((p) => localStorage.setItem('mix-and-splash/progress/v1', p), SEEN_ALL);
     await page.goto('/');
     await waitScene(page, 'menu');

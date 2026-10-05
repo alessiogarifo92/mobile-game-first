@@ -18,6 +18,17 @@ export async function tap(page: Page, x: number, y: number) {
   await page.mouse.click(box.x + x * k, box.y + (y - scroll) * k);
 }
 
+/**
+ * Slows the page's CPU by `E2E_CPU_THROTTLE` times (Chromium only), to reproduce a loaded CI runner locally:
+ * `E2E_CPU_THROTTLE=6 npx playwright test -g "full belt" --repeat-each=20`. Does nothing when the variable is unset.
+ */
+export async function throttleCpu(page: Page) {
+  const rate = Number(process.env.E2E_CPU_THROTTLE);
+  if (!(rate > 1)) return;
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send('Emulation.setCPUThrottlingRate', { rate });
+}
+
 export async function waitScene(page: Page, scene: string) {
   await page.waitForFunction((s) => (window as unknown as { __mix?: { scene: string } }).__mix?.scene === s, scene);
 }
