@@ -5,7 +5,9 @@ import { parseLevel, type LevelDef } from '../src/core/level';
 import { createGame, launchFromColumn, launchFromSlot, step } from '../src/core/sim';
 import { levelWinRate, solve } from '../src/core/solver';
 import { assignIds } from '../src/core/stages';
+import { checkCurve, curveLevel } from '../src/core/curve';
 import { STAGE_SPECS } from '../scripts/stages';
+import { KNOWN_CURVE_ERRORS } from '../scripts/stages/curve-known';
 
 const defs = levels as LevelDef[];
 
@@ -54,6 +56,15 @@ describe('shipped levels', () => {
     expect(avg(3, 10)).toBeLessThan(avg(1, 2) - 0.1);
     expect(avg(6, 8)).toBeLessThan(avg(3, 5) - 0.05);
     expect(avg(9, 10)).toBeLessThan(avg(6, 8) - 0.05);
+  }, 60_000);
+
+  it('follows the curve rules (#88): errors are exactly the known ones that #89 still has to fix', () => {
+    const curve = checkCurve(defs.map((d, i) => curveLevel(parseLevel(d), winRates()[i]!, !!specs[i]!.curve?.easyBoss)));
+    const errors = curve.filter((v) => v.severity === 'error').map((v) => v.key);
+    expect(errors.filter((k) => !KNOWN_CURVE_ERRORS.includes(k))).toEqual([]);
+    expect(KNOWN_CURVE_ERRORS.filter((k) => !errors.includes(k))).toEqual([]);
+    // Known errors are only rules 1–2 inside universe 1: the universe targets (rules 3–5) and the extremes (rule 8) already hold.
+    expect(errors.filter((k) => !/^r[12] /.test(k))).toEqual([]);
   }, 60_000);
 
   it('never gives a bigger belt back: the largest belt of a stage never grows from one stage to the next', () => {

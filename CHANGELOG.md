@@ -1,5 +1,11 @@
 # Changelog
 
+## Non rilasciato — regole automatiche della curva di difficoltà (#88)
+
+- **Curva controllata da regole**, non a occhio: `src/core/curve.ts` (puro, soglie in una sola tabella) verifica che "molto facile" (≥ 95% a caso) resti nei livelli 1–8, nei primi livelli di stage dell'universo 1 e ai debutti di una meccanica; il dente di sega dentro lo stage (respiro, base, gradini, livello duro, boss il più duro salvo eccezioni dichiarate); la fine di ogni universo più dura dell'inizio; l'inizio di un universo tra la fine e l'inizio del precedente; gli obiettivi provvisori di fine universo; nastro 1 o slot 1 solo sui boss dall'universo 3, mai insieme. Pochi colori secondari e livelli duri troppo lunghi sono avvisi.
+- `npm run gen:levels` stampa errori e avvisi e fallisce su un errore nuovo; `scripts/difficulty-report.ts` mostra la curva per universo. Funziona con N universi e stage incompleti.
+- I livelli **non cambiano**. Gli errori già presenti nell'universo 1 (troppi livelli molto facili, dente di sega irregolare) sono elencati in `scripts/stages/curve-known.ts` e li corregge #89.
+
 ## Non rilasciato — difficoltà con nastro e slot, curva ricalibrata (#75)
 
 - **Misura nuova**: la difficoltà di un livello (`levelWinRate`) si misura con 200 partite giocate tick per tick con le regole vere del gioco: un giocatore casuale lancia appena il nastro ha posto. Capienza del nastro e slot d'attesa ora pesano insieme; prima si simulava un secchiello alla volta (come un nastro da 1).

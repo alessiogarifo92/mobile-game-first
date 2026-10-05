@@ -106,7 +106,7 @@ const stage: StageSpec = {
       'BYYYYYYYBBGG',
       'GYYYYYYBGGGG',
     ] },
-    { name: 'lighthouse', columns: 4, ammoChunk: 15, slots: 2, beltCapacity: 2, special: { ice: 6 }, winRate: [0.84, 0.92], seed: 5333, image: [
+    { name: 'lighthouse', columns: 4, ammoChunk: 15, slots: 2, beltCapacity: 2, special: { ice: 6 }, winRate: [0.84, 0.92], seed: 5333, curve: { easyBoss: 'figura con pochi colori secondari: non si indurisce senza rifare il disegno (#75), da rivedere in #89' }, image: [
       '.....RR.....',
       '....YYYY....',
       '...YYYYYY...',

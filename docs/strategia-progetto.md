@@ -59,6 +59,12 @@ Ogni stage inizia con 1–3 livelli "di respiro" e il boss è il livello più du
 - Formato livello: `overlay` opzionale sopra l'immagine (`i` ghiaccio, `h` nascosto). Le regole di colpo stanno in `src/core/rules.ts`, condivise da simulazione e solver.
 - I 10 quadri di uno stage formano una pagina d'album (#40).
 
+### 500 livelli in 5 universi (epic #87)
+- **5 universi × 10 stage × 10 livelli**, id globali 1–500. L'universo N+1 si apre e si sceglie solo dopo l'ultimo livello dell'universo N; prima è visibile ma chiuso. Un universo per aggiornamento.
+- **Novità per universo**: 2 Natura → marrone (R+Y+B) e pietra; 3 Viaggio → lucchetto e chiave, secchiello coperto; 4 Mare e cielo → pellicola colorata, corsie cieche; 5 Cosmo → combinazioni e tele 16×16. Scartati sui dati: secchielli collegati (rendono più facile), ghiaccio doppio (troppo debole), nastro veloce. Niente stelle 1–3.
+- **Curva**: "molto facile" (≥ 95% a caso) solo nei livelli 1–8, nei primi livelli di stage dell'universo 1 e ai debutti; tre denti di sega (stage, universo, tra universi). Dati e decisioni: `docs/reports/2026-10-05-500-livelli-universi.md`.
+- **Regole automatiche (#88)**: `src/core/curve.ts` (tabella unica `CURVE`) controlla le 8 regole della curva; `npm run gen:levels` le stampa e fallisce su un errore nuovo, `tests/levels.test.ts` le verifica. Gli errori che l'universo 1 aveva già sono elencati in `scripts/stages/curve-known.ts` e vanno tolti man mano che #89 li corregge. Un boss più facile del suo stage si dichiara nella spec (`curve: { easyBoss: '…' }`). Regole 6 (pochi colori secondari) e 7 (livelli duri lunghi, tetto provvisorio fino al playtest #66) sono avvisi.
+
 ### Meta leggero
 - MVP: mappa livelli con sblocco progressivo, salvataggio locale, schermate vittoria/sconfitta.
 - Post-MVP: skin dei secchielli, collezione "galleria" dei quadri completati (si condividono come immagine → viralità), streak giornaliera, livello del giorno.
