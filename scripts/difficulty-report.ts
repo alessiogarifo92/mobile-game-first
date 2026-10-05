@@ -1,6 +1,7 @@
 /**
  * Difficulty curve of the shipped levels (tickets #29, #75): per-level metrics as JSON and a chart.
  * `randomWin` is levelWinRate: random playouts with the game's own rules, so `belt` and `slots` weigh in.
+ * Ends with the curve per universe and the curve rule violations (#88).
  *   npx tsx scripts/difficulty-report.ts
  */
 import { writeFileSync } from 'node:fs';
@@ -8,6 +9,9 @@ import { chromium } from '@playwright/test';
 import levelsJson from '../src/levels/levels.json' with { type: 'json' };
 import { parseLevel, type LevelDef } from '../src/core/level';
 import { levelWinRate, solve } from '../src/core/solver';
+import { CURVE, checkCurve, curveLevel, universeOf } from '../src/core/curve';
+import { assignIds } from '../src/core/stages';
+import { STAGE_SPECS } from './stages';
 
 const rows = (levelsJson as LevelDef[]).map((def) => {
   const l = parseLevel(def);
@@ -69,4 +73,21 @@ for (let s = 1; s <= 10; s++) {
     return lo === hi ? `${lo}` : `${lo}–${hi}`;
   };
   console.log(`| ${s} | ${avg((r) => r.randomWin)} | ${Math.min(...st.map((r) => r.randomWin)).toFixed(2)} | ${span((r) => r.belt)} | ${span((r) => r.slots)} | ${avg((r) => r.shooters)} | ${avg((r) => r.ice)} | ${avg((r) => r.hidden)} | ${st.find((r) => r.boss)?.randomWin ?? '-'} |`);
+}
+
+// Curve per universe (#88): mean of each stage against the universe targets, then every rule violation.
+const specs = assignIds(STAGE_SPECS);
+const curve = (levelsJson as LevelDef[]).map((def, i) => curveLevel(parseLevel(def), rows[i]!.randomWin, !!specs[i]!.curve?.easyBoss));
+for (let u = 1; u <= universeOf(Math.max(...rows.map((r) => r.stage))); u++) {
+  const stages = [...new Set(rows.filter((r) => universeOf(r.stage) === u).map((r) => r.stage))];
+  const means = stages.map((s) => { const st = rows.filter((r) => r.stage === s); return st.reduce((a, r) => a + r.randomWin, 0) / st.length; });
+  const bosses = rows.filter((r) => r.boss && universeOf(r.stage) === u).map((r) => r.randomWin);
+  const target = CURVE.universes[u - 1];
+  console.log(`\nuniverse ${u}: stage means ${means.map((m) => m.toFixed(2)).join(' ')} · hardest boss ${Math.min(...bosses).toFixed(2)}` +
+    (target ? ` · targets: last stage ${target.endMean}, hardest boss ≥ ${target.hardestBoss}` : ''));
+}
+const violations = checkCurve(curve);
+for (const rule of [...new Set(violations.map((v) => v.rule))].sort((a, b) => a - b)) {
+  const vs = violations.filter((v) => v.rule === rule);
+  console.log(`rule ${rule} (${vs[0]!.severity}): ${vs.map((v) => v.key.split(' ')[1]).join(' ')}`);
 }

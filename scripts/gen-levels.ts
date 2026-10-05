@@ -6,16 +6,25 @@
  *   npm run gen:levels -- --force regenerate everything
  */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { checkCurve, curveLevel } from '../src/core/curve';
 import { generateLevel } from '../src/core/generator';
 import { LEVEL_NAME_KEYS } from '../src/core/i18n';
-import type { LevelDef } from '../src/core/level';
+import { parseLevel, type LevelDef } from '../src/core/level';
+import { levelWinRate } from '../src/core/solver';
 import { assignIds, specHash, validateStages } from '../src/core/stages';
 import { STAGE_SPECS } from './stages';
+import { KNOWN_CURVE_ERRORS } from './stages/curve-known';
 
 const out = new URL('../src/levels/levels.json', import.meta.url);
 /** Bump when the tuning policy below changes, so cached levels are regenerated. */
 const POLICY_VERSION = 2;
-const hashOf = (spec: object) => specHash({ ...spec, policy: POLICY_VERSION });
+/** Curve notes never change the generated level, so they stay out of the hash. */
+const withoutCurve = <T extends { curve?: unknown }>(spec: T): Omit<T, 'curve'> => {
+  const copy = { ...spec };
+  delete copy.curve;
+  return copy;
+};
+const hashOf = (spec: { curve?: unknown }) => specHash({ ...withoutCurve(spec), policy: POLICY_VERSION });
 const check = process.argv.includes('--check');
 const force = process.argv.includes('--force');
 
@@ -35,8 +44,9 @@ if (check) {
 }
 
 const failures: string[] = [];
-const levels = specs.map((spec) => {
-  const hash = hashOf(spec);
+const levels = specs.map((full) => {
+  const spec = withoutCurve(full);
+  const hash = hashOf(full);
   const cached = byId.get(spec.id);
   if (!force && cached?.specHash === hash) return cached;
   const started = Date.now();
@@ -88,3 +98,21 @@ if (failures.length > 0) {
 }
 writeFileSync(out, JSON.stringify(levels, null, 1) + '\n');
 console.log(`wrote ${levels.length} levels (${stale.length} regenerated)`);
+
+// Curve rules (#88) over the whole game: a new error fails the run (levels.json is kept, so a fix to the specs
+// regenerates only what changed); known errors (#89) and warnings are listed.
+const curve = checkCurve(levels.map((def, i) => {
+  const level = parseLevel(def!);
+  return curveLevel(level, levelWinRate(level), !!specs[i]!.curve?.easyBoss);
+}));
+const known = new Set(KNOWN_CURVE_ERRORS);
+const errors = curve.filter((v) => v.severity === 'error' && !known.has(v.key));
+const fixed = KNOWN_CURVE_ERRORS.filter((k) => !curve.some((v) => v.key === k));
+const warnings = curve.filter((v) => v.severity === 'warning');
+console.log(`\ncurve: ${errors.length} new errors, ${curve.length - errors.length - warnings.length} known (#89), ${warnings.length} warnings`);
+for (const v of warnings) console.log(`  warning ${v.key}: ${v.message}`);
+for (const k of fixed) console.log(`  fixed ${k}: remove it from scripts/stages/curve-known.ts`);
+if (errors.length > 0) {
+  console.error(`\n${errors.length} curve errors (src/core/curve.ts):\n${errors.map((v) => `  ${v.key}: ${v.message}`).join('\n')}`);
+  process.exit(1);
+}
