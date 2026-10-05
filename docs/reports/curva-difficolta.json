@@ -136,11 +136,11 @@
   "pixels": 60,
   "shooters": 8,
   "columns": 2,
-  "slots": 3,
+  "slots": 2,
   "belt": 5,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 1,
+  "randomWin": 0.905,
   "solutionMoves": 12
  },
  {
@@ -152,12 +152,12 @@
   "pixels": 83,
   "shooters": 15,
   "columns": 3,
-  "slots": 3,
+  "slots": 2,
   "belt": 5,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 0.985,
-  "solutionMoves": 18
+  "randomWin": 0.76,
+  "solutionMoves": 17
  },
  {
   "id": 11,
@@ -180,16 +180,16 @@
   "stage": 2,
   "boss": false,
   "name": "orange",
-  "size": "8x7",
-  "pixels": 34,
-  "shooters": 6,
+  "size": "8x8",
+  "pixels": 42,
+  "shooters": 7,
   "columns": 3,
-  "slots": 3,
-  "belt": 4,
+  "slots": 2,
+  "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 1,
-  "solutionMoves": 7
+  "randomWin": 0.92,
+  "solutionMoves": 11
  },
  {
   "id": 13,
@@ -197,15 +197,15 @@
   "boss": false,
   "name": "banana",
   "size": "8x8",
-  "pixels": 26,
-  "shooters": 4,
+  "pixels": 64,
+  "shooters": 11,
   "columns": 3,
-  "slots": 3,
-  "belt": 4,
+  "slots": 2,
+  "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 1,
-  "solutionMoves": 4
+  "randomWin": 0.88,
+  "solutionMoves": 13
  },
  {
   "id": 14,
@@ -214,14 +214,14 @@
   "name": "apple",
   "size": "8x8",
   "pixels": 42,
-  "shooters": 6,
-  "columns": 3,
-  "slots": 3,
-  "belt": 4,
+  "shooters": 7,
+  "columns": 4,
+  "slots": 2,
+  "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 1,
-  "solutionMoves": 6
+  "randomWin": 0.9,
+  "solutionMoves": 8
  },
  {
   "id": 15,
@@ -229,15 +229,15 @@
   "boss": false,
   "name": "grapes",
   "size": "8x8",
-  "pixels": 29,
-  "shooters": 7,
-  "columns": 3,
-  "slots": 3,
-  "belt": 4,
+  "pixels": 41,
+  "shooters": 8,
+  "columns": 4,
+  "slots": 2,
+  "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 1,
-  "solutionMoves": 8
+  "randomWin": 0.915,
+  "solutionMoves": 9
  },
  {
   "id": 16,
@@ -246,30 +246,30 @@
   "name": "strawberry",
   "size": "8x8",
   "pixels": 46,
-  "shooters": 5,
-  "columns": 3,
-  "slots": 3,
-  "belt": 4,
+  "shooters": 8,
+  "columns": 4,
+  "slots": 2,
+  "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 1,
-  "solutionMoves": 8
+  "randomWin": 0.92,
+  "solutionMoves": 9
  },
  {
   "id": 17,
   "stage": 2,
   "boss": false,
   "name": "pear",
-  "size": "8x8",
-  "pixels": 32,
-  "shooters": 7,
-  "columns": 3,
-  "slots": 3,
-  "belt": 4,
+  "size": "9x9",
+  "pixels": 51,
+  "shooters": 8,
+  "columns": 4,
+  "slots": 2,
+  "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 1,
-  "solutionMoves": 10
+  "randomWin": 0.87,
+  "solutionMoves": 9
  },
  {
   "id": 18,
@@ -277,31 +277,31 @@
   "boss": false,
   "name": "watermelon",
   "size": "10x9",
-  "pixels": 54,
-  "shooters": 6,
+  "pixels": 82,
+  "shooters": 8,
   "columns": 3,
-  "slots": 3,
-  "belt": 4,
+  "slots": 2,
+  "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 1,
-  "solutionMoves": 8
+  "randomWin": 0.905,
+  "solutionMoves": 11
  },
  {
   "id": 19,
   "stage": 2,
   "boss": false,
   "name": "pineapple",
-  "size": "8x10",
-  "pixels": 52,
-  "shooters": 8,
-  "columns": 3,
-  "slots": 3,
-  "belt": 4,
+  "size": "10x10",
+  "pixels": 70,
+  "shooters": 10,
+  "columns": 4,
+  "slots": 2,
+  "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 1,
-  "solutionMoves": 10
+  "randomWin": 0.835,
+  "solutionMoves": 11
  },
  {
   "id": 20,
@@ -311,13 +311,13 @@
   "size": "10x10",
   "pixels": 81,
   "shooters": 16,
-  "columns": 3,
-  "slots": 3,
-  "belt": 4,
+  "columns": 4,
+  "slots": 2,
+  "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 0.985,
-  "solutionMoves": 19
+  "randomWin": 0.74,
+  "solutionMoves": 18
  },
  {
   "id": 21,
@@ -342,14 +342,14 @@
   "name": "frog",
   "size": "10x9",
   "pixels": 74,
-  "shooters": 11,
-  "columns": 3,
-  "slots": 3,
+  "shooters": 9,
+  "columns": 4,
+  "slots": 2,
   "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 1,
-  "solutionMoves": 13
+  "randomWin": 0.915,
+  "solutionMoves": 11
  },
  {
   "id": 23,
@@ -358,14 +358,14 @@
   "name": "bee",
   "size": "10x7",
   "pixels": 49,
-  "shooters": 7,
+  "shooters": 6,
   "columns": 3,
   "slots": 2,
   "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 1,
-  "solutionMoves": 7
+  "randomWin": 0.92,
+  "solutionMoves": 11
  },
  {
   "id": 24,
@@ -374,14 +374,14 @@
   "name": "snail",
   "size": "10x9",
   "pixels": 61,
-  "shooters": 7,
-  "columns": 3,
+  "shooters": 8,
+  "columns": 4,
   "slots": 2,
   "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 1,
-  "solutionMoves": 8
+  "randomWin": 0.85,
+  "solutionMoves": 10
  },
  {
   "id": 25,
@@ -396,8 +396,8 @@
   "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 0.955,
-  "solutionMoves": 8
+  "randomWin": 0.905,
+  "solutionMoves": 10
  },
  {
   "id": 26,
@@ -438,14 +438,14 @@
   "name": "dog",
   "size": "10x9",
   "pixels": 62,
-  "shooters": 7,
-  "columns": 3,
+  "shooters": 10,
+  "columns": 4,
   "slots": 2,
   "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 1,
-  "solutionMoves": 9
+  "randomWin": 0.91,
+  "solutionMoves": 12
  },
  {
   "id": 29,
@@ -460,8 +460,8 @@
   "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 0.905,
-  "solutionMoves": 20
+  "randomWin": 0.77,
+  "solutionMoves": 23
  },
  {
   "id": 30,
@@ -476,8 +476,8 @@
   "belt": 2,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 0.775,
-  "solutionMoves": 9
+  "randomWin": 0.735,
+  "solutionMoves": 10
  },
  {
   "id": 31,
@@ -501,15 +501,15 @@
   "boss": false,
   "name": "leaf",
   "size": "8x7",
-  "pixels": 27,
-  "shooters": 7,
-  "columns": 3,
+  "pixels": 56,
+  "shooters": 10,
+  "columns": 4,
   "slots": 3,
   "belt": 3,
   "ice": 2,
   "hidden": 0,
-  "randomWin": 1,
-  "solutionMoves": 8
+  "randomWin": 0.865,
+  "solutionMoves": 13
  },
  {
   "id": 33,
@@ -517,14 +517,14 @@
   "boss": false,
   "name": "carrot",
   "size": "10x10",
-  "pixels": 27,
+  "pixels": 50,
   "shooters": 6,
   "columns": 3,
-  "slots": 3,
+  "slots": 2,
   "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 1,
+  "randomWin": 0.85,
   "solutionMoves": 6
  },
  {
@@ -599,12 +599,12 @@
   "size": "10x10",
   "pixels": 100,
   "shooters": 7,
-  "columns": 3,
+  "columns": 4,
   "slots": 2,
-  "belt": 3,
+  "belt": 2,
   "ice": 5,
   "hidden": 0,
-  "randomWin": 0.99,
+  "randomWin": 0.895,
   "solutionMoves": 9
  },
  {
@@ -614,14 +614,14 @@
   "name": "cactus",
   "size": "10x11",
   "pixels": 63,
-  "shooters": 18,
-  "columns": 3,
+  "shooters": 10,
+  "columns": 4,
   "slots": 2,
   "belt": 3,
   "ice": 0,
   "hidden": 0,
-  "randomWin": 0.98,
-  "solutionMoves": 18
+  "randomWin": 0.78,
+  "solutionMoves": 13
  },
  {
   "id": 40,
@@ -661,15 +661,15 @@
   "boss": false,
   "name": "crab",
   "size": "10x8",
-  "pixels": 54,
-  "shooters": 7,
-  "columns": 3,
-  "slots": 3,
+  "pixels": 80,
+  "shooters": 6,
+  "columns": 4,
+  "slots": 2,
   "belt": 3,
   "ice": 3,
   "hidden": 0,
-  "randomWin": 1,
-  "solutionMoves": 7
+  "randomWin": 0.82,
+  "solutionMoves": 8
  },
  {
   "id": 43,
@@ -678,14 +678,14 @@
   "name": "shell",
   "size": "10x8",
   "pixels": 60,
-  "shooters": 10,
+  "shooters": 8,
   "columns": 3,
   "slots": 2,
   "belt": 3,
   "ice": 3,
   "hidden": 0,
-  "randomWin": 0.96,
-  "solutionMoves": 16
+  "randomWin": 0.86,
+  "solutionMoves": 10
  },
  {
   "id": 44,
@@ -700,8 +700,8 @@
   "belt": 3,
   "ice": 4,
   "hidden": 0,
-  "randomWin": 0.85,
-  "solutionMoves": 13
+  "randomWin": 0.79,
+  "solutionMoves": 15
  },
  {
   "id": 45,
@@ -742,14 +742,14 @@
   "name": "boat",
   "size": "10x10",
   "pixels": 54,
-  "shooters": 7,
-  "columns": 4,
+  "shooters": 6,
+  "columns": 3,
   "slots": 2,
   "belt": 2,
   "ice": 5,
   "hidden": 0,
-  "randomWin": 0.965,
-  "solutionMoves": 9
+  "randomWin": 0.785,
+  "solutionMoves": 11
  },
  {
   "id": 48,
@@ -774,14 +774,14 @@
   "name": "whale",
   "size": "12x8",
   "pixels": 96,
-  "shooters": 14,
+  "shooters": 8,
   "columns": 4,
   "slots": 2,
   "belt": 2,
   "ice": 5,
   "hidden": 0,
-  "randomWin": 0.99,
-  "solutionMoves": 15
+  "randomWin": 0.705,
+  "solutionMoves": 10
  },
  {
   "id": 50,
@@ -789,15 +789,15 @@
   "boss": true,
   "name": "lighthouse",
   "size": "12x12",
-  "pixels": 72,
-  "shooters": 7,
+  "pixels": 104,
+  "shooters": 10,
   "columns": 4,
   "slots": 2,
   "belt": 2,
   "ice": 6,
   "hidden": 0,
-  "randomWin": 0.905,
-  "solutionMoves": 10
+  "randomWin": 0.585,
+  "solutionMoves": 14
  },
  {
   "id": 51,
@@ -821,15 +821,15 @@
   "boss": false,
   "name": "streetlamp",
   "size": "12x12",
-  "pixels": 48,
-  "shooters": 6,
-  "columns": 4,
-  "slots": 3,
+  "pixels": 104,
+  "shooters": 15,
+  "columns": 3,
+  "slots": 2,
   "belt": 3,
   "ice": 0,
   "hidden": 2,
-  "randomWin": 1,
-  "solutionMoves": 6
+  "randomWin": 0.86,
+  "solutionMoves": 17
  },
  {
   "id": 53,
@@ -886,13 +886,13 @@
   "name": "bridge",
   "size": "12x10",
   "pixels": 74,
-  "shooters": 8,
+  "shooters": 7,
   "columns": 4,
-  "slots": 3,
+  "slots": 2,
   "belt": 2,
   "ice": 0,
   "hidden": 3,
-  "randomWin": 1,
+  "randomWin": 0.83,
   "solutionMoves": 9
  },
  {
@@ -902,14 +902,14 @@
   "name": "fountain",
   "size": "12x10",
   "pixels": 54,
-  "shooters": 7,
+  "shooters": 6,
   "columns": 4,
-  "slots": 3,
+  "slots": 2,
   "belt": 2,
   "ice": 0,
   "hidden": 4,
-  "randomWin": 1,
-  "solutionMoves": 7
+  "randomWin": 0.745,
+  "solutionMoves": 10
  },
  {
   "id": 58,
@@ -982,14 +982,14 @@
   "name": "candy",
   "size": "12x7",
   "pixels": 64,
-  "shooters": 8,
-  "columns": 4,
-  "slots": 3,
+  "shooters": 7,
+  "columns": 3,
+  "slots": 2,
   "belt": 3,
   "ice": 2,
   "hidden": 2,
-  "randomWin": 1,
-  "solutionMoves": 10
+  "randomWin": 0.88,
+  "solutionMoves": 9
  },
  {
   "id": 63,
@@ -1062,14 +1062,14 @@
   "name": "pizza",
   "size": "12x10",
   "pixels": 61,
-  "shooters": 8,
+  "shooters": 7,
   "columns": 4,
-  "slots": 3,
+  "slots": 2,
   "belt": 2,
   "ice": 4,
   "hidden": 3,
-  "randomWin": 1,
-  "solutionMoves": 9
+  "randomWin": 0.75,
+  "solutionMoves": 11
  },
  {
   "id": 68,
@@ -1142,14 +1142,14 @@
   "name": "bus",
   "size": "12x8",
   "pixels": 80,
-  "shooters": 8,
+  "shooters": 9,
   "columns": 4,
-  "slots": 3,
+  "slots": 2,
   "belt": 2,
   "ice": 2,
   "hidden": 0,
-  "randomWin": 1,
-  "solutionMoves": 9
+  "randomWin": 0.825,
+  "solutionMoves": 10
  },
  {
   "id": 73,
@@ -1158,14 +1158,14 @@
   "name": "truck",
   "size": "12x8",
   "pixels": 71,
-  "shooters": 8,
+  "shooters": 7,
   "columns": 4,
-  "slots": 3,
+  "slots": 2,
   "belt": 2,
   "ice": 2,
   "hidden": 1,
-  "randomWin": 1,
-  "solutionMoves": 9
+  "randomWin": 0.685,
+  "solutionMoves": 11
  },
  {
   "id": 74,
@@ -1190,14 +1190,14 @@
   "name": "train",
   "size": "12x8",
   "pixels": 77,
-  "shooters": 8,
-  "columns": 4,
+  "shooters": 11,
+  "columns": 3,
   "slots": 2,
   "belt": 2,
   "ice": 3,
   "hidden": 2,
-  "randomWin": 1,
-  "solutionMoves": 10
+  "randomWin": 0.735,
+  "solutionMoves": 15
  },
  {
   "id": 76,
@@ -1221,31 +1221,31 @@
   "boss": false,
   "name": "helicopter",
   "size": "12x9",
-  "pixels": 53,
-  "shooters": 6,
+  "pixels": 65,
+  "shooters": 9,
   "columns": 4,
-  "slots": 3,
+  "slots": 2,
   "belt": 2,
   "ice": 3,
   "hidden": 3,
-  "randomWin": 1,
-  "solutionMoves": 7
+  "randomWin": 0.68,
+  "solutionMoves": 12
  },
  {
   "id": 78,
   "stage": 8,
   "boss": false,
   "name": "scooter",
-  "size": "12x8",
-  "pixels": 30,
-  "shooters": 7,
+  "size": "12x9",
+  "pixels": 108,
+  "shooters": 8,
   "columns": 4,
   "slots": 2,
   "belt": 2,
   "ice": 4,
   "hidden": 3,
-  "randomWin": 1,
-  "solutionMoves": 9
+  "randomWin": 0.715,
+  "solutionMoves": 12
  },
  {
   "id": 79,
@@ -1254,14 +1254,14 @@
   "name": "submarine",
   "size": "12x8",
   "pixels": 96,
-  "shooters": 7,
-  "columns": 4,
+  "shooters": 12,
+  "columns": 3,
   "slots": 2,
   "belt": 2,
   "ice": 4,
   "hidden": 3,
-  "randomWin": 0.77,
-  "solutionMoves": 9
+  "randomWin": 0.61,
+  "solutionMoves": 14
  },
  {
   "id": 80,
@@ -1302,14 +1302,14 @@
   "name": "moon",
   "size": "12x10",
   "pixels": 120,
-  "shooters": 10,
+  "shooters": 11,
   "columns": 4,
-  "slots": 3,
+  "slots": 2,
   "belt": 2,
   "ice": 3,
   "hidden": 2,
-  "randomWin": 1,
-  "solutionMoves": 12
+  "randomWin": 0.855,
+  "solutionMoves": 17
  },
  {
   "id": 83,
@@ -1333,15 +1333,15 @@
   "boss": false,
   "name": "rocket",
   "size": "12x11",
-  "pixels": 45,
-  "shooters": 6,
+  "pixels": 132,
+  "shooters": 11,
   "columns": 4,
   "slots": 3,
   "belt": 2,
   "ice": 4,
   "hidden": 3,
-  "randomWin": 1,
-  "solutionMoves": 7
+  "randomWin": 0.63,
+  "solutionMoves": 17
  },
  {
   "id": 85,
@@ -1388,8 +1388,8 @@
   "belt": 2,
   "ice": 4,
   "hidden": 3,
-  "randomWin": 0.655,
-  "solutionMoves": 16
+  "randomWin": 0.63,
+  "solutionMoves": 14
  },
  {
   "id": 88,
@@ -1420,8 +1420,8 @@
   "belt": 2,
   "ice": 5,
   "hidden": 4,
-  "randomWin": 0.645,
-  "solutionMoves": 18
+  "randomWin": 0.52,
+  "solutionMoves": 19
  },
  {
   "id": 90,
@@ -1464,11 +1464,11 @@
   "pixels": 54,
   "shooters": 7,
   "columns": 4,
-  "slots": 3,
+  "slots": 2,
   "belt": 2,
   "ice": 4,
   "hidden": 3,
-  "randomWin": 1,
+  "randomWin": 0.765,
   "solutionMoves": 10
  },
  {
@@ -1516,8 +1516,8 @@
   "belt": 2,
   "ice": 5,
   "hidden": 4,
-  "randomWin": 0.995,
-  "solutionMoves": 9
+  "randomWin": 0.84,
+  "solutionMoves": 10
  },
  {
   "id": 96,

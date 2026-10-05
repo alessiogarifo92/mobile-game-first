@@ -19,7 +19,7 @@ const stage: StageSpec = {
       'YYYYYYYYYYYY',
       'OOOOOOOOOOOO',
     ] },
-    { name: 'potion', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.61, 1], seed: 10037, image: [
+    { name: 'potion', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.76, 0.84], seed: 10037, image: [
       '.....OO.....',
       '.....OO.....',
       '....BBBB....',
@@ -54,7 +54,7 @@ const stage: StageSpec = {
       '..BBBBBBBBB.',
       'PPPPPPPPPPPP',
     ] },
-    { name: 'mushroomhouse', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { ice: 5, hidden: 4 }, winRate: [0.82, 1], seed: 10148, image: [
+    { name: 'mushroomhouse', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { ice: 5, hidden: 4 }, winRate: [0.76, 0.86], seed: 10148, image: [
       '....RRRRR...',
       '..RRYRRRYRR.',
       '.RRRRRRRRRRR',

@@ -3,7 +3,7 @@ import type { StageSpec } from './types';
 /**
  * Stage 4 — Giardino e fiori (ticket #33).
  * Introduce il ghiaccio: da 2 pixel ghiacciati fino a 6 nel boss.
- * Nastro 3 (2 nel boss), slot 2 dal quarto livello (#75).
+ * Nastro 3 (2 nell'annaffiatoio e nel boss), slot 2 dal terzo livello (#75, #89).
  * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places ice/hidden pixels.
  */
 const stage: StageSpec = {
@@ -22,28 +22,28 @@ const stage: StageSpec = {
       '....G.....',
       'GGGGGGGGGG',
     ] },
-    { name: 'leaf', columns: 3, ammoChunk: 7, slots: 3, beltCapacity: 3, special: { ice: 2 }, winRate: [0.83, 1], seed: 4037, image: [
-      '.....GG.',
-      '...GGGG.',
-      '..GGYGG.',
-      '.GGYGGG.',
-      '.GYGGG..',
-      '.YGGG...',
-      'Y.......',
+    { name: 'leaf', columns: 4, ammoChunk: 8, slots: 3, beltCapacity: 3, special: { ice: 2 }, winRate: [0.83, 0.9], seed: 4037, image: [
+      'RRRRRGGR',
+      'RRRGGGGR',
+      'RRGGYGGR',
+      'RGGYGGGR',
+      'RGYGGGRR',
+      'RYGGGRRR',
+      'YRRRRRRR',
     ] },
-    { name: 'carrot', columns: 3, ammoChunk: 10, slots: 3, beltCapacity: 3, winRate: [0.77, 1], seed: 4074, image: [
+    { name: 'carrot', columns: 3, ammoChunk: 16, slots: 2, beltCapacity: 3, winRate: [0.83, 0.9], seed: 4074, image: [
       '....G.G...',
       '.....G....',
-      '....OOO...',
-      '....OOO...',
-      '...OOOO...',
-      '...OOO....',
-      '..OOOO....',
-      '..OOO.....',
-      '.OOO......',
-      '.O........',
+      'B...OOO..B',
+      'B...OOO..B',
+      'B..OOOO..B',
+      'B..OOO...B',
+      'B.OOOO...B',
+      'B.OOO....B',
+      'BOOO.....B',
+      'BOBBBBBBBB',
     ] },
-    { name: 'ladybug', columns: 3, ammoChunk: 15, slots: 2, beltCapacity: 3, special: { ice: 3 }, winRate: [0.75, 0.95], seed: 4111, image: [
+    { name: 'ladybug', columns: 3, ammoChunk: 15, slots: 2, beltCapacity: 3, special: { ice: 3 }, winRate: [0.75, 0.88], seed: 4111, image: [
       'GGGBBBBGGG',
       'GGBBBBBBGG',
       'GRRRBBRRRG',
@@ -87,7 +87,7 @@ const stage: StageSpec = {
       '....G...',
       '...GGG..',
     ] },
-    { name: 'wateringcan', columns: 3, ammoChunk: 15, slots: 2, beltCapacity: 3, special: { ice: 5 }, winRate: [0.96, 1], seed: 4259, image: [
+    { name: 'wateringcan', columns: 4, ammoChunk: 15, slots: 2, beltCapacity: 2, special: { ice: 5 }, winRate: [0.84, 0.91], seed: 4259, image: [
       'YYYYYYYBYY',
       'YYYYYYBYBY',
       'BBBBBBYBYY',
@@ -99,7 +99,7 @@ const stage: StageSpec = {
       'BBBBBBBBYY',
       'YBBBBBBYYY',
     ] },
-    { name: 'cactus', columns: 3, ammoChunk: 7, slots: 2, beltCapacity: 3, winRate: [0.69, 1], seed: 4296, image: [
+    { name: 'cactus', columns: 4, ammoChunk: 12, slots: 2, beltCapacity: 3, winRate: [0.72, 0.79], seed: 4296, image: [
       '....GG....',
       '...GGGG...',
       '...GGGG.GG',

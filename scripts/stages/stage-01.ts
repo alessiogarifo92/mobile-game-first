@@ -3,6 +3,7 @@ import type { StageSpec } from './types';
 /**
  * Stage 1 — Atelier (primi colori) (ticket #30).
  * Primari, poi un secondario alla volta (arancione al 4, verde al 5, viola al 7). Livello 1 guidato.
+ * Livelli 1–8 tutorial; 9–10 con 2 slot, primo ordine da scegliere (#89).
  * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places ice/hidden pixels.
  */
 const stage: StageSpec = {
@@ -85,7 +86,7 @@ const stage: StageSpec = {
       'BBBBBBBB',
       'PPPPPPPP',
     ] },
-    { name: 'crayons', columns: 2, ammoChunk: 10, slots: 3, beltCapacity: 5, winRate: [0.4, 1], seed: 1296, image: [
+    { name: 'crayons', columns: 2, ammoChunk: 10, slots: 2, beltCapacity: 5, winRate: [0.85, 0.93], seed: 1296, image: [
       'R.O.Y.G.',
       'RROOYYGG',
       'RROOYYGG',
@@ -95,7 +96,7 @@ const stage: StageSpec = {
       'BBBBBBBB',
       'BBBBBBBB',
     ] },
-    { name: 'palette', columns: 3, ammoChunk: 10, slots: 3, beltCapacity: 5, winRate: [0.3, 1], seed: 1333, image: [
+    { name: 'palette', columns: 3, ammoChunk: 10, slots: 2, beltCapacity: 5, winRate: [0.74, 0.84], seed: 1333, image: [
       '..OOOOOO..',
       '.OOOOOOOO.',
       'OORROOYYOO',
