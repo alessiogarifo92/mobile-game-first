@@ -1,6 +1,6 @@
 # 500 livelli in 5 universi — dati e decisioni
 
-Data: 5 ottobre 2026 · Epic: #87 · Milestone: "500 livelli: 5 universi" · Prototipo delle misure: [`2026-10-05-prototipo-meccaniche.patch`](2026-10-05-prototipo-meccaniche.patch) (si applica sul ramo di #75, commit `8b63079`; `STAGES=8,9,10 SEEDS=3 npx tsx scripts/exp-mechanics.ts`).
+Data: 5 ottobre 2026 · Epic: #87 · Milestone: "500 livelli: 5 universi" · Prototipo delle misure: [`2026-10-05-prototipo-meccaniche.patch`](https://github.com/alessiogarifo92/mobile-game-first/blob/5c461341603e699ba4aa1fd7ecc6e0b736c5b23e/docs/reports/2026-10-05-prototipo-meccaniche.patch) (non su main: codice di prova, fermo al commit `5c46134`; si applica sul ramo di #75, commit `8b63079`; `STAGES=8,9,10 SEEDS=3 npx tsx scripts/exp-mechanics.ts`).
 
 Richiesta: arrivare ad almeno 500 livelli, in universi da 100; difficoltà molto bassa solo nei primi livelli, poi in salita; nuovi modi per aumentare la difficoltà e tenere alta l'attenzione; un universo si sblocca e si può scegliere solo dopo l'ultimo livello del precedente. Le scelte sotto sono prese sui dati (misure nel codice + ricerca), non a gusto.
 
