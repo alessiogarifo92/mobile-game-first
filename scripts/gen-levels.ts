@@ -1,21 +1,23 @@
 /**
  * Generates src/levels/levels.json from the stage files (scripts/stages). Only levels whose spec hash
  * changed are regenerated; each one is kept only if the solver proves it solvable inside its difficulty band.
+ * Also writes src/levels/stages.json: name key, colour and completeness of each stage, for the map and the album.
  *   npm run gen:levels            regenerate what changed
- *   npm run gen:levels -- --check exit 1 if levels.json is out of date (used by CI)
+ *   npm run gen:levels -- --check exit 1 if levels.json or stages.json is out of date (used by CI)
  *   npm run gen:levels -- --force regenerate everything
  */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { checkCurve, curveLevel } from '../src/core/curve';
 import { generateLevel } from '../src/core/generator';
-import { LEVEL_NAME_KEYS } from '../src/core/i18n';
+import { LEVEL_NAME_KEYS, STAGE_NAME_KEYS } from '../src/core/i18n';
 import { parseLevel, type LevelDef } from '../src/core/level';
 import { levelWinRate } from '../src/core/solver';
-import { assignIds, specHash, validateStages } from '../src/core/stages';
+import { assignIds, specHash, stageInfos, validateStages } from '../src/core/stages';
 import { STAGE_SPECS } from './stages';
 import { KNOWN_CURVE_ERRORS } from './stages/curve-known';
 
 const out = new URL('../src/levels/levels.json', import.meta.url);
+const stagesOut = new URL('../src/levels/stages.json', import.meta.url);
 /** Bump when the tuning policy below changes, so cached levels are regenerated. */
 const POLICY_VERSION = 2;
 /** Curve notes never change the generated level, so they stay out of the hash. */
@@ -28,8 +30,10 @@ const hashOf = (spec: { curve?: unknown }) => specHash({ ...withoutCurve(spec), 
 const check = process.argv.includes('--check');
 const force = process.argv.includes('--force');
 
-validateStages(STAGE_SPECS, LEVEL_NAME_KEYS);
+validateStages(STAGE_SPECS, LEVEL_NAME_KEYS, STAGE_NAME_KEYS);
 const specs = assignIds(STAGE_SPECS);
+const stagesText = JSON.stringify(stageInfos(STAGE_SPECS), null, 1) + '\n';
+const stagesStale = !existsSync(stagesOut) || readFileSync(stagesOut, 'utf8') !== stagesText;
 const existing: LevelDef[] = existsSync(out) ? JSON.parse(readFileSync(out, 'utf8')) : [];
 const byId = new Map(existing.map((l) => [l.id, l]));
 
@@ -39,7 +43,11 @@ if (check) {
     console.error(`levels.json is out of date (${stale.length} levels changed, ${existing.length} stored vs ${specs.length} specs). Run npm run gen:levels.`);
     process.exit(1);
   }
-  console.log(`levels.json up to date (${specs.length} levels)`);
+  if (stagesStale) {
+    console.error('stages.json is out of date. Run npm run gen:levels.');
+    process.exit(1);
+  }
+  console.log(`levels.json and stages.json up to date (${specs.length} levels, ${STAGE_SPECS.length} stages)`);
   process.exit(0);
 }
 
@@ -97,7 +105,8 @@ if (failures.length > 0) {
   process.exit(1);
 }
 writeFileSync(out, JSON.stringify(levels, null, 1) + '\n');
-console.log(`wrote ${levels.length} levels (${stale.length} regenerated)`);
+writeFileSync(stagesOut, stagesText);
+console.log(`wrote ${levels.length} levels (${stale.length} regenerated) in ${STAGE_SPECS.length} stages`);
 
 // Curve rules (#88) over the whole game: a new error fails the run (levels.json is kept, so a fix to the specs
 // regenerates only what changed); known errors (#89) and warnings are listed.

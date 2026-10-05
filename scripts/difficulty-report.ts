@@ -38,12 +38,17 @@ writeFileSync(`${dir}curva-difficolta.json`, JSON.stringify(rows, null, 1) + '\n
 // Two small multiples sharing the level axis (never a dual axis): win rate, then decisions (shooters).
 const W = 1100, H = 260, PAD = { l: 56, r: 16, t: 34, b: 30 };
 const x = (id: number) => PAD.l + ((id - 0.5) / rows.length) * (W - PAD.l - PAD.r);
+/** First and last level id of each stage, from the data. */
+const stageSpans = [...new Set(rows.map((r) => r.stage))].map((s) => {
+  const ids = rows.filter((r) => r.stage === s).map((r) => r.id);
+  return { stage: s, first: Math.min(...ids), last: Math.max(...ids) };
+});
 function panel(title: string, value: (r: (typeof rows)[number]) => number, max: number, ticks: number[], fmt: (v: number) => string) {
   const y = (v: number) => PAD.t + (1 - v / max) * (H - PAD.t - PAD.b);
-  const bands = Array.from({ length: 10 }, (_, s) =>
-    s % 2 ? `<rect x="${x(s * 10 + 0.5)}" y="${PAD.t}" width="${x(s * 10 + 10.5) - x(s * 10 + 0.5)}" height="${H - PAD.t - PAD.b}" fill="var(--band)"/>` : '').join('');
+  const bands = stageSpans.map((s, i) =>
+    i % 2 ? `<rect x="${x(s.first - 0.5)}" y="${PAD.t}" width="${x(s.last + 0.5) - x(s.first - 0.5)}" height="${H - PAD.t - PAD.b}" fill="var(--band)"/>` : '').join('');
   const grid = ticks.map((t) => `<line x1="${PAD.l}" x2="${W - PAD.r}" y1="${y(t)}" y2="${y(t)}" stroke="var(--grid)"/><text x="${PAD.l - 8}" y="${y(t) + 4}" text-anchor="end" class="axis">${fmt(t)}</text>`).join('');
-  const stageLabels = Array.from({ length: 10 }, (_, s) => `<text x="${(x(s * 10 + 1) + x(s * 10 + 10)) / 2}" y="${H - 10}" text-anchor="middle" class="axis">S${s + 1}</text>`).join('');
+  const stageLabels = stageSpans.map((s) => `<text x="${(x(s.first) + x(s.last)) / 2}" y="${H - 10}" text-anchor="middle" class="axis">S${s.stage}</text>`).join('');
   const line = rows.map((r, i) => `${i ? 'L' : 'M'}${x(r.id).toFixed(1)},${y(value(r)).toFixed(1)}`).join('');
   const dots = rows.map((r) => r.boss
     ? `<rect x="${x(r.id) - 5}" y="${y(value(r)) - 5}" width="10" height="10" transform="rotate(45 ${x(r.id)} ${y(value(r))})" fill="var(--series)" stroke="var(--surface)" stroke-width="2"/>`
@@ -56,7 +61,7 @@ const html = `<style>
     --surface:#fcfcfb;--ink:#0b0b0b;--muted:#52514e;--grid:#e4e3df;--band:#f2f1ed;--series:#2a78d6}
   .title{font-weight:600;fill:var(--ink);font-size:15px}.axis{fill:var(--muted);font-size:12px}
   p{color:var(--muted);margin:4px 0 12px}</style>
-  <p>Ogni punto è un livello (1–100), fasce alterne = stage; rombo = boss.</p>
+  <p>Ogni punto è un livello (1–${rows.length}), fasce alterne = stage; rombo = boss.</p>
   ${panel('Vittorie di un giocatore casuale (più basso = più difficile)', (r) => r.randomWin, 1, [0, 0.25, 0.5, 0.75, 1], (v) => `${Math.round(v * 100)}%`)}
   ${panel('Secchielli per livello (decisioni)', (r) => r.shooters, 30, [0, 10, 20, 30], String)}`;
 const browser = await chromium.launch();
@@ -65,7 +70,7 @@ await page.setContent(html);
 await page.screenshot({ path: `${dir}curva-difficolta.png`, fullPage: true });
 await browser.close();
 
-for (let s = 1; s <= 10; s++) {
+for (const { stage: s } of stageSpans) {
   const st = rows.filter((r) => r.stage === s);
   const avg = (f: (r: (typeof rows)[number]) => number) => (st.reduce((a, r) => a + f(r), 0) / st.length).toFixed(2);
   const span = (f: (r: (typeof rows)[number]) => number) => {

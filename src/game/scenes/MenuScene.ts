@@ -4,10 +4,10 @@ import { VIEW } from '../../core/layout';
 import {
   MAP, clampScroll, computeMapLayout, currentLevel, inertia, keyScrollDelta, mapTapTarget, scrollToLevel, type MapLayout,
 } from '../../core/mapLayout';
-import { stageInfo } from '../../core/stages';
+import { moreLevelsComing, stageInfo } from '../../core/stages';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
-import { LEVELS, getProgress, levelTitle, resetTips, setLanguage, setSound, stageTitle, t } from '../store';
+import { LEVELS, STAGES, getProgress, levelTitle, resetTips, setLanguage, setSound, stageTitle, t } from '../store';
 import { PAINT, THEME } from '../theme';
 import { button, label } from '../ui';
 
@@ -62,7 +62,7 @@ export class MenuScene extends Phaser.Scene {
     this.drawPath();
     this.drawHeaders(progress.completed);
     this.drawNodes(progress.completed, progress.unlocked, current);
-    if (LEVELS.length % 10 !== 0 || LEVELS.length < 100) {
+    if (moreLevelsComing(STAGES)) {
       const top = this.layout.nodes.at(-1);
       if (top) label(this, VIEW.width / 2, top.y - 90, t('map.comingSoon'), THEME.type.sm, THEME.subCss, false);
     }
@@ -91,7 +91,7 @@ export class MenuScene extends Phaser.Scene {
   private drawHeaders(completed: readonly number[]): void {
     const g = this.add.graphics();
     for (const h of this.layout.headers) {
-      const info = stageInfo(h.stage);
+      const info = stageInfo(STAGES, h.stage);
       const done = LEVELS.filter((l) => l.stage === h.stage && completed.includes(l.id)).length;
       g.fillStyle(PAINT[info?.color ?? 1]!, 1);
       g.fillRoundedRect(80, h.y - 34, VIEW.width - 160, 68, 34);
@@ -296,6 +296,7 @@ export class MenuScene extends Phaser.Scene {
       scene: 'menu',
       nodes: this.layout.nodes.map((n) => ({ id: n.id, x: n.x, y: n.y, unlocked: n.id <= getProgress().unlocked, boss: !!n.boss })),
       headers: this.layout.headers,
+      comingSoon: moreLevelsComing(STAGES),
       scrollY: this.scroll,
       viewHeight: this.viewHeight,
       barHeight: MAP.barHeight,

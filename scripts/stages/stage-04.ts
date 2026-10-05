@@ -7,7 +7,7 @@ import type { StageSpec } from './types';
  * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places ice/hidden pixels.
  */
 const stage: StageSpec = {
-  stage: 4,
+  stage: 4, key: 'garden', color: 'G',
   complete: true,
   levels: [
     { name: 'tulip', columns: 3, ammoChunk: 10, slots: 3, beltCapacity: 3, special: { ice: 2 }, winRate: [0.86, 1], seed: 4000, image: [

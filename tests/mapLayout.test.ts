@@ -35,6 +35,17 @@ describe('map layout', () => {
     });
   });
 
+  it('lays out any number of stages, a short last stage and a total that is not a multiple of ten', () => {
+    const more = Array.from({ length: 115 }, (_, i) => ({ id: i + 1, stage: Math.floor(i / 10) + 1, boss: (i + 1) % 10 === 0 }));
+    const big = computeMapLayout(more, 720, VIEW_H);
+    expect(big.headers.map((h) => h.count)).toEqual([...Array(11).fill(10), 5]);
+    expect(big.nodes.at(-1)!.y).toBeGreaterThanOrEqual(MAP.barHeight);
+    expect(big.height).toBeGreaterThan(layout.height);
+    const one = computeMapLayout(levels.slice(0, 5), 720, VIEW_H);
+    expect(one.headers).toEqual([{ stage: 1, y: expect.any(Number), count: 5 }]);
+    expect(currentLevel(101, levels.map((l) => l.id), 115)).toBe(101);
+  });
+
   it('draws bosses bigger', () => {
     expect(layout.nodes[9]!.r).toBe(MAP.bossRadius);
     expect(layout.nodes[8]!.r).toBe(MAP.radius);

@@ -1,56 +1,73 @@
-import { BLUE, GREEN, ORANGE, PURPLE, RED, YELLOW } from './colors';
+import { COLOR_CODES } from './colors';
 
+/** Levels in a full stage; the last one is its boss. How many stages there are comes from the stage files. */
 export const LEVELS_PER_STAGE = 10;
 
+/** A stage as the game sees it: written to src/levels/stages.json by gen:levels from the stage files. */
 export interface StageInfo {
   id: number;
   /** Stable key: the translated name is `stage.<key>`. */
   key: string;
   /** Paint colour used for the stage header on the map. */
   color: number;
+  /** False while the stage is still being built: the map says more levels are coming. */
+  complete: boolean;
 }
 
-/** The ten themed stages of the 100-level plan (epic #22). */
-export const STAGES: readonly StageInfo[] = [
-  { id: 1, key: 'atelier', color: RED },
-  { id: 2, key: 'fruit', color: ORANGE },
-  { id: 3, key: 'animals', color: YELLOW },
-  { id: 4, key: 'garden', color: GREEN },
-  { id: 5, key: 'sea', color: BLUE },
-  { id: 6, key: 'city', color: PURPLE },
-  { id: 7, key: 'food', color: RED },
-  { id: 8, key: 'vehicles', color: ORANGE },
-  { id: 9, key: 'space', color: BLUE },
-  { id: 10, key: 'fantasy', color: PURPLE },
-];
+export function stageInfo(stages: readonly StageInfo[], id: number): StageInfo | undefined {
+  return stages.find((s) => s.id === id);
+}
 
-export function stageInfo(id: number): StageInfo | undefined {
-  return STAGES.find((s) => s.id === id);
+/** The last stage is still being built: the map tells the player more levels are on the way. */
+export function moreLevelsComing(stages: readonly StageInfo[]): boolean {
+  return stages.length > 0 && !stages.at(-1)!.complete;
 }
 
 export interface StageContent<L extends { name: string }> {
   stage: number;
+  /** Stable key: the translated name is `stage.<key>`. */
+  key: string;
+  /** Colour code of the stage header (`R Y B O G P`, as in level images). */
+  color: string;
   /** A complete stage must hold exactly LEVELS_PER_STAGE levels; an incomplete one is still being built. */
   complete?: boolean;
   levels: L[];
 }
 
+/** What the game needs to know about each stage (everything but the levels, which go to levels.json). */
+export function stageInfos(stages: readonly StageContent<{ name: string }>[]): StageInfo[] {
+  return stages.map((s) => ({ id: s.stage, key: s.key, color: COLOR_CODES[s.color]!, complete: !!s.complete }));
+}
+
 export class StageError extends Error {}
 
 /**
- * Checks the stage files before generation: stages numbered 1..n with no gaps, at most ten levels
- * each, exactly ten when marked complete, and every level name a known, unique translation key.
+ * Checks the stage files before generation: stages numbered 1..n with no gaps, each with a known, unique name
+ * key and a colour, never empty, at most LEVELS_PER_STAGE levels, exactly that many when marked complete, and
+ * every level name a known, unique translation key. Only the last stage may be incomplete: level ids are
+ * sequential, so growing an earlier stage would renumber every later level and the saves that point at them.
  */
-export function validateStages<L extends { name: string }>(stages: StageContent<L>[], knownNames: ReadonlySet<string>): void {
+export function validateStages<L extends { name: string }>(
+  stages: StageContent<L>[],
+  knownNames: ReadonlySet<string>,
+  knownStageKeys: ReadonlySet<string>,
+): void {
   const seen = new Set<string>();
+  const keys = new Set<string>();
   stages.forEach((s, i) => {
     if (s.stage !== i + 1) throw new StageError(`stage files must be numbered 1..n: found ${s.stage} at position ${i + 1}`);
-    if (!stageInfo(s.stage)) throw new StageError(`stage ${s.stage} is not in STAGES`);
+    if (!knownStageKeys.has(s.key)) throw new StageError(`stage ${s.stage} key "${s.key}" has no translation key stage.${s.key}`);
+    if (keys.has(s.key)) throw new StageError(`stage key "${s.key}" is used twice`);
+    keys.add(s.key);
+    if (!(s.color in COLOR_CODES)) throw new StageError(`stage ${s.stage} colour "${s.color}" is not one of ${Object.keys(COLOR_CODES).join(' ')}`);
+    if (s.levels.length === 0) throw new StageError(`stage ${s.stage} is empty`);
     if (s.levels.length > LEVELS_PER_STAGE) throw new StageError(`stage ${s.stage} has ${s.levels.length} levels, max ${LEVELS_PER_STAGE}`);
     if (s.complete && s.levels.length !== LEVELS_PER_STAGE) {
       throw new StageError(`stage ${s.stage} is marked complete but has ${s.levels.length} levels`);
     }
-    if (i < stages.length - 1 && s.levels.length === 0) throw new StageError(`stage ${s.stage} is empty`);
+    if (i < stages.length - 1 && !s.complete) {
+      throw new StageError(`stage ${s.stage} is not complete: only the last stage may still be in progress`);
+    }
     for (const l of s.levels) {
       if (!knownNames.has(l.name)) throw new StageError(`level name "${l.name}" has no translation key level.${l.name}`);
       if (seen.has(l.name)) throw new StageError(`level name "${l.name}" is used twice`);
@@ -59,8 +76,8 @@ export function validateStages<L extends { name: string }>(stages: StageContent<
   });
 }
 
-/** Flattens stages into levels with sequential ids; the 10th level of a stage is its boss. */
-export function assignIds<L extends { name: string }>(stages: StageContent<L>[]): (L & { id: number; stage: number; boss: boolean })[] {
+/** Flattens stages into levels with sequential ids; the last level of a full stage is its boss. */
+export function assignIds<L extends { name: string }>(stages: Pick<StageContent<L>, 'stage' | 'levels'>[]): (L & { id: number; stage: number; boss: boolean })[] {
   let id = 0;
   return stages.flatMap((s) => s.levels.map((l, i) => ({ ...l, id: ++id, stage: s.stage, boss: i === LEVELS_PER_STAGE - 1 })));
 }

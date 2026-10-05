@@ -1,5 +1,14 @@
 # Changelog
 
+## Non rilasciato — contenuti scalabili: niente più limiti fissi di 10 stage / 100 livelli (#74)
+
+- **Uno stage nuovo è un file nuovo**: `scripts/stages/index.ts` trova da solo i `stage-NN.ts`; chiave del nome e colore della fascia stanno nel file dello stage, non più in una tabella di 10 voci in `src/core/stages.ts`.
+- `npm run gen:levels` scrive anche `src/levels/stages.json` (chiave, colore, completo o no), letto da mappa e album; `--check` verifica anche questo file. I livelli **non cambiano** (`levels.json` identico).
+- "Altri livelli in arrivo" compare quando l'ultimo stage non è completo, non più con un conto su 100. L'album sfoglia tutti gli stage che esistono; uno stage senza skin non mostra il premio, e completarlo non promette uno stile nuovo.
+- Solo l'ultimo stage può essere incompleto: così gli id dei livelli non cambiano mai e i **salvataggi restano validi** dopo un aggiornamento; chi aveva finito il gioco trova aperto il primo livello nuovo.
+- Test: 1, 10, 11 e 12 stage, stage da 5 livelli, totali non multipli di 10, salvataggio di 100 livelli su un gioco da 110; e2e su una build con 115 livelli (`--mode more-levels`): salvataggio finito che apre il primo livello nuovo, stage 11 completato, album dello stage in costruzione. Gli e2e che usavano il livello 100 usano l'ultimo livello.
+- Regola "come si aggiunge uno stage" in `docs/strategia-progetto.md`.
+
 ## Non rilasciato — regole automatiche della curva di difficoltà (#88)
 
 - **Curva controllata da regole**, non a occhio: `src/core/curve.ts` (puro, soglie in una sola tabella) verifica che "molto facile" (≥ 95% a caso) resti nei livelli 1–8, nei primi livelli di stage dell'universo 1 e ai debutti di una meccanica; il dente di sega dentro lo stage (respiro, base, gradini, livello duro, boss il più duro salvo eccezioni dichiarate); la fine di ogni universo più dura dell'inizio; l'inizio di un universo tra la fine e l'inizio del precedente; gli obiettivi provvisori di fine universo; nastro 1 o slot 1 solo sui boss dall'universo 3, mai insieme. Pochi colori secondari e livelli duri troppo lunghi sono avvisi.

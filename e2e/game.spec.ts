@@ -1,36 +1,11 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import levels from '../src/levels/levels.json' with { type: 'json' };
 import type { LevelDef } from '../src/core/level';
 import type { Move } from '../src/core/solver';
 
-import { SEEN_ALL, dismissTip, jamSequence, mix, play, shots, tap, waitScene, waitSim, type Rect } from './helpers';
+import { SEEN_ALL, dismissTip, jamSequence, mix, openLevel, play, shots, tap, waitScene, waitSim, type Rect } from './helpers';
 
 /** On the map, drags until the level's node is in the visible area below the title bar, then taps it. */
-async function openLevel(page: Page, id: number) {
-  const box = (await page.locator('canvas').boundingBox())!;
-  const k = box.width / 720;
-  for (let i = 0; i < 60; i++) {
-    const node = (await mix<{ id: number; x: number; y: number }[]>(page, 'nodes')).find((n) => n.id === id)!;
-    const [scroll, viewH, bar] = await Promise.all([mix<number>(page, 'scrollY'), mix<number>(page, 'viewHeight'), mix<number>(page, 'barHeight')]);
-    const screenY = node.y - scroll;
-    if (screenY >= bar + 40 && screenY <= viewH - 40) {
-      await tap(page, node.x, node.y);
-      await waitScene(page, 'play');
-      return;
-    }
-    // Drag by up to 500 logical px towards the node (a real swipe, slow enough to avoid a flick).
-    const delta = Math.max(-700, Math.min(700, (bar + viewH) / 2 - screenY));
-    const x = box.x + 40 * k, y0 = box.y + ((bar + viewH) / 2) * k;
-    await page.mouse.move(x, y0);
-    await page.mouse.down();
-    for (let s = 1; s <= 10; s++) await page.mouse.move(x, y0 + (delta * k * s) / 10);
-    await page.waitForTimeout(120);
-    await page.mouse.up();
-    await page.waitForTimeout(300);
-  }
-  throw new Error(`could not scroll to level ${id}`);
-}
-
 test('first launch: English, guided level 1 played to a win, level 2 unlocked', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -168,7 +143,7 @@ test('the language is chosen in Settings and remembered; How to play pages throu
 });
 
 test('the map is split into stages and scrolls to far levels', async ({ page }) => {
-  test.setTimeout(300_000); // 100 levels of map to scroll with real drags
+  test.setTimeout(300_000); // the whole map to scroll with real drags
   await page.addInitScript((p) => localStorage.setItem('mix-and-splash/progress/v1', p), SEEN_ALL);
   await page.goto('/');
   await waitScene(page, 'menu');
