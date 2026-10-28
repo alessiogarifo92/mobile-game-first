@@ -1,5 +1,6 @@
 import { isSkin, unlockedSkins, type Skin } from './album';
 import { DEFAULT_LANGUAGE, isLanguage, type Language } from './i18n';
+import { lastLevelOf, openUniverse, universeOf } from './universes';
 
 export interface KeyValueStorage {
   getItem(key: string): string | null;
@@ -35,10 +36,18 @@ export function sanitize(raw: unknown, levels?: readonly LevelRef[]): Progress {
   const inRange = (n: unknown): n is number => Number.isInteger(n) && (n as number) >= 1 && (n as number) <= count;
   // Without the level list only the shape is checked; a hard cap still stops an oversized array.
   const ids = Array.isArray(r.completed) ? r.completed.slice(0, 10_000) : [];
-  const completed = [...new Set(ids.filter(inRange))].sort((a, b) => a - b);
+  let completed = [...new Set(ids.filter(inRange))].sort((a, b) => a - b);
+  // Universe n+1 opens only with the last level of universe n (#90): a hand-edited save keeps nothing beyond the
+  // open universes, so it cannot skip one.
+  let cap = count;
+  if (levels) {
+    const open = openUniverse(levels, completed);
+    completed = completed.filter((id) => universeOf(levels, id)! <= open);
+    cap = Math.min(count, lastLevelOf(levels, open) ?? 1);
+  }
   // Whatever is completed must be reachable: unlocked is at least the next level after the highest completed one.
   const claimed = Number.isInteger(r.unlocked) && (r.unlocked as number) >= 1 ? (r.unlocked as number) : 1;
-  const unlocked = Math.min(count, Math.max(claimed, (completed.at(-1) ?? 0) + 1));
+  const unlocked = Math.min(cap, Math.max(claimed, (completed.at(-1) ?? 0) + 1));
   const sound = typeof r.sound === 'boolean' ? r.sound : base.sound;
   // Saves from before v0.2 have no language or tips: they get English and the onboarding.
   const language = isLanguage(r.language) ? r.language : base.language;

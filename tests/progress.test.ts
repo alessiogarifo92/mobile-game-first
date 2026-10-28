@@ -119,6 +119,34 @@ describe('progress', () => {
     });
   });
 
+  describe('universes (#90)', () => {
+    const levelsOf = (n: number) => Array.from({ length: n }, (_, i) => ({ id: i + 1, stage: Math.floor(i / 10) + 1 }));
+    const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
+    const load = (o: object, n: number) => loadProgress(memory(JSON.stringify(o)), levelsOf(n));
+
+    it('the 100 levels of today, after the update to 200, open universe 2 at level 101', () => {
+      expect(load({ unlocked: 100, completed: range(1, 100) }, 200)).toMatchObject({ unlocked: 101, completed: range(1, 100) });
+    });
+
+    it('a hand-edited unlock cannot reach a closed universe', () => {
+      expect(load({ unlocked: 150, completed: range(1, 99) }, 200)).toMatchObject({ unlocked: 100, completed: range(1, 99) });
+      expect(load({ unlocked: 1e9, completed: [] }, 300).unlocked).toBe(100);
+    });
+
+    it('levels completed in a closed universe are dropped, so they cannot open the next one', () => {
+      // Level 200 without level 100: universe 2 is closed, so 150 and 200 go, and universe 3 stays closed.
+      expect(load({ unlocked: 201, completed: [...range(1, 99), 150, 200] }, 300)).toMatchObject({ unlocked: 100, completed: range(1, 99) });
+      // Universe 2 open, universe 3 not (no level 200): its levels go, unlock stops at 200.
+      const p = load({ unlocked: 250, completed: [...range(1, 150), 201, 205] }, 300);
+      expect(p.completed).toEqual(range(1, 150));
+      expect(p.unlocked).toBe(200);
+    });
+
+    it('a finished universe 2 opens universe 3, even if it is still being built', () => {
+      expect(load({ unlocked: 200, completed: range(1, 200) }, 205)).toMatchObject({ unlocked: 201 });
+    });
+  });
+
   it('reset erases levels, tips and skin but keeps language and sound', () => {
     const played = { ...defaultProgress(), unlocked: 40, completed: [1, 2, 3], seenTips: ['guide'], skin: 'dots' as const, language: 'it' as const, sound: false };
     expect(resetProgress(played)).toEqual({ ...defaultProgress(), language: 'it', sound: false });

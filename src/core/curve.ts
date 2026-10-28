@@ -1,13 +1,14 @@
 import { isPrimary } from './colors';
 import type { Level } from './level';
 import { LEVELS_PER_STAGE } from './stages';
+import { STAGES_PER_UNIVERSE, universeOfStage } from './universes';
 
 /**
  * Difficulty curve rules for any number of universes (epic #87, ticket #88). Every threshold lives in
  * CURVE so the rules can be retuned in one place; `winRate` is always levelWinRate (higher = easier).
  */
 export const CURVE = {
-  stagesPerUniverse: 10,
+  stagesPerUniverse: STAGES_PER_UNIVERSE,
   /** A level at or above this random win rate is "very easy". */
   veryEasy: 0.95,
   /** The first levels of the game may all be very easy. */
@@ -68,8 +69,6 @@ export interface CurveViolation {
   message: string;
 }
 
-export const universeOf = (stage: number): number => Math.ceil(stage / CURVE.stagesPerUniverse);
-
 /** Builds the curve view of a parsed level from its measured random win rate. */
 export function curveLevel(level: Level, winRate: number, easyBoss?: boolean): CurveLevel {
   const pixels = level.targets.filter((t) => t !== 0);
@@ -116,13 +115,13 @@ export function checkCurve(levels: readonly CurveLevel[]): CurveViolation[] {
     const debut = l.features.filter((f) => !seen.has(f));
     l.features.forEach((f) => seen.add(f));
     const first = byStage.get(l.stage)![0] === l;
-    if (l.winRate >= CURVE.veryEasy && l.id > CURVE.introLevels && !(first && universeOf(l.stage) === 1) && debut.length === 0) {
+    if (l.winRate >= CURVE.veryEasy && l.id > CURVE.introLevels && !(first && universeOfStage(l.stage) === 1) && debut.length === 0) {
       add(1, 'error', `#${l.id}`, `level ${l.id} is very easy (${pct(l.winRate)}) but is not an intro, first-of-stage or debut level`);
     }
   }
 
   for (const [stage, ls] of byStage) {
-    const u = universeOf(stage);
+    const u = universeOfStage(stage);
     // Rule 8: belt 1 or slots 1 only on a boss from universe 3, never both.
     for (const l of ls) {
       const lowBelt = l.beltCapacity < CURVE.minBelt;
@@ -168,7 +167,7 @@ export function checkCurve(levels: readonly CurveLevel[]): CurveViolation[] {
   const firstOf = (u: number) => (u - 1) * CURVE.stagesPerUniverse + 1;
   const lastOf = (u: number) => u * CURVE.stagesPerUniverse;
   const universeComplete = (u: number) => Array.from({ length: CURVE.stagesPerUniverse }, (_, i) => firstOf(u) + i).every(complete);
-  for (let u = 1; u <= universeOf(lastStage); u++) {
+  for (let u = 1; u <= universeOfStage(lastStage); u++) {
     const groupMean = (from: number, to: number) => mean(levels.filter((l) => l.stage >= from && l.stage <= to).map((l) => l.winRate));
     if (universeComplete(u)) {
       // Rule 3: the end of a universe is harder than its start (groups of two stages, as in #75).
@@ -182,7 +181,7 @@ export function checkCurve(levels: readonly CurveLevel[]): CurveViolation[] {
         if (Math.abs(endMean - target.endMean) > CURVE.endMeanTolerance) {
           add(5, 'error', `u${u}`, `universe ${u}: last stage mean ${pct(endMean)}, target ${pct(target.endMean)} ± ${pct(CURVE.endMeanTolerance)}`);
         }
-        const hardest = Math.min(...levels.filter((l) => l.boss && universeOf(l.stage) === u).map((l) => l.winRate));
+        const hardest = Math.min(...levels.filter((l) => l.boss && universeOfStage(l.stage) === u).map((l) => l.winRate));
         if (hardest < target.hardestBoss - CURVE.tolerance) {
           add(5, 'error', `u${u}`, `universe ${u}: hardest boss ${pct(hardest)} is below the floor ${pct(target.hardestBoss)}`);
         }

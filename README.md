@@ -49,7 +49,7 @@ Ogni colore ha anche un simbolo (● rosso, ▲ giallo, ■ blu), così il gioco
 ## Installare e provare
 
 ### APK Android
-- **Dalla Release (consigliato)**: GitHub → **Releases** → l'ultima pre-release (es. `v0.3.0-rc.1`) → scarica `mix-and-splash-…-debug.apk` direttamente dal telefono e aprilo.
+- **Dalla Release (consigliato)**: GitHub → **Releases** → l'ultima release (es. `v0.4.0`) → scarica `mix-and-splash-…-debug.apk` direttamente dal telefono e aprilo.
 - **Da ogni push**: GitHub → **Actions** → *Android APK* → **Artifacts** → `mix-and-splash-debug-apk` (uno zip con `app-debug.apk`).
 
 Android chiederà di consentire l'installazione da "origini sconosciute" per l'app usata (Files o Chrome): consentila solo per questa installazione.
@@ -107,6 +107,7 @@ src/
     solver.ts        prova di risolvibilità (DFS) + win-rate di un giocatore casuale
     generator.ts     code di secchielli, piazzamento ghiaccio/nascosti, scarto dei livelli non provati
     stages.ts        stage letti dai dati, validazione, id/boss, hash delle specifiche
+    universes.ts     universi da 10 stage, sblocco a fine universo, tela massima
     mapLayout.ts     geometria della mappa scorrevole
     album.ts         avanzamento per stage e stili sbloccati
     onboarding.ts    tutorial guidato e suggerimenti una tantum

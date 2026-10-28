@@ -81,6 +81,8 @@ const en = {
   'stage.vehicles': 'Vehicles',
   'stage.space': 'Space',
   'stage.fantasy': 'Fantasy',
+  'universe.atelier': 'Atelier',
+  'universe.locked': 'Complete level {n} to open',
   'map.stage': 'Stage {n}',
   'map.progress': '{done}/{total}',
   'map.comingSoon': 'More levels coming soon',
@@ -278,6 +280,8 @@ const it: Record<MessageKey, string> = {
   'stage.vehicles': 'Veicoli',
   'stage.space': 'Spazio',
   'stage.fantasy': 'Fantasia',
+  'universe.atelier': 'Atelier',
+  'universe.locked': 'Completa il livello {n} per aprire',
   'map.stage': 'Mondo {n}',
   'map.progress': '{done}/{total}',
   'map.comingSoon': 'Altri livelli in arrivo',
@@ -420,6 +424,10 @@ export function stageName(language: string, key: string): string {
   return translate(language, `stage.${key}`);
 }
 
+export function universeName(language: string, key: string): string {
+  return translate(language, `universe.${key}`);
+}
+
 /** Level name keys that have a translation, for validating stage files. */
 export const LEVEL_NAME_KEYS: ReadonlySet<string> = new Set(
   Object.keys(en).filter((k) => k.startsWith('level.') && k !== 'level.title' && k !== 'level.waiting').map((k) => k.slice(6)),
@@ -427,3 +435,8 @@ export const LEVEL_NAME_KEYS: ReadonlySet<string> = new Set(
 
 /** Stage name keys that have a translation, for validating stage files. */
 export const STAGE_NAME_KEYS: ReadonlySet<string> = new Set(Object.keys(en).filter((k) => k.startsWith('stage.')).map((k) => k.slice(6)));
+
+/** Universe name keys that have a translation (`universe.locked` is a message, not a name). */
+export const UNIVERSE_NAME_KEYS: ReadonlySet<string> = new Set(
+  Object.keys(en).filter((k) => k.startsWith('universe.') && k !== 'universe.locked').map((k) => k.slice(9)),
+);

@@ -4,6 +4,7 @@ import { primariesOf } from '../../core/colors';
 import { cellDone } from '../../core/rules';
 import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, slotAt, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
+import { currentLevel } from '../../core/mapLayout';
 import {
   beltFull, beltLoad, continueWithExtraSlot, createGame, launchFromColumn, launchFromSlot, step, type GameState, type HitEvent, type Shooter,
 } from '../../core/sim';
@@ -13,7 +14,7 @@ import {
 import { solve } from '../../core/solver';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
-import { LEVELS, getProgress, levelHint, levelTitle, markCompleted, markTip, setSound, t, tipSeen } from '../store';
+import { LEVELS, canOpen, getProgress, levelHint, levelTitle, markCompleted, markTip, setSound, t, tipSeen } from '../store';
 import { BLUE, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
 import { PAINT, SYMBOL, THEME, css } from '../theme';
 import { drawSkin } from '../skins';
@@ -68,7 +69,11 @@ export class PlayScene extends Phaser.Scene {
   }
 
   init(data: { levelId?: number }): void {
-    this.level = LEVELS[(data.levelId ?? 1) - 1] ?? LEVELS[0]!;
+    // A level the core refuses (locked, or in a closed universe) opens the player's current level instead.
+    const requested = data.levelId ?? 1;
+    const { unlocked, completed } = getProgress();
+    const id = canOpen(requested) ? requested : currentLevel(unlocked, completed, LEVELS.length);
+    this.level = LEVELS[id - 1] ?? LEVELS[0]!;
     this.layout = computeLayout(this.level.width, this.level.height, this.level.slots, this.level.columns.length, this.scale.height);
     this.gs = createGame(this.level, { boardGap: Math.ceil((BELT_JAR + 4) / this.layout.cell) });
     this.acc = 0;
