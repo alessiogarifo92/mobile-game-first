@@ -9,7 +9,8 @@ import { chromium } from '@playwright/test';
 import levelsJson from '../src/levels/levels.json' with { type: 'json' };
 import { parseLevel, type LevelDef } from '../src/core/level';
 import { levelWinRate, solve } from '../src/core/solver';
-import { CURVE, checkCurve, curveLevel, universeOf } from '../src/core/curve';
+import { CURVE, checkCurve, curveLevel } from '../src/core/curve';
+import { universeOfStage } from '../src/core/universes';
 import { assignIds } from '../src/core/stages';
 import { STAGE_SPECS } from './stages';
 
@@ -83,10 +84,10 @@ for (const { stage: s } of stageSpans) {
 // Curve per universe (#88): mean of each stage against the universe targets, then every rule violation.
 const specs = assignIds(STAGE_SPECS);
 const curve = (levelsJson as LevelDef[]).map((def, i) => curveLevel(parseLevel(def), rows[i]!.randomWin, !!specs[i]!.curve?.easyBoss));
-for (let u = 1; u <= universeOf(Math.max(...rows.map((r) => r.stage))); u++) {
-  const stages = [...new Set(rows.filter((r) => universeOf(r.stage) === u).map((r) => r.stage))];
+for (let u = 1; u <= universeOfStage(Math.max(...rows.map((r) => r.stage))); u++) {
+  const stages = [...new Set(rows.filter((r) => universeOfStage(r.stage) === u).map((r) => r.stage))];
   const means = stages.map((s) => { const st = rows.filter((r) => r.stage === s); return st.reduce((a, r) => a + r.randomWin, 0) / st.length; });
-  const bosses = rows.filter((r) => r.boss && universeOf(r.stage) === u).map((r) => r.randomWin);
+  const bosses = rows.filter((r) => r.boss && universeOfStage(r.stage) === u).map((r) => r.randomWin);
   const target = CURVE.universes[u - 1];
   console.log(`\nuniverse ${u}: stage means ${means.map((m) => m.toFixed(2)).join(' ')} · hardest boss ${Math.min(...bosses).toFixed(2)}` +
     (target ? ` · targets: last stage ${target.endMean}, hardest boss ≥ ${target.hardestBoss}` : ''));

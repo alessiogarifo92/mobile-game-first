@@ -5,6 +5,7 @@ import {
   completeLevel, loadProgress, markTipSeen, resetProgress as resetProgressData, saveProgress, type KeyValueStorage, type Progress,
 } from '../core/progress';
 import type { StageInfo } from '../core/stages';
+import { canOpenLevel } from '../core/universes';
 import levelsJson from '../levels/levels.json';
 import stagesJson from '../levels/stages.json';
 
@@ -36,7 +37,13 @@ export function getProgress(): Progress {
   return progress;
 }
 
+/** Whether the player may play this level now: the core's rule (unlocked, and in an open universe). */
+export function canOpen(levelId: number): boolean {
+  return canOpenLevel(LEVELS, progress, levelId);
+}
+
 export function markCompleted(levelId: number): void {
+  if (!canOpen(levelId)) return;
   update(completeLevel(progress, levelId, LEVELS.length));
 }
 

@@ -34,8 +34,8 @@ export async function waitScene(page: Page, scene: string) {
   await page.waitForFunction((s) => (window as unknown as { __mix?: { scene: string } }).__mix?.scene === s, scene);
 }
 
-/** Scrolls the map with real drags until the level's node is on screen, then opens it. */
-export async function openLevel(page: Page, id: number) {
+/** Scrolls the map with real drags until the level's node is on screen, then taps it (it may be locked). */
+export async function tapLevel(page: Page, id: number) {
   const box = (await page.locator('canvas').boundingBox())!;
   const k = box.width / 720;
   for (let i = 0; i < 60; i++) {
@@ -44,7 +44,6 @@ export async function openLevel(page: Page, id: number) {
     const screenY = node.y - scroll;
     if (screenY >= bar + 40 && screenY <= viewH - 40) {
       await tap(page, node.x, node.y);
-      await waitScene(page, 'play');
       return;
     }
     // Drag by up to 500 logical px towards the node (a real swipe, slow enough to avoid a flick).
@@ -58,6 +57,12 @@ export async function openLevel(page: Page, id: number) {
     await page.waitForTimeout(300);
   }
   throw new Error(`could not scroll to level ${id}`);
+}
+
+/** Scrolls the map to an unlocked level and opens it. */
+export async function openLevel(page: Page, id: number) {
+  await tapLevel(page, id);
+  await waitScene(page, 'play');
 }
 
 
