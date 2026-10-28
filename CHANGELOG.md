@@ -1,5 +1,13 @@
 # Changelog
 
+## Non rilasciato — universo 1: "molto facile" solo nei primi livelli (#89)
+
+- **Livelli molto facili da 55 a 17** (≥ 95% di vittorie per il giocatore casuale): restano solo l'introduzione (1–8) e il primo livello di ogni stage. Le regole della curva (#88) passano senza errori: `scripts/stages/curve-known.ts` è vuoto.
+- **Curva per stage** (media vittorie casuali): 97, 89, 88, 85, 79, 76, 74, 68, 64, 65%. Stage 1: 9–10 con 2 slot. Stage 2: nastro 3 e slot 2 dopo il respiro. Il faro (boss 50) ora è il più duro del suo stage e lo stage 8 è più duro del 7.
+- **29 figure ridisegnate** (cornice di un altro colore o più colori secondari), stessi soggetti e nomi: frutti dello stage 2, ape, lumaca, cane, foglia, carota, granchio, barca, faro, lampione, ponte, fontana, caramella, pizza, autobus, camion, treno, elicottero, scooter, sottomarino, luna, razzo.
+- 45 livelli cambiano, 55 identici; **id, nomi e numero dei livelli invariati, i progressi restano validi**.
+- Test: al massimo 17 livelli molto facili, solo intro e primi di stage; nessuna fascia oltre l'introduzione che arrivi al 95%. Report prima/dopo: `docs/reports/2026-10-05-curva-universo-1.md`.
+
 ## Non rilasciato — contenuti scalabili: niente più limiti fissi di 10 stage / 100 livelli (#74)
 
 - **Uno stage nuovo è un file nuovo**: `scripts/stages/index.ts` trova da solo i `stage-NN.ts`; chiave del nome e colore della fascia stanno nel file dello stage, non più in una tabella di 10 voci in `src/core/stages.ts`.

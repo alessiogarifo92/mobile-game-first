@@ -6,7 +6,7 @@ import { parseLevel, type LevelDef } from '../src/core/level';
 import { createGame, launchFromColumn, launchFromSlot, step } from '../src/core/sim';
 import { levelWinRate, solve } from '../src/core/solver';
 import { LEVELS_PER_STAGE, assignIds, stageInfos } from '../src/core/stages';
-import { checkCurve, curveLevel } from '../src/core/curve';
+import { CURVE, checkCurve, curveLevel, universeOf } from '../src/core/curve';
 import { STAGE_SPECS } from '../scripts/stages';
 import { KNOWN_CURVE_ERRORS } from '../scripts/stages/curve-known';
 
@@ -70,6 +70,18 @@ describe('shipped levels', () => {
     // Known errors are only rules 1–2 inside universe 1: the universe targets (rules 3–5) and the extremes (rule 8) already hold.
     expect(errors.filter((k) => !/^r[12] /.test(k))).toEqual([]);
   }, 60_000);
+
+  it('universe 1 is very easy only in the intro and on the first level of each stage (#89)', () => {
+    const veryEasy = defs.filter((_, i) => winRates()[i]! >= CURVE.veryEasy).map((d) => d.id);
+    const allowed = (id: number) => id <= CURVE.introLevels || id % 10 === 1;
+    expect(veryEasy.filter((id) => !allowed(id))).toEqual([]);
+    expect(veryEasy.filter((id) => universeOf(Math.ceil(id / 10)) === 1).length).toBeLessThanOrEqual(17);
+  }, 60_000);
+
+  it('keeps every band past the intro below "very easy", so a regeneration cannot bring one back (#89)', () => {
+    const open = specs.filter((s) => s.id > CURVE.introLevels && s.id % 10 !== 1 && (!s.winRate || s.winRate[1] >= CURVE.veryEasy));
+    expect(open.map((s) => `#${s.id} ${s.name}`)).toEqual([]);
+  });
 
   it('never gives a bigger belt back: the largest belt of a stage never grows from one stage to the next', () => {
     const maxBelt = stages.map((s) => Math.max(...defs.filter((d) => d.stage === s.id).map((d) => d.beltCapacity)));

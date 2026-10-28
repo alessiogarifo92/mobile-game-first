@@ -3,7 +3,7 @@ import type { StageSpec } from './types';
 /**
  * Stage 5 — Mare (ticket #34).
  * Ghiaccio con slot ridotti.
- * Nastro 3 nei primi cinque livelli, poi 2 (#75). Il faro (boss) resta facile per il giocatore casuale: vedi report.
+ * Nastro 3 nei primi cinque livelli, poi 2 (#75). Il faro (boss), ridisegnato di notte con il cielo viola, è il più duro dello stage (#89).
  * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places ice/hidden pixels.
  */
 const stage: StageSpec = {
@@ -22,17 +22,17 @@ const stage: StageSpec = {
       'GGBBBBBGGB',
       'GGGGGGGGGG',
     ] },
-    { name: 'crab', columns: 3, ammoChunk: 10, slots: 3, beltCapacity: 3, special: { ice: 3 }, winRate: [0.79, 1], seed: 5037, image: [
-      'R.R....R.R',
-      'RRR....RRR',
-      '.R.YRRY.R.',
-      '..RRRRRR..',
-      '.RRRRRRRR.',
+    { name: 'crab', columns: 4, ammoChunk: 16, slots: 2, beltCapacity: 3, special: { ice: 3 }, winRate: [0.8, 0.87], seed: 5037, image: [
+      'RBRBBBBRBR',
+      'RRRBBBBRRR',
+      'BRBYRRYBRB',
+      'BBRRRRRRBB',
+      'BRRRRRRRRB',
       'RRRRRRRRRR',
-      '.RRRRRRRR.',
-      'R.R.RR.R.R',
+      'BRRRRRRRRB',
+      'RBRBRRBRBR',
     ] },
-    { name: 'shell', columns: 3, ammoChunk: 10, slots: 2, beltCapacity: 3, special: { ice: 3 }, winRate: [0.73, 1], seed: 5074, image: [
+    { name: 'shell', columns: 3, ammoChunk: 12, slots: 2, beltCapacity: 3, special: { ice: 3 }, winRate: [0.8, 0.87], seed: 5074, image: [
       '...OOOO...',
       '..OYOYOO..',
       '.OYOYOYOO.',
@@ -42,7 +42,7 @@ const stage: StageSpec = {
       '.OOOOOOOO.',
       '...OOOO...',
     ] },
-    { name: 'starfish', columns: 3, ammoChunk: 15, slots: 3, beltCapacity: 3, special: { ice: 4 }, winRate: [0.71, 0.91], seed: 5111, image: [
+    { name: 'starfish', columns: 3, ammoChunk: 15, slots: 3, beltCapacity: 3, special: { ice: 4 }, winRate: [0.74, 0.83], seed: 5111, image: [
       'BBBBOOBBBB',
       'BBBBOOBBBB',
       'BBBOOOOBBB',
@@ -75,17 +75,17 @@ const stage: StageSpec = {
       '.B.B..B.B.',
       'B...B...B.',
     ] },
-    { name: 'boat', columns: 4, ammoChunk: 10, slots: 2, beltCapacity: 2, special: { ice: 5 }, winRate: [0.95, 1], seed: 5222, image: [
+    { name: 'boat', columns: 3, ammoChunk: 15, slots: 2, beltCapacity: 2, special: { ice: 5 }, winRate: [0.74, 0.83], seed: 5222, image: [
       '....R.....',
-      '....RY....',
-      '....RYY...',
-      '....RYYY..',
-      '....RYYYY.',
+      '....RO....',
+      '....ROO...',
+      '....RYYO..',
+      '....ROOOO.',
       '....R.....',
-      'OOOOOOOOOO',
-      '.OOOOOOOO.',
-      'BBBBBBBBBB',
-      'BBBBBBBBBB',
+      'PPPPPPPPPP',
+      '.PPPPPPPP.',
+      'GBGBGBGBGB',
+      'BGBGBGBGBG',
     ] },
     { name: 'turtle', columns: 4, ammoChunk: 15, slots: 2, beltCapacity: 2, special: { ice: 5 }, winRate: [0.62, 0.82], seed: 5259, image: [
       '...GGGG...',
@@ -96,7 +96,7 @@ const stage: StageSpec = {
       '.YY.YY..YY',
       '.YY.YY....',
     ] },
-    { name: 'whale', columns: 4, ammoChunk: 10, slots: 2, beltCapacity: 2, special: { ice: 5 }, winRate: [0.59, 1], seed: 5296, image: [
+    { name: 'whale', columns: 4, ammoChunk: 16, slots: 2, beltCapacity: 2, special: { ice: 5 }, winRate: [0.66, 0.75], seed: 5296, image: [
       'GGBGBGGGGGGG',
       'GGGBGGGGGGGG',
       'GGBBBBBBBGGG',
@@ -106,17 +106,17 @@ const stage: StageSpec = {
       'BYYYYYYYBBGG',
       'GYYYYYYBGGGG',
     ] },
-    { name: 'lighthouse', columns: 4, ammoChunk: 15, slots: 2, beltCapacity: 2, special: { ice: 6 }, winRate: [0.84, 0.92], seed: 5333, curve: { easyBoss: 'figura con pochi colori secondari: non si indurisce senza rifare il disegno (#75), da rivedere in #89' }, image: [
+    { name: 'lighthouse', columns: 4, ammoChunk: 16, slots: 2, beltCapacity: 2, special: { ice: 6 }, winRate: [0.56, 0.68], seed: 5333, image: [
       '.....RR.....',
-      '....YYYY....',
-      '...YYYYYY...',
-      '....RRRR....',
-      '....BBBB....',
-      '....RRRR....',
-      '....BBBB....',
-      '...RRRRRR...',
-      '...BBBBBB...',
-      '..RRRRRRRR..',
+      'YY..YYYY..YY',
+      '..YYYYYYYY..',
+      'P...RRRR...P',
+      'PP..OOOO..PP',
+      'PP..RRRR..PP',
+      'PP..OOOO..PP',
+      'PP.RRRRRR.PP',
+      'PP.OOOOOO.PP',
+      'PPRRRRRRRRPP',
       'GGGGGGGGGGGG',
       'BBBBBBBBBBBB',
     ] },
