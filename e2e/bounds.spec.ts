@@ -2,8 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import levels from '../src/levels/levels.json' with { type: 'json' };
 import type { LevelDef } from '../src/core/level';
 import type { Move } from '../src/core/solver';
-import type { DrawnBounds } from '../src/game/debug';
-import { LAST_LEVEL, SEEN_ALL, dismissTip, jamSequence, mix, play, shots, tap, waitScene, waitSim } from './helpers';
+import { LAST_LEVEL, SEEN_ALL, checkOnScreen as check, dismissTip, jamSequence, mix, play, shots, tap, waitScene, waitSim } from './helpers';
 
 /**
  * Nothing the game draws or lets you tap may be outside the screen, on any device. This walks every screen and
@@ -21,24 +20,6 @@ const BARS: [number, number][] = [[0, 0], [48, 34]];
 
 async function setBars(page: Page, top: number, bottom: number) {
   await page.addStyleTag({ content: `:root { --safe-area-inset-top: ${top}px; --safe-area-inset-bottom: ${bottom}px; }` });
-}
-
-async function check(page: Page, label: string, opts: { minDepth?: number } = {}) {
-  const [objects, screen, scrollY] = await Promise.all([
-    page.evaluate(() => window.__mixBounds!()),
-    page.evaluate(() => document.querySelector('canvas')!.height / (document.querySelector('canvas')!.width / 720)),
-    page.evaluate(() => window.__mix!.scrollY as number),
-  ]);
-  const h = Math.round(screen);
-  const bad: string[] = [];
-  for (const o of objects as DrawnBounds[]) {
-    if (o.depth < (opts.minDepth ?? 0)) continue;
-    if (o.w === 0 && o.h === 0) continue;
-    const top = scrollY;
-    const outside = o.x < -2 || o.x + o.w > 722 || o.y < top - 2 || o.y + o.h > top + h + 2;
-    if (outside) bad.push(`${o.type}${o.text ? ` "${o.text.slice(0, 24)}"` : ''} x=${Math.round(o.x)} y=${Math.round(o.y - top)} w=${Math.round(o.w)} h=${Math.round(o.h)} (screen 720x${h})`);
-  }
-  expect(bad, `${label}: drawn outside the screen`).toEqual([]);
 }
 
 /** Canvas inside the free area of the window. */
@@ -81,6 +62,16 @@ for (const [name, width, height] of SCREENS) {
         await page.waitForFunction(() => (window as unknown as { __mix: { scrollY: number } }).__mix.scrollY === 0);
         await check(page, 'map top', { minDepth: 5 });
         if (shots) await page.screenshot({ path: `${shots}/bounds/${name}${top ? '-bars' : ''}-map-top.png` });
+
+        // Universe selector from the title bar (one card today), then back to the map.
+        const universe = await mix<{ x: number; y: number }>(page, 'universeButton');
+        await tap(page, universe.x, universe.y);
+        await waitScene(page, 'universes');
+        await settle(page);
+        await check(page, 'universe selector');
+        if (shots) await page.screenshot({ path: `${shots}/bounds/${name}${top ? '-bars' : ''}-universes.png` });
+        await tap(page, 60, 64);
+        await waitScene(page, 'menu');
 
         await openSettings(page);
         await settle(page);

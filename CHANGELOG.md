@@ -1,5 +1,14 @@
 # Changelog
 
+## Non rilasciato — selettore degli universi, mappa per universo e festa di fine universo (#91)
+
+- **Selettore degli universi**: si apre dalla barra sotto il titolo della mappa. Una card per universo con nome, colore, avanzamento x/100 e il primo quadro come anteprima. Un universo chiuso resta visibile (lucchetto, sagoma del quadro, "Completa il livello N per aprire"); toccarlo lo scuote e spiega cosa manca, senza aprirlo.
+- **Mappa per universo**: solo i livelli dell'universo scelto (al massimo 100 nodi); si apre sull'universo del livello corrente. "Altri livelli in arrivo" solo sull'ultimo universo in costruzione.
+- **Barre di avanzamento**: universo x/100 nella barra del titolo della mappa e nel pannello di vittoria, con "+1" alla prima vittoria; stage x/10 nelle fasce come prima.
+- **Festa di fine universo**: vincendo l'ultimo livello di un universo, il pulsante porta alla festa: i quadri dell'universo si compongono in un mosaico, poi l'universo successivo si apre con "Vai all'universo N+1" (o "Un nuovo universo è in arrivo"). Una volta sola; si rivede dall'album dell'ultimo stage. Murale vero e skin nuova arrivano con #92.
+- La tabella degli universi passa in `scripts/universes.ts`; `npm run gen:levels` la scrive in `src/levels/universes.json` (verificata da `--check`). Livelli identici.
+- Test: unit sul selettore (card, layout, universo della mappa, universo appena completato); e2e a 360×640 e 412×915 su una build con 205 livelli (universo chiuso non selezionabile, festa una sola volta e rivista dall'album, mappa dell'universo 2 dal 101); il selettore è nel controllo "niente fuori schermo" su tutti i formati.
+
 ## Non rilasciato — universi da 100 livelli e sblocco a fine universo (#90)
 
 - **Universi nel core**: `src/core/universes.ts` (puro) con la tabella `UNIVERSES` (nome, colore del tema, tela massima) e le regole: un universo è una serie di 10 stage; l'universo N+1 si apre solo completando l'ultimo livello dell'universo N. Funzioni: `universeOf`, `universeLevels`, `lastLevelOf`, `isUniverseUnlocked`, `canOpenLevel`.

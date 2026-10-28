@@ -1,17 +1,19 @@
 import { unlockedSkins, type Skin } from '../core/album';
-import { DEFAULT_LANGUAGE, levelName, stageName, translate, type Language, type MessageKey, type Params } from '../core/i18n';
+import { DEFAULT_LANGUAGE, levelName, stageName, translate, universeName, type Language, type MessageKey, type Params } from '../core/i18n';
 import { parseLevel, type Level, type LevelDef } from '../core/level';
 import {
   completeLevel, loadProgress, markTipSeen, resetProgress as resetProgressData, saveProgress, type KeyValueStorage, type Progress,
 } from '../core/progress';
 import type { StageInfo } from '../core/stages';
-import { canOpenLevel } from '../core/universes';
+import { canOpenLevel, type UniverseInfo } from '../core/universes';
 import levelsJson from '../levels/levels.json';
 import stagesJson from '../levels/stages.json';
+import universesJson from '../levels/universes.json';
 
 /** Levels and stages come from the generated data (npm run gen:levels): nothing here assumes how many there are. */
 export const LEVELS: Level[] = (levelsJson as LevelDef[]).map(parseLevel);
 export const STAGES: readonly StageInfo[] = stagesJson as StageInfo[];
+export const UNIVERSES: readonly UniverseInfo[] = universesJson as UniverseInfo[];
 
 function storage(): KeyValueStorage | undefined {
   try {
@@ -99,6 +101,12 @@ export function levelTitle(id: number): string {
 
 export function stageTitle(key: string): string {
   return stageName(progress.language, key);
+}
+
+/** "Universe 2 · Nature": the universe's number and translated name. */
+export function universeTitle(id: number): string {
+  const u = UNIVERSES.find((x) => x.id === id);
+  return t('universes.card', { n: id, name: u ? universeName(progress.language, u.key) : '' });
 }
 
 /** Short subtitle hint for levels that introduce something; keys live in the dictionary as hint.<id>. */

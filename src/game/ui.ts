@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { VIEW } from '../core/layout';
-import { THEME } from './theme';
+import type { Level } from '../core/level';
+import { PAINT, THEME } from './theme';
 
 const MIN_TOUCH = 88;
 
@@ -62,4 +63,41 @@ export function label(
 export function screenBackground(scene: Phaser.Scene, color: number, alpha = 1): Phaser.GameObjects.Rectangle {
   scene.cameras.main.setScroll(0, 0);
   return scene.add.rectangle(0, 0, VIEW.width, scene.scale.height, color, alpha).setOrigin(0);
+}
+
+/** Progress bar: a belt-coloured track filled to `fraction` with `color` (the numbers go in a label beside it). */
+export function progressBar(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number, fraction: number, color: number): void {
+  g.fillStyle(THEME.belt, 1);
+  g.fillRoundedRect(x, y, w, h, h / 2);
+  const filled = Math.max(0, Math.min(1, fraction)) * w;
+  if (filled > 0) {
+    g.fillStyle(color, 1);
+    g.fillRoundedRect(x, y, Math.max(filled, h), h, h / 2);
+  }
+}
+
+/** Padlock centred on (x, y), `size` tall: a shape, so "closed" never rests on colour alone. */
+export function lockIcon(g: Phaser.GameObjects.Graphics, x: number, y: number, size: number, color: number = THEME.ink): void {
+  const w = size * 0.8;
+  const body = size * 0.55;
+  g.lineStyle(size * 0.12, color, 1);
+  g.beginPath();
+  g.arc(x, y - size / 2 + size * 0.32, w * 0.32, Math.PI, 0);
+  g.strokePath();
+  g.lineBetween(x - w * 0.32, y - size / 2 + size * 0.32, x - w * 0.32, y + size / 2 - body);
+  g.lineBetween(x + w * 0.32, y - size / 2 + size * 0.32, x + w * 0.32, y + size / 2 - body);
+  g.fillStyle(color, 1);
+  g.fillRoundedRect(x - w / 2, y + size / 2 - body, w, body, size * 0.1);
+}
+
+/** A level's picture fitted in a `size` square at (x, y): painted, or as a silhouette in the empty-pixel colour. */
+export function drawPicture(g: Phaser.GameObjects.Graphics, level: Level, x: number, y: number, size: number, painted: boolean): void {
+  const cell = size / Math.max(level.width, level.height);
+  const ox = x + (size - cell * level.width) / 2;
+  const oy = y + (size - cell * level.height) / 2;
+  level.targets.forEach((target, i) => {
+    if (!target) return;
+    g.fillStyle(painted ? PAINT[target]! : THEME.emptyPixel, 1);
+    g.fillRect(ox + (i % level.width) * cell, oy + Math.floor(i / level.width) * cell, Math.ceil(cell), Math.ceil(cell));
+  });
 }

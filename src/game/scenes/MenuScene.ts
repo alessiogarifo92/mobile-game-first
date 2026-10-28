@@ -1,15 +1,18 @@
 import Phaser from 'phaser';
+import { COLOR_CODES } from '../../core/colors';
 import { LANGUAGES, LANGUAGE_NAMES } from '../../core/i18n';
 import { VIEW } from '../../core/layout';
 import {
   MAP, clampScroll, computeMapLayout, currentLevel, inertia, keyScrollDelta, mapTapTarget, scrollToLevel, type MapLayout,
 } from '../../core/mapLayout';
 import { moreLevelsComing, stageInfo } from '../../core/stages';
+import { mapUniverse } from '../../core/universeMenu';
+import { universeLevels, universeOfStage } from '../../core/universes';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
-import { LEVELS, STAGES, canOpen, getProgress, levelTitle, resetTips, setLanguage, setSound, stageTitle, t } from '../store';
+import { LEVELS, STAGES, UNIVERSES, canOpen, getProgress, levelTitle, resetTips, setLanguage, setSound, stageTitle, t, universeTitle } from '../store';
 import { PAINT, THEME } from '../theme';
-import { button, label } from '../ui';
+import { button, label, progressBar } from '../ui';
 
 /** Most frequent target colour of a level, used to paint its node on the map once completed. */
 function dominantColor(targets: number[]): number {
@@ -19,8 +22,10 @@ function dominantColor(targets: number[]): number {
 }
 
 const DRAG_THRESHOLD = 12;
+/** Universe button in the title bar, under the game title (inside MAP.barHeight). */
+const UNIVERSE_BAR = { y: 186, w: 600, h: 72 } as const;
 
-/** Scrolling level map: one section per stage, a fixed title bar, settings panel. */
+/** Scrolling map of one universe: one section per stage, a fixed title bar with the universe's progress, settings panel. */
 export class MenuScene extends Phaser.Scene {
   private layout!: MapLayout;
   private scroll = 0;
@@ -34,26 +39,37 @@ export class MenuScene extends Phaser.Scene {
   private cullable: { y: number; make: () => Phaser.GameObjects.Text; text?: Phaser.GameObjects.Text }[] = [];
   private settings: Phaser.GameObjects.Container | null = null;
   private settingsButtons: Record<string, { x: number; y: number }> = {};
+  /** The universe on the map (#91): its levels only, at most 100 nodes. */
+  private universe = 1;
 
   constructor() {
     super('menu');
   }
 
-  relayoutData(): { settings: boolean; scroll: number } {
-    return { settings: !!this.settings, scroll: this.scroll };
+  relayoutData(): { settings: boolean; scroll: number; universe: number } {
+    return { settings: !!this.settings, scroll: this.scroll, universe: this.universe };
+  }
+
+  /** The last universe with levels is being built: the map says more levels are coming above its top node. */
+  private get comingSoon(): boolean {
+    return this.universe === universeOfStage(LEVELS.at(-1)?.stage ?? 1) && moreLevelsComing(STAGES);
   }
 
   private get viewHeight(): number {
     return this.scale.height;
   }
 
-  create(data: { settings?: boolean; scroll?: number } = {}): void {
+  create(data: { settings?: boolean; scroll?: number; universe?: number } = {}): void {
     const progress = getProgress();
     sfx.enabled = progress.sound;
     this.settings = null;
     this.velocity = 0;
     this.dragging = false;
-    this.layout = computeMapLayout(LEVELS.map((l) => ({ id: l.id, stage: l.stage, boss: l.boss })), VIEW.width, this.viewHeight);
+    // The map opens on the universe asked for (the selector) if it is open, else where the player is.
+    this.universe = mapUniverse(LEVELS, progress, data.universe);
+    const ids = new Set(universeLevels(LEVELS, this.universe));
+    const shown = LEVELS.filter((l) => ids.has(l.id));
+    this.layout = computeMapLayout(shown.map((l) => ({ id: l.id, stage: l.stage, boss: l.boss })), VIEW.width, this.viewHeight);
     const current = currentLevel(progress.unlocked, progress.completed, LEVELS.length);
     this.scroll = clampScroll(data.scroll ?? scrollToLevel(this.layout, current, this.viewHeight), this.layout, this.viewHeight);
 
@@ -62,7 +78,7 @@ export class MenuScene extends Phaser.Scene {
     this.drawPath();
     this.drawHeaders(progress.completed);
     this.drawNodes(progress.completed, progress.unlocked, current);
-    if (moreLevelsComing(STAGES)) {
+    if (this.comingSoon) {
       const top = this.layout.nodes.at(-1);
       if (top) label(this, VIEW.width / 2, top.y - 90, t('map.comingSoon'), THEME.type.sm, THEME.subCss, false);
     }
@@ -154,11 +170,34 @@ export class MenuScene extends Phaser.Scene {
   private createBar(): void {
     const bg = this.add.rectangle(0, 0, VIEW.width, MAP.barHeight, THEME.bg).setOrigin(0);
     const title = label(this, VIEW.width / 2, 110, t('app.title'), THEME.type.xl);
-    const tagline = label(this, VIEW.width / 2, 170, t('app.tagline'), THEME.type.sm, THEME.subCss, false);
     const gear = button(this, VIEW.width - 70, 50, 84, 64, '⚙', () => this.openSettings(), {
       fill: THEME.belt, color: THEME.inkCss, name: 'settings',
     });
-    this.bar = this.add.container(0, 0, [bg, title, tagline, gear]).setDepth(5);
+    this.bar = this.add.container(0, 0, [bg, title, ...this.universeBar(), gear]).setDepth(5);
+  }
+
+  /** Universe name and x/100 under the title; a tap opens the universe selector. */
+  private universeBar(): Phaser.GameObjects.GameObject[] {
+    const { completed } = getProgress();
+    const ids = universeLevels(LEVELS, this.universe);
+    const done = ids.filter((id) => completed.includes(id)).length;
+    const info = UNIVERSES.find((u) => u.id === this.universe);
+    const { y, w, h } = UNIVERSE_BAR;
+    const x = (VIEW.width - w) / 2;
+    const g = this.add.graphics();
+    g.fillStyle(THEME.paper, 1);
+    g.fillRoundedRect(x, y - h / 2, w, h, h / 2);
+    g.lineStyle(3, THEME.belt, 1);
+    g.strokeRoundedRect(x, y - h / 2, w, h, h / 2);
+    progressBar(g, x + 24, y + 10, w - 48, 10, done / Math.max(1, ids.length), info ? PAINT[COLOR_CODES[info.color]!]! : THEME.ink);
+    const name = label(this, x + 28, y - 10, `${universeTitle(this.universe)}  ▾`, THEME.type.xs).setOrigin(0, 0.5);
+    const count = label(this, x + w - 28, y - 10, t('map.progress', { done, total: ids.length }), THEME.type.xs, THEME.subCss).setOrigin(1, 0.5);
+    const zone = this.add.zone(VIEW.width / 2, y, w, Math.max(h, 88)).setInteractive({ useHandCursor: true });
+    zone.on('pointerup', (_p: Phaser.Input.Pointer, _x: number, _y: number, e: Phaser.Types.Input.EventData) => {
+      e.stopPropagation();
+      if (!this.settings) this.scene.start('universes');
+    });
+    return [g, name, count, zone];
   }
 
   // ---------- scrolling ----------
@@ -296,7 +335,9 @@ export class MenuScene extends Phaser.Scene {
       scene: 'menu',
       nodes: this.layout.nodes.map((n) => ({ id: n.id, x: n.x, y: n.y, unlocked: n.id <= getProgress().unlocked, boss: !!n.boss })),
       headers: this.layout.headers,
-      comingSoon: moreLevelsComing(STAGES),
+      comingSoon: this.comingSoon,
+      universe: this.universe,
+      universeButton: { x: VIEW.width / 2, y: this.scroll + UNIVERSE_BAR.y },
       scrollY: this.scroll,
       viewHeight: this.viewHeight,
       barHeight: MAP.barHeight,

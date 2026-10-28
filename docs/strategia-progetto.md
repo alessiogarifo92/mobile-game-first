@@ -76,13 +76,13 @@ Il codice non conosce il numero di stage né di livelli: li legge dai dati. L'un
 
 ### Come si aggiunge un universo (#90)
 Un universo è una serie di `STAGES_PER_UNIVERSE` (10) stage, quindi 100 livelli: lo stage N sta nell'universo ⌈N/10⌉. Quanti universi ci sono, quali livelli contengono e se sono completi lo dicono i dati; le regole stanno in `src/core/universes.ts` (puro, coperto da test).
-- **Tabella**: una riga in `UNIVERSES` (`src/core/universes.ts`) con `id` (numero successivo), `key` (nome in `i18n`), `color` (`R Y B O G P`, colore del tema) e `maxCanvas` (lato massimo delle figure: 14 fino all'universo 4, 16 dall'universo 5; mai oltre `MAX_CANVAS` = 16, perché a 360 px di larghezza un pixel di una tela 16×16 resta di ~14 px).
+- **Tabella**: una riga in `UNIVERSE_SPECS` (`scripts/universes.ts`, che `npm run gen:levels` copia in `src/levels/universes.json` per il gioco) con `id` (numero successivo), `key` (nome in `i18n`), `color` (`R Y B O G P`, colore del tema) e `maxCanvas` (lato massimo delle figure: 14 fino all'universo 4, 16 dall'universo 5; mai oltre `MAX_CANVAS` = 16, perché a 360 px di larghezza un pixel di una tela 16×16 resta di ~14 px).
 - **Nome**: `universe.<key>` in `src/core/i18n.ts`, in tutte le lingue.
 - **Stage**: i suoi stage sono file `scripts/stages/stage-NN.ts` come gli altri (vedi sopra), dal numero (N−1)·10+1 in poi.
 - **Validazione** (`npm run gen:levels`): ogni stage appartiene a un universo della tabella, nessun universo senza stage, solo l'ultimo universo può essere incompleto (meno di 10 stage completi), ogni figura entro la tela del suo universo.
 - **Sblocco**: l'universo 1 è sempre aperto; l'universo N+1 si apre completando l'ultimo livello dell'universo N. Lo decide il core (`canOpenLevel`), non solo la mappa: aprire un livello di un universo chiuso è rifiutato.
 - **Salvataggi**: nessuna migrazione, gli id sono globali. Chi aveva finito l'ultimo universo trova aperto il primo livello del successivo. Un salvataggio modificato a mano perde i livelli completati e lo sblocco oltre gli universi aperti, quindi non può saltare un universo.
-- Mappa, scelta dell'universo e festa di fine universo sono di #91 e #92.
+- **In gioco (#91)**: selettore degli universi dalla barra del titolo della mappa (universi chiusi visibili, con il livello che li apre); una mappa per universo; festa di fine universo, una volta sola e rivedibile dall'album. Murale e skin di fine universo: #92.
 
 ### Meta leggero
 - MVP: mappa livelli con sblocco progressivo, salvataggio locale, schermate vittoria/sconfitta.

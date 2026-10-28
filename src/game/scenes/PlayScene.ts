@@ -5,6 +5,9 @@ import { cellDone } from '../../core/rules';
 import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, slotAt, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
 import { currentLevel } from '../../core/mapLayout';
+import { newlyCompletedUniverse } from '../../core/universeMenu';
+import { universeLevels, universeOf } from '../../core/universes';
+import { COLOR_CODES } from '../../core/colors';
 import {
   beltFull, beltLoad, continueWithExtraSlot, createGame, launchFromColumn, launchFromSlot, step, type GameState, type HitEvent, type Shooter,
 } from '../../core/sim';
@@ -14,11 +17,11 @@ import {
 import { solve } from '../../core/solver';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
-import { LEVELS, canOpen, getProgress, levelHint, levelTitle, markCompleted, markTip, setSound, t, tipSeen } from '../store';
+import { LEVELS, UNIVERSES, canOpen, getProgress, levelHint, levelTitle, markCompleted, markTip, setSound, t, tipSeen } from '../store';
 import { BLUE, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
 import { PAINT, SYMBOL, THEME, css } from '../theme';
 import { drawSkin } from '../skins';
-import { button, label, screenBackground } from '../ui';
+import { button, label, progressBar, screenBackground } from '../ui';
 
 const TICK_MS = 85;
 const BELT_JAR = 54;
@@ -58,6 +61,11 @@ export class PlayScene extends Phaser.Scene {
   private hiddenMarks = new Map<number, Phaser.GameObjects.Text>();
   /** Stage completed by this win (album reward), if any. */
   private completedStage: number | null = null;
+  /** The universe this win completes for the first time: the win panel leads to its party. */
+  private completedUniverse: number | null = null;
+  /** Whether this win is the first on this level (the universe bar shows +1). */
+  private firstWin = false;
+  private universeDone: { done: number; total: number; plusOne: boolean } | null = null;
   private winText = '';
   private beltText!: Phaser.GameObjects.Text;
   /** Last launch refused because the belt was full: the tapped column or slot shakes for a moment. */
@@ -83,6 +91,9 @@ export class PlayScene extends Phaser.Scene {
     this.moves = 0;
     this.solution = undefined;
     this.completedStage = null;
+    this.completedUniverse = null;
+    this.firstWin = false;
+    this.universeDone = null;
     this.winText = '';
     this.guide = null;
     this.guideLayer = null;
@@ -570,7 +581,10 @@ export class PlayScene extends Phaser.Scene {
   private finish(): void {
     this.ended = true;
     if (this.gs.status === 'won') {
-      this.completedStage = newlyCompletedStage(LEVELS, getProgress().completed, this.level.id);
+      const before = getProgress().completed;
+      this.completedStage = newlyCompletedStage(LEVELS, before, this.level.id);
+      this.completedUniverse = newlyCompletedUniverse(LEVELS, before, this.level.id);
+      this.firstWin = !before.includes(this.level.id);
       markCompleted(this.level.id);
       this.time.delayedCall(450, () => {
         sfx.win();
@@ -597,7 +611,7 @@ export class PlayScene extends Phaser.Scene {
   private showWin(): void {
     const c = this.panel(t('win.title'), 760);
     const top = (this.scale.height - 760) / 2;
-    const size = 320;
+    const size = 280;
     const cell = Math.floor(size / Math.max(this.level.width, this.level.height));
     const ox = VIEW.width / 2 - (cell * this.level.width) / 2;
     const oy = top + 140;
@@ -612,11 +626,15 @@ export class PlayScene extends Phaser.Scene {
     const stageDone = this.completedStage && (stageSkin(this.completedStage) ? t('win.stageComplete') : t('win.stageCompleteNoSkin'));
     const summary = stageDone || t('win.summary', { name: levelTitle(this.level.id), moves: this.moves });
     this.winText = summary;
-    c.add(label(this, VIEW.width / 2, oy + size + 40, summary, THEME.type.sm, this.completedStage ? THEME.inkCss : THEME.subCss, !!this.completedStage)
+    c.add(label(this, VIEW.width / 2, oy + size + 36, summary, THEME.type.sm, this.completedStage ? THEME.inkCss : THEME.subCss, !!this.completedStage)
       .setWordWrapWidth(520));
+    this.addUniverseProgress(c, top + 512);
     const isLast = this.level.id >= LEVELS.length;
-    c.add(button(this, VIEW.width / 2, top + 600, 360, 88, t(isLast ? 'win.map' : 'win.next'), () => {
-      if (isLast) this.scene.start('menu');
+    const party = this.completedUniverse;
+    const nextLabel = party ? t('universes.celebrate') : t(isLast ? 'win.map' : 'win.next');
+    c.add(button(this, VIEW.width / 2, top + 600, party ? 460 : 360, 88, nextLabel, () => {
+      if (party) this.scene.start('universeEnd', { universe: party });
+      else if (isLast) this.scene.start('menu');
       else this.scene.start('play', { levelId: this.level.id + 1 });
     }, { name: 'next' }));
     const stage = this.completedStage;
@@ -625,6 +643,21 @@ export class PlayScene extends Phaser.Scene {
       else this.scene.start('menu');
     }, { fill: THEME.belt, color: THEME.inkCss, size: THEME.type.sm, name: stage ? 'album' : 'map' }));
     this.publish();
+  }
+
+  /** The universe's x/100 under the summary, with "+1" on a first win (goal gradient, #91). */
+  private addUniverseProgress(c: Phaser.GameObjects.Container, y: number): void {
+    const universe = universeOf(LEVELS, this.level.id) ?? 1;
+    const ids = universeLevels(LEVELS, universe);
+    const { completed } = getProgress();
+    const done = ids.filter((id) => completed.includes(id)).length;
+    const info = UNIVERSES.find((u) => u.id === universe);
+    const g = this.add.graphics();
+    progressBar(g, 140, y - 8, 300, 16, done / Math.max(1, ids.length), info ? PAINT[COLOR_CODES[info.color]!]! : THEME.ink);
+    c.add(g);
+    const count = `${t('map.progress', { done, total: ids.length })}${this.firstWin ? '  +1' : ''}`;
+    c.add(label(this, 460, y, count, THEME.type.xs, THEME.inkCss).setOrigin(0, 0.5));
+    this.universeDone = { done, total: ids.length, plusOne: this.firstWin };
   }
 
   private showJam(): void {
@@ -666,6 +699,8 @@ export class PlayScene extends Phaser.Scene {
       status: gs.status,
       overlay: this.overlay ? (gs.status === 'won' ? 'win' : 'jam') : null,
       completedStage: this.completedStage,
+      completedUniverse: this.completedUniverse,
+      universeProgress: this.universeDone,
       winText: this.winText,
       winButtons: { next: { x: VIEW.width / 2, y: (this.scale.height - 760) / 2 + 600 }, second: { x: VIEW.width / 2, y: (this.scale.height - 760) / 2 + 700 } },
       beltBusy: gs.belt.length + gs.pending.length > 0,

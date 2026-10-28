@@ -4,18 +4,22 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 type LevelRow = { id: number; stage: number; boss?: boolean };
 type StageRow = { id: number; complete: boolean };
+type UniverseRow = { id: number; key: string };
 
 /**
  * e2e only (`--mode more-levels`, used by e2e/more-levels.spec.ts): the shipped game, then as many full stages again
  * (a second universe, #90) and a half-built stage after them (a third universe being built), so the map, the album,
  * old saves and the universe unlock are tested with more levels than the game has today.
- * The extra levels are copies of the first ones with new ids, so they need no new translations. Self-contained (no
- * imports from src) to keep the config loadable as is.
+ * The extra levels are copies of the stage 1 levels (small and quick to play) with new ids, and the extra universes reuse
+ * universe 1's theme, so they need no new translations. Self-contained (no imports from src) to keep the config
+ * loadable as is.
  */
 function moreLevels(): Plugin {
   const read = (file: string) => JSON.parse(readFileSync(new URL(`./src/levels/${file}`, import.meta.url), 'utf8'));
   const levels: LevelRow[] = read('levels.json');
   const stages: StageRow[] = read('stages.json');
+  const universes: UniverseRow[] = read('universes.json');
+  const stagesPerUniverse = stages.length; // the shipped game is one full universe
   const full = levels.filter((l) => l.stage === 1).length; // stage 1 is complete: its size is a full stage
   let copied = 0;
   const extra = [...stages.map(() => full), Math.ceil(full / 2)];
@@ -23,18 +27,20 @@ function moreLevels(): Plugin {
     const stage = stages.length + 1;
     stages.push({ ...stages[copied % stages.length]!, id: stage, complete: size === full });
     for (let i = 0; i < size; i++) {
-      const copy: LevelRow = { ...levels[copied++ % levels.length]!, id: levels.length + 1, stage };
+      const copy: LevelRow = { ...levels[copied++ % full]!, id: levels.length + 1, stage };
       delete copy.boss;
       if (i === full - 1) copy.boss = true;
       levels.push(copy);
     }
   }
+  while (universes.length < Math.ceil(stages.length / stagesPerUniverse)) universes.push({ ...universes[0]!, id: universes.length + 1 });
   return {
     name: 'more-levels',
     enforce: 'pre',
     load(id) {
       if (id.endsWith('/src/levels/levels.json')) return JSON.stringify(levels);
       if (id.endsWith('/src/levels/stages.json')) return JSON.stringify(stages);
+      if (id.endsWith('/src/levels/universes.json')) return JSON.stringify(universes);
       return null;
     },
   };

@@ -108,13 +108,14 @@ src/
     generator.ts     code di secchielli, piazzamento ghiaccio/nascosti, scarto dei livelli non provati
     stages.ts        stage letti dai dati, validazione, id/boss, hash delle specifiche
     universes.ts     universi da 10 stage, sblocco a fine universo, tela massima
+    universeMenu.ts  selettore degli universi: card, layout, universo della mappa, fine universo
     mapLayout.ts     geometria della mappa scorrevole
     album.ts         avanzamento per stage e stili sbloccati
     onboarding.ts    tutorial guidato e suggerimenti una tantum
     i18n.ts          testi en/it
     progress.ts      salvataggio (resiste a dati corrotti o storage non disponibile)
     layout.ts        geometria della schermata di gioco
-  game/            rendering Phaser: scene Menu (mappa), Play, HowTo, Album; tema, audio, skin
+  game/            rendering Phaser: scene Menu (mappa di un universo), Universes (selettore), Play, UniverseEnd (festa), HowTo, Album; tema, audio, skin
   levels/levels.json   i livelli generati (committati)
   levels/stages.json   chiave, colore e completezza di ogni stage (generato)
 scripts/
