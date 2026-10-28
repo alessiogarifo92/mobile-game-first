@@ -2,10 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { UNIVERSE_NAME_KEYS, translate, universeName } from '../src/core/i18n';
 import { LEVELS_PER_STAGE, type StageContent } from '../src/core/stages';
 import {
-  MAX_CANVAS, STAGES_PER_UNIVERSE, UNIVERSES, UniverseError, canOpenLevel, isUniverseComplete, isUniverseUnlocked, lastLevelOf,
+  MAX_CANVAS, STAGES_PER_UNIVERSE, UniverseError, canOpenLevel, isUniverseComplete, isUniverseUnlocked, lastLevelOf,
   openUniverse, universeLevels, universeOf, universeOfStage, validateUniverses, type UniverseInfo,
 } from '../src/core/universes';
 import { STAGE_SPECS } from '../scripts/stages';
+import { UNIVERSE_SPECS } from '../scripts/universes';
+import universesJson from '../src/levels/universes.json';
 
 /** A game with `n` levels in full stages of LEVELS_PER_STAGE (only the last one may be partial). */
 const game = (n: number) => Array.from({ length: n }, (_, i) => ({ id: i + 1, stage: Math.floor(i / LEVELS_PER_STAGE) + 1 }));
@@ -91,7 +93,7 @@ describe('universes', () => {
     ['colour', [{ ...universes(1)[0]!, color: 'X' }], stageFiles(10), 'colour "X"'],
     ['canvas above the maximum', universes(1, MAX_CANVAS + 1), stageFiles(10), `between 1 and ${MAX_CANVAS}`],
     ['canvas not an integer', universes(1, 12.5), stageFiles(10), 'between 1 and'],
-    ['stage in no universe', universes(1), stageFiles(11), 'universe 2, which is not in UNIVERSES'],
+    ['stage in no universe', universes(1), stageFiles(11), 'universe 2, which is not in the universe list'],
     ['universe without stages', universes(2), stageFiles(10), 'universe 2 has no stages'],
     ['17×17 picture', universes(1, MAX_CANVAS), stageFiles(10, { side: 17 }), 'is 17×17, universe 1 allows up to 16×16'],
     ['15×15 picture in a 14×14 universe', universes(1), stageFiles(10, { side: 15 }), 'allows up to 14×14'],
@@ -107,8 +109,9 @@ describe('universes', () => {
   });
 
   it('describes the shipped universes: valid against the stage files and named in every language', () => {
-    expect(() => validateUniverses(UNIVERSES, STAGE_SPECS, UNIVERSE_NAME_KEYS)).not.toThrow();
-    for (const u of UNIVERSES) {
+    expect(() => validateUniverses(UNIVERSE_SPECS, STAGE_SPECS, UNIVERSE_NAME_KEYS)).not.toThrow();
+    expect(universesJson).toEqual(UNIVERSE_SPECS);
+    for (const u of UNIVERSE_SPECS) {
       expect(u.maxCanvas).toBeLessThanOrEqual(u.id <= 4 ? 14 : MAX_CANVAS);
       for (const lang of ['en', 'it']) expect(universeName(lang, u.key)).not.toBe(`universe.${u.key}`);
     }

@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { stageProgress, stageSkin, type Skin } from '../../core/album';
 import { VIEW } from '../../core/layout';
 import { LEVELS_PER_STAGE, stageInfo } from '../../core/stages';
+import { isUniverseComplete, lastLevelOf, universeLevels, universeOfStage } from '../../core/universes';
 import { publishDebug } from '../debug';
 import { LEVELS, STAGES, getProgress, setSkin, skinsUnlocked, stageTitle, t } from '../store';
 import { drawSkin } from '../skins';
@@ -30,6 +31,15 @@ export class AlbumScene extends Phaser.Scene {
 
     button(this, 60, 64, 84, 64, '◀', () => this.scene.start('menu'), { fill: THEME.belt, color: THEME.inkCss, name: 'home' });
     label(this, VIEW.width / 2, 64, t('album.title'), THEME.type.lg);
+    // The page of a universe's last stage replays its end-of-universe party once every level is painted.
+    const universe = universeOfStage(stage);
+    const finished = isUniverseComplete(LEVELS, universe) && universeLevels(LEVELS, universe).every((id) => progress.completed.includes(id));
+    const ownsParty = finished && LEVELS.find((l) => l.id === lastLevelOf(LEVELS, universe))?.stage === stage;
+    if (ownsParty) {
+      button(this, VIEW.width - 100, 64, 160, 64, `★ ${t('universes.party')}`, () => this.scene.start('universeEnd', { universe }), {
+        fill: THEME.belt, color: THEME.inkCss, size: THEME.type.xs, name: 'party',
+      });
+    }
     const band = this.add.graphics();
     band.fillStyle(PAINT[info.color]!, 1);
     band.fillRoundedRect(80, 130, VIEW.width - 160, 70, 35);
@@ -70,7 +80,7 @@ export class AlbumScene extends Phaser.Scene {
     label(this, VIEW.width / 2, 1100 + off, `${stage} / ${STAGES.length}`, THEME.type.sm, THEME.subCss);
 
     publishDebug({
-      scene: 'album', stage, done: p.done, complete: p.complete, skin, unlocked, activeSkin: progress.skin,
+      scene: 'album', stage, party: ownsParty ? { x: VIEW.width - 100, y: 64 } : null, done: p.done, complete: p.complete, skin, unlocked, activeSkin: progress.skin,
       useButton: action, scrollY: this.cameras.main.scrollY, offsetY: 0,
     });
   }

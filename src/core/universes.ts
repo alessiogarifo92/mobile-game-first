@@ -16,12 +16,6 @@ export interface UniverseInfo {
   maxCanvas: number;
 }
 
-/**
- * The universes of epic #87, one entry per universe that has stages. A universe is a theme for a run of
- * STAGES_PER_UNIVERSE stages: which stages and levels it holds, and whether it is complete, come from the data.
- */
-export const UNIVERSES: readonly UniverseInfo[] = [{ id: 1, key: 'atelier', color: 'R', maxCanvas: 14 }];
-
 /** Level ids and stages of the game (the shape progress.ts checks saves against). */
 type LevelRef = { id: number; stage: number };
 
@@ -94,7 +88,7 @@ export function validateUniverses(
   });
   const inUniverse = (id: number) => stages.filter((s) => universeOfStage(s.stage) === id);
   const last = universeOfStage(stages.at(-1)?.stage ?? 0);
-  if (last > universes.length) throw new UniverseError(`stage ${stages.at(-1)!.stage} is in universe ${last}, which is not in UNIVERSES`);
+  if (last > universes.length) throw new UniverseError(`stage ${stages.at(-1)!.stage} is in universe ${last}, which is not in the universe list`);
   for (const u of universes) {
     const own = inUniverse(u.id);
     if (own.length === 0) throw new UniverseError(`universe ${u.id} has no stages`);

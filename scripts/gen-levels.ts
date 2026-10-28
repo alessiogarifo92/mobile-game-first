@@ -1,9 +1,10 @@
 /**
  * Generates src/levels/levels.json from the stage files (scripts/stages). Only levels whose spec hash
  * changed are regenerated; each one is kept only if the solver proves it solvable inside its difficulty band.
- * Also writes src/levels/stages.json: name key, colour and completeness of each stage, for the map and the album.
+ * Also writes src/levels/stages.json (name key, colour and completeness of each stage) and src/levels/universes.json
+ * (name key, colour and canvas of each universe, from scripts/universes.ts), for the map, the album and the selector.
  *   npm run gen:levels            regenerate what changed
- *   npm run gen:levels -- --check exit 1 if levels.json or stages.json is out of date (used by CI)
+ *   npm run gen:levels -- --check exit 1 if levels.json, stages.json or universes.json is out of date (used by CI)
  *   npm run gen:levels -- --force regenerate everything
  */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -13,12 +14,17 @@ import { LEVEL_NAME_KEYS, STAGE_NAME_KEYS, UNIVERSE_NAME_KEYS } from '../src/cor
 import { parseLevel, type LevelDef } from '../src/core/level';
 import { levelWinRate } from '../src/core/solver';
 import { assignIds, specHash, stageInfos, validateStages } from '../src/core/stages';
-import { UNIVERSES, validateUniverses } from '../src/core/universes';
+import { validateUniverses } from '../src/core/universes';
+import { UNIVERSE_SPECS } from './universes';
 import { STAGE_SPECS } from './stages';
 import { KNOWN_CURVE_ERRORS } from './stages/curve-known';
 
 const out = new URL('../src/levels/levels.json', import.meta.url);
-const stagesOut = new URL('../src/levels/stages.json', import.meta.url);
+/** Small generated files rewritten as a whole: what the game knows about stages and universes. */
+const metaFiles = [
+  { name: 'stages.json', url: new URL('../src/levels/stages.json', import.meta.url), text: () => JSON.stringify(stageInfos(STAGE_SPECS), null, 1) + '\n' },
+  { name: 'universes.json', url: new URL('../src/levels/universes.json', import.meta.url), text: () => JSON.stringify(UNIVERSE_SPECS, null, 1) + '\n' },
+];
 /** Bump when the tuning policy below changes, so cached levels are regenerated. */
 const POLICY_VERSION = 2;
 /** Curve notes never change the generated level, so they stay out of the hash. */
@@ -32,10 +38,9 @@ const check = process.argv.includes('--check');
 const force = process.argv.includes('--force');
 
 validateStages(STAGE_SPECS, LEVEL_NAME_KEYS, STAGE_NAME_KEYS);
-validateUniverses(UNIVERSES, STAGE_SPECS, UNIVERSE_NAME_KEYS);
+validateUniverses(UNIVERSE_SPECS, STAGE_SPECS, UNIVERSE_NAME_KEYS);
 const specs = assignIds(STAGE_SPECS);
-const stagesText = JSON.stringify(stageInfos(STAGE_SPECS), null, 1) + '\n';
-const stagesStale = !existsSync(stagesOut) || readFileSync(stagesOut, 'utf8') !== stagesText;
+const staleMeta = metaFiles.filter((f) => !existsSync(f.url) || readFileSync(f.url, 'utf8') !== f.text());
 const existing: LevelDef[] = existsSync(out) ? JSON.parse(readFileSync(out, 'utf8')) : [];
 const byId = new Map(existing.map((l) => [l.id, l]));
 
@@ -45,11 +50,11 @@ if (check) {
     console.error(`levels.json is out of date (${stale.length} levels changed, ${existing.length} stored vs ${specs.length} specs). Run npm run gen:levels.`);
     process.exit(1);
   }
-  if (stagesStale) {
-    console.error('stages.json is out of date. Run npm run gen:levels.');
+  if (staleMeta.length > 0) {
+    console.error(`${staleMeta.map((f) => f.name).join(', ')} out of date. Run npm run gen:levels.`);
     process.exit(1);
   }
-  console.log(`levels.json and stages.json up to date (${specs.length} levels, ${STAGE_SPECS.length} stages)`);
+  console.log(`levels.json, stages.json and universes.json up to date (${specs.length} levels, ${STAGE_SPECS.length} stages, ${UNIVERSE_SPECS.length} universes)`);
   process.exit(0);
 }
 
@@ -107,7 +112,7 @@ if (failures.length > 0) {
   process.exit(1);
 }
 writeFileSync(out, JSON.stringify(levels, null, 1) + '\n');
-writeFileSync(stagesOut, stagesText);
+for (const f of metaFiles) writeFileSync(f.url, f.text());
 console.log(`wrote ${levels.length} levels (${stale.length} regenerated) in ${STAGE_SPECS.length} stages`);
 
 // Curve rules (#88) over the whole game: a new error fails the run (levels.json is kept, so a fix to the specs

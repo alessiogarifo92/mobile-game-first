@@ -6,6 +6,8 @@ import { DataScene } from './game/scenes/DataScene';
 import { HowToScene } from './game/scenes/HowToScene';
 import { MenuScene } from './game/scenes/MenuScene';
 import { PlayScene } from './game/scenes/PlayScene';
+import { UniverseEndScene } from './game/scenes/UniverseEndScene';
+import { UniversesScene } from './game/scenes/UniversesScene';
 import type { DrawnBounds } from './game/debug';
 import { THEME } from './game/theme';
 
@@ -27,7 +29,7 @@ const game = new Phaser.Game({
     height: hostHeight(),
   },
   input: { activePointers: 2 },
-  scene: [MenuScene, PlayScene, HowToScene, AlbumScene, DataScene],
+  scene: [MenuScene, PlayScene, HowToScene, AlbumScene, DataScene, UniversesScene, UniverseEndScene],
 });
 
 /**

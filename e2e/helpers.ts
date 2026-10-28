@@ -1,4 +1,5 @@
 import { expect, type Page } from '@playwright/test';
+import type { DrawnBounds } from '../src/game/debug';
 import levels from '../src/levels/levels.json' with { type: 'json' };
 import { buildLanes, parseLevel, type LevelDef } from '../src/core/level';
 import { cloneBoard, createBoard, type Board } from '../src/core/rules';
@@ -152,3 +153,21 @@ export function jamSequence(def: LevelDef): Move[] | null {
   return search(createBoard(level), level.columns.map(() => 0), 0, []);
 }
 
+/** Nothing visible (text, shape, tap zone) is drawn outside the screen; `minDepth` skips what lies under a fixed bar. */
+export async function checkOnScreen(page: Page, label: string, opts: { minDepth?: number } = {}) {
+  const [objects, screen, scrollY] = await Promise.all([
+    page.evaluate(() => window.__mixBounds!()),
+    page.evaluate(() => document.querySelector('canvas')!.height / (document.querySelector('canvas')!.width / 720)),
+    page.evaluate(() => window.__mix!.scrollY as number),
+  ]);
+  const h = Math.round(screen);
+  const bad: string[] = [];
+  for (const o of objects as DrawnBounds[]) {
+    if (o.depth < (opts.minDepth ?? 0)) continue;
+    if (o.w === 0 && o.h === 0) continue;
+    const top = scrollY;
+    const outside = o.x < -2 || o.x + o.w > 722 || o.y < top - 2 || o.y + o.h > top + h + 2;
+    if (outside) bad.push(`${o.type}${o.text ? ` "${o.text.slice(0, 24)}"` : ''} x=${Math.round(o.x)} y=${Math.round(o.y - top)} w=${Math.round(o.w)} h=${Math.round(o.h)} (screen 720x${h})`);
+  }
+  expect(bad, `${label}: drawn outside the screen`).toEqual([]);
+}
