@@ -9,10 +9,11 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { checkCurve, curveLevel } from '../src/core/curve';
 import { generateLevel } from '../src/core/generator';
-import { LEVEL_NAME_KEYS, STAGE_NAME_KEYS } from '../src/core/i18n';
+import { LEVEL_NAME_KEYS, STAGE_NAME_KEYS, UNIVERSE_NAME_KEYS } from '../src/core/i18n';
 import { parseLevel, type LevelDef } from '../src/core/level';
 import { levelWinRate } from '../src/core/solver';
 import { assignIds, specHash, stageInfos, validateStages } from '../src/core/stages';
+import { UNIVERSES, validateUniverses } from '../src/core/universes';
 import { STAGE_SPECS } from './stages';
 import { KNOWN_CURVE_ERRORS } from './stages/curve-known';
 
@@ -31,6 +32,7 @@ const check = process.argv.includes('--check');
 const force = process.argv.includes('--force');
 
 validateStages(STAGE_SPECS, LEVEL_NAME_KEYS, STAGE_NAME_KEYS);
+validateUniverses(UNIVERSES, STAGE_SPECS, UNIVERSE_NAME_KEYS);
 const specs = assignIds(STAGE_SPECS);
 const stagesText = JSON.stringify(stageInfos(STAGE_SPECS), null, 1) + '\n';
 const stagesStale = !existsSync(stagesOut) || readFileSync(stagesOut, 'utf8') !== stagesText;

@@ -1,5 +1,14 @@
 # Changelog
 
+## Non rilasciato — universi da 100 livelli e sblocco a fine universo (#90)
+
+- **Universi nel core**: `src/core/universes.ts` (puro) con la tabella `UNIVERSES` (nome, colore del tema, tela massima) e le regole: un universo è una serie di 10 stage; l'universo N+1 si apre solo completando l'ultimo livello dell'universo N. Funzioni: `universeOf`, `universeLevels`, `lastLevelOf`, `isUniverseUnlocked`, `canOpenLevel`.
+- **Il core rifiuta i livelli chiusi**: la scena di gioco apre un livello solo se `canOpenLevel` lo permette, e i salvataggi modificati a mano perdono i completati e lo sblocco oltre gli universi aperti. Chi ha finito i 100 livelli di oggi troverà aperto il livello 101 quando arriverà l'universo 2.
+- **Validazione** in `npm run gen:levels`: ogni stage in un universo della tabella, solo l'ultimo universo incompleto, figure entro la tela del loro universo (14×14 fino all'universo 4, 16×16 al massimo).
+- Testi IT/EN: `universe.atelier`, `universe.locked` ("Completa il livello {n} per aprire"). Oggi c'è un solo universo: in gioco non cambia nulla, livelli identici.
+- Test: 1, 2 e 5 universi, universo incompleto, id non multipli di 100, salvataggio di 100 livelli su un gioco da 200, salvataggi manomessi, tela 17×17 rifiutata; e2e su una build con 205 livelli (`--mode more-levels`, ora con un universo 2 completo): un salvataggio manomesso non apre il 101 senza il 100.
+- Regola "come si aggiunge un universo" in `docs/strategia-progetto.md`.
+
 ## 0.4.0 — curva di difficoltà ricalibrata e contenuti scalabili (28 ottobre 2026)
 
 Sempre 100 livelli in 10 stage, con la difficoltà rifatta: misurata con le regole vere del gioco, controllata da regole automatiche, e "molto facile" solo nei primi livelli. Molti livelli cambiano (inventari dei secchielli, nastro, slot e 29 figure ridisegnate), ma id e nomi restano gli stessi: **i progressi restano validi**. In più: capienza del nastro visibile, progressi al sicuro tra un aggiornamento e l'altro, layout adattivo a ogni schermo e un gioco pronto a ricevere nuovi stage.

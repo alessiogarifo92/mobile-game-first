@@ -6,7 +6,8 @@ import { parseLevel, type LevelDef } from '../src/core/level';
 import { createGame, launchFromColumn, launchFromSlot, step } from '../src/core/sim';
 import { levelWinRate, solve } from '../src/core/solver';
 import { LEVELS_PER_STAGE, assignIds, stageInfos } from '../src/core/stages';
-import { CURVE, checkCurve, curveLevel, universeOf } from '../src/core/curve';
+import { CURVE, checkCurve, curveLevel } from '../src/core/curve';
+import { universeOfStage } from '../src/core/universes';
 import { STAGE_SPECS } from '../scripts/stages';
 import { KNOWN_CURVE_ERRORS } from '../scripts/stages/curve-known';
 
@@ -75,7 +76,7 @@ describe('shipped levels', () => {
     const veryEasy = defs.filter((_, i) => winRates()[i]! >= CURVE.veryEasy).map((d) => d.id);
     const allowed = (id: number) => id <= CURVE.introLevels || id % 10 === 1;
     expect(veryEasy.filter((id) => !allowed(id))).toEqual([]);
-    expect(veryEasy.filter((id) => universeOf(Math.ceil(id / 10)) === 1).length).toBeLessThanOrEqual(17);
+    expect(veryEasy.filter((id) => universeOfStage(Math.ceil(id / 10)) === 1).length).toBeLessThanOrEqual(17);
   }, 60_000);
 
   it('keeps every band past the intro below "very easy", so a regeneration cannot bring one back (#89)', () => {

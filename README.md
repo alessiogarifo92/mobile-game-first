@@ -107,6 +107,7 @@ src/
     solver.ts        prova di risolvibilità (DFS) + win-rate di un giocatore casuale
     generator.ts     code di secchielli, piazzamento ghiaccio/nascosti, scarto dei livelli non provati
     stages.ts        stage letti dai dati, validazione, id/boss, hash delle specifiche
+    universes.ts     universi da 10 stage, sblocco a fine universo, tela massima
     mapLayout.ts     geometria della mappa scorrevole
     album.ts         avanzamento per stage e stili sbloccati
     onboarding.ts    tutorial guidato e suggerimenti una tantum

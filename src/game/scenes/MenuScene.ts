@@ -7,7 +7,7 @@ import {
 import { moreLevelsComing, stageInfo } from '../../core/stages';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
-import { LEVELS, STAGES, getProgress, levelTitle, resetTips, setLanguage, setSound, stageTitle, t } from '../store';
+import { LEVELS, STAGES, canOpen, getProgress, levelTitle, resetTips, setLanguage, setSound, stageTitle, t } from '../store';
 import { PAINT, THEME } from '../theme';
 import { button, label } from '../ui';
 
@@ -142,7 +142,7 @@ export class MenuScene extends Phaser.Scene {
   private tapAt(x: number, worldY: number): void {
     if (this.settings) return;
     const target = mapTapTarget(this.layout, getProgress().unlocked, x, worldY);
-    if (target?.kind === 'level') {
+    if (target?.kind === 'level' && canOpen(target.id)) {
       sfx.unlock();
       this.scene.start('play', { levelId: target.id });
     } else if (target?.kind === 'stage') {

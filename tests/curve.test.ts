@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { CURVE, checkCurve, curveLevel, universeOf, type CurveLevel } from '../src/core/curve';
+import { CURVE, checkCurve, curveLevel, type CurveLevel } from '../src/core/curve';
+import { universeOfStage } from '../src/core/universes';
 import { parseLevel } from '../src/core/level';
 
 /** Saw-tooth offsets from the stage base, positions 1–10. */
@@ -31,7 +32,7 @@ describe('curve rules', () => {
   });
 
   it('maps stages to universes of ten', () => {
-    expect([1, 10, 11, 100].map(universeOf)).toEqual([1, 1, 2, 10]);
+    expect([1, 10, 11, 100].map(universeOfStage)).toEqual([1, 1, 2, 10]);
   });
 
   it('rule 1: very easy only in the intro, on a universe-1 stage opener or on a debut', () => {

@@ -6,8 +6,9 @@ type LevelRow = { id: number; stage: number; boss?: boolean };
 type StageRow = { id: number; complete: boolean };
 
 /**
- * e2e only (`--mode more-levels`, used by e2e/more-levels.spec.ts): the shipped game plus a full extra stage and a
- * half-built one after it, so the map, the album and old saves are tested with more levels than the game has today.
+ * e2e only (`--mode more-levels`, used by e2e/more-levels.spec.ts): the shipped game, then as many full stages again
+ * (a second universe, #90) and a half-built stage after them (a third universe being built), so the map, the album,
+ * old saves and the universe unlock are tested with more levels than the game has today.
  * The extra levels are copies of the first ones with new ids, so they need no new translations. Self-contained (no
  * imports from src) to keep the config loadable as is.
  */
@@ -17,11 +18,12 @@ function moreLevels(): Plugin {
   const stages: StageRow[] = read('stages.json');
   const full = levels.filter((l) => l.stage === 1).length; // stage 1 is complete: its size is a full stage
   let copied = 0;
-  for (const size of [full, Math.ceil(full / 2)]) {
+  const extra = [...stages.map(() => full), Math.ceil(full / 2)];
+  for (const size of extra) {
     const stage = stages.length + 1;
     stages.push({ ...stages[copied % stages.length]!, id: stage, complete: size === full });
     for (let i = 0; i < size; i++) {
-      const copy: LevelRow = { ...levels[copied++]!, id: levels.length + 1, stage };
+      const copy: LevelRow = { ...levels[copied++ % levels.length]!, id: levels.length + 1, stage };
       delete copy.boss;
       if (i === full - 1) copy.boss = true;
       levels.push(copy);
