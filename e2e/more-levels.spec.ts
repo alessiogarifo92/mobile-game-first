@@ -139,7 +139,7 @@ for (const [name, width, height] of [['360x640', 360, 640], ['412x915', 412, 915
       expect(await mix(page, 'universe')).toBe(1);
     });
 
-    test('finishing a universe: the party shows once, opens the next universe, and can be seen again from the album', async ({ page }) => {
+    test('finishing a universe: the party shows, opens the next universe, and can be seen again from the album', async ({ page }) => {
       test.setTimeout(300_000);
       const last = shipped * 2; // last level of universe 2
       await start(page, { unlocked: last, completed: range(1, last - 1) });
@@ -178,16 +178,22 @@ for (const [name, width, height] of [['360x640', 360, 640], ['412x915', 412, 915
       await waitScene(page, 'universeEnd');
       expect(await mix(page, 'universe')).toBe(2);
 
-      // Replaying the last level does not celebrate again.
-      await tap(page, (await mix<{ x: number; y: number }>(page, 'goButton')).x, (await mix<{ x: number; y: number }>(page, 'goButton')).y);
-      await waitScene(page, 'menu');
+    });
+
+    test('replaying the last level of a finished universe does not celebrate again', async ({ page }) => {
+      test.setTimeout(300_000); // plays a whole boss; CI runners are about twice as slow
+      const last = shipped * 2;
+      await start(page, { unlocked: last + 1, completed: range(1, last) });
       await openSelector(page);
+      const cards = await mix<{ id: number; x: number; y: number }[]>(page, 'cards');
       await tap(page, cards[1]!.x, cards[1]!.y);
       await waitScene(page, 'menu');
+      expect(await mix(page, 'universe')).toBe(2);
       await openLevel(page, last);
       await play(page, await mix<Move[]>(page, 'solution'));
       await waitSim(page, () => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'win');
       expect(await mix(page, 'completedUniverse')).toBeNull();
+      expect(await mix(page, 'universeProgress')).toEqual({ done: shipped, total: shipped, plusOne: false });
     });
   });
 }
