@@ -49,7 +49,7 @@ Ogni colore ha anche un simbolo (● rosso, ▲ giallo, ■ blu), così il gioco
 ## Installare e provare
 
 ### APK Android
-- **Dalla Release (consigliato)**: GitHub → **Releases** → l'ultima pre-release (es. `v0.3.0-rc.1`) → scarica `mix-and-splash-…-debug.apk` direttamente dal telefono e aprilo.
+- **Dalla Release (consigliato)**: GitHub → **Releases** → l'ultima release (es. `v0.4.0`) → scarica `mix-and-splash-…-debug.apk` direttamente dal telefono e aprilo.
 - **Da ogni push**: GitHub → **Actions** → *Android APK* → **Artifacts** → `mix-and-splash-debug-apk` (uno zip con `app-debug.apk`).
 
 Android chiederà di consentire l'installazione da "origini sconosciute" per l'app usata (Files o Chrome): consentila solo per questa installazione.
