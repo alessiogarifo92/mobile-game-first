@@ -9,5 +9,12 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
   use: { baseURL: 'http://localhost:4173', ...devices['Pixel 7'], screenshot: 'only-on-failure', trace: 'retain-on-failure' },
-  webServer: { command: 'npm run build && npx vite preview --port 4173 --strictPort', url: 'http://localhost:4173', reuseExistingServer: !process.env.CI, timeout: 120_000 },
+  webServer: [
+    { command: 'npm run build && npx vite preview --port 4173 --strictPort', url: 'http://localhost:4173', reuseExistingServer: !process.env.CI, timeout: 120_000 },
+    // The same game with more levels than it ships (e2e/fixtures/more-levels.ts), for e2e/more-levels.spec.ts.
+    {
+      command: 'npx vite build --mode more-levels --outDir dist-more-levels && npx vite preview --outDir dist-more-levels --port 4174 --strictPort',
+      url: 'http://localhost:4174', reuseExistingServer: !process.env.CI, timeout: 120_000,
+    },
+  ],
 });
