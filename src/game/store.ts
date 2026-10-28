@@ -4,9 +4,13 @@ import { parseLevel, type Level, type LevelDef } from '../core/level';
 import {
   completeLevel, loadProgress, markTipSeen, resetProgress as resetProgressData, saveProgress, type KeyValueStorage, type Progress,
 } from '../core/progress';
+import type { StageInfo } from '../core/stages';
 import levelsJson from '../levels/levels.json';
+import stagesJson from '../levels/stages.json';
 
+/** Levels and stages come from the generated data (npm run gen:levels): nothing here assumes how many there are. */
 export const LEVELS: Level[] = (levelsJson as LevelDef[]).map(parseLevel);
+export const STAGES: readonly StageInfo[] = stagesJson as StageInfo[];
 
 function storage(): KeyValueStorage | undefined {
   try {

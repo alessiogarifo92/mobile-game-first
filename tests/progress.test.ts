@@ -97,6 +97,28 @@ describe('progress', () => {
     });
   });
 
+  describe('after an update that adds levels', () => {
+    // A player who finished the 100-level game, then the game grows to 110 levels (11 stages).
+    const levelsOf = (n: number) => Array.from({ length: n }, (_, i) => ({ id: i + 1, stage: Math.floor(i / 10) + 1 }));
+    const all = levelsOf(100).map((l) => l.id);
+    let finished = defaultProgress();
+    for (const id of all) finished = completeLevel(finished, id, 100);
+
+    it('keeps every completed level and the earned skin, and opens the first new level', () => {
+      expect(finished.unlocked).toBe(100);
+      const saved = JSON.stringify({ ...finished, skin: 'gold' });
+      const p = loadProgress(memory(saved), levelsOf(110));
+      expect(p).toMatchObject({ completed: all, unlocked: 101, skin: 'gold' });
+      expect(completeLevel(p, 101, 110).unlocked).toBe(102);
+    });
+
+    it('a player midway keeps their place', () => {
+      const p = loadProgress(memory(JSON.stringify({ unlocked: 43, completed: levelsOf(42).map((l) => l.id) })), levelsOf(110));
+      expect(p).toMatchObject({ unlocked: 43 });
+      expect(p.completed).toHaveLength(42);
+    });
+  });
+
   it('reset erases levels, tips and skin but keeps language and sound', () => {
     const played = { ...defaultProgress(), unlocked: 40, completed: [1, 2, 3], seenTips: ['guide'], skin: 'dots' as const, language: 'it' as const, sound: false };
     expect(resetProgress(played)).toEqual({ ...defaultProgress(), language: 'it', sound: false });

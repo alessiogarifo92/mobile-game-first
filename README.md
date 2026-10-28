@@ -106,7 +106,7 @@ src/
     sim.ts           simulazione deterministica a tick (nastro, slot, ingorgo)
     solver.ts        prova di risolvibilità (DFS) + win-rate di un giocatore casuale
     generator.ts     code di secchielli, piazzamento ghiaccio/nascosti, scarto dei livelli non provati
-    stages.ts        i 10 stage, validazione, id/boss, hash delle specifiche
+    stages.ts        stage letti dai dati, validazione, id/boss, hash delle specifiche
     mapLayout.ts     geometria della mappa scorrevole
     album.ts         avanzamento per stage e stili sbloccati
     onboarding.ts    tutorial guidato e suggerimenti una tantum
@@ -114,9 +114,10 @@ src/
     progress.ts      salvataggio (resiste a dati corrotti o storage non disponibile)
     layout.ts        geometria della schermata di gioco
   game/            rendering Phaser: scene Menu (mappa), Play, HowTo, Album; tema, audio, skin
-  levels/levels.json   i 100 livelli generati (committati)
+  levels/levels.json   i livelli generati (committati)
+  levels/stages.json   chiave, colore e completezza di ogni stage (generato)
 scripts/
-  stages/stage-NN.ts   specifiche dei livelli, una per stage (pixel art + parametri)
+  stages/stage-NN.ts   specifiche dei livelli, una per stage (pixel art + parametri), trovate da sole
   gen-levels.ts        generazione incrementale e verificata
   preview-levels.ts    fogli di anteprima
   render-icons.ts      icone PWA/Android e splash dall'SVG
@@ -137,12 +138,12 @@ La generazione (`npm run gen:levels`), per ogni specifica:
 I test verificano che la soluzione di **ogni** livello vinca davvero nella simulazione.
 
 ### Aggiungere livelli o uno stage
-1. Disegna l'immagine in `scripts/stages/stage-NN.ts` (dimensioni consigliate 8×8 → 14×14) con nome-chiave e parametri.
-2. Aggiungi il nome in inglese e italiano in `src/core/i18n.ts` (`level.<nome>`): senza traduzione la generazione si ferma.
+1. Disegna l'immagine in `scripts/stages/stage-NN.ts` (dimensioni consigliate 8×8 → 14×14) con nome-chiave e parametri. Uno stage nuovo è solo un file nuovo, con `stage`, `key` e `color`: nessun elenco da aggiornare.
+2. Aggiungi il nome in inglese e italiano in `src/core/i18n.ts` (`level.<nome>`, e `stage.<key>` per uno stage nuovo): senza traduzione la generazione si ferma.
 3. `npm run gen:levels`, poi `npm run preview:levels` per rivedere la pixel art.
 4. `npm test` e `npm run test:e2e`.
 
-Uno stage segnato `complete` deve avere esattamente 10 livelli. Un'immagine monocolore senza "cornici" di un altro colore viene facile per costruzione: lo sfondo di un altro colore è ciò che crea le corsie bloccate.
+Uno stage segnato `complete` deve avere esattamente 10 livelli, e solo l'ultimo stage può essere incompleto (altrimenti gli id dei livelli dopo cambierebbero). Regole complete in [`docs/strategia-progetto.md`](docs/strategia-progetto.md#come-si-aggiunge-uno-stage-74). Un'immagine monocolore senza "cornici" di un altro colore viene facile per costruzione: lo sfondo di un altro colore è ciò che crea le corsie bloccate.
 
 ### Aggiungere una lingua
 Un nuovo dizionario in `src/core/i18n.ts` con le stesse chiavi dell'inglese: `tests/i18n.test.ts` fallisce se ne manca una.

@@ -88,8 +88,9 @@ const en = {
   'album.reward': 'Reward: bucket style',
   'album.use': 'Use it',
   'album.inUse': 'In use',
-  'album.locked': 'Paint all 10 pictures of this stage to unlock it',
+  'album.locked': 'Paint all {n} pictures of this stage to unlock it',
   'win.stageComplete': 'Stage complete! New bucket style unlocked',
+  'win.stageCompleteNoSkin': 'Stage complete!',
   'win.album': 'Album',
   'level.heart': 'Heart',
   'level.sun': 'Sun',
@@ -284,8 +285,9 @@ const it: Record<MessageKey, string> = {
   'album.reward': 'Premio: stile dei secchielli',
   'album.use': 'Usalo',
   'album.inUse': 'In uso',
-  'album.locked': 'Dipingi tutti i 10 quadri del mondo per sbloccarlo',
+  'album.locked': 'Dipingi tutti i {n} quadri del mondo per sbloccarlo',
   'win.stageComplete': 'Mondo completato! Nuovo stile dei secchielli',
+  'win.stageCompleteNoSkin': 'Mondo completato!',
   'win.album': 'Album',
   'level.heart': 'Cuore',
   'level.sun': 'Sole',
@@ -422,3 +424,6 @@ export function stageName(language: string, key: string): string {
 export const LEVEL_NAME_KEYS: ReadonlySet<string> = new Set(
   Object.keys(en).filter((k) => k.startsWith('level.') && k !== 'level.title' && k !== 'level.waiting').map((k) => k.slice(6)),
 );
+
+/** Stage name keys that have a translation, for validating stage files. */
+export const STAGE_NAME_KEYS: ReadonlySet<string> = new Set(Object.keys(en).filter((k) => k.startsWith('stage.')).map((k) => k.slice(6)));

@@ -1,35 +1,9 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import levels from '../src/levels/levels.json' with { type: 'json' };
 import type { LevelDef } from '../src/core/level';
 import type { Move } from '../src/core/solver';
 
-import { SEEN_ALL, dismissTip, jamSequence, mix, play, shots, tap, waitScene, waitSim, type Rect } from './helpers';
-
-/** On the map, drags until the level's node is in the visible area below the title bar, then taps it. */
-async function openLevel(page: Page, id: number) {
-  const box = (await page.locator('canvas').boundingBox())!;
-  const k = box.width / 720;
-  for (let i = 0; i < 60; i++) {
-    const node = (await mix<{ id: number; x: number; y: number }[]>(page, 'nodes')).find((n) => n.id === id)!;
-    const [scroll, viewH, bar] = await Promise.all([mix<number>(page, 'scrollY'), mix<number>(page, 'viewHeight'), mix<number>(page, 'barHeight')]);
-    const screenY = node.y - scroll;
-    if (screenY >= bar + 40 && screenY <= viewH - 40) {
-      await tap(page, node.x, node.y);
-      await waitScene(page, 'play');
-      return;
-    }
-    // Drag by up to 500 logical px towards the node (a real swipe, slow enough to avoid a flick).
-    const delta = Math.max(-700, Math.min(700, (bar + viewH) / 2 - screenY));
-    const x = box.x + 40 * k, y0 = box.y + ((bar + viewH) / 2) * k;
-    await page.mouse.move(x, y0);
-    await page.mouse.down();
-    for (let s = 1; s <= 10; s++) await page.mouse.move(x, y0 + (delta * k * s) / 10);
-    await page.waitForTimeout(120);
-    await page.mouse.up();
-    await page.waitForTimeout(300);
-  }
-  throw new Error(`could not scroll to level ${id}`);
-}
+import { SEEN_ALL, dismissTip, jamSequence, mix, openLevel, play, shots, tap, throttleCpu, waitScene, waitSim, type Rect } from './helpers';
 
 test('first launch: English, guided level 1 played to a win, level 2 unlocked', async ({ page }) => {
   const errors: string[] = [];
@@ -168,7 +142,7 @@ test('the language is chosen in Settings and remembered; How to play pages throu
 });
 
 test('the map is split into stages and scrolls to far levels', async ({ page }) => {
-  test.setTimeout(300_000); // 100 levels of map to scroll with real drags
+  test.setTimeout(300_000); // the whole map to scroll with real drags
   await page.addInitScript((p) => localStorage.setItem('mix-and-splash/progress/v1', p), SEEN_ALL);
   await page.goto('/');
   await waitScene(page, 'menu');
@@ -253,6 +227,7 @@ test.describe('full belt on a 360x640 phone', () => {
     await page.goto('/');
     await waitScene(page, 'menu');
     await openLevel(page, 71);
+    await throttleCpu(page); // only from here: scrolling the map under throttling is slow and not what this test is about
     const { capacity } = await mix<{ used: number; capacity: number }>(page, 'belt');
     expect(capacity).toBe(2);
     const columns = await mix<Rect[]>(page, 'columns');
@@ -265,18 +240,23 @@ test.describe('full belt on a 360x640 phone', () => {
     expect(belt).toBeTruthy();
     expect(belt.x + belt.w).toBeLessThan(waiting.x);
 
-    const tapColumn = (c: number) => tap(page, columns[c]!.x + columns[c]!.w / 2, columns[c]!.y + 40);
-    // Taps in quick succession until the belt is full and refuses one: on a slow machine a bucket may finish its loop
-    // between two taps, so the test does not assume which tap is refused.
-    let refusedAt = -1;
-    for (let i = 0; i < 12 && refusedAt < 0; i++) {
+    // Fills the belt and taps once more in a single burst of clicks, without reading the game state in between: four
+    // round trips per tap used to take as long as a bucket's loop on a loaded runner, so the belt never filled (#105).
+    // A burst can still lose the race if a bucket runs out of ammo at once: it is tried again, at most 3 times.
+    const box = (await page.locator('canvas').boundingBox())!;
+    const k = box.width / 720;
+    const scroll = await mix<number>(page, 'scrollY');
+    const points = columns.slice(0, capacity + 1).map((c) => ({ x: box.x + (c.x + c.w / 2) * k, y: box.y + (c.y + 40 - scroll) * k }));
+    let launched = 0;
+    let refusals = 0;
+    for (let attempt = 0; attempt < 3 && refusals === 0; attempt++) {
       const before = await mix<number>(page, 'moves');
-      await tapColumn(i % columns.length);
-      if ((await mix<number>(page, 'refusals')) === 0) continue;
-      refusedAt = i;
-      expect(await mix(page, 'moves')).toBe(before); // nothing launched
+      for (const p of points) await page.mouse.click(p.x, p.y);
+      refusals = await mix<number>(page, 'refusals');
+      launched = (await mix<number>(page, 'moves')) - before;
     }
-    expect(refusedAt).toBeGreaterThanOrEqual(capacity);
+    expect(refusals).toBeGreaterThan(0);
+    expect(launched).toBeLessThan(points.length); // the refused tap launched nothing
     await page.waitForFunction(() => (window as unknown as { __mix: { tip: string | null } }).__mix.tip === 'belt');
     if (shots) await page.screenshot({ path: `${shots}/09-suggerimento-nastro.png` });
     expect(await dismissTip(page)).toBe('belt');

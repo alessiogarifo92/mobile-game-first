@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { mix, shots, tap, waitScene, type Rect } from './helpers';
+import { LAST_LEVEL, mix, shots, tap, waitScene, type Rect } from './helpers';
 
 /** Device matrix of issue #62 (CSS px): the game must fit and stay usable on every one of them. */
 const SCREENS: [string, number, number][] = [
@@ -16,7 +16,7 @@ const SCREENS: [string, number, number][] = [
 ];
 
 const SAVE = JSON.stringify({
-  unlocked: 100, completed: [], sound: false, language: 'en', seenTips: ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden'],
+  unlocked: LAST_LEVEL, completed: [], sound: false, language: 'en', seenTips: ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden'],
 });
 
 /** The canvas is entirely inside the window: nothing is cut off. */
@@ -50,7 +50,7 @@ for (const [name, width, height] of SCREENS) {
   test.describe(name, () => {
     test.use({ viewport: { width, height } });
 
-    test('map, levels 1 and 100, and the other screens fit', async ({ page }) => {
+    test('map, the first and the last level, and the other screens fit', async ({ page }) => {
       const errors: string[] = [];
       page.on('pageerror', (e) => errors.push(e.message));
       await page.addInitScript((p) => localStorage.setItem('mix-and-splash/progress/v1', p), SAVE);
@@ -61,15 +61,15 @@ for (const [name, width, height] of SCREENS) {
       expect(84 * k).toBeGreaterThan(0);
       if (shots) await page.screenshot({ path: `${shots}/screens/${name}-map.png` });
 
-      // Level 100 (14x14, the biggest board): Home scrolls to the top of the map.
+      // The last level (today the biggest board, 14x14): Home scrolls to the top of the map.
       await page.keyboard.press('Home');
       await page.waitForFunction(() => (window as unknown as { __mix: { scrollY: number } }).__mix.scrollY === 0);
       const nodes = await mix<{ id: number; x: number; y: number }[]>(page, 'nodes');
-      const top = nodes.find((n) => n.id === 100)!;
+      const top = nodes.find((n) => n.id === LAST_LEVEL)!;
       await tap(page, top.x, top.y);
       await waitScene(page, 'play');
-      expect(await mix(page, 'levelId')).toBe(100);
-      await checkPlay(page, k, name, 'level100');
+      expect(await mix(page, 'levelId')).toBe(LAST_LEVEL);
+      await checkPlay(page, k, name, 'last-level');
 
       // Level 1 (small board) through the in-game Retry? No: back to the map and open level 1.
       await tap(page, 60, 64);

@@ -1,14 +1,13 @@
+import { readdirSync } from 'node:fs';
 import type { StageSpec } from './types';
-import stage01 from './stage-01';
-import stage02 from './stage-02';
-import stage03 from './stage-03';
-import stage04 from './stage-04';
-import stage05 from './stage-05';
-import stage06 from './stage-06';
-import stage07 from './stage-07';
-import stage08 from './stage-08';
-import stage09 from './stage-09';
-import stage10 from './stage-10';
 
-/** Stage files in play order. Add a new stage by creating stage-NN.ts and listing it here. */
-export const STAGE_SPECS: StageSpec[] = [stage01, stage02, stage03, stage04, stage05, stage06, stage07, stage08, stage09, stage10];
+/** `stage-NN.ts` files next to this one, in play order. Add a stage by creating the next stage-NN.ts: nothing else lists it. */
+const files = readdirSync(new URL('.', import.meta.url))
+  .map((file) => ({ file, n: /^stage-(\d+)\.ts$/.exec(file)?.[1] }))
+  .filter((f): f is { file: string; n: string } => f.n !== undefined)
+  .sort((a, b) => Number(a.n) - Number(b.n));
+
+/** Stage files in play order (validateStages checks that their numbers run 1..n). */
+export const STAGE_SPECS: StageSpec[] = await Promise.all(
+  files.map(async ({ file }) => ((await import(`./${file}`)) as { default: StageSpec }).default),
+);

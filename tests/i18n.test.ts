@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_LANGUAGE, DICTIONARIES, LANGUAGES, LANGUAGE_NAMES, LEVEL_NAME_KEYS, isLanguage, levelName, stageName, translate } from '../src/core/i18n';
-import { STAGES } from '../src/core/stages';
+import { STAGE_SPECS } from '../scripts/stages';
 
 describe('i18n', () => {
   it('defaults to English', () => {
@@ -48,6 +48,6 @@ describe('i18n', () => {
   });
 
   it('names every stage in every language', () => {
-    for (const s of STAGES) for (const lang of LANGUAGES) expect(stageName(lang, s.key)).not.toBe(`stage.${s.key}`);
+    for (const s of STAGE_SPECS) for (const lang of LANGUAGES) expect(stageName(lang, s.key)).not.toBe(`stage.${s.key}`);
   });
 });

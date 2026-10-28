@@ -1,0 +1,62 @@
+[
+ {
+  "id": 1,
+  "key": "atelier",
+  "color": 1,
+  "complete": true
+ },
+ {
+  "id": 2,
+  "key": "fruit",
+  "color": 3,
+  "complete": true
+ },
+ {
+  "id": 3,
+  "key": "animals",
+  "color": 2,
+  "complete": true
+ },
+ {
+  "id": 4,
+  "key": "garden",
+  "color": 6,
+  "complete": true
+ },
+ {
+  "id": 5,
+  "key": "sea",
+  "color": 4,
+  "complete": true
+ },
+ {
+  "id": 6,
+  "key": "city",
+  "color": 5,
+  "complete": true
+ },
+ {
+  "id": 7,
+  "key": "food",
+  "color": 1,
+  "complete": true
+ },
+ {
+  "id": 8,
+  "key": "vehicles",
+  "color": 3,
+  "complete": true
+ },
+ {
+  "id": 9,
+  "key": "space",
+  "color": 4,
+  "complete": true
+ },
+ {
+  "id": 10,
+  "key": "fantasy",
+  "color": 5,
+  "complete": true
+ }
+]

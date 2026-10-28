@@ -59,6 +59,15 @@ Ogni stage inizia con 1–3 livelli "di respiro" e il boss è il livello più du
 - Formato livello: `overlay` opzionale sopra l'immagine (`i` ghiaccio, `h` nascosto). Le regole di colpo stanno in `src/core/rules.ts`, condivise da simulazione e solver.
 - I 10 quadri di uno stage formano una pagina d'album (#40).
 
+### Come si aggiunge uno stage (#74)
+Il codice non conosce il numero di stage né di livelli: li legge dai dati. L'unica costante è `LEVELS_PER_STAGE` (10), la dimensione di uno stage completo.
+- **Un file nuovo**: `scripts/stages/stage-NN.ts` con `stage` (numero successivo all'ultimo), `key` (nome in `i18n`), `color` (`R Y B O G P`, colore della fascia sulla mappa) e i livelli. `scripts/stages/index.ts` trova da solo i file `stage-*.ts`: non c'è un elenco da aggiornare.
+- **Nomi**: `stage.<key>` e `level.<nome>` di ogni livello in `src/core/i18n.ts`, in tutte le lingue; senza traduzione la generazione si ferma.
+- **Generazione**: `npm run gen:levels` scrive `src/levels/levels.json` (i livelli, id in sequenza) e `src/levels/stages.json` (chiave, colore e `complete` di ogni stage), letti da mappa, album e salvataggi. `npm run preview:levels` disegna `docs/levels/stage-NN.png` per rivedere la pixel art.
+- **Stage in costruzione**: solo l'ultimo stage può essere incompleto (`complete` assente, meno di 10 livelli); la mappa mostra "Altri livelli in arrivo" sopra di lui. Gli stage precedenti devono essere `complete: true`, perché aggiungere livelli a metà gioco cambierebbe gli id di tutti quelli dopo, e con loro i salvataggi.
+- **Boss**: il decimo livello di uno stage completo; nel gioco è un campo del livello (`boss`), non una posizione.
+- **Salvataggi**: i progressi sono id di livello; un aggiornamento che aggiunge livelli li conserva tutti, e chi aveva finito il gioco trova aperto il primo livello nuovo. Le skin dei secchielli sono 10 (una per gli stage 1–10): gli stage dopo il 10 non hanno ancora una skin e la loro pagina d'album non mostra il premio.
+
 ### 500 livelli in 5 universi (epic #87)
 - **5 universi × 10 stage × 10 livelli**, id globali 1–500. L'universo N+1 si apre e si sceglie solo dopo l'ultimo livello dell'universo N; prima è visibile ma chiuso. Un universo per aggiornamento.
 - **Novità per universo**: 2 Natura → marrone (R+Y+B) e pietra; 3 Viaggio → lucchetto e chiave, secchiello coperto; 4 Mare e cielo → pellicola colorata, corsie cieche; 5 Cosmo → combinazioni e tele 16×16. Scartati sui dati: secchielli collegati (rendono più facile), ghiaccio doppio (troppo debole), nastro veloce. Niente stelle 1–3.
@@ -105,7 +114,7 @@ src/
     scenes/      Boot, Menu (mappa livelli), Play, overlay Win/Lose
     theme.ts     token di design (palette, font, spaziature) — unica fonte di stile
     audio.ts     effetti sintetizzati (Web Audio)
-  levels/      levels.json generato da scripts/gen-levels.ts (committato, verificato nei test)
+  levels/      levels.json e stages.json generati da scripts/gen-levels.ts (committati, verificati nei test)
 android/     progetto Capacitor generato
 ```
 

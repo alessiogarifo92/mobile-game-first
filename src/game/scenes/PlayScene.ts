@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { newlyCompletedStage } from '../../core/album';
+import { newlyCompletedStage, stageSkin } from '../../core/album';
 import { primariesOf } from '../../core/colors';
 import { cellDone } from '../../core/rules';
 import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, slotAt, type Layout } from '../../core/layout';
@@ -57,6 +57,7 @@ export class PlayScene extends Phaser.Scene {
   private hiddenMarks = new Map<number, Phaser.GameObjects.Text>();
   /** Stage completed by this win (album reward), if any. */
   private completedStage: number | null = null;
+  private winText = '';
   private beltText!: Phaser.GameObjects.Text;
   /** Last launch refused because the belt was full: the tapped column or slot shakes for a moment. */
   private refused: { column: number; slot: number; at: number } | null = null;
@@ -77,6 +78,7 @@ export class PlayScene extends Phaser.Scene {
     this.moves = 0;
     this.solution = undefined;
     this.completedStage = null;
+    this.winText = '';
     this.guide = null;
     this.guideLayer = null;
     this.tip = null;
@@ -601,7 +603,10 @@ export class PlayScene extends Phaser.Scene {
       g.fillRect(ox + (i % this.level.width) * cell, oy + Math.floor(i / this.level.width) * cell, cell - 1, cell - 1);
     });
     c.add(g);
-    const summary = this.completedStage ? t('win.stageComplete') : t('win.summary', { name: levelTitle(this.level.id), moves: this.moves });
+    // A stage beyond the skin list is celebrated without promising a new style.
+    const stageDone = this.completedStage && (stageSkin(this.completedStage) ? t('win.stageComplete') : t('win.stageCompleteNoSkin'));
+    const summary = stageDone || t('win.summary', { name: levelTitle(this.level.id), moves: this.moves });
+    this.winText = summary;
     c.add(label(this, VIEW.width / 2, oy + size + 40, summary, THEME.type.sm, this.completedStage ? THEME.inkCss : THEME.subCss, !!this.completedStage)
       .setWordWrapWidth(520));
     const isLast = this.level.id >= LEVELS.length;
@@ -656,6 +661,7 @@ export class PlayScene extends Phaser.Scene {
       status: gs.status,
       overlay: this.overlay ? (gs.status === 'won' ? 'win' : 'jam') : null,
       completedStage: this.completedStage,
+      winText: this.winText,
       winButtons: { next: { x: VIEW.width / 2, y: (this.scale.height - 760) / 2 + 600 }, second: { x: VIEW.width / 2, y: (this.scale.height - 760) / 2 + 700 } },
       beltBusy: gs.belt.length + gs.pending.length > 0,
       belt: beltLoad(gs),

@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import levels from '../src/levels/levels.json';
+import stages from '../src/levels/stages.json';
 import { LEVEL_NAME_KEYS } from '../src/core/i18n';
 import { parseLevel, type LevelDef } from '../src/core/level';
 import { createGame, launchFromColumn, launchFromSlot, step } from '../src/core/sim';
 import { levelWinRate, solve } from '../src/core/solver';
-import { assignIds } from '../src/core/stages';
+import { LEVELS_PER_STAGE, assignIds, stageInfos } from '../src/core/stages';
 import { CURVE, checkCurve, curveLevel, universeOf } from '../src/core/curve';
 import { STAGE_SPECS } from '../scripts/stages';
 import { KNOWN_CURVE_ERRORS } from '../scripts/stages/curve-known';
@@ -12,11 +13,14 @@ import { KNOWN_CURVE_ERRORS } from '../scripts/stages/curve-known';
 const defs = levels as LevelDef[];
 
 describe('shipped levels', () => {
-  it('has sequential ids, a stage on every level and a boss at the 10th of each stage', () => {
+  it('has sequential ids, a stage on every level and a boss closing each full stage', () => {
     expect(defs.map((d) => d.id)).toEqual(Array.from({ length: defs.length }, (_, i) => i + 1));
+    expect(stages).toEqual(stageInfos(STAGE_SPECS));
+    expect(new Set(defs.map((d) => d.stage)).size).toBe(stages.length);
     for (const d of defs) {
-      expect(d.stage).toBe(Math.ceil(d.id / 10));
-      expect(!!d.boss).toBe(d.id % 10 === 0);
+      // Only the last stage may be partial, so ids follow from the stage size.
+      expect(d.stage).toBe(Math.ceil(d.id / LEVELS_PER_STAGE));
+      expect(!!d.boss).toBe(d.id % LEVELS_PER_STAGE === 0);
       expect(LEVEL_NAME_KEYS.has(d.name)).toBe(true);
       expect(d.specHash).toMatch(/^[0-9a-f]{8}$/);
     }
@@ -35,7 +39,7 @@ describe('shipped levels', () => {
     expect(g.status).toBe('won');
   });
 
-  // Heavy (random playouts over 100 levels, computed once): explicit timeouts so a slower CI runner does not fail.
+  // Heavy (random playouts over every level, computed once): explicit timeouts so a slower CI runner does not fail.
   const specs = assignIds(STAGE_SPECS);
   let rates: number[] | undefined;
   const winRates = () => (rates ??= defs.map((d) => levelWinRate(parseLevel(d))));
@@ -48,7 +52,7 @@ describe('shipped levels', () => {
     expect(out.map((d) => `#${d.id} ${d.name}`)).toEqual([]);
   }, 60_000);
 
-  it('gets harder: the introduction is easiest, then stages 3–5, 6–8 and 9–10 get harder in turn', () => {
+  it('gets harder in universe 1: the introduction is easiest, then stages 3–5, 6–8 and 9–10 get harder in turn', () => {
     const avg = (from: number, to: number) => {
       const r = winRates().filter((_, i) => defs[i]!.stage >= from && defs[i]!.stage <= to);
       return r.reduce((a, b) => a + b, 0) / r.length;
@@ -80,8 +84,8 @@ describe('shipped levels', () => {
   });
 
   it('never gives a bigger belt back: the largest belt of a stage never grows from one stage to the next', () => {
-    const maxBelt = Array.from({ length: 10 }, (_, s) => Math.max(...defs.filter((d) => d.stage === s + 1).map((d) => d.beltCapacity)));
+    const maxBelt = stages.map((s) => Math.max(...defs.filter((d) => d.stage === s.id).map((d) => d.beltCapacity)));
     for (let s = 1; s < maxBelt.length; s++) expect(maxBelt[s]!).toBeLessThanOrEqual(maxBelt[s - 1]!);
-    expect(maxBelt.slice(7)).toEqual([2, 2, 2]);
+    expect(maxBelt.slice(7, 10)).toEqual([2, 2, 2]);
   });
 });

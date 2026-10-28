@@ -34,4 +34,11 @@ describe('album', () => {
     expect(newlyCompletedStage(levels, range(1, 8), 10)).toBeNull(); // 9 still missing
     expect(newlyCompletedStage(levels, [], 99)).toBeNull();
   });
+
+  it('celebrates stages beyond the skin list too, without inventing a skin for them', () => {
+    const eleven = Array.from({ length: 110 }, (_, i) => ({ id: i + 1, stage: Math.floor(i / 10) + 1 }));
+    expect(newlyCompletedStage(eleven, range(1, 109), 110)).toBe(11);
+    expect(stageProgress(eleven, range(1, 110)).every((p) => p.complete)).toBe(true);
+    expect(unlockedSkins(eleven, range(1, 110))).toEqual([...SKINS]);
+  });
 });

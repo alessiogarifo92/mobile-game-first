@@ -3,7 +3,7 @@ import levels from '../src/levels/levels.json' with { type: 'json' };
 import type { LevelDef } from '../src/core/level';
 import type { Move } from '../src/core/solver';
 import type { DrawnBounds } from '../src/game/debug';
-import { SEEN_ALL, dismissTip, jamSequence, mix, play, shots, tap, waitScene, waitSim } from './helpers';
+import { LAST_LEVEL, SEEN_ALL, dismissTip, jamSequence, mix, play, shots, tap, waitScene, waitSim } from './helpers';
 
 /**
  * Nothing the game draws or lets you tap may be outside the screen, on any device. This walks every screen and
@@ -137,7 +137,7 @@ for (const [name, width, height] of SCREENS) {
         test.setTimeout(240_000);
         // Fresh player: level 1 with the guide; level 4 shows the mixing tip card.
         await page.addInitScript((p) => localStorage.setItem('mix-and-splash/progress/v1', p), JSON.stringify({
-          unlocked: 100, completed: [], sound: false, language: 'en', seenTips: [],
+          unlocked: LAST_LEVEL, completed: [], sound: false, language: 'en', seenTips: [],
         }));
         await page.goto('/');
         await waitScene(page, 'menu');
@@ -193,13 +193,13 @@ for (const [name, width, height] of SCREENS) {
         expect(await dismissTip(page)).toBe('mixing');
         await home();
 
-        // The biggest board (14x14, ice and hidden pixels): Home scrolls to level 100 at the top of the map.
+        // The last level (today the biggest board: 14x14, ice and hidden pixels): Home scrolls to the top of the map.
         await page.keyboard.press('Home');
         await page.waitForFunction(() => (window as unknown as { __mix: { scrollY: number } }).__mix.scrollY === 0);
-        await open(100);
+        await open(LAST_LEVEL);
         await settle(page);
-        await check(page, 'level 100');
-        if (shots) await page.screenshot({ path: `${shots}/bounds/${bar}-level100.png` });
+        await check(page, `level ${LAST_LEVEL}`);
+        if (shots) await page.screenshot({ path: `${shots}/bounds/${bar}-last-level.png` });
       });
     });
   }
