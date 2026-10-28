@@ -7,9 +7,10 @@ on:
     branches: [main]
   pull_request:
 
+# Only PR runs share a group (one per PR); every main commit gets its own run and is always checked.
 concurrency:
-  group: ci-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: ci-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   checks:
