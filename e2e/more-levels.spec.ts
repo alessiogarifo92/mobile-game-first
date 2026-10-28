@@ -29,6 +29,26 @@ async function openSelector(page: Page) {
   await waitScene(page, 'universes');
 }
 
+/** Scrolls the map with the keyboard until a stage band is on screen, then taps it (opens its album page). */
+async function tapBand(page: Page, stage: number) {
+  // Stage bands of the last stages are near the top: start there, then step down.
+  await page.keyboard.press('Home');
+  await page.waitForFunction(() => (window as unknown as { __mix: { scrollY: number } }).__mix.scrollY === 0);
+  for (let i = 0; i < 100; i++) {
+    const band = (await mix<{ stage: number; y: number }[]>(page, 'headers')).find((h) => h.stage === stage)!;
+    const [scroll, viewH, bar] = await Promise.all([mix<number>(page, 'scrollY'), mix<number>(page, 'viewHeight'), mix<number>(page, 'barHeight')]);
+    const screenY = band.y - scroll;
+    if (screenY >= bar + 60 && screenY <= viewH - 60) {
+      await tap(page, 360, band.y);
+      await waitScene(page, 'album');
+      return;
+    }
+    await page.keyboard.press(screenY < bar + 60 ? 'ArrowUp' : 'ArrowDown');
+    await page.waitForTimeout(50);
+  }
+  throw new Error(`could not scroll to stage ${stage}`);
+}
+
 const saved = (page: Page) => page.evaluate((key) => JSON.parse(localStorage.getItem(key)!), KEY);
 
 test('a player who finished the game keeps everything and plays the next universe from level 101', async ({ page }) => {
@@ -62,11 +82,7 @@ test('a universe still being built: its map says more levels are coming, its alb
   const headers = await mix<{ stage: number; count: number }[]>(page, 'headers');
   expect(headers.map((h) => [h.stage, h.count])).toEqual([[stages.length * 2 + 1, LEVELS_PER_STAGE / 2]]);
   expect(await mix(page, 'comingSoon')).toBe(true);
-  await page.keyboard.press('Home');
-  await page.waitForFunction(() => (window as unknown as { __mix: { scrollY: number } }).__mix.scrollY === 0);
-  const band = (await mix<{ stage: number; y: number }[]>(page, 'headers')).at(-1)!;
-  await tap(page, 360, band.y);
-  await waitScene(page, 'album');
+  await tapBand(page, stages.length * 2 + 1);
   expect(await mix(page, 'stage')).toBe(stages.length * 2 + 1);
   expect(await mix(page, 'skin')).toBeNull();
   expect(await mix(page, 'complete')).toBe(false);
@@ -155,11 +171,7 @@ for (const [name, width, height] of [['360x640', 360, 640], ['412x915', 412, 915
       const cards = await mix<{ id: number; x: number; y: number }[]>(page, 'cards');
       await tap(page, cards[1]!.x, cards[1]!.y);
       await waitScene(page, 'menu');
-      await page.keyboard.press('Home');
-      await page.waitForFunction(() => (window as unknown as { __mix: { scrollY: number } }).__mix.scrollY === 0);
-      const band = (await mix<{ stage: number; y: number }[]>(page, 'headers')).at(-1)!;
-      await tap(page, 360, band.y);
-      await waitScene(page, 'album');
+      await tapBand(page, stages.length * 2);
       await checkOnScreen(page, `${name} album with the party button`);
       const party = await mix<{ x: number; y: number }>(page, 'party');
       await tap(page, party.x, party.y);

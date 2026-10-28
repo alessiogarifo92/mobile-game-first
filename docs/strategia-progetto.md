@@ -82,7 +82,7 @@ Un universo è una serie di `STAGES_PER_UNIVERSE` (10) stage, quindi 100 livelli
 - **Validazione** (`npm run gen:levels`): ogni stage appartiene a un universo della tabella, nessun universo senza stage, solo l'ultimo universo può essere incompleto (meno di 10 stage completi), ogni figura entro la tela del suo universo.
 - **Sblocco**: l'universo 1 è sempre aperto; l'universo N+1 si apre completando l'ultimo livello dell'universo N. Lo decide il core (`canOpenLevel`), non solo la mappa: aprire un livello di un universo chiuso è rifiutato.
 - **Salvataggi**: nessuna migrazione, gli id sono globali. Chi aveva finito l'ultimo universo trova aperto il primo livello del successivo. Un salvataggio modificato a mano perde i livelli completati e lo sblocco oltre gli universi aperti, quindi non può saltare un universo.
-- Mappa, scelta dell'universo e festa di fine universo sono di #91 e #92.
+- **In gioco (#91)**: selettore degli universi dalla barra del titolo della mappa (universi chiusi visibili, con il livello che li apre); una mappa per universo; festa di fine universo, una volta sola e rivedibile dall'album. Murale e skin di fine universo: #92.
 
 ### Meta leggero
 - MVP: mappa livelli con sblocco progressivo, salvataggio locale, schermate vittoria/sconfitta.
