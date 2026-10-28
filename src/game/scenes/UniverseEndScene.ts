@@ -73,11 +73,14 @@ export class UniverseEndScene extends Phaser.Scene {
       const status = label(this, 120, cardY + 60, t('universes.card', { n: next.id, name: universeName(getProgress().language, next.key) }), THEME.type.sm)
         .setOrigin(0, 0.5);
       this.time.delayedCall(mosaicMs, () => {
-        this.tweens.add({ targets: lock, alpha: 0, y: -40, duration: 400 });
         status.setText(t('universes.opened', { n: next.id }));
         sfx.win();
-        this.done = true;
-        this.publish();
+        this.tweens.add({
+          targets: lock, alpha: 0, y: -40, duration: 400, onComplete: () => {
+            this.done = true;
+            this.publish();
+          },
+        });
       });
     } else {
       label(this, VIEW.width / 2, cardY + 60, t('universes.soon'), THEME.type.sm, THEME.subCss, false).setWordWrapWidth(VIEW.width - 180);

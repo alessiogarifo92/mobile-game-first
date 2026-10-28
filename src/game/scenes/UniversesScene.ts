@@ -54,14 +54,14 @@ export class UniversesScene extends Phaser.Scene {
 
     const textX = x + 52;
     const textW = px - textX - 20;
-    label(this, textX, y + 44, universeTitle(card.id), THEME.type.sm).setOrigin(0, 0.5).setWordWrapWidth(textW);
+    label(this, textX, y + 44, universeTitle(card.id), THEME.type.sm).setOrigin(0, 0.5).setAlign('left').setWordWrapWidth(textW);
     if (card.open) {
       progressBar(g, textX, y + h - 56, textW, 16, card.done / card.total, PAINT[card.color]!);
       label(this, textX, y + h - 86, t('map.progress', { done: card.done, total: card.total }), THEME.type.xs, THEME.subCss).setOrigin(0, 0.5);
       if (!card.complete) label(this, textX + textW, y + h - 86, t('map.comingSoon'), THEME.type.xs, THEME.subCss, false).setOrigin(1, 0.5);
     } else {
       label(this, textX, y + h - 60, t('universe.locked', { n: card.unlockLevel! }), THEME.type.xs, THEME.subCss, false)
-        .setOrigin(0, 0.5).setWordWrapWidth(textW);
+        .setOrigin(0, 0.5).setAlign('left').setWordWrapWidth(textW);
     }
 
     const zone = this.add.zone(x + w / 2, y + h / 2, w, h).setInteractive({ useHandCursor: true });
