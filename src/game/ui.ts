@@ -104,6 +104,23 @@ export function drawPicture(g: Phaser.GameObjects.Graphics, level: Level, x: num
 }
 
 /**
+ * Stone block (#95) in the cell (x, y, w, h): bevelled grey with speckles, so it reads as a solid block at 14 px and
+ * without relying on colour.
+ */
+export function drawStone(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number): void {
+  const b = Math.max(2, Math.round(w * 0.12));
+  g.fillStyle(THEME.stoneDark, 1);
+  g.fillRoundedRect(x, y, w, h, THEME.radius.cell);
+  g.fillStyle(THEME.stone, 1);
+  g.fillRoundedRect(x, y, w - b, h - b, THEME.radius.cell);
+  g.fillStyle(THEME.white, 0.55);
+  g.fillRect(x + b, y + b / 2, w - 3 * b, Math.max(1, b / 2));
+  g.fillStyle(THEME.stoneDark, 0.9);
+  const dot = Math.max(1, w * 0.07);
+  for (const [fx, fy] of [[0.3, 0.45], [0.62, 0.32], [0.5, 0.68], [0.24, 0.74]] as const) g.fillCircle(x + w * fx, y + h * fy, dot);
+}
+
+/**
  * One tile of a universe's mural (#92), in a mural `size` wide at (x, y): its cells when painted, else an empty tile
  * with a small gap around it, so the missing pieces read as boxes still to fill.
  */

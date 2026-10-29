@@ -5,12 +5,12 @@ import { VIEW } from '../../core/layout';
 import type { MessageKey } from '../../core/i18n';
 import { publishDebug } from '../debug';
 import { t } from '../store';
-import { PAINT, SYMBOL, THEME } from '../theme';
-import { button, label, screenBackground } from '../ui';
+import { PAINT, SYMBOL, THEME, css } from '../theme';
+import { button, drawStone, label, screenBackground } from '../ui';
 
 const PAGES = HOWTO_PAGES;
 
-/** "How to play": three illustrated cards, reachable from Settings. */
+/** "How to play": illustrated cards (HOWTO_PAGES), reachable from Settings. */
 export class HowToScene extends Phaser.Scene {
   private pageNow = 0;
 
@@ -56,7 +56,7 @@ export class HowToScene extends Phaser.Scene {
     const dots = this.add.graphics();
     for (let i = 0; i < PAGES; i++) {
       dots.fillStyle(THEME.ink, i === page ? 1 : 0.2);
-      dots.fillCircle(VIEW.width / 2 + (i - 1) * 32, 1080 + off * 0.75, 9);
+      dots.fillCircle(VIEW.width / 2 + (i - (PAGES - 1) / 2) * 32, 1080 + off * 0.75, 9);
     }
     const last = page === PAGES - 1;
     button(this, VIEW.width / 2, 1170 + off, 360, 88, t(last ? 'howto.done' : 'howto.next'), () => {
@@ -70,7 +70,7 @@ export class HowToScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-LEFT', () => this.go(page - 1));
     this.input.keyboard?.on('keydown-RIGHT', () => this.go(page + 1));
     for (let i = 0; i < PAGES; i++) {
-      this.add.zone(VIEW.width / 2 + (i - 1) * 64, 1080 + off * 0.75, 64, 88).setInteractive({ useHandCursor: true }).on('pointerup', () => this.go(i));
+      this.add.zone(VIEW.width / 2 + (i - (PAGES - 1) / 2) * 64, 1080 + off * 0.75, 64, 88).setInteractive({ useHandCursor: true }).on('pointerup', () => this.go(i));
     }
     button(this, 60, 64, 84, 64, '◀', () => this.scene.start('menu', { settings: true }), {
       fill: THEME.belt, color: THEME.inkCss, name: 'home',
@@ -120,6 +120,16 @@ export class HowToScene extends Phaser.Scene {
       this.pixel(g, cx + 55, 420, ORANGE, 90, RED);
       label(this, cx + 135, 420, '→', THEME.type.lg);
       this.pixel(g, cx + 215, 420, ORANGE, 70);
+    } else if (page === 3) {
+      // Stones (#95): the drop from the left stops on the stone; the pixel behind takes paint from the right.
+      label(this, cx - 210, 420, '●→', THEME.type.lg, css(PAINT[RED]!));
+      drawStone(g, cx - 140, 375, 90, 90);
+      // An unfinished pixel: the ghost of the colour it still needs.
+      g.fillStyle(THEME.emptyPixel, 1);
+      g.fillRoundedRect(cx - 20, 375, 90, 90, THEME.radius.cell);
+      g.fillStyle(PAINT[RED]!, 0.3);
+      g.fillRoundedRect(cx - 4, 391, 58, 58, THEME.radius.cell);
+      label(this, cx + 140, 420, '←●', THEME.type.lg, css(PAINT[RED]!));
     } else {
       // Waiting slots, one free.
       for (let i = 0; i < 3; i++) {

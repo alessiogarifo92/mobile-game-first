@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { newlyCompletedStage, stageSkin } from '../../core/album';
 import { primariesOf } from '../../core/colors';
 import { cellDone } from '../../core/rules';
+import type { StoneEvent } from '../../core/sim';
 import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, slotAt, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
 import { currentLevel } from '../../core/mapLayout';
@@ -21,7 +22,7 @@ import { LEVELS, UNIVERSES, canOpen, getProgress, levelHint, levelTitle, markCom
 import { BLUE, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
 import { PAINT, SYMBOL, THEME, css } from '../theme';
 import { drawSkin } from '../skins';
-import { button, label, progressBar, screenBackground } from '../ui';
+import { button, drawStone, label, progressBar, screenBackground } from '../ui';
 
 const TICK_MS = 85;
 const BELT_JAR = 54;
@@ -71,6 +72,8 @@ export class PlayScene extends Phaser.Scene {
   /** Last launch refused because the belt was full: the tapped column or slot shakes for a moment. */
   private refused: { column: number; slot: number; at: number } | null = null;
   private refusals = 0;
+  /** Shots stopped by a stone so far (for tests). */
+  private stoneSplashes = 0;
 
   constructor() {
     super('play');
@@ -102,6 +105,7 @@ export class PlayScene extends Phaser.Scene {
     this.pixelsDirty = false;
     this.refused = null;
     this.refusals = 0;
+    this.stoneSplashes = 0;
   }
 
   create(): void {
@@ -314,6 +318,16 @@ export class PlayScene extends Phaser.Scene {
       for (let k = 0; k < n; k++) sq(left + k * 80, y, PAINT[colors[k % 3]!]!);
       sq(left + n * 80, y, PAINT[colors[n % 3]!]!, 0.3);
       card.add(label(this, left + n * 80, y, '✕', THEME.type.md, THEME.inkCss));
+    } else if (id === 'stone') {
+      // Belt → stone: the drop stops; the pixel behind is painted from the other side.
+      const y = y0 + 200;
+      card.add(label(this, cx - 220, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
+      drawStone(g, cx - 164, y - 24, 48, 48);
+      sq(cx - 80, y, THEME.emptyPixel);
+      sq(cx - 80, y, PAINT[RED]!, 0.3);
+      card.add(label(this, cx, y, '←●', THEME.type.sm, css(PAINT[RED]!)));
+      card.add(label(this, cx + 80, y, '=', THEME.type.md));
+      sq(cx + 160, y, PAINT[RED]!);
     } else if (id === 'hidden') {
       // "?" next to a pixel: finish the neighbour, the colour shows.
       const y = y0 + 200;
@@ -345,6 +359,7 @@ export class PlayScene extends Phaser.Scene {
         this.acc -= TICK_MS;
         step(this.gs);
         for (const e of this.gs.events) this.splash(e);
+        for (const e of this.gs.stoneHits) this.stoneSplash(e);
         for (const d of this.gs.departures) {
           if (d.slot === null) continue;
           const back = this.gs.slots[d.slot];
@@ -371,6 +386,11 @@ export class PlayScene extends Phaser.Scene {
     const { targets } = this.level;
     const inset = this.layout.cell > 30 ? 2 : 1;
     targets.forEach((target, i) => {
+      if (this.level.stone[i]) {
+        const r = cellRect(this.layout, this.level.width, i);
+        drawStone(g, r.x + inset, r.y + inset, r.w - 2 * inset, r.h - 2 * inset);
+        return;
+      }
       if (!target) return;
       const r = cellRect(this.layout, this.level.width, i);
       const x = r.x + inset, y = r.y + inset, w = r.w - 2 * inset, h = r.h - 2 * inset;
@@ -576,6 +596,32 @@ export class PlayScene extends Phaser.Scene {
     });
   }
 
+  /** A shot stopped by a stone: a grey drop that bursts on the stone without colouring anything (#95). */
+  private stoneSplash(e: StoneEvent): void {
+    this.stoneSplashes += 1;
+    const from = beltPoint(this.layout, e.lane);
+    const r = cellRect(this.layout, this.level.width, e.cell);
+    const to = { x: r.x + r.w / 2, y: r.y + r.h / 2 };
+    const drop = this.add.circle(from.x, from.y, 9, THEME.stone).setStrokeStyle(2, THEME.stoneDark).setDepth(4);
+    this.tweens.add({
+      targets: drop,
+      x: to.x,
+      y: to.y,
+      duration: 110,
+      onComplete: () => {
+        drop.destroy();
+        for (let k = 0; k < 4; k++) {
+          const a = Math.random() * Math.PI * 2;
+          const d = r.w * (0.4 + Math.random() * 0.4);
+          const spot = this.add.circle(to.x, to.y, 2 + Math.random() * 3, THEME.stoneDark).setDepth(4);
+          this.tweens.add({
+            targets: spot, x: to.x + Math.cos(a) * d, y: to.y + Math.sin(a) * d, alpha: 0, duration: 220, onComplete: () => spot.destroy(),
+          });
+        }
+      },
+    });
+  }
+
   // ---------- end of level ----------
 
   private finish(): void {
@@ -726,6 +772,8 @@ export class PlayScene extends Phaser.Scene {
       painted: this.level.targets.filter((t, i) => t && cellDone(this.level, gs, i)).length,
       ice: gs.ice.reduce((a, b) => a + b, 0),
       hidden: gs.hidden.filter(Boolean).length,
+      stones: this.level.stone.filter(Boolean).length,
+      stoneSplashes: this.stoneSplashes,
     });
   }
 

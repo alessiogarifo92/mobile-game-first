@@ -76,6 +76,7 @@ export function curveLevel(level: Level, winRate: number, easyBoss?: boolean): C
   if (pixels.some((t) => !isPrimary(t))) features.push('mix');
   if (level.ice.some((n) => n > 0)) features.push('ice');
   if (level.hidden.some(Boolean)) features.push('hidden');
+  if (level.stone.some(Boolean)) features.push('stone');
   return {
     id: level.id,
     stage: level.stage,

@@ -15,6 +15,9 @@ export const THEME = {
   subCss: '#66637A',
   white: 0xffffff,
   ice: 0xcfe8f7,
+  /** Stone block (#95): cool grey, apart from the warm hidden cover; bevel and speckles carry it without colour. */
+  stone: 0xa3a6ad,
+  stoneDark: 0x5f626b,
   /** Reward gold: the 'gold' skin, finished-universe skins. */
   gold: 0xffd166,
   font: 'ui-rounded, "Nunito", "Fredoka", system-ui, sans-serif',

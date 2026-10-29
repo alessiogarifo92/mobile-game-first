@@ -40,15 +40,30 @@ export function boardDone(level: Level, board: Board): boolean {
 
 /**
  * Cell a shot of `color` hits along `laneCells`: paint flies over finished pixels and stops at the
- * first unfinished one, which takes the shot only if it can use it. -1 when the lane is blocked.
+ * first unfinished one, which takes the shot only if it can use it. -1 when the lane is blocked,
+ * also by a stone (paint never passes one).
  */
 export function findTarget(level: Level, board: Board, laneCells: readonly number[], color: Primary): number {
   for (const cell of laneCells) {
+    if (level.stone[cell]) return -1;
     if (cellDone(level, board, cell)) continue;
     if (board.hidden[cell]) return -1;
     const target = level.targets[cell]!;
     if (board.ice[cell]! > 0) return (target & color) !== 0 ? cell : -1;
     return accepts(target, board.paint[cell]!, color) ? cell : -1;
+  }
+  return -1;
+}
+
+/**
+ * Stone that stops a shot of `color` along `laneCells`: the shot would hit a pixel behind it, but paint never
+ * passes a stone. -1 otherwise. Only feedback (an uncoloured splash on the stone): findTarget already returns -1.
+ */
+export function blockingStone(level: Level, board: Board, laneCells: readonly number[], color: Primary): number {
+  for (let k = 0; k < laneCells.length; k++) {
+    const cell = laneCells[k]!;
+    if (level.stone[cell]) return findTarget(level, board, laneCells.slice(k + 1), color) >= 0 ? cell : -1;
+    if (!cellDone(level, board, cell)) return -1;
   }
   return -1;
 }
