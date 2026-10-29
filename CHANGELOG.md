@@ -1,6 +1,10 @@
 # Changelog
 
-## Non rilasciato — selettore degli universi, mappa per universo e festa di fine universo (#91)
+## 0.5.0 — universi: selettore, mappa per universo e festa di fine universo (29 ottobre 2026)
+
+Il gioco ora è organizzato in **universi** da 100 livelli: oggi c'è l'universo 1 (Atelier), con i 100 livelli di sempre, e tutto è pronto per i prossimi. La mappa mostra un universo alla volta, con il suo avanzamento x/100; un selettore elenca gli universi, anche quelli ancora chiusi, e finire l'ultimo livello di un universo apre una festa. **I progressi restano validi** e i livelli non cambiano.
+
+### Selettore degli universi, mappa per universo e festa di fine universo (#91)
 
 - **Selettore degli universi**: si apre dalla barra sotto il titolo della mappa. Una card per universo con nome, colore, avanzamento x/100 e il primo quadro come anteprima. Un universo chiuso resta visibile (lucchetto, sagoma del quadro, "Completa il livello N per aprire"); toccarlo lo scuote e spiega cosa manca, senza aprirlo.
 - **Mappa per universo**: solo i livelli dell'universo scelto (al massimo 100 nodi); si apre sull'universo del livello corrente. "Altri livelli in arrivo" solo sull'ultimo universo in costruzione.
@@ -9,7 +13,7 @@
 - La tabella degli universi passa in `scripts/universes.ts`; `npm run gen:levels` la scrive in `src/levels/universes.json` (verificata da `--check`). Livelli identici.
 - Test: unit sul selettore (card, layout, universo della mappa, universo appena completato); e2e a 360×640 e 412×915 su una build con 205 livelli (universo chiuso non selezionabile, festa una sola volta e rivista dall'album, mappa dell'universo 2 dal 101); il selettore è nel controllo "niente fuori schermo" su tutti i formati.
 
-## Non rilasciato — universi da 100 livelli e sblocco a fine universo (#90)
+### Universi da 100 livelli e sblocco a fine universo (#90)
 
 - **Universi nel core**: `src/core/universes.ts` (puro) con la tabella `UNIVERSES` (nome, colore del tema, tela massima) e le regole: un universo è una serie di 10 stage; l'universo N+1 si apre solo completando l'ultimo livello dell'universo N. Funzioni: `universeOf`, `universeLevels`, `lastLevelOf`, `isUniverseUnlocked`, `canOpenLevel`.
 - **Il core rifiuta i livelli chiusi**: la scena di gioco apre un livello solo se `canOpenLevel` lo permette, e i salvataggi modificati a mano perdono i completati e lo sblocco oltre gli universi aperti. Chi ha finito i 100 livelli di oggi troverà aperto il livello 101 quando arriverà l'universo 2.

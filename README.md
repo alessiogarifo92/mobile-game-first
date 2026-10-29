@@ -49,12 +49,12 @@ Ogni colore ha anche un simbolo (● rosso, ▲ giallo, ■ blu), così il gioco
 ## Installare e provare
 
 ### APK Android
-- **Dalla Release (consigliato)**: GitHub → **Releases** → l'ultima release (es. `v0.4.0`) → scarica `mix-and-splash-…-debug.apk` direttamente dal telefono e aprilo.
+- **Dalla Release (consigliato)**: GitHub → **Releases** → l'ultima release (es. `v0.5.0`) → scarica `mix-and-splash-…-debug.apk` direttamente dal telefono e aprilo.
 - **Da ogni push**: GitHub → **Actions** → *Android APK* → **Artifacts** → `mix-and-splash-debug-apk` (uno zip con `app-debug.apk`).
 
 Android chiederà di consentire l'installazione da "origini sconosciute" per l'app usata (Files o Chrome): consentila solo per questa installazione.
 
-Per pubblicare una nuova pre-release: GitHub → Actions → *Android APK* → **Run workflow**, scegli il branch e scrivi la versione (es. `v0.4.0-rc.1`); in alternativa pusha un tag di versione. Il workflow compila l'APK e crea la release con le note della sezione corrispondente di `CHANGELOG.md`.
+Per pubblicare una nuova pre-release: GitHub → Actions → *Android APK* → **Run workflow**, scegli il branch e scrivi la versione (es. `v0.5.0-rc.1`); in alternativa pusha un tag di versione. Il workflow compila l'APK e crea la release con le note della sezione corrispondente di `CHANGELOG.md`.
 
 È una build di **debug** (firmata con la chiave di debug): va bene per i test, non per il Play Store.
 
