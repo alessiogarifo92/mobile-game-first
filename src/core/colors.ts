@@ -9,6 +9,8 @@ export const PRIMARIES: readonly Primary[] = [RED, YELLOW, BLUE];
 export const ORANGE = RED | YELLOW;
 export const GREEN = YELLOW | BLUE;
 export const PURPLE = RED | BLUE;
+/** The tertiary: a brown pixel needs one hit of each primary, in any order (#94). */
+export const BROWN = RED | YELLOW | BLUE;
 
 /** Single-character codes used by level images. `.` means "no pixel". */
 export const COLOR_CODES: Record<string, number> = {
@@ -18,6 +20,7 @@ export const COLOR_CODES: Record<string, number> = {
   O: ORANGE,
   G: GREEN,
   P: PURPLE,
+  K: BROWN,
 };
 
 export function isPrimary(value: number): value is Primary {

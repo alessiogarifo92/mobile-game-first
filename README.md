@@ -30,6 +30,8 @@ Ogni colore ha anche un simbolo (● rosso, ▲ giallo, ■ blu), così il gioco
 |---|---|---|
 | **Pixel ghiacciato** (crepe azzurre) | stage 4 | Vuole due colpi del suo colore: il primo rompe il ghiaccio, il secondo lo dipinge. Finché è ghiacciato blocca la corsia. |
 | **Pixel nascosto** ("?") | stage 6 | Blocca la corsia e non mostra il colore finché un pixel accanto (sopra, sotto, a destra o a sinistra) non è completo. |
+| **Pietra** (blocco grigio) | livello 141 | Cella senza pixel: la vernice si ferma lì e non passa oltre. I pixel dietro si dipingono da un altro lato del nastro. |
+| **Lucchetto e chiave** (icone lucchetto 🔒 e chiave) | livello 201 (universo 3) | Il pixel col lucchetto blocca la corsia finché **tutti** i pixel chiave non sono completi; poi tutti i lucchetti si aprono insieme. Non costa colpi in più. |
 | **Nastro corto** | stage 8 | Al massimo 2 secchielli sul nastro insieme. |
 
 ### Stage, boss e album
@@ -41,7 +43,7 @@ Ogni colore ha anche un simbolo (● rosso, ▲ giallo, ■ blu), così il gioco
 
 ### Primo accesso e impostazioni
 - Il **livello 1 è guidato**: evidenzia la colonna da toccare e accompagna i primi lanci.
-- Ogni meccanica nuova (mixing, corsia bloccata, slot, ghiaccio, nascosti) è spiegata **una sola volta**, con un'illustrazione, la prima volta che compare.
+- Ogni meccanica nuova (mixing, corsia bloccata, slot, ghiaccio, nascosti, pietre, lucchetti) è spiegata **una sola volta**, con un'illustrazione, la prima volta che compare.
 - **Impostazioni** (⚙ nella mappa): lingua (English / Italiano), suono, **Come si gioca** (3 schede), **Rivedi il tutorial**.
 - I progressi sono salvati sul dispositivo.
 
@@ -103,10 +105,10 @@ src/
   core/            regole del gioco, pure (niente Phaser/DOM), coperte da unit test
     colors.ts        primari come bitmask, mixing
     level.ts         formato livello, parsing e validazione (munizioni esatte)
-    rules.ts         colpo, ghiaccio, nascosti: condivise da simulazione e solver
+    rules.ts         colpo, ghiaccio, nascosti, pietre, lucchetti: condivise da simulazione e solver
     sim.ts           simulazione deterministica a tick (nastro, slot, ingorgo)
     solver.ts        prova di risolvibilità (DFS) + win-rate di un giocatore casuale
-    generator.ts     code di secchielli, piazzamento ghiaccio/nascosti, scarto dei livelli non provati
+    generator.ts     code di secchielli, piazzamento ghiaccio/nascosti/pietre/chiavi e lucchetti, scarto dei livelli non provati
     stages.ts        stage letti dai dati, validazione, id/boss, hash delle specifiche
     universes.ts     universi da 10 stage, sblocco a fine universo, tela massima
     universeMenu.ts  selettore degli universi: card, layout, universo della mappa, fine universo
@@ -131,10 +133,10 @@ docs/              strategia, design, report, anteprime livelli, evidenze dei te
 ```
 
 ### Come funziona un livello
-Un livello è un'immagine di caratteri (`R Y B O G P`, `.` = vuoto), un `overlay` opzionale (`i` ghiaccio, `h` nascosto) e le colonne di secchielli. Le munizioni di ogni colore sono **esattamente** quelle che servono: non ci sono colpi sprecati per costruzione.
+Un livello è un'immagine di caratteri (`R Y B O G P`, `K` = marrone, cioè rosso + giallo + blu; `.` = vuoto), un `overlay` opzionale (`i` ghiaccio, `h` nascosto, `s` pietra su una cella vuota, `k` chiave, `l` lucchetto) e le colonne di secchielli. Le munizioni di ogni colore sono **esattamente** quelle che servono: non ci sono colpi sprecati per costruzione.
 
 La generazione (`npm run gen:levels`), per ogni specifica:
-1. divide la vernice necessaria in secchielli, li mescola nelle colonne (con un seed) e, se richiesto, piazza ghiaccio e pixel nascosti;
+1. divide la vernice necessaria in secchielli, li mescola nelle colonne (con un seed) e, se richiesto, piazza ghiaccio, pixel nascosti, chiavi e lucchetti;
 2. accetta il risultato solo se il **solver** dimostra che è risolvibile (cercando una sequenza vincente);
 3. misura la difficoltà come **percentuale di vittorie di un giocatore che tocca a caso** e la confronta con la fascia `winRate` della specifica;
 4. se il livello è troppo facile, prova a stringerlo (uno slot in meno, secchielli più carichi) senza scendere sotto 6 secchielli dallo stage 3; se non basta, allenta la fascia e lo segnala nel log.

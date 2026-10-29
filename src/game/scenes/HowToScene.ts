@@ -1,16 +1,16 @@
 import Phaser from 'phaser';
-import { BLUE, ORANGE, RED, YELLOW } from '../../core/colors';
+import { BLUE, BROWN, ORANGE, RED, YELLOW } from '../../core/colors';
 import { HOWTO_PAGES, clampPage, pageAfterSwipe } from '../../core/howto';
 import { VIEW } from '../../core/layout';
 import type { MessageKey } from '../../core/i18n';
 import { publishDebug } from '../debug';
 import { t } from '../store';
-import { PAINT, SYMBOL, THEME } from '../theme';
-import { button, label, screenBackground } from '../ui';
+import { PAINT, SYMBOL, THEME, css } from '../theme';
+import { brownPixel, button, drawStone, keyIcon, label, lockIcon, screenBackground } from '../ui';
 
 const PAGES = HOWTO_PAGES;
 
-/** "How to play": illustrated cards (HOWTO_PAGES), reachable from Settings. */
+/** "How to play": illustrated cards (one per HOWTO_PAGES), reachable from Settings. */
 export class HowToScene extends Phaser.Scene {
   private pageNow = 0;
 
@@ -87,10 +87,10 @@ export class HowToScene extends Phaser.Scene {
     label(this, x, y, color === null ? '?' : SYMBOL[color]!, size * (color === null ? 0.4 : 0.3), '#ffffff');
   }
 
-  private pixel(g: Phaser.GameObjects.Graphics, x: number, y: number, color: number, size = 90, half = 0): void {
+  private pixel(g: Phaser.GameObjects.Graphics, x: number, y: number, color: number, size = 90, half = 0, ghost = false): void {
     g.fillStyle(THEME.emptyPixel, 1);
     g.fillRoundedRect(x - size / 2, y - size / 2, size, size, THEME.radius.cell);
-    g.fillStyle(PAINT[color]!, half ? 0.3 : 1);
+    g.fillStyle(PAINT[color]!, half || ghost ? 0.3 : 1);
     g.fillRoundedRect(x - size / 2, y - size / 2, size, size, THEME.radius.cell);
     if (half) {
       g.fillStyle(PAINT[half]!, 1);
@@ -121,6 +121,40 @@ export class HowToScene extends Phaser.Scene {
       this.pixel(g, cx + 55, 420, ORANGE, 90, RED);
       label(this, cx + 135, 420, '→', THEME.type.lg);
       this.pixel(g, cx + 215, 420, ORANGE, 70);
+    } else if (page === 3) {
+      // Red + yellow + blue = brown; below, a brown pixel still missing its blue wedge.
+      this.pixel(g, cx - 225, 360, RED, 80);
+      label(this, cx - 165, 360, '+', THEME.type.lg);
+      this.pixel(g, cx - 105, 360, YELLOW, 80);
+      label(this, cx - 45, 360, '+', THEME.type.lg);
+      this.pixel(g, cx + 15, 360, BLUE, 80);
+      label(this, cx + 85, 360, '=', THEME.type.lg);
+      this.pixel(g, cx + 165, 360, BROWN, 80);
+      g.fillStyle(THEME.emptyPixel, 1);
+      g.fillRoundedRect(cx - 165, 485, 110, 110, THEME.radius.cell);
+      g.fillStyle(PAINT[BROWN]!, 0.3);
+      g.fillRoundedRect(cx - 145, 505, 70, 70, THEME.radius.cell);
+      brownPixel(g, cx - 165, 485, 110, 110, RED | YELLOW);
+      this.jar(g, cx + 20, 540, BLUE, 70);
+      label(this, cx + 90, 540, '→', THEME.type.lg);
+      this.pixel(g, cx + 170, 540, BROWN, 90);
+    } else if (page === 4) {
+      // Stones (#95): the drop from the left stops on the stone; the pixel behind takes paint from the right.
+      label(this, cx - 170, 420, '●→', THEME.type.lg, css(PAINT[RED]!));
+      drawStone(g, cx - 100, 375, 90, 90);
+      // An unfinished pixel: the ghost of the colour it still needs.
+      g.fillStyle(THEME.emptyPixel, 1);
+      g.fillRoundedRect(cx + 20, 375, 90, 90, THEME.radius.cell);
+      g.fillStyle(PAINT[RED]!, 0.3);
+      g.fillRoundedRect(cx + 36, 391, 58, 58, THEME.radius.cell);
+      label(this, cx + 180, 420, '←●', THEME.type.lg, css(PAINT[RED]!));
+    } else if (page === 5) {
+      // A key pixel, then the padlocked pixel it opens.
+      this.pixel(g, cx - 150, 420, YELLOW);
+      keyIcon(g, cx - 150, 420, 70);
+      label(this, cx - 30, 420, '→', THEME.type.xl);
+      this.pixel(g, cx + 110, 420, RED, 90, 0, true);
+      lockIcon(g, cx + 110, 420, 64);
     } else if (page === 2) {
       // Waiting slots, one free.
       for (let i = 0; i < 3; i++) {

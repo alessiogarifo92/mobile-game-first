@@ -12,6 +12,8 @@ export interface Board {
   ice: number[];
   /** Hidden pixels block their lane until a neighbour is done. */
   hidden: boolean[];
+  /** Locked pixels block their lane until every key pixel of the level is done. */
+  locked: boolean[];
 }
 
 export interface HitResult {
@@ -19,19 +21,21 @@ export interface HitResult {
   completed: boolean;
   /** Hidden pixels revealed because this hit completed their neighbour. */
   revealed: number[];
+  /** Locked pixels opened because this hit completed the last key. */
+  unlocked: number[];
 }
 
 export function createBoard(level: Level): Board {
-  return { paint: level.targets.map(() => 0), ice: level.ice.slice(), hidden: level.hidden.slice() };
+  return { paint: level.targets.map(() => 0), ice: level.ice.slice(), hidden: level.hidden.slice(), locked: level.locked.slice() };
 }
 
 export function cloneBoard(board: Board): Board {
-  return { paint: board.paint.slice(), ice: board.ice.slice(), hidden: board.hidden.slice() };
+  return { paint: board.paint.slice(), ice: board.ice.slice(), hidden: board.hidden.slice(), locked: board.locked.slice() };
 }
 
 export function cellDone(level: Level, board: Board, cell: number): boolean {
   const target = level.targets[cell]!;
-  return target === 0 || (board.paint[cell] === target && board.ice[cell] === 0 && !board.hidden[cell]);
+  return target === 0 || (board.paint[cell] === target && board.ice[cell] === 0 && !board.hidden[cell] && !board.locked[cell]);
 }
 
 export function boardDone(level: Level, board: Board): boolean {
@@ -40,15 +44,30 @@ export function boardDone(level: Level, board: Board): boolean {
 
 /**
  * Cell a shot of `color` hits along `laneCells`: paint flies over finished pixels and stops at the
- * first unfinished one, which takes the shot only if it can use it. -1 when the lane is blocked.
+ * first unfinished one, which takes the shot only if it can use it. -1 when the lane is blocked,
+ * also by a stone (paint never passes one).
  */
 export function findTarget(level: Level, board: Board, laneCells: readonly number[], color: Primary): number {
   for (const cell of laneCells) {
+    if (level.stone[cell]) return -1;
     if (cellDone(level, board, cell)) continue;
-    if (board.hidden[cell]) return -1;
+    if (board.hidden[cell] || board.locked[cell]) return -1;
     const target = level.targets[cell]!;
     if (board.ice[cell]! > 0) return (target & color) !== 0 ? cell : -1;
     return accepts(target, board.paint[cell]!, color) ? cell : -1;
+  }
+  return -1;
+}
+
+/**
+ * Stone that stops a shot of `color` along `laneCells`: the shot would hit a pixel behind it, but paint never
+ * passes a stone. -1 otherwise. Only feedback (an uncoloured splash on the stone): findTarget already returns -1.
+ */
+export function blockingStone(level: Level, board: Board, laneCells: readonly number[], color: Primary): number {
+  for (let k = 0; k < laneCells.length; k++) {
+    const cell = laneCells[k]!;
+    if (level.stone[cell]) return findTarget(level, board, laneCells.slice(k + 1), color) >= 0 ? cell : -1;
+    if (!cellDone(level, board, cell)) return -1;
   }
   return -1;
 }
@@ -80,7 +99,15 @@ export function applyHit(level: Level, board: Board, cell: number, color: Primar
       }
     }
   }
-  return { brokeIce, completed, revealed };
+  const unlocked: number[] = [];
+  if (completed && level.keys[cell] && level.keys.every((key, i) => !key || cellDone(level, board, i))) {
+    board.locked.forEach((locked, i) => {
+      if (!locked) return;
+      board.locked[i] = false;
+      unlocked.push(i);
+    });
+  }
+  return { brokeIce, completed, revealed, unlocked };
 }
 
 /**

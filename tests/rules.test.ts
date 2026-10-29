@@ -20,7 +20,7 @@ describe('ice', () => {
     const b = createBoard(iced);
     expect(findTarget(iced, b, [0], RED)).toBe(0);
     expect(findTarget(iced, b, [0], BLUE)).toBe(-1);
-    expect(applyHit(iced, b, 0, RED)).toEqual({ brokeIce: true, completed: false, revealed: [] });
+    expect(applyHit(iced, b, 0, RED)).toEqual({ brokeIce: true, completed: false, revealed: [], unlocked: [] });
     expect(b.paint[0]).toBe(0);
     expect(applyHit(iced, b, 0, RED)).toMatchObject({ brokeIce: false, completed: true });
     expect(boardDone(iced, b)).toBe(true);
@@ -59,7 +59,7 @@ describe('hidden pixels', () => {
 
   it('is revealed when a neighbour is completed, then plays normally', () => {
     const b = createBoard(l);
-    expect(applyHit(l, b, 0, RED)).toEqual({ brokeIce: false, completed: true, revealed: [1] });
+    expect(applyHit(l, b, 0, RED)).toEqual({ brokeIce: false, completed: true, revealed: [1], unlocked: [] });
     expect(findTarget(l, b, [1], BLUE)).toBe(1);
     applyHit(l, b, 1, BLUE);
     expect(boardDone(l, b)).toBe(true);
@@ -98,7 +98,7 @@ describe('simulation and solver apply the same rules', () => {
         if (!shooter || !launchFromColumn(g, col)) continue;
         const left = runLoop(special, lanes, board, shooter.color, shooter.ammo);
         while (g.belt.length + g.pending.length > 0 && g.status === 'playing') step(g);
-        expect({ paint: g.paint, ice: g.ice, hidden: g.hidden }).toEqual(cloneBoard(board));
+        expect({ paint: g.paint, ice: g.ice, hidden: g.hidden, locked: g.locked }).toEqual(cloneBoard(board));
         const back = g.slots.find((s) => s?.id === shooter.id);
         expect(back?.ammo ?? 0).toBe(left);
         g.slots = g.slots.map(() => null); // keep slots free so the sequence never jams

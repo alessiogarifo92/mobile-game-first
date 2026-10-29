@@ -1,4 +1,4 @@
-import { BLUE, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../core/colors';
+import { BLUE, BROWN, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../core/colors';
 
 /** Design tokens of direction A "Gouache Studio" (docs/design/README.md). The only source of style. */
 export const THEME = {
@@ -15,6 +15,9 @@ export const THEME = {
   subCss: '#66637A',
   white: 0xffffff,
   ice: 0xcfe8f7,
+  /** Stone block (#95): cool grey, apart from the warm hidden cover; bevel and speckles carry it without colour. */
+  stone: 0xa3a6ad,
+  stoneDark: 0x5f626b,
   /** Reward gold: the 'gold' skin, finished-universe skins. */
   gold: 0xffd166,
   font: 'ui-rounded, "Nunito", "Fredoka", system-ui, sans-serif',
@@ -30,6 +33,8 @@ export const PAINT: Record<number, number> = {
   [ORANGE]: 0xfb8500,
   [GREEN]: 0x43aa8b,
   [PURPLE]: 0x8e5bd9,
+  /** Warm gouache brown (#94): much darker than orange and warmer than purple, so the three never blur together. */
+  [BROWN]: 0x8b5a3c,
 };
 
 /** Colour-blind support: every primary also has a shape. */

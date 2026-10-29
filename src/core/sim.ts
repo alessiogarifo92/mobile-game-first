@@ -1,6 +1,6 @@
 import type { Primary } from './colors';
 import { buildLanes, type Level } from './level';
-import { applyHit, boardDone, createBoard, findTarget, type Board } from './rules';
+import { applyHit, blockingStone, boardDone, createBoard, findTarget, type Board } from './rules';
 
 export interface Shooter {
   id: number;
@@ -26,9 +26,17 @@ export interface HitEvent {
   completed: boolean;
   brokeIce: boolean;
   revealed: number[];
+  unlocked: number[];
 }
 
-/** The game state is a Board (paint, ice, hidden) plus the belt and the shooters. */
+/** A shot stopped by a stone (#95): no paint lands, the stone just takes an uncoloured splash. */
+export interface StoneEvent {
+  shooterId: number;
+  lane: number;
+  cell: number;
+}
+
+/** The game state is a Board (paint, ice, hidden, locked) plus the belt and the shooters. */
 export interface GameState extends Board {
   level: Level;
   lanes: number[][];
@@ -47,6 +55,8 @@ export interface GameState extends Board {
   boardGap: number;
   /** Hits produced by the last step, for rendering. */
   events: HitEvent[];
+  /** Shots stopped by a stone in the last step, for rendering. */
+  stoneHits: StoneEvent[];
   /** Shooters that left the belt in the last step: to a slot (index) or emptied (null). */
   departures: { shooterId: number; slot: number | null }[];
 }
@@ -67,6 +77,7 @@ export function createGame(level: Level, options: { boardGap?: number } = {}): G
     extraSlotUsed: false,
     boardGap: Math.max(1, Math.floor(options.boardGap ?? 1)),
     events: [],
+    stoneHits: [],
     departures: [],
   };
 }
@@ -135,6 +146,7 @@ export function isWon(state: GameState): boolean {
 /** Advances the simulation by one tick. Deterministic: same inputs, same result. */
 export function step(state: GameState): GameState {
   state.events = [];
+  state.stoneHits = [];
   state.departures = [];
   if (state.status !== 'playing') return state;
   state.tick += 1;
@@ -158,6 +170,9 @@ export function step(state: GameState): GameState {
         paint: state.paint[cell]!,
         ...hit,
       });
+    } else {
+      const stone = blockingStone(state.level, state, state.lanes[shooter.pos]!, shooter.color);
+      if (stone >= 0) state.stoneHits.push({ shooterId: shooter.id, lane: shooter.pos, cell: stone });
     }
     if (shooter.ammo === 0) {
       state.departures.push({ shooterId: shooter.id, slot: null });

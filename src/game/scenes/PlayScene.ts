@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { newlyCompletedStage, stageSkin } from '../../core/album';
 import { primariesOf } from '../../core/colors';
 import { cellDone, colorShown } from '../../core/rules';
+import type { StoneEvent } from '../../core/sim';
 import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, slotAt, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
 import { currentLevel } from '../../core/mapLayout';
@@ -18,10 +19,10 @@ import { solve } from '../../core/solver';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
 import { LEVELS, UNIVERSES, canOpen, getProgress, levelHint, levelTitle, markCompleted, markTip, setSound, t, tipSeen } from '../store';
-import { BLUE, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
+import { BLUE, BROWN, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
 import { PAINT, SYMBOL, THEME, css } from '../theme';
 import { drawSkin } from '../skins';
-import { button, label, progressBar, screenBackground } from '../ui';
+import { brownPixel, button, drawStone, keyIcon, label, lockIcon, progressBar, screenBackground } from '../ui';
 
 const TICK_MS = 85;
 const BELT_JAR = 54;
@@ -75,6 +76,8 @@ export class PlayScene extends Phaser.Scene {
   /** Last launch refused because the belt was full: the tapped column or slot shakes for a moment. */
   private refused: { column: number; slot: number; at: number } | null = null;
   private refusals = 0;
+  /** Shots stopped by a stone so far (for tests). */
+  private stoneSplashes = 0;
 
   constructor() {
     super('play');
@@ -107,6 +110,7 @@ export class PlayScene extends Phaser.Scene {
     this.pixelsDirty = false;
     this.refused = null;
     this.refusals = 0;
+    this.stoneSplashes = 0;
   }
 
   create(): void {
@@ -310,6 +314,19 @@ export class PlayScene extends Phaser.Scene {
       sq(cx + 160, y, PAINT[RED]!);
       card.add(label(this, cx - 80, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
       card.add(label(this, cx + 80, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
+    } else if (id === 'brown') {
+      // Red + yellow + blue = brown, then a brown pixel with two of its three wedges painted: blue is missing.
+      const y = y0 + 150;
+      [RED, YELLOW, BLUE, BROWN].forEach((col, k) => sq(cx - 210 + k * 120 + (k === 3 ? 20 : 0), y, PAINT[col]!));
+      card.add(label(this, cx - 150, y, '+', THEME.type.md));
+      card.add(label(this, cx - 30, y, '+', THEME.type.md));
+      card.add(label(this, cx + 100, y, '=', THEME.type.md));
+      const y2 = y0 + 225;
+      sq(cx - 80, y2, THEME.emptyPixel);
+      sq(cx - 80, y2, PAINT[BROWN]!, 0.3);
+      brownPixel(g, cx - 104, y2 - 24, 48, 48, RED | YELLOW);
+      card.add(label(this, cx, y2, `${SYMBOL[BLUE]}→`, THEME.type.sm, css(PAINT[BLUE]!)));
+      sq(cx + 80, y2, PAINT[BROWN]!);
     } else if (id === 'belt') {
       // As many buckets as the belt holds, then one more that cannot board.
       const n = Math.min(this.level.beltCapacity, 5);
@@ -319,6 +336,28 @@ export class PlayScene extends Phaser.Scene {
       for (let k = 0; k < n; k++) sq(left + k * 80, y, PAINT[colors[k % 3]!]!);
       sq(left + n * 80, y, PAINT[colors[n % 3]!]!, 0.3);
       card.add(label(this, left + n * 80, y, '✕', THEME.type.md, THEME.inkCss));
+    } else if (id === 'stone') {
+      // Belt → stone: the drop stops; the pixel behind is painted from the other side.
+      const y = y0 + 200;
+      card.add(label(this, cx - 220, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
+      drawStone(g, cx - 164, y - 24, 48, 48);
+      sq(cx - 80, y, THEME.emptyPixel);
+      sq(cx - 80, y, PAINT[RED]!, 0.3);
+      card.add(label(this, cx, y, '←●', THEME.type.sm, css(PAINT[RED]!)));
+      card.add(label(this, cx + 80, y, '=', THEME.type.md));
+      sq(cx + 160, y, PAINT[RED]!);
+    } else if (id === 'lock') {
+      // Key done → padlock opens → the pixel can be painted.
+      const y = y0 + 200;
+      sq(cx - 200, y, PAINT[YELLOW]!);
+      keyIcon(g, cx - 200, y, 38);
+      card.add(label(this, cx - 120, y, '→', THEME.type.lg));
+      sq(cx - 40, y, PAINT[RED]!, 0.3);
+      lockIcon(g, cx - 40, y, 36);
+      card.add(label(this, cx + 40, y, '→', THEME.type.lg));
+      sq(cx + 120, y, THEME.emptyPixel);
+      sq(cx + 120, y, PAINT[RED]!, 0.3);
+      card.add(label(this, cx + 200, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
     } else if (id === 'covered') {
       // A "?" bucket behind the front → at the front it shows its colour.
       const y = y0 + 200;
@@ -363,6 +402,7 @@ export class PlayScene extends Phaser.Scene {
         this.acc -= TICK_MS;
         step(this.gs);
         for (const e of this.gs.events) this.splash(e);
+        for (const e of this.gs.stoneHits) this.stoneSplash(e);
         for (const d of this.gs.departures) {
           if (d.slot === null) continue;
           const back = this.gs.slots[d.slot];
@@ -389,6 +429,11 @@ export class PlayScene extends Phaser.Scene {
     const { targets } = this.level;
     const inset = this.layout.cell > 30 ? 2 : 1;
     targets.forEach((target, i) => {
+      if (this.level.stone[i]) {
+        const r = cellRect(this.layout, this.level.width, i);
+        drawStone(g, r.x + inset, r.y + inset, r.w - 2 * inset, r.h - 2 * inset);
+        return;
+      }
       if (!target) return;
       const r = cellRect(this.layout, this.level.width, i);
       const x = r.x + inset, y = r.y + inset, w = r.w - 2 * inset, h = r.h - 2 * inset;
@@ -411,10 +456,20 @@ export class PlayScene extends Phaser.Scene {
       // Ghost of the target colour: tells the player what this pixel still needs.
       g.fillStyle(PAINT[target]!, 0.3);
       g.fillRoundedRect(x + w * 0.18, y + h * 0.18, w * 0.64, h * 0.64, THEME.radius.cell);
-      if (paint) {
+      if (target === BROWN) brownPixel(g, x, y, w, h, paint);
+      else if (paint) {
         // Half-mixed secondary: the received primary fills the upper-left triangle.
         g.fillStyle(PAINT[paint]!, 1);
         g.fillTriangle(x, y, x + w, y, x, y + h);
+      }
+      if (this.gs.locked[i]) {
+        // Locked: the colour still shows (so the player can plan), under a veil and an ink padlock.
+        g.fillStyle(THEME.paper, 0.55);
+        g.fillRoundedRect(x, y, w, h, THEME.radius.cell);
+        lockIcon(g, x + w / 2, y + h / 2, h * 0.72);
+      } else if (this.level.keys[i]) {
+        // Key: what opens the padlocks, until it is done.
+        keyIcon(g, x + w / 2, y + h / 2, w * 0.78);
       }
       if (this.gs.ice[i]! > 0) {
         // Ice: frosted cover with cracks.
@@ -602,6 +657,13 @@ export class PlayScene extends Phaser.Scene {
             });
           }
         }
+        for (const cell of e.unlocked) {
+          // The padlock lifts off and fades: the lane is open.
+          const rr = cellRect(this.layout, this.level.width, cell);
+          const lock = this.add.graphics().setPosition(rr.x + rr.w / 2, rr.y + rr.h / 2).setDepth(4);
+          lockIcon(lock, 0, 0, rr.h * 0.72);
+          this.tweens.add({ targets: lock, y: lock.y - rr.h * 0.8, angle: 18, alpha: 0, scale: 1.3, duration: 420, ease: 'Back.easeIn', onComplete: () => lock.destroy() });
+        }
         for (const cell of e.revealed) {
           const rr = cellRect(this.layout, this.level.width, cell);
           const pop = this.add.circle(rr.x + rr.w / 2, rr.y + rr.h / 2, rr.w / 2, THEME.white, 0.8).setDepth(4);
@@ -610,6 +672,32 @@ export class PlayScene extends Phaser.Scene {
         if (e.completed && primariesOf(e.paint).length === 2) {
           const ring = this.add.circle(to.x, to.y, r.w / 2, blotColor, 0).setStrokeStyle(4, blotColor).setDepth(4);
           this.tweens.add({ targets: ring, scale: 1.8, alpha: 0, duration: 320, onComplete: () => ring.destroy() });
+        }
+      },
+    });
+  }
+
+  /** A shot stopped by a stone: a grey drop that bursts on the stone without colouring anything (#95). */
+  private stoneSplash(e: StoneEvent): void {
+    this.stoneSplashes += 1;
+    const from = beltPoint(this.layout, e.lane);
+    const r = cellRect(this.layout, this.level.width, e.cell);
+    const to = { x: r.x + r.w / 2, y: r.y + r.h / 2 };
+    const drop = this.add.circle(from.x, from.y, 9, THEME.stone).setStrokeStyle(2, THEME.stoneDark).setDepth(4);
+    this.tweens.add({
+      targets: drop,
+      x: to.x,
+      y: to.y,
+      duration: 110,
+      onComplete: () => {
+        drop.destroy();
+        for (let k = 0; k < 4; k++) {
+          const a = Math.random() * Math.PI * 2;
+          const d = r.w * (0.4 + Math.random() * 0.4);
+          const spot = this.add.circle(to.x, to.y, 2 + Math.random() * 3, THEME.stoneDark).setDepth(4);
+          this.tweens.add({
+            targets: spot, x: to.x + Math.cos(a) * d, y: to.y + Math.sin(a) * d, alpha: 0, duration: 220, onComplete: () => spot.destroy(),
+          });
         }
       },
     });
@@ -765,6 +853,9 @@ export class PlayScene extends Phaser.Scene {
       painted: this.level.targets.filter((t, i) => t && cellDone(this.level, gs, i)).length,
       ice: gs.ice.reduce((a, b) => a + b, 0),
       hidden: gs.hidden.filter(Boolean).length,
+      stones: this.level.stone.filter(Boolean).length,
+      stoneSplashes: this.stoneSplashes,
+      locked: gs.locked.filter(Boolean).length,
       // What the player can see of each column's top three buckets: a covered one reads as null.
       queueColors: gs.queues.map((q) => q.slice(0, 3).map((s, k) => (colorShown(s, k) ? s.color : null))),
       covered: gs.queues.reduce((n, q) => n + q.filter((s, k) => !colorShown(s, k)).length, 0),
