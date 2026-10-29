@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Meccanica: pixel marrone (#94)
+
+- **Marrone = rosso + giallo + blu**: un pixel marrone (codice `K` nelle immagini) è completo dopo tre colpi, uno per primario, in qualsiasi ordine; finché non arrivano tutti e tre blocca la sua corsia come gli altri pixel non finiti. Le munizioni e il solver contano il colpo in più; il generatore può piazzare pixel marroni in modo deterministico (`special.brown`).
+- **Grafica**: marrone gouache `#8B5A3C`; un pixel marrone a metà mostra tre spicchi fissi (rosso in alto a sinistra, giallo in alto a destra, blu in basso) separati da divisori, così ciò che manca si legge dalla posizione e non solo dal colore.
+- **Spiegazione**: suggerimento una tantum al primo livello con il marrone e quarta pagina di "Come si gioca" ("Rosso + giallo + blu = marrone"), in italiano e inglese. Per le regole della curva (#88) il marrone conta come pixel misto ed è una meccanica a sé, quindi il suo livello di debutto può essere molto facile.
+- **Livello di debutto 101, "Ghianda"**: primo livello dello stage 11 (Bosco) e dell'universo 2 (Natura), che si apre finendo il livello 100. Lo stage e l'universo sono ancora in costruzione (#100); il 101 è molto facile (98% di vittorie a caso) e dimostrato risolvibile. Livelli 1–100 identici.
+- Test: unit su regole (tre colpi in ordine qualsiasi, colore ripetuto rifiutato, corsia bloccata, rivelazione dei nascosti), formato e munizioni, solver e simulazione con le stesse regole, generatore deterministico, suggerimento, curva e spicchi; e2e: il suggerimento compare al 101 una volta sola e il livello si vince, quarta pagina di "Come si gioca".
+
 ### Meccanica: pietra (#95)
 
 - **Pietra**: una cella fissa senza pixel in cui la vernice si ferma, senza passare oltre. I pixel dietro si dipingono da un altro lato del nastro; la pietra non conta per la vittoria. Debutto previsto al livello 141 (universo 2), con i contenuti di #100.

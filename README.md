@@ -132,7 +132,7 @@ docs/              strategia, design, report, anteprime livelli, evidenze dei te
 ```
 
 ### Come funziona un livello
-Un livello è un'immagine di caratteri (`R Y B O G P`, `.` = vuoto), un `overlay` opzionale (`i` ghiaccio, `h` nascosto) e le colonne di secchielli. Le munizioni di ogni colore sono **esattamente** quelle che servono: non ci sono colpi sprecati per costruzione.
+Un livello è un'immagine di caratteri (`R Y B O G P`, `K` = marrone, cioè rosso + giallo + blu; `.` = vuoto), un `overlay` opzionale (`i` ghiaccio, `h` nascosto) e le colonne di secchielli. Le munizioni di ogni colore sono **esattamente** quelle che servono: non ci sono colpi sprecati per costruzione.
 
 La generazione (`npm run gen:levels`), per ogni specifica:
 1. divide la vernice necessaria in secchielli, li mescola nelle colonne (con un seed) e, se richiesto, piazza ghiaccio e pixel nascosti;

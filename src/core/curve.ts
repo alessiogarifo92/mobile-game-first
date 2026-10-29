@@ -1,4 +1,4 @@
-import { isPrimary } from './colors';
+import { BROWN, isPrimary } from './colors';
 import type { Level } from './level';
 import { LEVELS_PER_STAGE } from './stages';
 import { STAGES_PER_UNIVERSE, universeOfStage } from './universes';
@@ -49,11 +49,11 @@ export interface CurveLevel {
   boss: boolean;
   winRate: number;
   shooters: number;
-  /** Share of pixels that need mixing (0–1). */
+  /** Share of pixels that need mixing (0–1): secondaries and brown. */
   secondaryShare: number;
   beltCapacity: number;
   slots: number;
-  /** Mechanics the level uses (e.g. `mix`, `ice`, `hidden`); a level that uses one first is its debut. */
+  /** Mechanics the level uses (e.g. `mix`, `brown`, `ice`, `hidden`); a level that uses one first is its debut. */
   features: readonly string[];
   /** Declared in the spec: this boss is allowed not to be the hardest level of its stage. */
   easyBoss?: boolean;
@@ -74,6 +74,7 @@ export function curveLevel(level: Level, winRate: number, easyBoss?: boolean): C
   const pixels = level.targets.filter((t) => t !== 0);
   const features: string[] = [];
   if (pixels.some((t) => !isPrimary(t))) features.push('mix');
+  if (pixels.includes(BROWN)) features.push('brown');
   if (level.ice.some((n) => n > 0)) features.push('ice');
   if (level.hidden.some(Boolean)) features.push('hidden');
   if (level.stone.some(Boolean)) features.push('stone');

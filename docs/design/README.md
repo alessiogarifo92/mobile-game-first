@@ -19,6 +19,7 @@ Unica fonte di verità in codice: `src/game/theme.ts`.
 | Arancione O (R+Y) | `#FB8500` |
 | Verde G (Y+B) | `#43AA8B` |
 | Viola P (R+B) | `#8E5BD9` |
+| Marrone K (R+Y+B, #94) | `#8B5A3C` · pixel a metà: tre spicchi fissi (rosso in alto a sinistra, giallo in alto a destra, blu in basso) con divisori, così ciò che manca si legge dalla posizione e non solo dal colore |
 | Fango (errore, post-MVP) | `#7A5C45` |
 | Oro (premi) | `#FFD166` |
 | Pietra (#95) | `#A3A6AD` · ombra e puntini `#5F626B`, luce bianca: blocco smussato con texture, riconoscibile senza colore; il colpo fermato fa uno schizzo grigio |

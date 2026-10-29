@@ -1,4 +1,4 @@
-import { PRIMARIES, isPrimary, type Primary } from './colors';
+import { BROWN, PRIMARIES, isPrimary, type Primary } from './colors';
 import { paintNeeds, parseImage, parseLevel, parseOverlay, walledIn, type LevelDef, type ShooterSpec } from './level';
 import { createRng, shuffle } from './rng';
 import { levelWinRate, solve } from './solver';
@@ -23,13 +23,17 @@ export interface GenerateOptions {
   winRate?: [number, number];
   /** Reject settings that leave fewer shooters than this: few huge buckets mean few decisions. */
   minShooters?: number;
-  /** Instead of a hand-drawn overlay: how many ice and hidden pixels and stones to place (seeded, per attempt). */
+  /**
+   * Instead of a hand-drawn overlay: how many ice and hidden pixels and stones to place (seeded, per attempt). `brown`
+   * repaints that many pixels of the image brown first (#94).
+   */
   special?: Special;
 }
 
 export interface Special {
   ice?: number;
   hidden?: number;
+  brown?: number;
   /** Stones go on empty cells touching the figure (holes inside it or its edge): draw `.` where they may go. */
   stone?: number;
 }
@@ -84,6 +88,16 @@ export function placeSpecial(image: string[], counts: Special, rng: () => number
   return Array.from({ length: height }, (_, y) => grid.slice(y * width, (y + 1) * width).join(''));
 }
 
+/** Repaints `count` seeded pixels of the image brown (`K`); pixels already brown are not picked again. */
+export function placeBrown(image: string[], count: number, rng: () => number): string[] {
+  const { width, targets } = parseImage(image);
+  const grid = image.join('').split('');
+  const cells = shuffle(targets.map((_, i) => i), rng).filter((c) => targets[c] !== 0 && targets[c] !== BROWN);
+  if (cells.length < count) throw new Error(`not enough pixels for ${count} brown`);
+  for (const c of cells.slice(0, count)) grid[c] = 'K';
+  return image.map((_, y) => grid.slice(y * width, (y + 1) * width).join(''));
+}
+
 /** Splits each color's paint need into shooters of roughly `chunk` ammo. */
 export function splitAmmo(needs: Record<Primary, number>, chunk: number): ShooterSpec[] {
   if (!Number.isInteger(chunk) || chunk < 1) throw new Error('ammoChunk must be a positive integer');
@@ -105,7 +119,6 @@ export function splitAmmo(needs: Record<Primary, number>, chunk: number): Shoote
  * Throws when no attempt is solvable, so an unplayable level can never ship.
  */
 export function generateLevel(opts: GenerateOptions): { def: LevelDef; seed: number; nodes: number; winRate: number } {
-  const { width, targets } = parseImage(opts.image);
   const attempts = opts.attempts ?? 200;
   let unsolvable = 0;
   let lowest = Infinity;
@@ -113,7 +126,9 @@ export function generateLevel(opts: GenerateOptions): { def: LevelDef; seed: num
   for (let a = 0; a < attempts; a++) {
     const seed = opts.seed + a;
     const rng = createRng(seed);
-    const overlay = opts.special ? placeSpecial(opts.image, opts.special, rng) : opts.overlay;
+    const image = opts.special?.brown ? placeBrown(opts.image, opts.special.brown, rng) : opts.image;
+    const { width, targets } = parseImage(image);
+    const overlay = opts.special ? placeSpecial(image, opts.special, rng) : opts.overlay;
     const { ice } = parseOverlay(overlay, width, targets);
     const shooters = splitAmmo(paintNeeds(targets, ice), opts.ammoChunk);
     if (opts.minShooters && shooters.length < opts.minShooters) {
@@ -126,7 +141,7 @@ export function generateLevel(opts: GenerateOptions): { def: LevelDef; seed: num
       name: opts.name,
       stage: opts.stage ?? 1,
       ...(opts.boss ? { boss: true } : {}),
-      image: opts.image,
+      image,
       ...(overlay ? { overlay } : {}),
       columns: columns.filter((c) => c.length > 0),
       slots: opts.slots,

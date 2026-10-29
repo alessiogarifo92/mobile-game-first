@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { curveLevel } from '../src/core/curve';
 import { generateLevel, placeSpecial } from '../src/core/generator';
 import { HOWTO_PAGES } from '../src/core/howto';
+import { DICTIONARIES } from '../src/core/i18n';
 import { buildLanes, checkReachable, paintNeeds, parseImage, parseLevel, parseOverlay, walledIn, LevelError, type LevelDef } from '../src/core/level';
 import { tipOnLevelStart } from '../src/core/onboarding';
 import { createRng } from '../src/core/rng';
@@ -190,7 +191,8 @@ describe('stone: onboarding and curve', () => {
   });
 
   it('has its own "How to play" page', () => {
-    expect(HOWTO_PAGES).toBe(4);
+    expect(HOWTO_PAGES).toBeGreaterThanOrEqual(5);
+    expect(DICTIONARIES.it['howto.5.title']).toBe('Pietre');
   });
 });
 

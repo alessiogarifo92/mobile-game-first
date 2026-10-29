@@ -3,6 +3,7 @@ import levels from '../src/levels/levels.json' with { type: 'json' };
 import type { LevelDef } from '../src/core/level';
 import { HOWTO_PAGES } from '../src/core/howto';
 import type { Move } from '../src/core/solver';
+import { universeOfStage } from '../src/core/universes';
 
 import { SEEN_ALL, dismissTip, jamSequence, mix, openLevel, play, shots, tap, throttleCpu, waitScene, waitSim, type Rect } from './helpers';
 
@@ -148,12 +149,14 @@ test('the map is split into stages and scrolls to far levels', async ({ page }) 
   await page.addInitScript((p) => localStorage.setItem('mix-and-splash/progress/v1', p), SEEN_ALL);
   await page.goto('/');
   await waitScene(page, 'menu');
+  // A fresh save opens the map of universe 1: its stages and levels only.
+  const universe1 = (levels as LevelDef[]).filter((d) => universeOfStage(d.stage) === 1);
   const headers = await mix<{ stage: number }[]>(page, 'headers');
-  expect(headers.map((h) => h.stage)).toEqual([...new Set((levels as LevelDef[]).map((d) => d.stage))]);
+  expect(headers.map((h) => h.stage)).toEqual([...new Set(universe1.map((d) => d.stage))]);
   const nodes = await mix<{ id: number; boss: boolean }[]>(page, 'nodes');
-  expect(nodes.filter((n) => n.boss).map((n) => n.id)).toEqual((levels as LevelDef[]).filter((d) => d.boss).map((d) => d.id));
+  expect(nodes.filter((n) => n.boss).map((n) => n.id)).toEqual(universe1.filter((d) => d.boss).map((d) => d.id));
   const before = await mix<number>(page, 'scrollY');
-  const last = (levels as LevelDef[]).length;
+  const last = universe1.length;
   if (shots) await page.screenshot({ path: `${shots}/10-mappa-stage.png` });
   await openLevel(page, last); // needs real scrolling: the map opens at the bottom
   expect(await mix(page, 'levelId')).toBe(last);
