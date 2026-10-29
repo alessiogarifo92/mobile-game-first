@@ -5,7 +5,7 @@ export interface ShooterSpec {
   ammo: number;
 }
 
-/** Level as stored in JSON. Images are rows of `.RYBOGP` characters. */
+/** Level as stored in JSON. Images are rows of `.RYBOGPK` characters (`K` = brown). */
 export interface LevelDef {
   id: number;
   /** Translation key: the displayed name is `level.<name>`. */

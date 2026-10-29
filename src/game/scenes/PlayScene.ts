@@ -18,10 +18,10 @@ import { solve } from '../../core/solver';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
 import { LEVELS, UNIVERSES, canOpen, getProgress, levelHint, levelTitle, markCompleted, markTip, setSound, t, tipSeen } from '../store';
-import { BLUE, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
+import { BLUE, BROWN, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
 import { PAINT, SYMBOL, THEME, css } from '../theme';
 import { drawSkin } from '../skins';
-import { button, label, progressBar, screenBackground } from '../ui';
+import { brownPixel, button, label, progressBar, screenBackground } from '../ui';
 
 const TICK_MS = 85;
 const BELT_JAR = 54;
@@ -305,6 +305,19 @@ export class PlayScene extends Phaser.Scene {
       sq(cx + 160, y, PAINT[RED]!);
       card.add(label(this, cx - 80, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
       card.add(label(this, cx + 80, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
+    } else if (id === 'brown') {
+      // Red + yellow + blue = brown, then a brown pixel with two of its three wedges painted: blue is missing.
+      const y = y0 + 150;
+      [RED, YELLOW, BLUE, BROWN].forEach((col, k) => sq(cx - 210 + k * 120 + (k === 3 ? 20 : 0), y, PAINT[col]!));
+      card.add(label(this, cx - 150, y, '+', THEME.type.md));
+      card.add(label(this, cx - 30, y, '+', THEME.type.md));
+      card.add(label(this, cx + 100, y, '=', THEME.type.md));
+      const y2 = y0 + 225;
+      sq(cx - 80, y2, THEME.emptyPixel);
+      sq(cx - 80, y2, PAINT[BROWN]!, 0.3);
+      brownPixel(g, cx - 104, y2 - 24, 48, 48, RED | YELLOW);
+      card.add(label(this, cx, y2, `${SYMBOL[BLUE]}→`, THEME.type.sm, css(PAINT[BLUE]!)));
+      sq(cx + 80, y2, PAINT[BROWN]!);
     } else if (id === 'belt') {
       // As many buckets as the belt holds, then one more that cannot board.
       const n = Math.min(this.level.beltCapacity, 5);
@@ -393,7 +406,8 @@ export class PlayScene extends Phaser.Scene {
       // Ghost of the target colour: tells the player what this pixel still needs.
       g.fillStyle(PAINT[target]!, 0.3);
       g.fillRoundedRect(x + w * 0.18, y + h * 0.18, w * 0.64, h * 0.64, THEME.radius.cell);
-      if (paint) {
+      if (target === BROWN) brownPixel(g, x, y, w, h, paint);
+      else if (paint) {
         // Half-mixed secondary: the received primary fills the upper-left triangle.
         g.fillStyle(PAINT[paint]!, 1);
         g.fillTriangle(x, y, x + w, y, x, y + h);

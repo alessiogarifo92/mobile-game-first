@@ -1,16 +1,16 @@
 import Phaser from 'phaser';
-import { BLUE, ORANGE, RED, YELLOW } from '../../core/colors';
+import { BLUE, BROWN, ORANGE, RED, YELLOW } from '../../core/colors';
 import { HOWTO_PAGES, clampPage, pageAfterSwipe } from '../../core/howto';
 import { VIEW } from '../../core/layout';
 import type { MessageKey } from '../../core/i18n';
 import { publishDebug } from '../debug';
 import { t } from '../store';
 import { PAINT, SYMBOL, THEME } from '../theme';
-import { button, label, screenBackground } from '../ui';
+import { brownPixel, button, label, screenBackground } from '../ui';
 
 const PAGES = HOWTO_PAGES;
 
-/** "How to play": three illustrated cards, reachable from Settings. */
+/** "How to play": illustrated cards (one per HOWTO_PAGES), reachable from Settings. */
 export class HowToScene extends Phaser.Scene {
   private pageNow = 0;
 
@@ -56,7 +56,7 @@ export class HowToScene extends Phaser.Scene {
     const dots = this.add.graphics();
     for (let i = 0; i < PAGES; i++) {
       dots.fillStyle(THEME.ink, i === page ? 1 : 0.2);
-      dots.fillCircle(VIEW.width / 2 + (i - 1) * 32, 1080 + off * 0.75, 9);
+      dots.fillCircle(VIEW.width / 2 + (i - (PAGES - 1) / 2) * 32, 1080 + off * 0.75, 9);
     }
     const last = page === PAGES - 1;
     button(this, VIEW.width / 2, 1170 + off, 360, 88, t(last ? 'howto.done' : 'howto.next'), () => {
@@ -70,7 +70,7 @@ export class HowToScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-LEFT', () => this.go(page - 1));
     this.input.keyboard?.on('keydown-RIGHT', () => this.go(page + 1));
     for (let i = 0; i < PAGES; i++) {
-      this.add.zone(VIEW.width / 2 + (i - 1) * 64, 1080 + off * 0.75, 64, 88).setInteractive({ useHandCursor: true }).on('pointerup', () => this.go(i));
+      this.add.zone(VIEW.width / 2 + (i - (PAGES - 1) / 2) * 64, 1080 + off * 0.75, 64, 88).setInteractive({ useHandCursor: true }).on('pointerup', () => this.go(i));
     }
     button(this, 60, 64, 84, 64, '◀', () => this.scene.start('menu', { settings: true }), {
       fill: THEME.belt, color: THEME.inkCss, name: 'home',
@@ -120,6 +120,23 @@ export class HowToScene extends Phaser.Scene {
       this.pixel(g, cx + 55, 420, ORANGE, 90, RED);
       label(this, cx + 135, 420, '→', THEME.type.lg);
       this.pixel(g, cx + 215, 420, ORANGE, 70);
+    } else if (page === 3) {
+      // Red + yellow + blue = brown; below, a brown pixel still missing its blue wedge.
+      this.pixel(g, cx - 225, 360, RED, 80);
+      label(this, cx - 165, 360, '+', THEME.type.lg);
+      this.pixel(g, cx - 105, 360, YELLOW, 80);
+      label(this, cx - 45, 360, '+', THEME.type.lg);
+      this.pixel(g, cx + 15, 360, BLUE, 80);
+      label(this, cx + 85, 360, '=', THEME.type.lg);
+      this.pixel(g, cx + 165, 360, BROWN, 80);
+      g.fillStyle(THEME.emptyPixel, 1);
+      g.fillRoundedRect(cx - 165, 485, 110, 110, THEME.radius.cell);
+      g.fillStyle(PAINT[BROWN]!, 0.3);
+      g.fillRoundedRect(cx - 145, 505, 70, 70, THEME.radius.cell);
+      brownPixel(g, cx - 165, 485, 110, 110, RED | YELLOW);
+      this.jar(g, cx + 20, 540, BLUE, 70);
+      label(this, cx + 90, 540, '→', THEME.type.lg);
+      this.pixel(g, cx + 170, 540, BROWN, 90);
     } else {
       // Waiting slots, one free.
       for (let i = 0; i < 3; i++) {

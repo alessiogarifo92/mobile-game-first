@@ -60,6 +60,8 @@ const en = {
   'tip.ice.body': 'A frozen pixel needs two hits of its colour:\nthe first breaks the ice, the second paints it.',
   'tip.hidden.title': 'Hidden pixels',
   'tip.hidden.body': 'A "?" pixel blocks its lane.\nFinish a pixel next to it to reveal its colour.',
+  'tip.brown.title': 'Brown',
+  'tip.brown.body': 'Red + yellow + blue = brown.\nA brown pixel needs all three colours, in any order.',
   'tip.belt.title': 'Belt full',
   'tip.belt.body': 'The belt holds only {n} buckets at a time.\nWait for one to finish its loop, then send the next.',
   'howto.title': 'How to play',
@@ -69,6 +71,8 @@ const en = {
   'howto.2.body': 'Only red, yellow and blue. Orange, green and purple pixels need two colours.',
   'howto.3.title': 'Plan',
   'howto.3.body': 'Paint stops at the first unfinished pixel. Buckets with paint left wait in a slot — keep a slot free!',
+  'howto.4.title': 'Brown',
+  'howto.4.body': 'Red + yellow + blue = brown. A brown pixel takes one hit of each colour, in any order.',
   'howto.next': 'Next',
   'howto.done': 'Play',
   'stage.atelier': 'Atelier',
@@ -81,7 +85,9 @@ const en = {
   'stage.vehicles': 'Vehicles',
   'stage.space': 'Space',
   'stage.fantasy': 'Fantasy',
+  'stage.forest': 'Forest',
   'universe.atelier': 'Atelier',
+  'universe.nature': 'Nature',
   'universe.locked': 'Complete level {n} to open',
   'universes.title': 'Universes',
   'universes.card': 'Universe {n} · {name}',
@@ -209,6 +215,7 @@ const en = {
   'level.spellbook': 'Spell book',
   'level.castle': 'Castle',
   'level.dragon': 'Dragon',
+  'level.acorn': 'Acorn',
 };
 
 export type MessageKey = keyof typeof en;
@@ -274,6 +281,8 @@ const it: Record<MessageKey, string> = {
   'tip.ice.body': 'Un pixel ghiacciato vuole due colpi del suo colore:\nil primo rompe il ghiaccio, il secondo lo dipinge.',
   'tip.hidden.title': 'Pixel nascosti',
   'tip.hidden.body': 'Un pixel con "?" blocca la sua corsia.\nCompleta un pixel accanto per scoprirne il colore.',
+  'tip.brown.title': 'Marrone',
+  'tip.brown.body': 'Rosso + giallo + blu = marrone.\nUn pixel marrone vuole tutti e tre i colori, in qualsiasi ordine.',
   'tip.belt.title': 'Nastro pieno',
   'tip.belt.body': 'Il nastro regge solo {n} secchielli alla volta.\nAspetta che uno finisca il giro, poi manda il prossimo.',
   'howto.title': 'Come si gioca',
@@ -283,6 +292,8 @@ const it: Record<MessageKey, string> = {
   'howto.2.body': 'Solo rosso, giallo e blu. I pixel arancioni, verdi e viola vogliono due colori.',
   'howto.3.title': 'Pianifica',
   'howto.3.body': 'La vernice si ferma sul primo pixel non finito. I secchielli avanzati aspettano in uno slot: tienine uno libero!',
+  'howto.4.title': 'Marrone',
+  'howto.4.body': 'Rosso + giallo + blu = marrone. Un pixel marrone vuole un colpo di ogni colore, in qualsiasi ordine.',
   'howto.next': 'Avanti',
   'howto.done': 'Gioca',
   'stage.atelier': 'Atelier',
@@ -295,7 +306,9 @@ const it: Record<MessageKey, string> = {
   'stage.vehicles': 'Veicoli',
   'stage.space': 'Spazio',
   'stage.fantasy': 'Fantasia',
+  'stage.forest': 'Bosco',
   'universe.atelier': 'Atelier',
+  'universe.nature': 'Natura',
   'universe.locked': 'Completa il livello {n} per aprire',
   'universes.title': 'Universi',
   'universes.card': 'Universo {n} · {name}',
@@ -423,6 +436,7 @@ const it: Record<MessageKey, string> = {
   'level.spellbook': 'Libro degli incantesimi',
   'level.castle': 'Castello',
   'level.dragon': 'Drago',
+  'level.acorn': 'Ghianda',
 };
 
 export const DICTIONARIES = { en, it } as const;

@@ -4,5 +4,11 @@
   "key": "atelier",
   "color": "R",
   "maxCanvas": 14
+ },
+ {
+  "id": 2,
+  "key": "nature",
+  "color": "G",
+  "maxCanvas": 14
  }
 ]

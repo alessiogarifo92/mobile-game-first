@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BLUE, GREEN, ORANGE, PURPLE, RED, YELLOW, accepts, codeOf, isComplete, isPrimary, primariesOf } from '../src/core/colors';
+import { BLUE, BROWN, GREEN, ORANGE, PURPLE, RED, YELLOW, accepts, codeOf, isComplete, isPrimary, primariesOf } from '../src/core/colors';
 
 describe('colors', () => {
   it('secondaries are the mix of two primaries', () => {
@@ -27,6 +27,7 @@ describe('colors', () => {
     expect(isPrimary(RED)).toBe(true);
     expect(isPrimary(ORANGE)).toBe(false);
     expect(codeOf(PURPLE)).toBe('P');
-    expect(codeOf(7)).toBe('.');
+    expect(codeOf(BROWN)).toBe('K');
+    expect(codeOf(8)).toBe('.');
   });
 });

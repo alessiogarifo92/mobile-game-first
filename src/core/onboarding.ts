@@ -1,9 +1,9 @@
-import { isPrimary } from './colors';
+import { BROWN, isPrimary } from './colors';
 import type { Level } from './level';
 
 /** One-time onboarding tips, shown the first time the mechanic they explain shows up. */
 /** Tips shown as a card; 'guide' is the guided level 1 instead. */
-export type CardTip = 'mixing' | 'blocked' | 'slots' | 'ice' | 'hidden' | 'belt';
+export type CardTip = 'mixing' | 'blocked' | 'slots' | 'ice' | 'hidden' | 'belt' | 'brown';
 export type TipId = 'guide' | CardTip;
 
 /** Level 1 is played as a guided tutorial until the player has seen it once. */
@@ -13,11 +13,12 @@ export function needsGuide(level: Level, seen: readonly string[]): boolean {
 
 /**
  * Tip to show when a level starts, the first time it contains something new: secondary colours,
- * ice or hidden pixels. One tip per level start, in that order.
+ * brown (three primaries), ice or hidden pixels. One tip per level start, in that order.
  */
 export function tipOnLevelStart(level: Level, seen: readonly string[]): CardTip | null {
   const present: [CardTip, boolean][] = [
     ['mixing', level.targets.some((t) => t !== 0 && !isPrimary(t))],
+    ['brown', level.targets.includes(BROWN)],
     ['ice', level.ice.some((n) => n > 0)],
     ['hidden', level.hidden.some(Boolean)],
   ];
