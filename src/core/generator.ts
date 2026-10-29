@@ -23,15 +23,23 @@ export interface GenerateOptions {
   winRate?: [number, number];
   /** Reject settings that leave fewer shooters than this: few huge buckets mean few decisions. */
   minShooters?: number;
-  /** Instead of a hand-drawn overlay: how many ice and hidden pixels to place (seeded, per attempt). */
-  special?: { ice?: number; hidden?: number };
+  /** Instead of a hand-drawn overlay: how many ice, hidden, key and locked pixels to place (seeded, per attempt). */
+  special?: Special;
+}
+
+export interface Special {
+  ice?: number;
+  hidden?: number;
+  key?: number;
+  lock?: number;
 }
 
 /**
- * Places `ice` iced pixels (on primary pixels only) and `hidden` pixels (each with at least one
- * orthogonal neighbour that is a visible pixel, so it can be revealed). Returns an overlay.
+ * Places `ice` iced pixels (on primary pixels only), `hidden` pixels (each with at least one
+ * orthogonal neighbour that is a visible pixel, so it can be revealed), then `key` key pixels and
+ * `lock` locked pixels (skipping any lock that would wall a key in). Returns an overlay.
  */
-export function placeSpecial(image: string[], counts: { ice?: number; hidden?: number }, rng: () => number): string[] {
+export function placeSpecial(image: string[], counts: Special, rng: () => number): string[] {
   const { width, height, targets } = parseImage(image);
   const grid = targets.map(() => '.');
   const cells = shuffle(targets.map((_, i) => i), rng);
@@ -58,7 +66,31 @@ export function placeSpecial(image: string[], counts: { ice?: number; hidden?: n
     hidden -= 1;
   }
   if (hidden > 0) throw new Error(`not enough room for ${counts.hidden} hidden pixels`);
-  return Array.from({ length: height }, (_, y) => grid.slice(y * width, (y + 1) * width).join(''));
+  const rows = () => Array.from({ length: height }, (_, y) => grid.slice(y * width, (y + 1) * width).join(''));
+  let key = counts.key ?? 0;
+  let lock = counts.lock ?? 0;
+  if ((key > 0) !== (lock > 0)) throw new Error('keys and locks come together');
+  for (const c of cells) {
+    if (key === 0) break;
+    if (targets[c] === 0 || grid[c] !== '.') continue;
+    grid[c] = 'k';
+    key -= 1;
+  }
+  if (key > 0) throw new Error(`not enough room for ${counts.key} keys`);
+  for (const c of cells) {
+    if (lock === 0) break;
+    if (targets[c] === 0 || grid[c] !== '.') continue;
+    grid[c] = 'l';
+    try {
+      parseOverlay(rows(), width, targets);
+    } catch {
+      grid[c] = '.'; // this lock would wall a key in (or leave a lock without a key in sight)
+      continue;
+    }
+    lock -= 1;
+  }
+  if (lock > 0) throw new Error(`not enough room for ${counts.lock} locks`);
+  return rows();
 }
 
 /** Splits each color's paint need into shooters of roughly `chunk` ammo. */

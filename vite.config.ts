@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { defineConfig, type Plugin } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
-type LevelRow = { id: number; stage: number; boss?: boolean };
+type LevelRow = { id: number; stage: number; boss?: boolean; image: string[]; overlay?: string[] | null };
 type StageRow = { id: number; complete: boolean };
 type UniverseRow = { id: number; key: string };
 
@@ -32,6 +32,12 @@ function moreLevels(): Plugin {
       if (i === full - 1) copy.boss = true;
       levels.push(copy);
     }
+  }
+  // Level 201 debuts locks and keys (#96): the first two pixels of the top row are keys, the first two of the bottom row locked.
+  const debut = levels.find((l) => l.id === 201);
+  if (debut) {
+    const mark = (row: string, code: string) => [...row].map((ch, x) => (ch !== '.' && [...row].slice(0, x).filter((c) => c !== '.').length < 2 ? code : '.')).join('');
+    debut.overlay = debut.image.map((row, y) => (y === 0 ? mark(row, 'k') : y === debut.image.length - 1 ? mark(row, 'l') : '.'.repeat(row.length)));
   }
   while (universes.length < Math.ceil(stages.length / stagesPerUniverse)) universes.push({ ...universes[0]!, id: universes.length + 1 });
   return {

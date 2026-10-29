@@ -6,11 +6,11 @@ import type { MessageKey } from '../../core/i18n';
 import { publishDebug } from '../debug';
 import { t } from '../store';
 import { PAINT, SYMBOL, THEME } from '../theme';
-import { button, label, screenBackground } from '../ui';
+import { button, keyIcon, label, lockIcon, screenBackground } from '../ui';
 
 const PAGES = HOWTO_PAGES;
 
-/** "How to play": three illustrated cards, reachable from Settings. */
+/** "How to play": illustrated cards, reachable from Settings. */
 export class HowToScene extends Phaser.Scene {
   private pageNow = 0;
 
@@ -56,7 +56,7 @@ export class HowToScene extends Phaser.Scene {
     const dots = this.add.graphics();
     for (let i = 0; i < PAGES; i++) {
       dots.fillStyle(THEME.ink, i === page ? 1 : 0.2);
-      dots.fillCircle(VIEW.width / 2 + (i - 1) * 32, 1080 + off * 0.75, 9);
+      dots.fillCircle(VIEW.width / 2 + (i - (PAGES - 1) / 2) * 32, 1080 + off * 0.75, 9);
     }
     const last = page === PAGES - 1;
     button(this, VIEW.width / 2, 1170 + off, 360, 88, t(last ? 'howto.done' : 'howto.next'), () => {
@@ -70,7 +70,7 @@ export class HowToScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-LEFT', () => this.go(page - 1));
     this.input.keyboard?.on('keydown-RIGHT', () => this.go(page + 1));
     for (let i = 0; i < PAGES; i++) {
-      this.add.zone(VIEW.width / 2 + (i - 1) * 64, 1080 + off * 0.75, 64, 88).setInteractive({ useHandCursor: true }).on('pointerup', () => this.go(i));
+      this.add.zone(VIEW.width / 2 + (i - (PAGES - 1) / 2) * 64, 1080 + off * 0.75, 64, 88).setInteractive({ useHandCursor: true }).on('pointerup', () => this.go(i));
     }
     button(this, 60, 64, 84, 64, '◀', () => this.scene.start('menu', { settings: true }), {
       fill: THEME.belt, color: THEME.inkCss, name: 'home',
@@ -86,10 +86,10 @@ export class HowToScene extends Phaser.Scene {
     label(this, x, y, SYMBOL[color]!, size * 0.3, '#ffffff');
   }
 
-  private pixel(g: Phaser.GameObjects.Graphics, x: number, y: number, color: number, size = 90, half = 0): void {
+  private pixel(g: Phaser.GameObjects.Graphics, x: number, y: number, color: number, size = 90, half = 0, ghost = false): void {
     g.fillStyle(THEME.emptyPixel, 1);
     g.fillRoundedRect(x - size / 2, y - size / 2, size, size, THEME.radius.cell);
-    g.fillStyle(PAINT[color]!, half ? 0.3 : 1);
+    g.fillStyle(PAINT[color]!, half || ghost ? 0.3 : 1);
     g.fillRoundedRect(x - size / 2, y - size / 2, size, size, THEME.radius.cell);
     if (half) {
       g.fillStyle(PAINT[half]!, 1);
@@ -120,7 +120,14 @@ export class HowToScene extends Phaser.Scene {
       this.pixel(g, cx + 55, 420, ORANGE, 90, RED);
       label(this, cx + 135, 420, '→', THEME.type.lg);
       this.pixel(g, cx + 215, 420, ORANGE, 70);
-    } else {
+    } else if (page === 3) {
+      // A key pixel, then the padlocked pixel it opens.
+      this.pixel(g, cx - 150, 420, YELLOW);
+      keyIcon(g, cx - 150, 420, 70);
+      label(this, cx - 30, 420, '→', THEME.type.xl);
+      this.pixel(g, cx + 110, 420, RED, 90, 0, true);
+      lockIcon(g, cx + 110, 420, 64);
+    } else if (page === 2) {
       // Waiting slots, one free.
       for (let i = 0; i < 3; i++) {
         g.lineStyle(3, THEME.ink, 0.3);

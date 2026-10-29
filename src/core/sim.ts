@@ -24,9 +24,10 @@ export interface HitEvent {
   completed: boolean;
   brokeIce: boolean;
   revealed: number[];
+  unlocked: number[];
 }
 
-/** The game state is a Board (paint, ice, hidden) plus the belt and the shooters. */
+/** The game state is a Board (paint, ice, hidden, locked) plus the belt and the shooters. */
 export interface GameState extends Board {
   level: Level;
   lanes: number[][];

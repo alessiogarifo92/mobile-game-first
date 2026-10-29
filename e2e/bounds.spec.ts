@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import levels from '../src/levels/levels.json' with { type: 'json' };
+import { HOWTO_PAGES } from '../src/core/howto';
 import type { LevelDef } from '../src/core/level';
 import type { Move } from '../src/core/solver';
 import { LAST_LEVEL, SEEN_ALL, checkOnScreen as check, dismissTip, jamSequence, mix, play, shots, tap, waitScene, waitSim } from './helpers';
@@ -98,12 +99,12 @@ for (const [name, width, height] of SCREENS) {
         const again = await mix<Record<string, { x: number; y: number }>>(page, 'settingsButtons');
         await tap(page, again.howto!.x, again.howto!.y);
         await waitScene(page, 'howto');
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < HOWTO_PAGES; i++) {
           await page.waitForFunction((n) => (window as unknown as { __mix: { page: number } }).__mix.page === n, i);
           await settle(page);
           await check(page, `how to play page ${i + 1}`);
           if (shots) await page.screenshot({ path: `${shots}/bounds/${name}${top ? '-bars' : ''}-howto-${i + 1}.png` });
-          if (i < 2) await page.keyboard.press('ArrowRight');
+          if (i < HOWTO_PAGES - 1) await page.keyboard.press('ArrowRight');
         }
         await tap(page, 60, 64); // back to the map with Settings still open
         await waitScene(page, 'menu');

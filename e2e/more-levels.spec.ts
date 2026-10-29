@@ -3,7 +3,7 @@ import levels from '../src/levels/levels.json' with { type: 'json' };
 import stages from '../src/levels/stages.json' with { type: 'json' };
 import type { Move } from '../src/core/solver';
 import { LEVELS_PER_STAGE } from '../src/core/stages';
-import { checkOnScreen, mix, openLevel, play, shots, tap, waitScene, waitSim } from './helpers';
+import { checkOnScreen, dismissTip, mix, openLevel, play, shots, tap, waitScene, waitSim } from './helpers';
 
 /**
  * The game served with a second universe (as many full stages again) and a half-built stage after it, the start of a
@@ -256,3 +256,23 @@ for (const [name, width, height] of [['360x640', 360, 640], ['412x915', 412, 915
     });
   });
 }
+
+test('level 201 debuts locks and keys: the one-time tip explains them, finishing the keys opens the padlocks (#96)', async ({ page }) => {
+  const debut = 201;
+  // Universe 2 done: the player reaches the first level of universe 3, with every earlier tip already seen.
+  await start(page, { unlocked: debut, completed: range(1, debut - 1) });
+  expect(await mix(page, 'universe')).toBe(3);
+  await openLevel(page, debut);
+  await page.waitForFunction(() => (window as unknown as { __mix: { tip: string | null } }).__mix.tip === 'lock');
+  expect(await mix(page, 'locked')).toBe(2);
+  await checkOnScreen(page, 'level 201, lock tip card');
+  if (shots) await page.screenshot({ path: `${shots}/lock-01-suggerimento.png` });
+
+  expect(await dismissTip(page)).toBe('lock');
+  if (shots) await page.screenshot({ path: `${shots}/lock-02-tela.png` });
+  expect(await play(page, await mix<Move[]>(page, 'solution'))).toEqual([]);
+  await waitSim(page, () => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'win');
+  expect(await mix(page, 'locked')).toBe(0);
+  expect((await saved(page)).seenTips).toContain('lock'); // shown once: remembered with the other tips
+  if (shots) await page.screenshot({ path: `${shots}/lock-03-vittoria.png` });
+});
