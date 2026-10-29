@@ -33,6 +33,15 @@ function moreLevels(): Plugin {
       levels.push(copy);
     }
   }
+  // Mechanic debuts (#87): a small level using the mechanic (e2e/fixtures, checked solvable by the unit tests) takes the
+  // debut level's place, so its one-time tip can be tested before the real content exists.
+  const debuts: Record<number, string> = { 141: 'stone-debut.json' };
+  for (const [id, file] of Object.entries(debuts)) {
+    const at = levels.findIndex((l) => l.id === Number(id));
+    if (at < 0) continue;
+    const fixture = JSON.parse(readFileSync(new URL(`./e2e/fixtures/${file}`, import.meta.url), 'utf8'));
+    levels[at] = { ...levels[at]!, ...fixture };
+  }
   while (universes.length < Math.ceil(stages.length / stagesPerUniverse)) universes.push({ ...universes[0]!, id: universes.length + 1 });
   return {
     name: 'more-levels',

@@ -2,6 +2,15 @@
 
 ## Non rilasciato
 
+### Meccanica: pietra (#95)
+
+- **Pietra**: una cella fissa senza pixel in cui la vernice si ferma, senza passare oltre. I pixel dietro si dipingono da un altro lato del nastro; la pietra non conta per la vittoria. Debutto previsto al livello 141 (universo 2), con i contenuti di #100.
+- **Formato livello**: codice `s` nell'`overlay`, solo su una cella vuota. `parseLevel` rifiuta, prima del solver e con un messaggio chiaro, una pietra su un pixel e un pixel murato su tutti e quattro i lati. La regola sta in `src/core/rules.ts` (`findTarget`), condivisa da gioco, `solve` e `levelWinRate`.
+- **Generatore**: `special: { stone: N }` piazza N pietre in modo deterministico sulle celle vuote che toccano la figura (buchi o bordo), mai murando un pixel; le pietre si estraggono dopo ghiaccio e nascosti, quindi i livelli esistenti restano identici.
+- **Grafica disegnata in codice**: blocco grigio smussato con puntini, riconoscibile senza colore a 14 px; un colpo fermato da una pietra fa uno schizzo grigio senza colore. Token `stone` e `stoneDark` in `src/game/theme.ts`.
+- **Spiegazione**: suggerimento una tantum al primo livello con pietre e quarta pagina in "Come si gioca" (IT/EN).
+- Test: unit su formato, raggiungibilità, regole, simulazione, solver, generatore deterministico, suggerimento e curva; e2e sul livello di debutto (141) nella build con più livelli: il suggerimento compare, un colpo si ferma sulla pietra, il livello si vince.
+
 ### Murale dell'universo e skin per universo (#92)
 
 - **Murale**: ogni universo ha un grande quadro diviso in 100 tessere, disegnato in codice con i colori del gioco (Atelier: ruota dei colori; Natura, Viaggio, Mare e cielo, Cosmo per i prossimi). La tessera N si colora completando il livello N dell'universo; la prima è già dipinta quando l'universo si apre. Prende il posto dei segnaposto nella card del selettore, nell'album e nella festa di fine universo (le tessere si aggiungono una alla volta).

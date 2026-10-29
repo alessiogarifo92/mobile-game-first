@@ -122,14 +122,14 @@ export class HowToScene extends Phaser.Scene {
       this.pixel(g, cx + 215, 420, ORANGE, 70);
     } else if (page === 3) {
       // Stones (#95): the drop from the left stops on the stone; the pixel behind takes paint from the right.
-      label(this, cx - 210, 420, '●→', THEME.type.lg, css(PAINT[RED]!));
-      drawStone(g, cx - 140, 375, 90, 90);
+      label(this, cx - 170, 420, '●→', THEME.type.lg, css(PAINT[RED]!));
+      drawStone(g, cx - 100, 375, 90, 90);
       // An unfinished pixel: the ghost of the colour it still needs.
       g.fillStyle(THEME.emptyPixel, 1);
-      g.fillRoundedRect(cx - 20, 375, 90, 90, THEME.radius.cell);
+      g.fillRoundedRect(cx + 20, 375, 90, 90, THEME.radius.cell);
       g.fillStyle(PAINT[RED]!, 0.3);
-      g.fillRoundedRect(cx - 4, 391, 58, 58, THEME.radius.cell);
-      label(this, cx + 140, 420, '←●', THEME.type.lg, css(PAINT[RED]!));
+      g.fillRoundedRect(cx + 36, 391, 58, 58, THEME.radius.cell);
+      label(this, cx + 180, 420, '←●', THEME.type.lg, css(PAINT[RED]!));
     } else {
       // Waiting slots, one free.
       for (let i = 0; i < 3; i++) {

@@ -3,7 +3,7 @@ import levels from '../src/levels/levels.json' with { type: 'json' };
 import stages from '../src/levels/stages.json' with { type: 'json' };
 import type { Move } from '../src/core/solver';
 import { LEVELS_PER_STAGE } from '../src/core/stages';
-import { checkOnScreen, mix, openLevel, play, shots, tap, waitScene, waitSim } from './helpers';
+import { checkOnScreen, dismissTip, mix, openLevel, play, shots, tap, waitScene, waitSim } from './helpers';
 
 /**
  * The game served with a second universe (as many full stages again) and a half-built stage after it, the start of a
@@ -256,3 +256,24 @@ for (const [name, width, height] of [['360x640', 360, 640], ['412x915', 412, 915
     });
   });
 }
+
+test('stones debut at level 141: the one-time tip explains them, a stopped shot splashes, the level is won', async ({ page }) => {
+  test.setTimeout(240_000);
+  // Level 141 of this build is the stone fixture (e2e/fixtures/stone-debut.json, see vite.config.ts).
+  await start(page, { unlocked: 141, completed: range(1, 140), seenTips: TIPS });
+  await openLevel(page, 141);
+  expect(await mix(page, 'stones')).toBeGreaterThan(0);
+  await page.waitForFunction(() => (window as unknown as { __mix: { tip: string | null } }).__mix.tip === 'stone');
+  await checkOnScreen(page, 'level 141, stone tip card');
+  if (shots) await page.screenshot({ path: `${shots}/01-suggerimento-pietra.png` });
+  expect(await dismissTip(page)).toBe('stone');
+  if (shots) await page.screenshot({ path: `${shots}/02-tela-con-pietra.png` });
+
+  await play(page, await mix<Move[]>(page, 'solution'));
+  await waitSim(page, () => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'win');
+  // The stone sits between pixels of one colour: a shot from the far side always meets it once its own pixel is done.
+  expect(await mix<number>(page, 'stoneSplashes')).toBeGreaterThan(0);
+  if (shots) await page.screenshot({ path: `${shots}/03-livello-pietra-vinto.png` });
+  // Remembered with the other tips, so it is shown only once (tipOnLevelStart, unit-tested).
+  expect((await saved(page)).seenTips).toContain('stone');
+});
