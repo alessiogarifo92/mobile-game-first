@@ -1,8 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 import levels from '../src/levels/levels.json' with { type: 'json' };
-import stages from '../src/levels/stages.json' with { type: 'json' };
+import shippedStages from '../src/levels/stages.json' with { type: 'json' };
 import type { Move } from '../src/core/solver';
 import { LEVELS_PER_STAGE } from '../src/core/stages';
+import { universeOfStage } from '../src/core/universes';
 import { checkOnScreen, dismissTip, mix, openLevel, play, shots, tap, waitScene, waitSim } from './helpers';
 
 /**
@@ -11,7 +12,9 @@ import { checkOnScreen, dismissTip, mix, openLevel, play, shots, tap, waitScene,
  */
 test.use({ baseURL: 'http://localhost:4174' });
 
-const shipped = levels.length;
+/** Universe 1 of the shipped game: the fixture keeps it and builds the next universes from copies. */
+const shipped = levels.filter((l) => universeOfStage(l.stage) === 1).length;
+const stages = shippedStages.filter((s) => universeOfStage(s.id) === 1);
 const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
 const all = range(1, shipped);
 const KEY = 'mix-and-splash/progress/v1';
@@ -256,6 +259,27 @@ for (const [name, width, height] of [['360x640', 360, 640], ['412x915', 412, 915
     });
   });
 }
+
+test('stones debut at level 141: the one-time tip explains them, a stopped shot splashes, the level is won', async ({ page }) => {
+  test.setTimeout(240_000);
+  // Level 141 of this build is the stone fixture (e2e/fixtures/stone-debut.json, see vite.config.ts).
+  await start(page, { unlocked: 141, completed: range(1, 140), seenTips: TIPS });
+  await openLevel(page, 141);
+  expect(await mix(page, 'stones')).toBeGreaterThan(0);
+  await page.waitForFunction(() => (window as unknown as { __mix: { tip: string | null } }).__mix.tip === 'stone');
+  await checkOnScreen(page, 'level 141, stone tip card');
+  if (shots) await page.screenshot({ path: `${shots}/01-suggerimento-pietra.png` });
+  expect(await dismissTip(page)).toBe('stone');
+  if (shots) await page.screenshot({ path: `${shots}/02-tela-con-pietra.png` });
+
+  await play(page, await mix<Move[]>(page, 'solution'));
+  await waitSim(page, () => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'win');
+  // The stone sits between pixels of one colour: a shot from the far side always meets it once its own pixel is done.
+  expect(await mix<number>(page, 'stoneSplashes')).toBeGreaterThan(0);
+  if (shots) await page.screenshot({ path: `${shots}/03-livello-pietra-vinto.png` });
+  // Remembered with the other tips, so it is shown only once (tipOnLevelStart, unit-tested).
+  expect((await saved(page)).seenTips).toContain('stone');
+});
 
 test('level 201 debuts locks and keys: the one-time tip explains them, finishing the keys opens the padlocks (#96)', async ({ page }) => {
   const debut = 201;

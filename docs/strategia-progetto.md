@@ -56,7 +56,7 @@ Ogni stage inizia con 1–3 livelli "di respiro" e il boss è il livello più du
 ### 100 livelli in 10 stage tematici (v0.3, epic #22)
 - 10 stage da 10 livelli, ognuno con un tema (Atelier, Frutta, Animali, Giardino, Mare, Città, Cibo, Veicoli, Spazio, Fantasia); il 10° di ogni stage è il boss.
 - Le meccaniche nuove arrivano ogni ~2 stage, indipendenti dal tema: **ghiaccio** (stage 4: pixel primario da colpire due volte con il suo colore) e **pixel nascosti** (stage 6: "?" che blocca la corsia finché un vicino non è completo).
-- Formato livello: `overlay` opzionale sopra l'immagine (`i` ghiaccio, `h` nascosto, `k` chiave, `l` lucchetto: un gruppo per livello, i lucchetti si aprono quando tutte le chiavi sono complete, #96). Le regole di colpo stanno in `src/core/rules.ts`, condivise da simulazione e solver.
+- Formato livello: `overlay` opzionale sopra l'immagine (`i` ghiaccio, `h` nascosto, `k` chiave, `s` pietra su una cella vuota, #95; `k` chiave, `l` lucchetto: un gruppo per livello, i lucchetti si aprono quando tutte le chiavi sono complete, #96). Le regole di colpo stanno in `src/core/rules.ts`, condivise da simulazione e solver.
 - I 10 quadri di uno stage formano una pagina d'album (#40).
 
 ### Come si aggiunge uno stage (#74)

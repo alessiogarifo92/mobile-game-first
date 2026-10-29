@@ -7477,5 +7477,58 @@
   "slots": 2,
   "beltCapacity": 2,
   "specHash": "00a54e9a"
+ },
+ {
+  "id": 101,
+  "name": "acorn",
+  "stage": 11,
+  "image": [
+   "...KK...",
+   "..KKKK..",
+   ".KKKKKK.",
+   ".OOOOOO.",
+   ".OOOOOO.",
+   "..OOOO..",
+   "...OO..."
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 12
+    }
+   ]
+  ],
+  "slots": 3,
+  "beltCapacity": 2,
+  "specHash": "c31516e6"
  }
 ]

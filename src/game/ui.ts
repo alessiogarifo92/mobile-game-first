@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import { VIEW } from '../core/layout';
 import type { Level } from '../core/level';
+import { brownWedges } from '../core/brownPixel';
+import { PRIMARIES } from '../core/colors';
 import { MURAL_SIDE, TILE_CELLS, tileCells } from '../core/mural';
 import { MURAL_PAINT, PAINT, THEME } from './theme';
 
@@ -117,6 +119,23 @@ export function drawPicture(g: Phaser.GameObjects.Graphics, level: Level, x: num
 }
 
 /**
+ * Stone block (#95) in the cell (x, y, w, h): bevelled grey with speckles, so it reads as a solid block at 14 px and
+ * without relying on colour.
+ */
+export function drawStone(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number): void {
+  const b = Math.max(2, Math.round(w * 0.12));
+  g.fillStyle(THEME.stoneDark, 1);
+  g.fillRoundedRect(x, y, w, h, THEME.radius.cell);
+  g.fillStyle(THEME.stone, 1);
+  g.fillRoundedRect(x, y, w - b, h - b, THEME.radius.cell);
+  g.fillStyle(THEME.white, 0.55);
+  g.fillRect(x + b, y + b / 2, w - 3 * b, Math.max(1, b / 2));
+  g.fillStyle(THEME.stoneDark, 0.9);
+  const dot = Math.max(1, w * 0.07);
+  for (const [fx, fy] of [[0.3, 0.45], [0.62, 0.32], [0.5, 0.68], [0.24, 0.74]] as const) g.fillCircle(x + w * fx, y + h * fy, dot);
+}
+
+/**
  * One tile of a universe's mural (#92), in a mural `size` wide at (x, y): its cells when painted, else an empty tile
  * with a small gap around it, so the missing pieces read as boxes still to fill.
  */
@@ -141,4 +160,22 @@ export function drawMural(g: Phaser.GameObjects.Graphics, universe: number, pain
   g.fillStyle(THEME.paper, 1);
   g.fillRect(x, y, size, size);
   painted.forEach((p, tile) => drawMuralTile(g, universe, tile, x, y, size, p));
+}
+
+/**
+ * Unfinished brown pixel (#94), drawn over its empty background: each received primary fills its own wedge, and thin
+ * dividers mark the three parts, so what is missing reads by position as well as by colour.
+ */
+export function brownPixel(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number, paint: number): void {
+  const wedges = brownWedges(x, y, w, h);
+  for (const p of PRIMARIES) {
+    if (!(paint & p)) continue;
+    g.fillStyle(PAINT[p]!, 1);
+    g.fillPoints(wedges[p].map(([px, py]) => new Phaser.Math.Vector2(px, py)), true);
+  }
+  g.lineStyle(Math.max(1, w / 24), THEME.ink, 0.35);
+  for (const p of PRIMARIES) {
+    const [[cx, cy], [ex, ey]] = wedges[p] as [readonly [number, number], readonly [number, number]];
+    g.lineBetween(cx, cy, ex, ey);
+  }
 }

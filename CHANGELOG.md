@@ -2,6 +2,23 @@
 
 ## Non rilasciato
 
+### Meccanica: pixel marrone (#94)
+
+- **Marrone = rosso + giallo + blu**: un pixel marrone (codice `K` nelle immagini) è completo dopo tre colpi, uno per primario, in qualsiasi ordine; finché non arrivano tutti e tre blocca la sua corsia come gli altri pixel non finiti. Le munizioni e il solver contano il colpo in più; il generatore può piazzare pixel marroni in modo deterministico (`special.brown`).
+- **Grafica**: marrone gouache `#8B5A3C`; un pixel marrone a metà mostra tre spicchi fissi (rosso in alto a sinistra, giallo in alto a destra, blu in basso) separati da divisori, così ciò che manca si legge dalla posizione e non solo dal colore.
+- **Spiegazione**: suggerimento una tantum al primo livello con il marrone e quarta pagina di "Come si gioca" ("Rosso + giallo + blu = marrone"), in italiano e inglese. Per le regole della curva (#88) il marrone conta come pixel misto ed è una meccanica a sé, quindi il suo livello di debutto può essere molto facile.
+- **Livello di debutto 101, "Ghianda"**: primo livello dello stage 11 (Bosco) e dell'universo 2 (Natura), che si apre finendo il livello 100. Lo stage e l'universo sono ancora in costruzione (#100); il 101 è molto facile (98% di vittorie a caso) e dimostrato risolvibile. Livelli 1–100 identici.
+- Test: unit su regole (tre colpi in ordine qualsiasi, colore ripetuto rifiutato, corsia bloccata, rivelazione dei nascosti), formato e munizioni, solver e simulazione con le stesse regole, generatore deterministico, suggerimento, curva e spicchi; e2e: il suggerimento compare al 101 una volta sola e il livello si vince, quarta pagina di "Come si gioca".
+
+### Meccanica: pietra (#95)
+
+- **Pietra**: una cella fissa senza pixel in cui la vernice si ferma, senza passare oltre. I pixel dietro si dipingono da un altro lato del nastro; la pietra non conta per la vittoria. Debutto previsto al livello 141 (universo 2), con i contenuti di #100.
+- **Formato livello**: codice `s` nell'`overlay`, solo su una cella vuota. `parseLevel` rifiuta, prima del solver e con un messaggio chiaro, una pietra su un pixel e un pixel murato su tutti e quattro i lati. La regola sta in `src/core/rules.ts` (`findTarget`), condivisa da gioco, `solve` e `levelWinRate`.
+- **Generatore**: `special: { stone: N }` piazza N pietre in modo deterministico sulle celle vuote che toccano la figura (buchi o bordo), mai murando un pixel; le pietre si estraggono dopo ghiaccio e nascosti, quindi i livelli esistenti restano identici.
+- **Grafica disegnata in codice**: blocco grigio smussato con puntini, riconoscibile senza colore a 14 px; un colpo fermato da una pietra fa uno schizzo grigio senza colore. Token `stone` e `stoneDark` in `src/game/theme.ts`.
+- **Spiegazione**: suggerimento una tantum al primo livello con pietre e quarta pagina in "Come si gioca" (IT/EN).
+- Test: unit su formato, raggiungibilità, regole, simulazione, solver, generatore deterministico, suggerimento e curva; e2e sul livello di debutto (141) nella build con più livelli: il suggerimento compare, un colpo si ferma sulla pietra, il livello si vince.
+
 ### Murale dell'universo e skin per universo (#92)
 
 - **Murale**: ogni universo ha un grande quadro diviso in 100 tessere, disegnato in codice con i colori del gioco (Atelier: ruota dei colori; Natura, Viaggio, Mare e cielo, Cosmo per i prossimi). La tessera N si colora completando il livello N dell'universo; la prima è già dipinta quando l'universo si apre. Prende il posto dei segnaposto nella card del selettore, nell'album e nella festa di fine universo (le tessere si aggiungono una alla volta).

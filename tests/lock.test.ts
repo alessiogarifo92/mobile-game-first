@@ -35,6 +35,12 @@ describe('locks and keys: format', () => {
     expect(() => level(['R.B'], [[[RED, 1]], [[BLUE, 1]]], { overlay: ['.kl'] })).toThrow(LevelError);
   });
 
+  it('counts stones as walls too: a key behind locks on two sides and stones on the other two is rejected (#95)', () => {
+    const cols: [Primary, number][][] = [[[RED, 3]]];
+    expect(() => level(['.R.', 'RR.', '...'], cols, { overlay: ['.l.', 'lks', '.s.'] })).toThrow('walled in');
+    expect(() => level(['.R.', 'RR.', '...'], cols, { overlay: ['.l.', 'lk.', '.s.'] })).not.toThrow();
+  });
+
   it('rejects a key walled in by locks on every lane, and accepts one reachable from a single side', () => {
     const image = ['RRR', 'RRR', 'RRR'];
     const columns: [Primary, number][][] = [[[RED, 9]]];

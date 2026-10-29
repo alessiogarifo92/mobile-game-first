@@ -1,5 +1,5 @@
-import { PRIMARIES, isPrimary, type Primary } from './colors';
-import { paintNeeds, parseImage, parseLevel, parseOverlay, type LevelDef, type ShooterSpec } from './level';
+import { BROWN, PRIMARIES, isPrimary, type Primary } from './colors';
+import { paintNeeds, parseImage, parseLevel, parseOverlay, walledIn, type LevelDef, type ShooterSpec } from './level';
 import { createRng, shuffle } from './rng';
 import { levelWinRate, solve } from './solver';
 
@@ -23,21 +23,28 @@ export interface GenerateOptions {
   winRate?: [number, number];
   /** Reject settings that leave fewer shooters than this: few huge buckets mean few decisions. */
   minShooters?: number;
-  /** Instead of a hand-drawn overlay: how many ice, hidden, key and locked pixels to place (seeded, per attempt). */
+  /**
+   * Instead of a hand-drawn overlay: how many ice, hidden, key and locked pixels and stones to place (seeded, per
+   * attempt). `brown` repaints that many pixels of the image brown first (#94).
+   */
   special?: Special;
 }
 
 export interface Special {
   ice?: number;
   hidden?: number;
+  brown?: number;
   key?: number;
   lock?: number;
+  /** Stones go on empty cells touching the figure (holes inside it or its edge): draw `.` where they may go. */
+  stone?: number;
 }
 
 /**
  * Places `ice` iced pixels (on primary pixels only), `hidden` pixels (each with at least one
  * orthogonal neighbour that is a visible pixel, so it can be revealed), then `key` key pixels and
- * `lock` locked pixels (skipping any lock that would wall a key in). Returns an overlay.
+ * `lock` locked pixels (skipping any lock that would wall a key in), then `stone` stones (on empty cells next to a pixel,
+ * never walling a pixel or a key in). Returns an overlay.
  */
 export function placeSpecial(image: string[], counts: Special, rng: () => number): string[] {
   const { width, height, targets } = parseImage(image);
@@ -67,6 +74,14 @@ export function placeSpecial(image: string[], counts: Special, rng: () => number
   }
   if (hidden > 0) throw new Error(`not enough room for ${counts.hidden} hidden pixels`);
   const rows = () => Array.from({ length: height }, (_, y) => grid.slice(y * width, (y + 1) * width).join(''));
+  const valid = () => {
+    try {
+      parseOverlay(rows(), width, targets);
+      return true;
+    } catch {
+      return false;
+    }
+  };
   let key = counts.key ?? 0;
   let lock = counts.lock ?? 0;
   if ((key > 0) !== (lock > 0)) throw new Error('keys and locks come together');
@@ -81,16 +96,41 @@ export function placeSpecial(image: string[], counts: Special, rng: () => number
     if (lock === 0) break;
     if (targets[c] === 0 || grid[c] !== '.') continue;
     grid[c] = 'l';
-    try {
-      parseOverlay(rows(), width, targets);
-    } catch {
+    if (!valid()) {
       grid[c] = '.'; // this lock would wall a key in (or leave a lock without a key in sight)
       continue;
     }
     lock -= 1;
   }
   if (lock > 0) throw new Error(`not enough room for ${counts.lock} locks`);
+  // Stones last, from the same shuffle: levels without stones keep their overlay draw for draw.
+  let stone = counts.stone ?? 0;
+  const stones = targets.map(() => false);
+  for (const c of cells) {
+    if (stone === 0) break;
+    if (targets[c] !== 0 || neighbours(c).length === 0) continue;
+    stones[c] = true;
+    grid[c] = 's';
+    // A stone must not wall a pixel in, nor (with the locks) a key.
+    if (walledIn(width, height, targets, stones) >= 0 || !valid()) {
+      stones[c] = false;
+      grid[c] = '.';
+      continue;
+    }
+    stone -= 1;
+  }
+  if (stone > 0) throw new Error(`not enough empty cells next to the figure for ${counts.stone} stones`);
   return rows();
+}
+
+/** Repaints `count` seeded pixels of the image brown (`K`); pixels already brown are not picked again. */
+export function placeBrown(image: string[], count: number, rng: () => number): string[] {
+  const { width, targets } = parseImage(image);
+  const grid = image.join('').split('');
+  const cells = shuffle(targets.map((_, i) => i), rng).filter((c) => targets[c] !== 0 && targets[c] !== BROWN);
+  if (cells.length < count) throw new Error(`not enough pixels for ${count} brown`);
+  for (const c of cells.slice(0, count)) grid[c] = 'K';
+  return image.map((_, y) => grid.slice(y * width, (y + 1) * width).join(''));
 }
 
 /** Splits each color's paint need into shooters of roughly `chunk` ammo. */
@@ -114,7 +154,6 @@ export function splitAmmo(needs: Record<Primary, number>, chunk: number): Shoote
  * Throws when no attempt is solvable, so an unplayable level can never ship.
  */
 export function generateLevel(opts: GenerateOptions): { def: LevelDef; seed: number; nodes: number; winRate: number } {
-  const { width, targets } = parseImage(opts.image);
   const attempts = opts.attempts ?? 200;
   let unsolvable = 0;
   let lowest = Infinity;
@@ -122,7 +161,9 @@ export function generateLevel(opts: GenerateOptions): { def: LevelDef; seed: num
   for (let a = 0; a < attempts; a++) {
     const seed = opts.seed + a;
     const rng = createRng(seed);
-    const overlay = opts.special ? placeSpecial(opts.image, opts.special, rng) : opts.overlay;
+    const image = opts.special?.brown ? placeBrown(opts.image, opts.special.brown, rng) : opts.image;
+    const { width, targets } = parseImage(image);
+    const overlay = opts.special ? placeSpecial(image, opts.special, rng) : opts.overlay;
     const { ice } = parseOverlay(overlay, width, targets);
     const shooters = splitAmmo(paintNeeds(targets, ice), opts.ammoChunk);
     if (opts.minShooters && shooters.length < opts.minShooters) {
@@ -135,7 +176,7 @@ export function generateLevel(opts: GenerateOptions): { def: LevelDef; seed: num
       name: opts.name,
       stage: opts.stage ?? 1,
       ...(opts.boss ? { boss: true } : {}),
-      image: opts.image,
+      image,
       ...(overlay ? { overlay } : {}),
       columns: columns.filter((c) => c.length > 0),
       slots: opts.slots,
