@@ -1,5 +1,5 @@
 /** Pages of "How to play": navigation by swipe, keys or dots. Pure so the rules are unit-tested. */
-export const HOWTO_PAGES = 5;
+export const HOWTO_PAGES = 6;
 /** Horizontal drag, in logical units, that counts as a swipe. */
 export const SWIPE_DISTANCE = 70;
 

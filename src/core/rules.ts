@@ -12,6 +12,8 @@ export interface Board {
   ice: number[];
   /** Hidden pixels block their lane until a neighbour is done. */
   hidden: boolean[];
+  /** Locked pixels block their lane until every key pixel of the level is done. */
+  locked: boolean[];
 }
 
 export interface HitResult {
@@ -19,19 +21,21 @@ export interface HitResult {
   completed: boolean;
   /** Hidden pixels revealed because this hit completed their neighbour. */
   revealed: number[];
+  /** Locked pixels opened because this hit completed the last key. */
+  unlocked: number[];
 }
 
 export function createBoard(level: Level): Board {
-  return { paint: level.targets.map(() => 0), ice: level.ice.slice(), hidden: level.hidden.slice() };
+  return { paint: level.targets.map(() => 0), ice: level.ice.slice(), hidden: level.hidden.slice(), locked: level.locked.slice() };
 }
 
 export function cloneBoard(board: Board): Board {
-  return { paint: board.paint.slice(), ice: board.ice.slice(), hidden: board.hidden.slice() };
+  return { paint: board.paint.slice(), ice: board.ice.slice(), hidden: board.hidden.slice(), locked: board.locked.slice() };
 }
 
 export function cellDone(level: Level, board: Board, cell: number): boolean {
   const target = level.targets[cell]!;
-  return target === 0 || (board.paint[cell] === target && board.ice[cell] === 0 && !board.hidden[cell]);
+  return target === 0 || (board.paint[cell] === target && board.ice[cell] === 0 && !board.hidden[cell] && !board.locked[cell]);
 }
 
 export function boardDone(level: Level, board: Board): boolean {
@@ -47,7 +51,7 @@ export function findTarget(level: Level, board: Board, laneCells: readonly numbe
   for (const cell of laneCells) {
     if (level.stone[cell]) return -1;
     if (cellDone(level, board, cell)) continue;
-    if (board.hidden[cell]) return -1;
+    if (board.hidden[cell] || board.locked[cell]) return -1;
     const target = level.targets[cell]!;
     if (board.ice[cell]! > 0) return (target & color) !== 0 ? cell : -1;
     return accepts(target, board.paint[cell]!, color) ? cell : -1;
@@ -95,5 +99,13 @@ export function applyHit(level: Level, board: Board, cell: number, color: Primar
       }
     }
   }
-  return { brokeIce, completed, revealed };
+  const unlocked: number[] = [];
+  if (completed && level.keys[cell] && level.keys.every((key, i) => !key || cellDone(level, board, i))) {
+    board.locked.forEach((locked, i) => {
+      if (!locked) return;
+      board.locked[i] = false;
+      unlocked.push(i);
+    });
+  }
+  return { brokeIce, completed, revealed, unlocked };
 }

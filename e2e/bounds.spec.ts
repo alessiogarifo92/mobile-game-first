@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import levels from '../src/levels/levels.json' with { type: 'json' };
-import type { LevelDef } from '../src/core/level';
 import { HOWTO_PAGES } from '../src/core/howto';
+import type { LevelDef } from '../src/core/level';
 import type { Move } from '../src/core/solver';
 import { LAST_LEVEL, SEEN_ALL, checkOnScreen as check, dismissTip, jamSequence, mix, play, shots, tap, waitScene, waitSim } from './helpers';
 

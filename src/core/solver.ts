@@ -48,7 +48,7 @@ function key(node: Node): string {
   // Stones are part of the level and never change, so they need no place in the key.
   const slots = node.slots.filter((s): s is Waiting => s !== null).map((s) => `${s.color}:${s.ammo}`).sort().join(',');
   const b = node.board;
-  return `${b.paint.join('')}|${b.ice.join('')}|${b.hidden.map(Number).join('')}|${node.heads.join(',')}|${slots}`;
+  return `${b.paint.join('')}|${b.ice.join('')}|${b.hidden.map(Number).join('')}|${b.locked.map(Number).join('')}|${node.heads.join(',')}|${slots}`;
 }
 
 /**

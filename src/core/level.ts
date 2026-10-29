@@ -16,7 +16,7 @@ export interface LevelDef {
   /** Hash of the spec this level was generated from (see stages.ts). */
   specHash?: string;
   image: string[];
-  /** Optional layer over the image: `i` = ice, `h` = hidden, `s` = stone (on an empty cell), `.` = nothing. */
+  /** Optional layer over the image: `i` = ice, `h` = hidden, `s` = stone (on an empty cell), `k` = key, `l` = lock, `.` = nothing. */
   overlay?: string[];
   columns: ShooterSpec[][];
   slots: number;
@@ -33,6 +33,9 @@ export interface Level extends LevelDef {
   hidden: boolean[];
   /** Stones: fixed cells with no pixel where paint stops (#95). */
   stone: boolean[];
+  /** Locked pixels block their lane until every key pixel is done. */
+  locked: boolean[];
+  keys: boolean[];
 }
 
 export class LevelError extends Error {}
@@ -51,11 +54,13 @@ export function parseOverlay(
   overlay: readonly string[] | undefined,
   width: number,
   targets: readonly number[],
-): { ice: number[]; hidden: boolean[]; stone: boolean[] } {
+): { ice: number[]; hidden: boolean[]; stone: boolean[]; locked: boolean[]; keys: boolean[] } {
   const ice = targets.map(() => 0);
   const hidden = targets.map(() => false);
   const stone = targets.map(() => false);
-  if (!overlay) return { ice, hidden, stone };
+  const locked = targets.map(() => false);
+  const keys = targets.map(() => false);
+  if (!overlay) return { ice, hidden, stone, locked, keys };
   if (overlay.length * width !== targets.length) throw new LevelError('overlay must have the same rows as the image');
   overlay.forEach((row, y) => {
     if (row.length !== width) throw new LevelError(`overlay row ${y} has length ${row.length}, expected ${width}`);
@@ -67,15 +72,18 @@ export function parseOverlay(
         stone[cell] = true;
         return;
       }
-      if (ch !== 'i' && ch !== 'h') throw new LevelError(`unknown overlay code "${ch}" in row ${y}`);
+      if (!'ihkl'.includes(ch)) throw new LevelError(`unknown overlay code "${ch}" in row ${y}`);
       if (targets[cell] === 0) throw new LevelError(`overlay "${ch}" on an empty cell (${x}, ${y})`);
       if (ch === 'i') {
         if (!isPrimary(targets[cell]!)) throw new LevelError(`ice on a non-primary pixel (${x}, ${y})`);
         ice[cell] = 1;
-      } else hidden[cell] = true;
+      } else if (ch === 'h') hidden[cell] = true;
+      else if (ch === 'k') keys[cell] = true;
+      else locked[cell] = true;
     });
   });
-  return { ice, hidden, stone };
+  checkLocks(width, targets.length / width, locked, keys, stone);
+  return { ice, hidden, stone, locked, keys };
 }
 
 /** First pixel that no lane reaches before a stone (stones stop paint), or -1 when every pixel can be painted. */
@@ -99,6 +107,28 @@ export function checkReachable(width: number, height: number, targets: readonly 
   }
 }
 
+/**
+ * Locks need keys and keys need locks. Every key must be reachable from some lane without crossing a lock or a stone:
+ * all keys open the locks together, so a key walled in by locks would keep the level closed for ever.
+ */
+function checkLocks(width: number, height: number, locked: readonly boolean[], keys: readonly boolean[], stone: readonly boolean[]): void {
+  const hasLocks = locked.some(Boolean);
+  const hasKeys = keys.some(Boolean);
+  if (hasLocks && !hasKeys) throw new LevelError('locked pixels but no key pixel');
+  if (hasKeys && !hasLocks) throw new LevelError('key pixels but no locked pixel');
+  if (!hasKeys) return;
+  const reachable = keys.map(() => false);
+  for (const lane of buildLanes(width, height)) {
+    for (const cell of lane) {
+      if (locked[cell] || stone[cell]) break;
+      if (keys[cell]) reachable[cell] = true;
+    }
+  }
+  keys.forEach((key, cell) => {
+    if (key && !reachable[cell]) throw new LevelError(`key (${cell % width}, ${Math.floor(cell / width)}) is walled in by locks`);
+  });
+}
+
 export function parseImage(image: readonly string[]): { width: number; height: number; targets: number[] } {
   if (image.length === 0) throw new LevelError('image has no rows');
   const width = image[0]!.length;
@@ -119,7 +149,7 @@ export function parseImage(image: readonly string[]): { width: number; height: n
 /** Parses and validates a level definition; throws LevelError when it can never be completed. */
 export function parseLevel(def: LevelDef): Level {
   const { width, height, targets } = parseImage(def.image);
-  const { ice, hidden, stone } = parseOverlay(def.overlay, width, targets);
+  const { ice, hidden, stone, locked, keys } = parseOverlay(def.overlay, width, targets);
   checkReachable(width, height, targets, stone);
   if (!Number.isInteger(def.slots) || def.slots < 1) throw new LevelError('slots must be a positive integer');
   if (!Number.isInteger(def.beltCapacity) || def.beltCapacity < 1) {
@@ -141,7 +171,7 @@ export function parseLevel(def: LevelDef): Level {
       throw new LevelError(`ammo for color ${p} is ${ammo[p]} but the image needs ${needs[p]}`);
     }
   }
-  return { ...def, width, height, targets, ice, hidden, stone };
+  return { ...def, width, height, targets, ice, hidden, stone, locked, keys };
 }
 
 /**

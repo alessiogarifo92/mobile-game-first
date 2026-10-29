@@ -62,7 +62,7 @@ describe('brown rules', () => {
   it('takes three hits, stays unfinished after two and blocks the lane until done', () => {
     const b = createBoard(l);
     expect(findTarget(l, b, lane, RED)).toBe(0);
-    expect(applyHit(l, b, 0, RED)).toEqual({ brokeIce: false, completed: false, revealed: [] });
+    expect(applyHit(l, b, 0, RED)).toEqual({ brokeIce: false, completed: false, revealed: [], unlocked: [] });
     expect(findTarget(l, b, lane, RED)).toBe(-1); // red already received: the brown pixel blocks the red behind it
     applyHit(l, b, 0, BLUE);
     expect(cellDone(l, b, 0)).toBe(false);
@@ -111,7 +111,7 @@ describe('brown in the solver and the simulation', () => {
         if (!shooter || !launchFromColumn(g, col)) continue;
         const left = runLoop(sample, lanes, board, shooter.color, shooter.ammo);
         while (g.belt.length + g.pending.length > 0 && g.status === 'playing') step(g);
-        expect({ paint: g.paint, ice: g.ice, hidden: g.hidden }).toEqual(cloneBoard(board));
+        expect({ paint: g.paint, ice: g.ice, hidden: g.hidden, locked: g.locked }).toEqual(cloneBoard(board));
         expect(g.slots.find((s) => s?.id === shooter.id)?.ammo ?? 0).toBe(left);
         g.slots = g.slots.map(() => null);
       }

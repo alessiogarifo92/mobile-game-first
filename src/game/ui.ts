@@ -93,6 +93,19 @@ export function lockIcon(g: Phaser.GameObjects.Graphics, x: number, y: number, s
   g.fillRoundedRect(x - w / 2, y + size / 2 - body, w, body, size * 0.1);
 }
 
+/** Key centred on (x, y), `size` wide: a ring bow and a toothed shaft, the partner shape of `lockIcon`. */
+export function keyIcon(g: Phaser.GameObjects.Graphics, x: number, y: number, size: number, color: number = THEME.ink): void {
+  const bow = size * 0.22;
+  const left = x - size / 2 + bow;
+  g.lineStyle(Math.max(size * 0.12, 1.5), color, 1);
+  g.strokeCircle(left, y, bow);
+  g.fillStyle(color, 1);
+  const shaft = Math.max(size * 0.13, 1.5);
+  g.fillRect(left + bow, y - shaft / 2, size / 2 + x - left - bow, shaft);
+  g.fillRect(x + size * 0.28, y, shaft, size * 0.22);
+  g.fillRect(x + size * 0.1, y, shaft, size * 0.16);
+}
+
 /** A level's picture fitted in a `size` square at (x, y): painted, or as a silhouette in the empty-pixel colour. */
 export function drawPicture(g: Phaser.GameObjects.Graphics, level: Level, x: number, y: number, size: number, painted: boolean): void {
   const cell = size / Math.max(level.width, level.height);

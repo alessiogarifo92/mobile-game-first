@@ -6,7 +6,7 @@ import type { MessageKey } from '../../core/i18n';
 import { publishDebug } from '../debug';
 import { t } from '../store';
 import { PAINT, SYMBOL, THEME, css } from '../theme';
-import { brownPixel, button, drawStone, label, screenBackground } from '../ui';
+import { brownPixel, button, drawStone, keyIcon, label, lockIcon, screenBackground } from '../ui';
 
 const PAGES = HOWTO_PAGES;
 
@@ -86,10 +86,10 @@ export class HowToScene extends Phaser.Scene {
     label(this, x, y, SYMBOL[color]!, size * 0.3, '#ffffff');
   }
 
-  private pixel(g: Phaser.GameObjects.Graphics, x: number, y: number, color: number, size = 90, half = 0): void {
+  private pixel(g: Phaser.GameObjects.Graphics, x: number, y: number, color: number, size = 90, half = 0, ghost = false): void {
     g.fillStyle(THEME.emptyPixel, 1);
     g.fillRoundedRect(x - size / 2, y - size / 2, size, size, THEME.radius.cell);
-    g.fillStyle(PAINT[color]!, half ? 0.3 : 1);
+    g.fillStyle(PAINT[color]!, half || ghost ? 0.3 : 1);
     g.fillRoundedRect(x - size / 2, y - size / 2, size, size, THEME.radius.cell);
     if (half) {
       g.fillStyle(PAINT[half]!, 1);
@@ -147,7 +147,14 @@ export class HowToScene extends Phaser.Scene {
       g.fillStyle(PAINT[RED]!, 0.3);
       g.fillRoundedRect(cx + 36, 391, 58, 58, THEME.radius.cell);
       label(this, cx + 180, 420, '←●', THEME.type.lg, css(PAINT[RED]!));
-    } else {
+    } else if (page === 5) {
+      // A key pixel, then the padlocked pixel it opens.
+      this.pixel(g, cx - 150, 420, YELLOW);
+      keyIcon(g, cx - 150, 420, 70);
+      label(this, cx - 30, 420, '→', THEME.type.xl);
+      this.pixel(g, cx + 110, 420, RED, 90, 0, true);
+      lockIcon(g, cx + 110, 420, 64);
+    } else if (page === 2) {
       // Waiting slots, one free.
       for (let i = 0; i < 3; i++) {
         g.lineStyle(3, THEME.ink, 0.3);

@@ -22,7 +22,7 @@ import { LEVELS, UNIVERSES, canOpen, getProgress, levelHint, levelTitle, markCom
 import { BLUE, BROWN, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
 import { PAINT, SYMBOL, THEME, css } from '../theme';
 import { drawSkin } from '../skins';
-import { brownPixel, button, drawStone, label, progressBar, screenBackground } from '../ui';
+import { brownPixel, button, drawStone, keyIcon, label, lockIcon, progressBar, screenBackground } from '../ui';
 
 const TICK_MS = 85;
 const BELT_JAR = 54;
@@ -341,6 +341,18 @@ export class PlayScene extends Phaser.Scene {
       card.add(label(this, cx, y, '←●', THEME.type.sm, css(PAINT[RED]!)));
       card.add(label(this, cx + 80, y, '=', THEME.type.md));
       sq(cx + 160, y, PAINT[RED]!);
+    } else if (id === 'lock') {
+      // Key done → padlock opens → the pixel can be painted.
+      const y = y0 + 200;
+      sq(cx - 200, y, PAINT[YELLOW]!);
+      keyIcon(g, cx - 200, y, 38);
+      card.add(label(this, cx - 120, y, '→', THEME.type.lg));
+      sq(cx - 40, y, PAINT[RED]!, 0.3);
+      lockIcon(g, cx - 40, y, 36);
+      card.add(label(this, cx + 40, y, '→', THEME.type.lg));
+      sq(cx + 120, y, THEME.emptyPixel);
+      sq(cx + 120, y, PAINT[RED]!, 0.3);
+      card.add(label(this, cx + 200, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
     } else if (id === 'hidden') {
       // "?" next to a pixel: finish the neighbour, the colour shows.
       const y = y0 + 200;
@@ -431,6 +443,15 @@ export class PlayScene extends Phaser.Scene {
         // Half-mixed secondary: the received primary fills the upper-left triangle.
         g.fillStyle(PAINT[paint]!, 1);
         g.fillTriangle(x, y, x + w, y, x, y + h);
+      }
+      if (this.gs.locked[i]) {
+        // Locked: the colour still shows (so the player can plan), under a veil and an ink padlock.
+        g.fillStyle(THEME.paper, 0.55);
+        g.fillRoundedRect(x, y, w, h, THEME.radius.cell);
+        lockIcon(g, x + w / 2, y + h / 2, h * 0.72);
+      } else if (this.level.keys[i]) {
+        // Key: what opens the padlocks, until it is done.
+        keyIcon(g, x + w / 2, y + h / 2, w * 0.78);
       }
       if (this.gs.ice[i]! > 0) {
         // Ice: frosted cover with cracks.
@@ -596,6 +617,13 @@ export class PlayScene extends Phaser.Scene {
               onComplete: () => shard.destroy(),
             });
           }
+        }
+        for (const cell of e.unlocked) {
+          // The padlock lifts off and fades: the lane is open.
+          const rr = cellRect(this.layout, this.level.width, cell);
+          const lock = this.add.graphics().setPosition(rr.x + rr.w / 2, rr.y + rr.h / 2).setDepth(4);
+          lockIcon(lock, 0, 0, rr.h * 0.72);
+          this.tweens.add({ targets: lock, y: lock.y - rr.h * 0.8, angle: 18, alpha: 0, scale: 1.3, duration: 420, ease: 'Back.easeIn', onComplete: () => lock.destroy() });
         }
         for (const cell of e.revealed) {
           const rr = cellRect(this.layout, this.level.width, cell);
@@ -788,6 +816,7 @@ export class PlayScene extends Phaser.Scene {
       hidden: gs.hidden.filter(Boolean).length,
       stones: this.level.stone.filter(Boolean).length,
       stoneSplashes: this.stoneSplashes,
+      locked: gs.locked.filter(Boolean).length,
     });
   }
 
