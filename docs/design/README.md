@@ -22,6 +22,7 @@ Unica fonte di verità in codice: `src/game/theme.ts`.
 | Marrone K (R+Y+B, #94) | `#8B5A3C` · pixel a metà: tre spicchi fissi (rosso in alto a sinistra, giallo in alto a destra, blu in basso) con divisori, così ciò che manca si legge dalla posizione e non solo dal colore |
 | Fango (errore, post-MVP) | `#7A5C45` |
 | Oro (premi) | `#FFD166` |
+| Pietra (#95) | `#A3A6AD` · ombra e puntini `#5F626B`, luce bianca: blocco smussato con texture, riconoscibile senza colore; il colpo fermato fa uno schizzo grigio |
 | Skin degli universi 2–5 | coppie colore/accento da token esistenti: `SKIN_COLORS` in `theme.ts` (oro+inchiostro per lo stile dell'universo, 10 varianti per gli stage) |
 | Murale | 6 colori di vernice + bianco + inchiostro (`MURAL_PAINT`); tessere vuote in pixel vuoto `#F1E7D8` |
 | Tipografia | Titoli: Fredoka 600 · UI: Nunito 700 — MVP usa lo stack `ui-rounded, system-ui` (zero download); Fredoka/Nunito (OFL-1.1) via @fontsource in un ticket successivo |

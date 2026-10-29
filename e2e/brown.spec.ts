@@ -57,8 +57,4 @@ test('"How to play" has a fourth page: red + yellow + blue = brown', async ({ pa
   }
   expect(await mix(page, 'page')).toBe(3);
   if (shots) await page.screenshot({ path: `${shots}/05-come-si-gioca-marrone.png` });
-  // The last page's button starts playing: back to the map.
-  const next = await mix<{ x: number; y: number }>(page, 'next');
-  await tap(page, next.x, next.y);
-  await waitScene(page, 'menu');
 });

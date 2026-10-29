@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 import levels from '../src/levels/levels.json' with { type: 'json' };
 import type { LevelDef } from '../src/core/level';
-import type { Move } from '../src/core/solver';
 import { HOWTO_PAGES } from '../src/core/howto';
+import type { Move } from '../src/core/solver';
 import { universeOfStage } from '../src/core/universes';
 
 import { SEEN_ALL, dismissTip, jamSequence, mix, openLevel, play, shots, tap, throttleCpu, waitScene, waitSim, type Rect } from './helpers';
@@ -92,6 +92,7 @@ test('the language is chosen in Settings and remembered; How to play pages throu
   for (let i = 0; i < HOWTO_PAGES; i++) {
     expect(await mix(page, 'page')).toBe(i);
     if (shots && i === 1) await page.screenshot({ path: `${shots}/09-come-si-gioca.png` });
+    if (shots && i === 3) await page.screenshot({ path: `${shots}/09b-come-si-gioca-pietre.png` });
     const next = await mix<{ x: number; y: number }>(page, 'next');
     await tap(page, next.x, next.y);
     await waitScene(page, i < HOWTO_PAGES - 1 ? 'howto' : 'menu');

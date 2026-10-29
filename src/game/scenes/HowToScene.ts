@@ -5,8 +5,8 @@ import { VIEW } from '../../core/layout';
 import type { MessageKey } from '../../core/i18n';
 import { publishDebug } from '../debug';
 import { t } from '../store';
-import { PAINT, SYMBOL, THEME } from '../theme';
-import { brownPixel, button, label, screenBackground } from '../ui';
+import { PAINT, SYMBOL, THEME, css } from '../theme';
+import { brownPixel, button, drawStone, label, screenBackground } from '../ui';
 
 const PAGES = HOWTO_PAGES;
 
@@ -137,6 +137,16 @@ export class HowToScene extends Phaser.Scene {
       this.jar(g, cx + 20, 540, BLUE, 70);
       label(this, cx + 90, 540, '→', THEME.type.lg);
       this.pixel(g, cx + 170, 540, BROWN, 90);
+    } else if (page === 4) {
+      // Stones (#95): the drop from the left stops on the stone; the pixel behind takes paint from the right.
+      label(this, cx - 170, 420, '●→', THEME.type.lg, css(PAINT[RED]!));
+      drawStone(g, cx - 100, 375, 90, 90);
+      // An unfinished pixel: the ghost of the colour it still needs.
+      g.fillStyle(THEME.emptyPixel, 1);
+      g.fillRoundedRect(cx + 20, 375, 90, 90, THEME.radius.cell);
+      g.fillStyle(PAINT[RED]!, 0.3);
+      g.fillRoundedRect(cx + 36, 391, 58, 58, THEME.radius.cell);
+      label(this, cx + 180, 420, '←●', THEME.type.lg, css(PAINT[RED]!));
     } else {
       // Waiting slots, one free.
       for (let i = 0; i < 3; i++) {

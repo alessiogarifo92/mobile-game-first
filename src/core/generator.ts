@@ -1,5 +1,5 @@
 import { BROWN, PRIMARIES, isPrimary, type Primary } from './colors';
-import { paintNeeds, parseImage, parseLevel, parseOverlay, type LevelDef, type ShooterSpec } from './level';
+import { paintNeeds, parseImage, parseLevel, parseOverlay, walledIn, type LevelDef, type ShooterSpec } from './level';
 import { createRng, shuffle } from './rng';
 import { levelWinRate, solve } from './solver';
 
@@ -24,17 +24,26 @@ export interface GenerateOptions {
   /** Reject settings that leave fewer shooters than this: few huge buckets mean few decisions. */
   minShooters?: number;
   /**
-   * Instead of a hand-drawn overlay: how many ice and hidden pixels to place (seeded, per attempt). `brown` repaints
-   * that many pixels of the image brown first (#94).
+   * Instead of a hand-drawn overlay: how many ice and hidden pixels and stones to place (seeded, per attempt). `brown`
+   * repaints that many pixels of the image brown first (#94).
    */
-  special?: { ice?: number; hidden?: number; brown?: number };
+  special?: Special;
+}
+
+export interface Special {
+  ice?: number;
+  hidden?: number;
+  brown?: number;
+  /** Stones go on empty cells touching the figure (holes inside it or its edge): draw `.` where they may go. */
+  stone?: number;
 }
 
 /**
- * Places `ice` iced pixels (on primary pixels only) and `hidden` pixels (each with at least one
- * orthogonal neighbour that is a visible pixel, so it can be revealed). Returns an overlay.
+ * Places `ice` iced pixels (on primary pixels only), `hidden` pixels (each with at least one
+ * orthogonal neighbour that is a visible pixel, so it can be revealed) and `stone` stones (on empty
+ * cells next to a pixel, never walling a pixel in on all four sides). Returns an overlay.
  */
-export function placeSpecial(image: string[], counts: { ice?: number; hidden?: number }, rng: () => number): string[] {
+export function placeSpecial(image: string[], counts: Special, rng: () => number): string[] {
   const { width, height, targets } = parseImage(image);
   const grid = targets.map(() => '.');
   const cells = shuffle(targets.map((_, i) => i), rng);
@@ -61,6 +70,21 @@ export function placeSpecial(image: string[], counts: { ice?: number; hidden?: n
     hidden -= 1;
   }
   if (hidden > 0) throw new Error(`not enough room for ${counts.hidden} hidden pixels`);
+  // Stones last, from the same shuffle: levels without stones keep their overlay draw for draw.
+  let stone = counts.stone ?? 0;
+  const stones = targets.map(() => false);
+  for (const c of cells) {
+    if (stone === 0) break;
+    if (targets[c] !== 0 || neighbours(c).length === 0) continue;
+    stones[c] = true;
+    if (walledIn(width, height, targets, stones) >= 0) {
+      stones[c] = false;
+      continue;
+    }
+    grid[c] = 's';
+    stone -= 1;
+  }
+  if (stone > 0) throw new Error(`not enough empty cells next to the figure for ${counts.stone} stones`);
   return Array.from({ length: height }, (_, y) => grid.slice(y * width, (y + 1) * width).join(''));
 }
 
