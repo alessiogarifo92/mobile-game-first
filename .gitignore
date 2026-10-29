@@ -1,6 +1,7 @@
 node_modules/
 dist/
 dist-more-levels/
+dist-covered-debut/
 dev-dist/
 coverage/
 playwright-report/

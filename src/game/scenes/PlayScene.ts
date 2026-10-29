@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { newlyCompletedStage, stageSkin } from '../../core/album';
 import { primariesOf } from '../../core/colors';
-import { cellDone } from '../../core/rules';
+import { cellDone, colorShown } from '../../core/rules';
 import type { StoneEvent } from '../../core/sim';
 import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, slotAt, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
@@ -33,6 +33,8 @@ const REFUSE_MS = 450;
 const PIP = 16;
 const PIP_GAP = 6;
 const MAX_PIPS = 6;
+/** Covered bucket reaching the front of its column: it turns over (squash, swap face, unsquash) in this time. */
+const REVEAL_MS = 420;
 const GUIDE_TEXT = { tap: 'guide.tap', watch: 'guide.watch', next: 'guide.next', free: 'guide.free' } as const;
 
 export class PlayScene extends Phaser.Scene {
@@ -60,6 +62,8 @@ export class PlayScene extends Phaser.Scene {
   /** Ammo each shooter had when it was launched, to tell whether its loop hit anything. */
   private launchAmmo = new Map<number, number>();
   private hiddenMarks = new Map<number, Phaser.GameObjects.Text>();
+  /** Covered buckets that reached the front of their column, with the time their reveal started. */
+  private reveals = new Map<number, number>();
   /** Stage completed by this win (album reward), if any. */
   private completedStage: number | null = null;
   /** The universe this win completes for the first time: the win panel leads to its party. */
@@ -102,6 +106,7 @@ export class PlayScene extends Phaser.Scene {
     this.guideLayer = null;
     this.tip = null;
     this.launchAmmo = new Map();
+    this.reveals = new Map();
     this.pixelsDirty = false;
     this.refused = null;
     this.refusals = 0;
@@ -353,6 +358,19 @@ export class PlayScene extends Phaser.Scene {
       sq(cx + 120, y, THEME.emptyPixel);
       sq(cx + 120, y, PAINT[RED]!, 0.3);
       card.add(label(this, cx + 200, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
+    } else if (id === 'covered') {
+      // A "?" bucket behind the front → at the front it shows its colour.
+      const y = y0 + 200;
+      const bucket = (bx: number, fill: number, mark: string) => {
+        g.fillStyle(fill, 1);
+        g.fillRoundedRect(bx - 32, y - 32, 64, 64, THEME.radius.jar);
+        g.lineStyle(3, THEME.ink, 1);
+        g.strokeRoundedRect(bx - 32, y - 32, 64, 64, THEME.radius.jar);
+        card.add(label(this, bx, y, mark, THEME.type.md, '#ffffff'));
+      };
+      bucket(cx - 110, THEME.hidden, '?');
+      card.add(label(this, cx, y, '→', THEME.type.lg));
+      bucket(cx + 110, PAINT[BLUE]!, SYMBOL[BLUE]!);
     } else if (id === 'hidden') {
       // "?" next to a pixel: finish the neighbour, the colour shows.
       const y = y0 + 200;
@@ -497,24 +515,44 @@ export class PlayScene extends Phaser.Scene {
     this.textState.set(t, { value, size, color });
   }
 
-  private jar(x: number, y: number, size: number, shooter: Shooter, alpha = 1): void {
+  /** `covered`: draw the bucket's cover ("?", no colour) instead of its paint; `squash` narrows it while it turns over. */
+  private jar(x: number, y: number, size: number, shooter: Shooter, alpha = 1, covered = false, squash = 1): void {
     const g = this.dynamic;
-    const c = PAINT[shooter.color]!;
+    const c = covered ? THEME.hidden : PAINT[shooter.color]!;
+    const w = Math.max(size * squash, 2);
+    const r = Math.min(THEME.radius.jar, w / 2);
     g.fillStyle(THEME.ink, 0.15 * alpha);
-    g.fillRoundedRect(x - size / 2 + 3, y - size / 2 + 5, size, size, THEME.radius.jar);
+    g.fillRoundedRect(x - w / 2 + 3, y - size / 2 + 5, w, size, r);
     g.fillStyle(c, alpha);
-    g.fillRoundedRect(x - size / 2, y - size / 2, size, size, THEME.radius.jar);
-    g.fillStyle(THEME.ink, 0.25 * alpha);
-    g.fillRoundedRect(x - size / 2 + 6, y - size / 2 - 6, size - 12, 12, 5); // lid
-    drawSkin(g, getProgress().skin, x, y, size, alpha);
+    g.fillRoundedRect(x - w / 2, y - size / 2, w, size, r);
+    if (w > 16) {
+      g.fillStyle(THEME.ink, 0.25 * alpha);
+      g.fillRoundedRect(x - w / 2 + 6, y - size / 2 - 6, w - 12, 12, 5); // lid
+    }
+    if (!covered && squash === 1) drawSkin(g, getProgress().skin, x, y, size, alpha);
     g.lineStyle(3, THEME.ink, alpha);
-    g.strokeRoundedRect(x - size / 2, y - size / 2, size, size, THEME.radius.jar);
-    if (alpha > 0.5) {
+    g.strokeRoundedRect(x - w / 2, y - size / 2, w, size, r);
+    if (alpha > 0.5 && squash > 0.6) {
       // Floors keep the numbers legible (≥ 12 px on a 360 px phone) on the small belt jars.
       const small = size < 70;
-      this.text(x, y - size * (small ? 0.27 : 0.18), SYMBOL[shooter.color]!, Math.max(size * 0.26, 18));
+      // A covered bucket shows "?" where its colour symbol goes: the cover is told by its mark, not by its colour.
+      this.text(x, y - size * (small ? 0.27 : 0.18), covered ? '?' : SYMBOL[shooter.color]!, Math.max(size * (covered ? 0.32 : 0.26), 18));
       this.text(x, y + size * (small ? 0.2 : 0.16), String(shooter.ammo), Math.max(size * 0.36, 24));
     }
+  }
+
+  /** Cover state of a column bucket: hidden behind the front, then turning over once it reaches the front. */
+  private columnFace(s: Shooter, k: number): { covered: boolean; squash: number } {
+    if (!s.covered) return { covered: false, squash: 1 };
+    if (!colorShown(s, k)) return { covered: true, squash: 1 };
+    let start = this.reveals.get(s.id);
+    if (start === undefined) {
+      start = this.time.now;
+      this.reveals.set(s.id, start);
+      sfx.reveal();
+    }
+    const p = Math.min((this.time.now - start) / REVEAL_MS, 1);
+    return { covered: p < 0.5, squash: Math.abs(Math.cos(p * Math.PI)) };
   }
 
   private drawDynamic(alpha: number): void {
@@ -541,7 +579,8 @@ export class PlayScene extends Phaser.Scene {
       const r = layout.columns[c]!;
       const dx = this.refused?.column === c ? shake : 0;
       queue.slice(0, 3).forEach((s, k) => {
-        this.jar(r.x + r.w / 2 + dx, r.y + layout.jar / 2 + 6 + k * layout.columnStep, k === 0 ? layout.jar : layout.jar - 14, s, k === 0 ? 1 : 0.55);
+        const face = this.columnFace(s, k);
+        this.jar(r.x + r.w / 2 + dx, r.y + layout.jar / 2 + 6 + k * layout.columnStep, k === 0 ? layout.jar : layout.jar - 14, s, k === 0 ? 1 : 0.55, face.covered, face.squash);
       });
       if (queue.length > 3) this.text(r.x + r.w / 2, r.y + 3 * layout.columnStep + 36, `+${queue.length - 3}`, THEME.type.sm, THEME.subCss);
     });
@@ -817,6 +856,10 @@ export class PlayScene extends Phaser.Scene {
       stones: this.level.stone.filter(Boolean).length,
       stoneSplashes: this.stoneSplashes,
       locked: gs.locked.filter(Boolean).length,
+      // What the player can see of each column's top three buckets: a covered one reads as null.
+      queueColors: gs.queues.map((q) => q.slice(0, 3).map((s, k) => (colorShown(s, k) ? s.color : null))),
+      covered: gs.queues.reduce((n, q) => n + q.filter((s, k) => !colorShown(s, k)).length, 0),
+      reveals: this.reveals.size,
     });
   }
 

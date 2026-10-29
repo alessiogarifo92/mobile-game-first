@@ -46,6 +46,7 @@ export function runLoop(level: Level, lanes: number[][], board: Board, color: Pr
 function key(node: Node): string {
   // Positions don't change what can still be solved, so equal multisets of waiting shooters share a key.
   // Stones are part of the level and never change, so they need no place in the key.
+  // Covered buckets add no state: the solver knows every colour, and what the player sees follows from `heads`.
   const slots = node.slots.filter((s): s is Waiting => s !== null).map((s) => `${s.color}:${s.ammo}`).sort().join(',');
   const b = node.board;
   return `${b.paint.join('')}|${b.ice.join('')}|${b.hidden.map(Number).join('')}|${b.locked.map(Number).join('')}|${node.heads.join(',')}|${slots}`;

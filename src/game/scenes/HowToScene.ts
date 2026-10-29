@@ -78,12 +78,13 @@ export class HowToScene extends Phaser.Scene {
     publishDebug({ scene: 'howto', page, offsetY: 0, scrollY: this.cameras.main.scrollY, next: { x: VIEW.width / 2, y: 1170 + off } });
   }
 
-  private jar(g: Phaser.GameObjects.Graphics, x: number, y: number, color: number, size = 84): void {
-    g.fillStyle(PAINT[color]!, 1);
+  /** `color` null: a covered bucket, "?" on the cover colour. */
+  private jar(g: Phaser.GameObjects.Graphics, x: number, y: number, color: number | null, size = 84): void {
+    g.fillStyle(color === null ? THEME.hidden : PAINT[color]!, 1);
     g.fillRoundedRect(x - size / 2, y - size / 2, size, size, THEME.radius.jar);
     g.lineStyle(3, THEME.ink, 1);
     g.strokeRoundedRect(x - size / 2, y - size / 2, size, size, THEME.radius.jar);
-    label(this, x, y, SYMBOL[color]!, size * 0.3, '#ffffff');
+    label(this, x, y, color === null ? '?' : SYMBOL[color]!, size * (color === null ? 0.4 : 0.3), '#ffffff');
   }
 
   private pixel(g: Phaser.GameObjects.Graphics, x: number, y: number, color: number, size = 90, half = 0, ghost = false): void {
@@ -163,6 +164,17 @@ export class HowToScene extends Phaser.Scene {
       this.jar(g, cx - 105, 422, YELLOW);
       this.jar(g, cx, 422, BLUE);
       label(this, cx + 105, 422, '?', THEME.type.lg, THEME.subCss);
+    } else {
+      // A column with covered buckets behind the front → the next one shows its colour at the top.
+      g.fillStyle(THEME.belt, 1);
+      g.fillRoundedRect(cx - 230, 260, 140, 330, THEME.radius.jar);
+      g.fillRoundedRect(cx + 90, 260, 140, 330, THEME.radius.jar);
+      this.jar(g, cx - 160, 320, RED);
+      this.jar(g, cx - 160, 420, null, 70);
+      this.jar(g, cx - 160, 510, null, 70);
+      label(this, cx, 420, '→', THEME.type.xl);
+      this.jar(g, cx + 160, 320, BLUE);
+      this.jar(g, cx + 160, 420, null, 70);
     }
   }
 }

@@ -1,0 +1,63 @@
+{
+  "id": 241,
+  "name": "balloon",
+  "stage": 25,
+  "image": [
+    "..RRRR..",
+    ".RRRRRR.",
+    ".RRYYRR.",
+    ".RRRRRR.",
+    "..RRRR..",
+    "...BB...",
+    "...BB...",
+    "..BBBB.."
+  ],
+  "columns": [
+    [
+      {
+        "color": 2,
+        "ammo": 2
+      },
+      {
+        "color": 4,
+        "ammo": 4,
+        "covered": true
+      },
+      {
+        "color": 1,
+        "ammo": 4
+      }
+    ],
+    [
+      {
+        "color": 1,
+        "ammo": 4
+      },
+      {
+        "color": 4,
+        "ammo": 4
+      },
+      {
+        "color": 1,
+        "ammo": 4,
+        "covered": true
+      }
+    ],
+    [
+      {
+        "color": 1,
+        "ammo": 4
+      },
+      {
+        "color": 1,
+        "ammo": 4
+      },
+      {
+        "color": 1,
+        "ammo": 4
+      }
+    ]
+  ],
+  "slots": 3,
+  "beltCapacity": 3
+}

@@ -10,6 +10,8 @@ export interface Shooter {
   pos: number;
   /** Lanes already visited in the current loop. */
   traveled: number;
+  /** Covered bucket (see `colorShown`): its colour is hidden until it reaches the front of its column. */
+  covered?: boolean;
 }
 
 export type Status = 'playing' | 'won' | 'jammed';
