@@ -46,6 +46,32 @@ function moreLevels(): Plugin {
   };
 }
 
+/**
+ * e2e only (`--mode covered-debut`, used by e2e/covered.spec.ts): the shipped game, then a second universe holding only
+ * the covered-bucket debut level (e2e/fixtures/covered-debut.json, #97), renumbered to follow the shipped levels. It
+ * stands in for level 241 until universe 3 ships. Self-contained like `moreLevels`.
+ */
+function coveredDebut(): Plugin {
+  const read = (file: string) => JSON.parse(readFileSync(new URL(file, import.meta.url), 'utf8'));
+  const levels: LevelRow[] = read('./src/levels/levels.json');
+  const stages: StageRow[] = read('./src/levels/stages.json');
+  const universes: UniverseRow[] = read('./src/levels/universes.json');
+  const stage = stages.length + 1;
+  stages.push({ ...stages[0]!, id: stage, complete: false });
+  levels.push({ ...read('./e2e/fixtures/covered-debut.json'), id: levels.length + 1, stage });
+  universes.push({ ...universes[0]!, id: universes.length + 1 });
+  return {
+    name: 'covered-debut',
+    enforce: 'pre',
+    load(id) {
+      if (id.endsWith('/src/levels/levels.json')) return JSON.stringify(levels);
+      if (id.endsWith('/src/levels/stages.json')) return JSON.stringify(stages);
+      if (id.endsWith('/src/levels/universes.json')) return JSON.stringify(universes);
+      return null;
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => ({
   // Relative base so the same build works on any static host and inside Capacitor's WebView.
   base: './',
@@ -56,6 +82,7 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     mode === 'more-levels' && moreLevels(),
+    mode === 'covered-debut' && coveredDebut(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg', 'icons/*.png'],

@@ -82,3 +82,12 @@ export function applyHit(level: Level, board: Board, cell: number, color: Primar
   }
   return { brokeIce, completed, revealed };
 }
+
+/**
+ * Covered buckets (`ShooterSpec.covered`): whether the player may see a bucket's colour. A covered bucket shows it
+ * only from the front of its column (`position` 0) onwards, and once launched it stays revealed. The rule only hides
+ * information: what a bucket paints never changes, so play, `solve` and `levelWinRate` need no extra state.
+ */
+export function colorShown(bucket: { covered?: boolean }, position: number): boolean {
+  return !bucket.covered || position === 0;
+}

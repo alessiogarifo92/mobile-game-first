@@ -45,6 +45,12 @@ export class Sfx {
     this.tone(180, 0.08, 'triangle', 0.04);
   }
 
+  /** Rising two-note chime: a covered bucket turns over and shows its colour. */
+  reveal(): void {
+    this.tone(660, 0.07, 'triangle', 0.04);
+    this.tone(880, 0.09, 'triangle', 0.04, 0.06);
+  }
+
   win(): void {
     [523, 659, 784, 1047].forEach((f, i) => this.tone(f, 0.25, 'triangle', 0.07, i * 0.11));
   }

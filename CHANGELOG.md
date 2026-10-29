@@ -2,6 +2,15 @@
 
 ## Non rilasciato
 
+### Meccanica: secchiello coperto (#97)
+
+- **Secchiello coperto**: un secchiello dietro il primo della sua colonna può essere coperto: mostra "?" sul colore del coperchio (token `hidden`, lo stesso dei pixel nascosti) e la sua vernice resta un segreto finché non arriva in cima. Lì si gira (animazione di 420 ms e un piccolo suono) e mostra il colore; da lì in poi resta scoperto. Le munizioni restano visibili.
+- **Regole invariate**: il colore resta nel dato (`covered?: boolean` sullo `ShooterSpec`), quindi simulazione, `solve` e `levelWinRate` giocano il livello come prima; la regola di visibilità `colorShown` sta in `src/core/rules.ts`. `parseLevel` rifiuta un `covered` che non sia booleano e un primo secchiello coperto (non nasconderebbe niente).
+- **Generatore**: `special.covered` è la quota di secchielli coperti (es. 0,25), scelti con il seme del livello e mai il primo di una colonna. I livelli esistenti non cambiano.
+- **Suggerimento una tantum** al primo livello con secchielli coperti e **quarta scheda** in "Come si gioca" ("Sorpresa"), IT/EN.
+- Il debutto vero (livello 241) arriva con l'universo 3 (#101). Il livello di debutto è già pronto come spec (`e2e/fixtures/covered-debut.ts`, fascia "molto facile") e lo serve la build e2e `--mode covered-debut`. La difficoltà è solo umana: va confermata col playtest (#66) prima di rilasciare l'universo 3.
+- Test: unit su formato, regola, generatore deterministico (quota, mai il primo di colonna, errori), solver e probe invariati, suggerimento; e2e sul livello di debutto (suggerimento, "?" nelle colonne, colore scoperto in cima, vittoria) e su tutte e quattro le schede di "Come si gioca".
+
 ### Murale dell'universo e skin per universo (#92)
 
 - **Murale**: ogni universo ha un grande quadro diviso in 100 tessere, disegnato in codice con i colori del gioco (Atelier: ruota dei colori; Natura, Viaggio, Mare e cielo, Cosmo per i prossimi). La tessera N si colora completando il livello N dell'universo; la prima è già dipinta quando l'universo si apre. Prende il posto dei segnaposto nella card del selettore, nell'album e nella festa di fine universo (le tessere si aggiungono una alla volta).

@@ -16,5 +16,10 @@ export default defineConfig({
       command: 'npx vite build --mode more-levels --outDir dist-more-levels && npx vite preview --outDir dist-more-levels --port 4174 --strictPort',
       url: 'http://localhost:4174', reuseExistingServer: !process.env.CI, timeout: 120_000,
     },
+    // The game with the covered-bucket debut level after the shipped ones (vite.config.ts), for e2e/covered.spec.ts.
+    {
+      command: 'npx vite build --mode covered-debut --outDir dist-covered-debut && npx vite preview --outDir dist-covered-debut --port 4175 --strictPort',
+      url: 'http://localhost:4175', reuseExistingServer: !process.env.CI, timeout: 120_000,
+    },
   ],
 });

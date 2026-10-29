@@ -3,6 +3,11 @@ import { COLOR_CODES, PRIMARIES, isPrimary, primariesOf, type Primary } from './
 export interface ShooterSpec {
   color: Primary;
   ammo: number;
+  /**
+   * Covered bucket: the player sees its colour only once it reaches the front of its column. The colour stays in the
+   * data, so the simulation and the solver play it as any other bucket; only the UI hides it (see `colorShown`).
+   */
+  covered?: boolean;
 }
 
 /** Level as stored in JSON. Images are rows of `.RYBOGP` characters. */
@@ -98,10 +103,13 @@ export function parseLevel(def: LevelDef): Level {
   if (def.columns.length === 0) throw new LevelError('level has no shooter columns');
 
   const ammo = { 1: 0, 2: 0, 4: 0 } as Record<Primary, number>;
-  for (const column of def.columns) {
-    for (const s of column) {
+  for (const [c, column] of def.columns.entries()) {
+    for (const [k, s] of column.entries()) {
       if (!isPrimary(s.color)) throw new LevelError(`shooter color ${s.color} is not a primary`);
       if (!Number.isInteger(s.ammo) || s.ammo < 1) throw new LevelError('shooter ammo must be a positive integer');
+      if (s.covered !== undefined && typeof s.covered !== 'boolean') throw new LevelError(`covered must be true or false (column ${c}, bucket ${k})`);
+      // The front bucket is in view from the start: covering it would hide nothing.
+      if (s.covered && k === 0) throw new LevelError(`the first bucket of column ${c} cannot be covered`);
       ammo[s.color] += s.ammo;
     }
   }

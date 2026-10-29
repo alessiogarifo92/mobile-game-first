@@ -23,8 +23,26 @@ export interface GenerateOptions {
   winRate?: [number, number];
   /** Reject settings that leave fewer shooters than this: few huge buckets mean few decisions. */
   minShooters?: number;
-  /** Instead of a hand-drawn overlay: how many ice and hidden pixels to place (seeded, per attempt). */
-  special?: { ice?: number; hidden?: number };
+  /**
+   * Instead of a hand-drawn overlay: how many ice and hidden pixels to place (seeded, per attempt). `covered` is the
+   * share of buckets (0–1) dealt covered, never the first of a column (see `coverShooters`).
+   */
+  special?: { ice?: number; hidden?: number; covered?: number };
+}
+
+/**
+ * Covers `round(share × buckets)` buckets, picked with `rng` among those behind the front of their column: the front
+ * one is in view from the start, so the player always sees one colour per column. Returns new columns.
+ */
+export function coverShooters(columns: ShooterSpec[][], share: number, rng: () => number): ShooterSpec[][] {
+  if (!(share >= 0 && share <= 1)) throw new Error('covered must be a share between 0 and 1');
+  const total = columns.reduce((n, c) => n + c.length, 0);
+  const behind = columns.flatMap((column, c) => column.slice(1).map((_, k) => [c, k + 1] as const));
+  const count = Math.round(share * total);
+  if (count > behind.length) throw new Error(`only ${behind.length} buckets behind the front, cannot cover ${count}`);
+  const out = columns.map((column) => column.map((s) => ({ ...s })));
+  for (const [c, k] of shuffle(behind, rng).slice(0, count)) out[c]![k]!.covered = true;
+  return out;
 }
 
 /**
@@ -90,14 +108,15 @@ export function generateLevel(opts: GenerateOptions): { def: LevelDef; seed: num
   for (let a = 0; a < attempts; a++) {
     const seed = opts.seed + a;
     const rng = createRng(seed);
-    const overlay = opts.special ? placeSpecial(opts.image, opts.special, rng) : opts.overlay;
+    const overlay = opts.special && (opts.special.ice || opts.special.hidden) ? placeSpecial(opts.image, opts.special, rng) : opts.overlay;
     const { ice } = parseOverlay(overlay, width, targets);
     const shooters = splitAmmo(paintNeeds(targets, ice), opts.ammoChunk);
     if (opts.minShooters && shooters.length < opts.minShooters) {
       throw new Error(`only ${shooters.length} shooters with ammoChunk ${opts.ammoChunk}, minimum ${opts.minShooters}`);
     }
-    const columns: ShooterSpec[][] = Array.from({ length: opts.columns }, () => []);
+    let columns: ShooterSpec[][] = Array.from({ length: opts.columns }, () => []);
     shuffle(shooters, rng).forEach((s, i) => columns[i % opts.columns]!.push(s));
+    if (opts.special?.covered) columns = coverShooters(columns.filter((c) => c.length > 0), opts.special.covered, rng);
     const def: LevelDef = {
       id: opts.id,
       name: opts.name,
