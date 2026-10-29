@@ -4,6 +4,7 @@ import levels from '../src/levels/levels.json' with { type: 'json' };
 import { buildLanes, parseLevel, type LevelDef } from '../src/core/level';
 import { cloneBoard, createBoard, type Board } from '../src/core/rules';
 import { runLoop, type Move } from '../src/core/solver';
+import { universeOfStage } from '../src/core/universes';
 
 export type Rect = { x: number; y: number; w: number; h: number };
 export const shots = process.env.SHOTS_DIR;
@@ -125,8 +126,8 @@ export async function play(page: Page, moves: Move[]): Promise<string[]> {
 }
 
 
-/** Number of levels the game ships: the last one sits at the top of the map. */
-export const LAST_LEVEL = (levels as LevelDef[]).length;
+/** Last level of universe 1: it sits at the top of that universe's map (the map a fresh save opens on). */
+export const LAST_LEVEL = (levels as LevelDef[]).filter((l) => universeOfStage(l.stage) === 1).length;
 
 export const SEEN_ALL = JSON.stringify({ unlocked: LAST_LEVEL, completed: [], sound: false, language: 'en', seenTips: ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden'] });
 

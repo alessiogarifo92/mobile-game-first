@@ -3,6 +3,7 @@ import levels from '../src/levels/levels.json' with { type: 'json' };
 import stages from '../src/levels/stages.json' with { type: 'json' };
 import type { Move } from '../src/core/solver';
 import { LEVELS_PER_STAGE } from '../src/core/stages';
+import { universeOfStage } from '../src/core/universes';
 import { checkOnScreen, mix, openLevel, play, shots, tap, waitScene, waitSim } from './helpers';
 
 /**
@@ -11,7 +12,8 @@ import { checkOnScreen, mix, openLevel, play, shots, tap, waitScene, waitSim } f
  */
 test.use({ baseURL: 'http://localhost:4174' });
 
-const shipped = levels.length;
+/** Universe 1 of the shipped game: the fixture keeps it and builds the next universes from copies. */
+const shipped = levels.filter((l) => universeOfStage(l.stage) === 1).length;
 const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
 const all = range(1, shipped);
 const KEY = 'mix-and-splash/progress/v1';

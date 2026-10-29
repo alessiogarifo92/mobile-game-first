@@ -11,15 +11,16 @@ type UniverseRow = { id: number; key: string };
  * (a second universe, #90) and a half-built stage after them (a third universe being built), so the map, the album,
  * old saves and the universe unlock are tested with more levels than the game has today.
  * The extra levels are copies of the stage 1 levels (small and quick to play) with new ids, and the extra universes reuse
- * universe 1's theme, so they need no new translations. Self-contained (no imports from src) to keep the config
+ * universe 1's theme, so they need no new translations. Only universe 1 of the shipped game is kept: what ships after
+ * it (the start of universe 2) is replaced by the copies. Self-contained (no imports from src) to keep the config
  * loadable as is.
  */
 function moreLevels(): Plugin {
   const read = (file: string) => JSON.parse(readFileSync(new URL(`./src/levels/${file}`, import.meta.url), 'utf8'));
-  const levels: LevelRow[] = read('levels.json');
-  const stages: StageRow[] = read('stages.json');
-  const universes: UniverseRow[] = read('universes.json');
-  const stagesPerUniverse = stages.length; // the shipped game is one full universe
+  const stagesPerUniverse = 10; // STAGES_PER_UNIVERSE in src/core/universes.ts
+  const levels: LevelRow[] = read('levels.json').filter((l: LevelRow) => l.stage <= stagesPerUniverse);
+  const stages: StageRow[] = read('stages.json').filter((s: StageRow) => s.id <= stagesPerUniverse);
+  const universes: UniverseRow[] = read('universes.json').slice(0, 1);
   const full = levels.filter((l) => l.stage === 1).length; // stage 1 is complete: its size is a full stage
   let copied = 0;
   const extra = [...stages.map(() => full), Math.ceil(full / 2)];

@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import { VIEW } from '../core/layout';
 import type { Level } from '../core/level';
+import { brownWedges } from '../core/brownPixel';
+import { PRIMARIES } from '../core/colors';
 import { MURAL_SIDE, TILE_CELLS, tileCells } from '../core/mural';
 import { MURAL_PAINT, PAINT, THEME } from './theme';
 
@@ -128,4 +130,22 @@ export function drawMural(g: Phaser.GameObjects.Graphics, universe: number, pain
   g.fillStyle(THEME.paper, 1);
   g.fillRect(x, y, size, size);
   painted.forEach((p, tile) => drawMuralTile(g, universe, tile, x, y, size, p));
+}
+
+/**
+ * Unfinished brown pixel (#94), drawn over its empty background: each received primary fills its own wedge, and thin
+ * dividers mark the three parts, so what is missing reads by position as well as by colour.
+ */
+export function brownPixel(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number, paint: number): void {
+  const wedges = brownWedges(x, y, w, h);
+  for (const p of PRIMARIES) {
+    if (!(paint & p)) continue;
+    g.fillStyle(PAINT[p]!, 1);
+    g.fillPoints(wedges[p].map(([px, py]) => new Phaser.Math.Vector2(px, py)), true);
+  }
+  g.lineStyle(Math.max(1, w / 24), THEME.ink, 0.35);
+  for (const p of PRIMARIES) {
+    const [[cx, cy], [ex, ey]] = wedges[p] as [readonly [number, number], readonly [number, number]];
+    g.lineBetween(cx, cy, ex, ey);
+  }
 }

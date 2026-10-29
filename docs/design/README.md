@@ -19,6 +19,7 @@ Unica fonte di verità in codice: `src/game/theme.ts`.
 | Arancione O (R+Y) | `#FB8500` |
 | Verde G (Y+B) | `#43AA8B` |
 | Viola P (R+B) | `#8E5BD9` |
+| Marrone K (R+Y+B, #94) | `#8B5A3C` · pixel a metà: tre spicchi fissi (rosso in alto a sinistra, giallo in alto a destra, blu in basso) con divisori, così ciò che manca si legge dalla posizione e non solo dal colore |
 | Fango (errore, post-MVP) | `#7A5C45` |
 | Oro (premi) | `#FFD166` |
 | Skin degli universi 2–5 | coppie colore/accento da token esistenti: `SKIN_COLORS` in `theme.ts` (oro+inchiostro per lo stile dell'universo, 10 varianti per gli stage) |
