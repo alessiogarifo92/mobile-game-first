@@ -15,6 +15,8 @@ export const THEME = {
   subCss: '#66637A',
   white: 0xffffff,
   ice: 0xcfe8f7,
+  /** Reward gold: the 'gold' skin, finished-universe skins. */
+  gold: 0xffd166,
   font: 'ui-rounded, "Nunito", "Fredoka", system-ui, sans-serif',
   type: { xs: 24, sm: 28, md: 36, lg: 48, xl: 64 },
   space: { xs: 8, sm: 16, md: 24, lg: 32, xl: 48 },
@@ -36,3 +38,28 @@ export const SYMBOL: Record<number, string> = { [RED]: '●', [YELLOW]: '▲', [
 export function css(color: number): string {
   return `#${color.toString(16).padStart(6, '0')}`;
 }
+
+/**
+ * Colour pairs [main, accent] of the universe skins (#92): the universe's own colours (earned by finishing it) and the
+ * ten stage variants. A variant only swaps the palette; every colour is a token above.
+ */
+export const SKIN_COLORS: { own: readonly [number, number]; variants: readonly (readonly [number, number])[] } = {
+  own: [THEME.gold, THEME.ink],
+  variants: [
+    [THEME.white, THEME.gold],
+    [PAINT[RED]!, THEME.white],
+    [PAINT[YELLOW]!, THEME.ink],
+    [PAINT[BLUE]!, THEME.white],
+    [PAINT[ORANGE]!, THEME.white],
+    [PAINT[GREEN]!, THEME.white],
+    [PAINT[PURPLE]!, THEME.white],
+    [THEME.ink, THEME.gold],
+    [THEME.gold, PAINT[RED]!],
+    [THEME.ice, PAINT[BLUE]!],
+  ],
+};
+
+/** Mural cell codes (core/mural.ts) to colours: the six paints, white and ink. */
+export const MURAL_PAINT: Record<string, number> = {
+  R: PAINT[RED]!, Y: PAINT[YELLOW]!, B: PAINT[BLUE]!, O: PAINT[ORANGE]!, G: PAINT[GREEN]!, P: PAINT[PURPLE]!, W: THEME.white, K: THEME.ink,
+};

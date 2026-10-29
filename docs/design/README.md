@@ -20,6 +20,9 @@ Unica fonte di verità in codice: `src/game/theme.ts`.
 | Verde G (Y+B) | `#43AA8B` |
 | Viola P (R+B) | `#8E5BD9` |
 | Fango (errore, post-MVP) | `#7A5C45` |
+| Oro (premi) | `#FFD166` |
+| Skin degli universi 2–5 | coppie colore/accento da token esistenti: `SKIN_COLORS` in `theme.ts` (oro+inchiostro per lo stile dell'universo, 10 varianti per gli stage) |
+| Murale | 6 colori di vernice + bianco + inchiostro (`MURAL_PAINT`); tessere vuote in pixel vuoto `#F1E7D8` |
 | Tipografia | Titoli: Fredoka 600 · UI: Nunito 700 — MVP usa lo stack `ui-rounded, system-ui` (zero download); Fredoka/Nunito (OFL-1.1) via @fontsource in un ticket successivo |
 | Scala tipografica | 12 / 14 / 18 / 24 / 32 px |
 | Spaziatura | 4 / 8 / 12 / 16 / 24 px |

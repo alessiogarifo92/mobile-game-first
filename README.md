@@ -37,6 +37,7 @@ Ogni colore ha anche un simbolo (● rosso, ▲ giallo, ■ blu), così il gioco
 - Il **10° livello di ogni stage è il boss** (★): più grande e difficile.
 - Tocca l'intestazione di uno stage per aprire il suo **album**: i quadri dipinti a colori, quelli mancanti in silhouette.
 - **Completando uno stage** sblocchi uno **stile per i secchielli** (pois, righe, onde, stelle, oro…); lo scegli dall'album.
+- Ogni universo ha un **murale** da 100 tessere: la tessera N si colora completando il livello N (la prima è un regalo). Lo vedi nel selettore degli universi, nell'album (una pagina per universo, con i suoi stage) e nella festa di fine universo. Dall'universo 2 ogni stage completato sblocca una variante di colore dello stile dell'universo, e finire l'universo sblocca lo stile vero e proprio.
 
 ### Primo accesso e impostazioni
 - Il **livello 1 è guidato**: evidenzia la colonna da toccare e accompagna i primi lanci.
@@ -110,7 +111,8 @@ src/
     universes.ts     universi da 10 stage, sblocco a fine universo, tela massima
     universeMenu.ts  selettore degli universi: card, layout, universo della mappa, fine universo
     mapLayout.ts     geometria della mappa scorrevole
-    album.ts         avanzamento per stage e stili sbloccati
+    album.ts         avanzamento per stage, stili per stage e per universo sbloccati
+    mural.ts         murale dell'universo: disegno in codice e tessere dipinte
     onboarding.ts    tutorial guidato e suggerimenti una tantum
     i18n.ts          testi en/it
     progress.ts      salvataggio (resiste a dati corrotti o storage non disponibile)

@@ -76,7 +76,7 @@ test('a player who finished the game keeps everything and plays the next univers
   if (shots) await page.screenshot({ path: `${shots}/02-vittoria-barra-universo.png` });
 });
 
-test('a universe still being built: its map says more levels are coming, its album has no skin to win', async ({ page }) => {
+test('a universe still being built: its map says more levels are coming, its album offers the first colour of its skin', async ({ page }) => {
   await start(page, { unlocked: shipped * 2, completed: range(1, shipped * 2) });
   expect(await mix(page, 'universe')).toBe(3);
   const headers = await mix<{ stage: number; count: number }[]>(page, 'headers');
@@ -84,11 +84,12 @@ test('a universe still being built: its map says more levels are coming, its alb
   expect(await mix(page, 'comingSoon')).toBe(true);
   await tapBand(page, stages.length * 2 + 1);
   expect(await mix(page, 'stage')).toBe(stages.length * 2 + 1);
-  expect(await mix(page, 'skin')).toBeNull();
+  expect(await mix(page, 'skin')).toBe('stamps-1');
+  expect(await mix(page, 'unlocked')).toBe(false);
   expect(await mix(page, 'complete')).toBe(false);
 });
 
-test('completing a stage beyond the bucket styles celebrates it without promising a style', async ({ page }) => {
+test('completing the first stage of universe 2 unlocks the first colour of its bucket style (#92)', async ({ page }) => {
   test.setTimeout(240_000);
   const boss = shipped + LEVELS_PER_STAGE; // closes the first extra stage
   await start(page, { unlocked: boss, completed: range(1, boss - 1) });
@@ -97,13 +98,19 @@ test('completing a stage beyond the bucket styles celebrates it without promisin
   await waitSim(page, () => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'win');
   expect(await mix(page, 'completedStage')).toBe(stages.length + 1);
   expect(await mix(page, 'completedUniverse')).toBeNull();
-  expect(await mix(page, 'winText')).toBe('Stage complete!');
+  expect(await mix(page, 'winText')).toBe('Stage complete! New bucket style unlocked');
   const buttons = await mix<{ second: { x: number; y: number } }>(page, 'winButtons');
   await tap(page, buttons.second.x, buttons.second.y);
   await waitScene(page, 'album');
   expect(await mix(page, 'stage')).toBe(stages.length + 1);
   expect(await mix(page, 'complete')).toBe(true);
-  expect(await mix(page, 'skin')).toBeNull();
+  expect(await mix(page, 'skin')).toBe('petals-1');
+  expect(await mix(page, 'unlocked')).toBe(true);
+  const use = await mix<{ x: number; y: number }>(page, 'useButton');
+  await tap(page, use.x, use.y);
+  await page.waitForFunction(() => (window as unknown as { __mix: { activeSkin: string } }).__mix.activeSkin === 'petals-1');
+  if (shots) await page.screenshot({ path: `${shots}/06-album-stage-11-variante.png` });
+  expect((await saved(page)).skin).toBe('petals-1');
 });
 
 for (const [name, width, height] of [['360x640', 360, 640], ['412x915', 412, 915]] as const) {
@@ -156,6 +163,7 @@ for (const [name, width, height] of [['360x640', 360, 640], ['412x915', 412, 915
       expect(await mix(page, 'universe')).toBe(2);
       expect(await mix(page, 'next')).toBe(3);
       await page.waitForFunction(() => (window as unknown as { __mix: { done: boolean } }).__mix.done);
+      expect(await mix(page, 'newSkin')).toBe('petals');
       await checkOnScreen(page, `${name} universe party`);
       if (shots) await page.screenshot({ path: `${shots}/05-festa-universo-${name}.png` });
 
@@ -177,7 +185,58 @@ for (const [name, width, height] of [['360x640', 360, 640], ['412x915', 412, 915
       await tap(page, party.x, party.y);
       await waitScene(page, 'universeEnd');
       expect(await mix(page, 'universe')).toBe(2);
+    });
 
+    test('completing a level paints its tile of the universe mural (#92)', async ({ page }) => {
+      test.setTimeout(240_000);
+      // Universe 2 just opened: level 101 done (its tile is also the gift tile), level 102 next.
+      await start(page, { unlocked: shipped + 2, completed: range(1, shipped + 1) });
+      await openSelector(page);
+      let cards = await mix<{ id: number; tiles: number[]; x: number; y: number }[]>(page, 'cards');
+      expect(cards.map((c) => c.tiles.length)).toEqual([shipped, 1, 0]);
+      expect(cards[1]!.tiles).toEqual([1]);
+
+      await tap(page, cards[1]!.x, cards[1]!.y);
+      await waitScene(page, 'menu');
+      await openLevel(page, shipped + 2);
+      await play(page, await mix<Move[]>(page, 'solution'));
+      await waitSim(page, () => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'win');
+      const buttons = await mix<{ second: { x: number; y: number } }>(page, 'winButtons');
+      await tap(page, buttons.second.x, buttons.second.y);
+      await waitScene(page, 'menu');
+
+      // The selector card shows tile 2 painted.
+      await openSelector(page);
+      cards = await mix<{ id: number; tiles: number[]; x: number; y: number }[]>(page, 'cards');
+      expect(cards[1]!.tiles).toEqual([1, 2]);
+      await checkOnScreen(page, `${name} selector with murals`);
+      if (shots) await page.screenshot({ path: `${shots}/07-selettore-murale-${name}.png` });
+
+      // The album opens on universe 2: the same tiles, its stages and its skin still to earn.
+      const album = await mix<{ x: number; y: number }>(page, 'albumButton');
+      await tap(page, album.x, album.y);
+      await waitScene(page, 'album');
+      expect(await mix(page, 'universe')).toBe(2);
+      expect(await mix(page, 'tiles')).toEqual([1, 2]);
+      expect(await mix(page, 'skin')).toBe('petals');
+      expect(await mix(page, 'unlocked')).toBe(false);
+      await checkOnScreen(page, `${name} album universe 2`);
+      if (shots) await page.screenshot({ path: `${shots}/08-album-universo-2-${name}.png` });
+
+      // Universe 1: a finished mural, its party, no universe skin; a stage chip opens the stage page.
+      const pager = await mix<{ prev: { x: number; y: number } }>(page, 'pager');
+      await tap(page, pager.prev.x, pager.prev.y);
+      await page.waitForFunction(() => (window as unknown as { __mix: { universe: number } }).__mix.universe === 1);
+      expect(await mix<number[]>(page, 'tiles')).toEqual(all);
+      expect(await mix(page, 'party')).not.toBeNull();
+      expect(await mix(page, 'skin')).toBeNull();
+      await checkOnScreen(page, `${name} album universe 1`);
+      if (shots) await page.screenshot({ path: `${shots}/09-album-universo-1-${name}.png` });
+      const chips = await mix<{ stage: number; x: number; y: number }[]>(page, 'chips');
+      expect(chips.map((c) => c.stage)).toEqual(range(1, stages.length));
+      await tap(page, chips[2]!.x, chips[2]!.y);
+      await page.waitForFunction(() => (window as unknown as { __mix: { stage: number | null } }).__mix.stage === 3);
+      await checkOnScreen(page, `${name} album stage 3`);
     });
 
     test('replaying the last level of a finished universe does not celebrate again', async ({ page }) => {

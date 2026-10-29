@@ -1,5 +1,15 @@
 # Changelog
 
+## Non rilasciato
+
+### Murale dell'universo e skin per universo (#92)
+
+- **Murale**: ogni universo ha un grande quadro diviso in 100 tessere, disegnato in codice con i colori del gioco (Atelier: ruota dei colori; Natura, Viaggio, Mare e cielo, Cosmo per i prossimi). La tessera N si colora completando il livello N dell'universo; la prima è già dipinta quando l'universo si apre. Prende il posto dei segnaposto nella card del selettore, nell'album e nella festa di fine universo (le tessere si aggiungono una alla volta).
+- **Album per universo**: una pagina per universo con il murale, l'avanzamento "Murale x/100", un pulsante per ogni stage (✓ se completo) e lo stile dell'universo da vincere; frecce ‹ › per passare da un universo all'altro (anche quelli chiusi, vuoti e col lucchetto). Si apre dal pulsante "Album" del selettore o con ◀ dalla pagina di uno stage, che ora sfoglia solo gli stage del suo universo.
+- **Skin per universo**: gli universi 2–5 hanno uno stile nuovo ciascuno (fiori, francobolli, bolle, orbite), sbloccato finendo l'universo e mostrato nella festa; ogni stage completato del suo universo sblocca una variante di colore (solo cambio di palette, 10 per universo). L'universo 1 tiene i suoi 10 stili per stage. I colori sono token nuovi in `src/game/theme.ts` (`gold`, `SKIN_COLORS`, `MURAL_PAINT`).
+- **Salvataggi compatibili**: gli stili già guadagnati restano validi; uno stile non guadagnato in un salvataggio torna a "classico". Livelli identici.
+- Test: unit su murale (tessere = livelli completati dell'universo + tessera regalo, universo chiuso vuoto, tessere dei livelli che non esistono ancora), skin e varianti secondo i progressi, salvataggi con skin non guadagnate; e2e a 360×640 e 412×915 sulla build con 205 livelli (completare un livello colora la sua tessera nel selettore e nell'album, album per universo, variante sbloccata dal primo stage dell'universo 2, stile dell'universo nella festa), con il controllo "niente fuori schermo" sulle schermate nuove.
+
 ## 0.5.0 — universi: selettore, mappa per universo e festa di fine universo (29 ottobre 2026)
 
 Il gioco ora è organizzato in **universi** da 100 livelli: oggi c'è l'universo 1 (Atelier), con i 100 livelli di sempre, e tutto è pronto per i prossimi. La mappa mostra un universo alla volta, con il suo avanzamento x/100; un selettore elenca gli universi, anche quelli ancora chiusi, e finire l'ultimo livello di un universo apre una festa. **I progressi restano validi** e i livelli non cambiano.

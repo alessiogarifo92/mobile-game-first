@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
 import { VIEW } from '../core/layout';
 import type { Level } from '../core/level';
-import { PAINT, THEME } from './theme';
+import { MURAL_SIDE, TILE_CELLS, tileCells } from '../core/mural';
+import { MURAL_PAINT, PAINT, THEME } from './theme';
 
 const MIN_TOUCH = 88;
 
@@ -100,4 +101,31 @@ export function drawPicture(g: Phaser.GameObjects.Graphics, level: Level, x: num
     g.fillStyle(painted ? PAINT[target]! : THEME.emptyPixel, 1);
     g.fillRect(ox + (i % level.width) * cell, oy + Math.floor(i / level.width) * cell, Math.ceil(cell), Math.ceil(cell));
   });
+}
+
+/**
+ * One tile of a universe's mural (#92), in a mural `size` wide at (x, y): its cells when painted, else an empty tile
+ * with a small gap around it, so the missing pieces read as boxes still to fill.
+ */
+export function drawMuralTile(g: Phaser.GameObjects.Graphics, universe: number, tile: number, x: number, y: number, size: number, painted: boolean): void {
+  const side = size / MURAL_SIDE;
+  const tx = x + (tile % MURAL_SIDE) * side, ty = y + Math.floor(tile / MURAL_SIDE) * side;
+  if (!painted) {
+    const gap = Math.max(1, side * 0.06);
+    g.fillStyle(THEME.emptyPixel, 1);
+    g.fillRect(tx + gap, ty + gap, side - 2 * gap, side - 2 * gap);
+    return;
+  }
+  const cell = side / TILE_CELLS;
+  tileCells(universe, tile).forEach((row, j) => row.forEach((code, i) => {
+    g.fillStyle(MURAL_PAINT[code]!, 1);
+    g.fillRect(tx + i * cell, ty + j * cell, Math.ceil(cell), Math.ceil(cell));
+  }));
+}
+
+/** A universe's whole mural in a `size` square at (x, y) on a paper frame: painted tiles in colour, the others empty. */
+export function drawMural(g: Phaser.GameObjects.Graphics, universe: number, painted: readonly boolean[], x: number, y: number, size: number): void {
+  g.fillStyle(THEME.paper, 1);
+  g.fillRect(x, y, size, size);
+  painted.forEach((p, tile) => drawMuralTile(g, universe, tile, x, y, size, p));
 }

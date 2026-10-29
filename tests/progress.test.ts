@@ -95,6 +95,20 @@ describe('progress', () => {
       expect(load({ skin: 'gold', completed: [] }).skin).toBe('classic');
       expect(load({ skin: 'dots', completed: levels.slice(0, 10).map((l) => l.id) }).skin).toBe('dots');
     });
+
+    it('keeps a universe skin or variant only once earned (#92)', () => {
+      const game = Array.from({ length: 300 }, (_, i) => ({ id: i + 1, stage: Math.floor(i / 10) + 1 }));
+      const loadGame = (o: object) => loadProgress(memory(JSON.stringify(o)), game);
+      const upTo = (n: number) => Array.from({ length: n }, (_, i) => i + 1);
+      expect(loadGame({ skin: 'petals-1', completed: upTo(110) }).skin).toBe('petals-1');
+      expect(loadGame({ skin: 'petals-2', completed: upTo(110) }).skin).toBe('classic');
+      expect(loadGame({ skin: 'petals', completed: upTo(199) }).skin).toBe('classic');
+      expect(loadGame({ skin: 'petals', completed: upTo(200) }).skin).toBe('petals');
+      expect(loadGame({ skin: 'stamps', completed: upTo(200) }).skin).toBe('classic');
+      expect(loadGame({ skin: 'petals-11', completed: upTo(200) }).skin).toBe('classic');
+      // Skins of universe 1 stay valid for players who earned them before universe skins existed.
+      expect(loadGame({ skin: 'gold', completed: upTo(100) }).skin).toBe('gold');
+    });
   });
 
   describe('after an update that adds levels', () => {
