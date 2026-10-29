@@ -1,28 +1,32 @@
 import Phaser from 'phaser';
 import { COLOR_CODES } from '../../core/colors';
 import { VIEW } from '../../core/layout';
+import { universeSkin, type Skin } from '../../core/album';
+import { paintedTiles } from '../../core/mural';
 import { universeLevels } from '../../core/universes';
 import { universeName } from '../../core/i18n';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
 import { LEVELS, UNIVERSES, getProgress, t } from '../store';
 import { PAINT, THEME } from '../theme';
-import { button, drawPicture, label, lockIcon, screenBackground } from '../ui';
+import { drawSkin } from '../skins';
+import { button, drawMural, drawMuralTile, label, lockIcon, screenBackground } from '../ui';
 
-/** Time between two pictures joining the mosaic, and how long each takes to appear. */
+/** Time between two tiles joining the mural, and how long each takes to appear. */
 const TILE_STEP_MS = 24;
 const TILE_FADE_MS = 260;
 
 /**
- * End of a universe (#91, peak-end): every picture of the universe joins a mosaic one by one, then the next universe's
- * card opens with the button to go there, or says a new universe is on its way. Shown once, on the win that completes
- * the universe; the album of its last stage can show it again. The real mural and the new skin come with #92.
+ * End of a universe (#91, peak-end): every tile of the universe's mural (#92) joins it one by one, its new bucket style
+ * shows below, then the next universe's card opens with the button to go there, or says a new universe is on its way.
+ * Shown once, on the win that completes the universe; the album can show it again.
  */
 export class UniverseEndScene extends Phaser.Scene {
   private universe = 1;
   private done = false;
   private next: number | null = null;
   private goButton = { x: 0, y: 0 };
+  private skin: Skin | null = null;
 
   constructor() {
     super('universeEnd');
@@ -42,26 +46,40 @@ export class UniverseEndScene extends Phaser.Scene {
     label(this, VIEW.width / 2, 90 + off / 4, t('universes.done'), THEME.type.lg);
     label(this, VIEW.width / 2, 150 + off / 4, t('universes.body', { name }), THEME.type.sm, THEME.subCss, false).setWordWrapWidth(VIEW.width - 120);
 
-    // Mosaic: up to 10 × 10 pictures in a 600-unit square.
-    const ids = universeLevels(LEVELS, this.universe);
-    const per = Math.ceil(Math.sqrt(ids.length));
-    const area = 600;
-    const tile = area / Math.max(1, per);
+    // Mural (#92): the empty tiles first, then every tile of a painted level joins one by one.
+    const tiles = paintedTiles(LEVELS, getProgress().completed, this.universe);
+    const area = 500;
     const left = (VIEW.width - area) / 2;
     const top = 200 + off / 3;
     const frame = this.add.graphics();
     frame.fillStyle(THEME.paper, 1);
     frame.fillRoundedRect(left - 16, top - 16, area + 32, area + 32, THEME.radius.panel);
-    ids.forEach((id, i) => {
+    drawMural(frame, this.universe, tiles.map(() => false), left, top, area);
+    tiles.forEach((painted, i) => {
+      if (!painted) return;
       const g = this.add.graphics().setAlpha(0);
-      drawPicture(g, LEVELS[id - 1]!, left + (i % per) * tile + 3, top + Math.floor(i / per) * tile + 3, tile - 6, true);
+      drawMuralTile(g, this.universe, i, left, top, area, true);
       this.tweens.add({ targets: g, alpha: 1, delay: i * TILE_STEP_MS, duration: TILE_FADE_MS });
     });
-    const mosaicMs = ids.length * TILE_STEP_MS + TILE_FADE_MS;
+    const mosaicMs = tiles.length * TILE_STEP_MS + TILE_FADE_MS;
+
+    // The universe's own bucket style (universes 2–5), shown under the mural.
+    this.skin = universeSkin(this.universe);
+    const skinY = top + area + 50;
+    if (this.skin) {
+      const jar = this.add.graphics();
+      const jx = 130;
+      jar.fillStyle(PAINT[COLOR_CODES[info?.color ?? 'R']!]!, 1);
+      jar.fillRoundedRect(jx - 36, skinY - 36, 72, 72, THEME.radius.jar);
+      drawSkin(jar, this.skin, jx, skinY, 72);
+      jar.lineStyle(3, THEME.ink, 1);
+      jar.strokeRoundedRect(jx - 36, skinY - 36, 72, 72, THEME.radius.jar);
+      label(this, jx + 60, skinY, t('album.newSkin'), THEME.type.xs, THEME.inkCss).setOrigin(0, 0.5).setAlign('left').setWordWrapWidth(VIEW.width - jx - 120);
+    }
 
     // Next universe: its card opens once the mosaic is complete.
     const next = UNIVERSES.find((u) => u.id === this.universe + 1 && universeLevels(LEVELS, u.id).length > 0);
-    const cardY = top + area + 60;
+    const cardY = top + area + 110;
     const card = this.add.graphics();
     card.fillStyle(THEME.paper, 1);
     card.fillRoundedRect(60, cardY, VIEW.width - 120, 120, THEME.radius.panel);
@@ -100,6 +118,8 @@ export class UniverseEndScene extends Phaser.Scene {
   }
 
   private publish(): void {
-    publishDebug({ scene: 'universeEnd', universe: this.universe, next: this.next, done: this.done, goButton: this.goButton, scrollY: 0, offsetY: 0 });
+    publishDebug({
+      scene: 'universeEnd', universe: this.universe, next: this.next, done: this.done, goButton: this.goButton, newSkin: this.skin, scrollY: 0, offsetY: 0,
+    });
   }
 }

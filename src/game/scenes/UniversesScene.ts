@@ -1,10 +1,11 @@
 import Phaser from 'phaser';
 import { VIEW } from '../../core/layout';
+import { paintedTileNumbers, paintedTiles } from '../../core/mural';
 import { selectorLayout, universeCards, type Rect, type UniverseCard } from '../../core/universeMenu';
 import { publishDebug } from '../debug';
 import { LEVELS, UNIVERSES, getProgress, t, universeTitle } from '../store';
 import { PAINT, THEME } from '../theme';
-import { button, drawPicture, label, lockIcon, progressBar, screenBackground } from '../ui';
+import { button, drawMural, label, lockIcon, progressBar, screenBackground } from '../ui';
 
 /**
  * Universe selector (#91): one card per universe with its name, colour and x/100. A closed universe stays visible
@@ -13,7 +14,7 @@ import { button, drawPicture, label, lockIcon, progressBar, screenBackground } f
 export class UniversesScene extends Phaser.Scene {
   private explained: number | null = null;
   private okButton: { x: number; y: number } | null = null;
-  private cards: (UniverseCard & Rect)[] = [];
+  private cards: (UniverseCard & Rect & { tiles: boolean[] })[] = [];
 
   constructor() {
     super('universes');
@@ -26,15 +27,19 @@ export class UniversesScene extends Phaser.Scene {
     screenBackground(this, THEME.bg);
     button(this, 60, 64, 84, 64, '◀', () => this.scene.start('menu'), { fill: THEME.belt, color: THEME.inkCss, name: 'home' });
     label(this, VIEW.width / 2, 64, t('universes.title'), THEME.type.lg);
+    // The album opens on the player's universe: its mural, stages and bucket styles.
+    button(this, VIEW.width - 100, 64, 160, 64, t('win.album'), () => this.scene.start('album', {}), {
+      fill: THEME.belt, color: THEME.inkCss, size: THEME.type.xs, name: 'album',
+    });
 
     const list = universeCards(UNIVERSES, LEVELS, completed);
     const { cards } = selectorLayout(list.length, VIEW.width, this.scale.height);
-    this.cards = list.map((c, i) => ({ ...c, ...cards[i]! }));
-    for (const card of this.cards) this.drawCard(card, completed);
+    this.cards = list.map((c, i) => ({ ...c, ...cards[i]!, tiles: paintedTiles(LEVELS, completed, c.id) }));
+    for (const card of this.cards) this.drawCard(card);
     this.publish();
   }
 
-  private drawCard(card: UniverseCard & Rect, completed: readonly number[]): void {
+  private drawCard(card: UniverseCard & Rect & { tiles: boolean[] }): void {
     const { x, y, w, h } = card;
     const g = this.add.graphics();
     g.fillStyle(THEME.paper, 1);
@@ -45,11 +50,10 @@ export class UniversesScene extends Phaser.Scene {
     g.lineStyle(3, card.open ? THEME.ink : THEME.belt, 1);
     g.strokeRoundedRect(x, y, w, h, THEME.radius.panel);
 
-    // Preview: the universe's first picture, painted once completed (the mural of #92 will take its place).
+    // Preview: the universe's mural (#92), a tile painted per completed level; a closed universe shows it empty.
     const pic = h - 40;
     const px = x + w - pic - 20;
-    const first = LEVELS[card.firstLevel - 1]!;
-    drawPicture(g, first, px, y + 20, pic, card.open && completed.includes(first.id));
+    drawMural(g, card.id, card.tiles, px, y + 20, pic);
     if (!card.open) lockIcon(g, px + pic / 2, y + 20 + pic / 2, Math.min(80, pic * 0.6));
 
     const textX = x + 52;
@@ -101,9 +105,13 @@ export class UniversesScene extends Phaser.Scene {
   private publish(): void {
     publishDebug({
       scene: 'universes',
-      cards: this.cards.map((c) => ({ id: c.id, open: c.open, done: c.done, total: c.total, unlockLevel: c.unlockLevel ?? null, x: c.x + c.w / 2, y: c.y + c.h / 2 })),
+      cards: this.cards.map((c) => ({
+        id: c.id, open: c.open, done: c.done, total: c.total, unlockLevel: c.unlockLevel ?? null, x: c.x + c.w / 2, y: c.y + c.h / 2,
+        tiles: paintedTileNumbers(c.tiles),
+      })),
       explained: this.explained,
       okButton: this.okButton,
+      albumButton: { x: VIEW.width - 100, y: 64 },
       scrollY: 0,
       offsetY: 0,
     });

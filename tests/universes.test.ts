@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { UNIVERSE_NAME_KEYS, translate, universeName } from '../src/core/i18n';
 import { LEVELS_PER_STAGE, type StageContent } from '../src/core/stages';
 import {
-  MAX_CANVAS, STAGES_PER_UNIVERSE, UniverseError, canOpenLevel, isUniverseComplete, isUniverseUnlocked, lastLevelOf,
+  MAX_CANVAS, STAGES_PER_UNIVERSE, UniverseError, canOpenLevel, isUniverseComplete, isUniverseFinished, isUniverseUnlocked, lastLevelOf,
   openUniverse, universeLevels, universeOf, universeOfStage, validateUniverses, type UniverseInfo,
 } from '../src/core/universes';
 import { STAGE_SPECS } from '../scripts/stages';
@@ -117,5 +117,13 @@ describe('universes', () => {
     }
     expect(translate('it', 'universe.locked', { n: 100 })).toBe('Completa il livello 100 per aprire');
     expect(translate('en', 'universe.locked', { n: 200 })).toBe('Complete level 200 to open');
+  });
+  it('calls a universe finished only when it is complete and every level is painted', () => {
+    const game = Array.from({ length: 250 }, (_, i) => ({ id: i + 1, stage: Math.floor(i / 10) + 1 }));
+    const upTo = (n: number) => Array.from({ length: n }, (_, i) => i + 1);
+    expect(isUniverseFinished(game, upTo(100), 1)).toBe(true);
+    expect(isUniverseFinished(game, upTo(99), 1)).toBe(false);
+    expect(isUniverseFinished(game, [...upTo(98), 100], 1)).toBe(false);
+    expect(isUniverseFinished(game, upTo(250), 3)).toBe(false); // only 50 levels so far
   });
 });

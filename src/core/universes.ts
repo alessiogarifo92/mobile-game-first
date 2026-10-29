@@ -111,3 +111,9 @@ export function validateUniverses(
 export function isUniverseComplete(levels: readonly LevelRef[], universe: number): boolean {
   return universeLevels(levels, universe).length === STAGES_PER_UNIVERSE * LEVELS_PER_STAGE;
 }
+
+/** Every level of a complete universe is painted: its party and its bucket style belong to the player. */
+export function isUniverseFinished(levels: readonly LevelRef[], completed: readonly number[], universe: number): boolean {
+  const done = new Set(completed);
+  return isUniverseComplete(levels, universe) && universeLevels(levels, universe).every((id) => done.has(id));
+}
