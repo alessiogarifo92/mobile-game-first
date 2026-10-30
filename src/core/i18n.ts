@@ -249,6 +249,18 @@ const en = {
   'level.cablecar': 'Cable car',
   'level.eagle': 'Eagle',
   'level.summit': 'Summit',
+  // Stage 13 — Meadow (#123)
+  'stage.meadow': 'Meadow',
+  'level.daisy': 'Daisy',
+  'level.dandelion': 'Dandelion',
+  'level.beehive': 'Beehive',
+  'level.grasshopper': 'Grasshopper',
+  'level.picnic': 'Picnic basket',
+  'level.kite': 'Kite',
+  'level.wheelbarrow': 'Wheelbarrow',
+  'level.scarecrow': 'Scarecrow',
+  'level.rooster': 'Rooster',
+  'level.windmill': 'Windmill',
 };
 
 export type MessageKey = keyof typeof en;
@@ -503,6 +515,18 @@ const it: Record<MessageKey, string> = {
   'level.cablecar': 'Funivia',
   'level.eagle': 'Aquila',
   'level.summit': 'Vetta',
+  // Stage 13 — Prato (#123)
+  'stage.meadow': 'Prato',
+  'level.daisy': 'Margherita',
+  'level.dandelion': 'Tarassaco',
+  'level.beehive': 'Alveare',
+  'level.grasshopper': 'Cavalletta',
+  'level.picnic': 'Cestino da picnic',
+  'level.kite': 'Aquilone',
+  'level.wheelbarrow': 'Carriola',
+  'level.scarecrow': 'Spaventapasseri',
+  'level.rooster': 'Gallo',
+  'level.windmill': 'Mulino a vento',
 };
 
 export const DICTIONARIES = { en, it } as const;

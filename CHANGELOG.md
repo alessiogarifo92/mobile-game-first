@@ -2,6 +2,13 @@
 
 ## Non rilasciato
 
+### Stage 13 "Prato": livelli 121–130 (#123)
+
+- **Dieci figure nuove in pixel art originale** sul tema del prato, terzo stage dell'universo 2 (Natura): margherita, tarassaco, alveare, cavalletta, cestino da picnic, aquilone, carriola, spaventapasseri, gallo e, come boss, il mulino a vento (14×14). Nomi in italiano e inglese.
+- **Meccaniche**: marrone e pixel nascosti, nessuna novità. Nastro 2 come in tutto l'universo, slot 2 o 3.
+- **Curva** (#88): dente di sega con margherita di respiro (92% di vittorie a caso), base 81%, scalini al 70% e 74%, gallo difficile al 64%, mulino boss al 56%; media dello stage 75,5%, nessun livello molto facile. Figure con il 67–95% di pixel secondari o marroni.
+- Test: e2e che gioca il livello 121 fino alla vittoria; chiavi i18n e regole della curva coperte dai test esistenti su tutti i livelli.
+
 ### Stage 12 "Montagna": livelli 111–120 (#122)
 
 - **Dieci figure nuove in pixel art**, disegnate a mano sul tema: scarpone, cima innevata, baita, marmotta, stella alpina, zaino, stambecco, funivia, aquila e, come boss, la vetta (14×14, la tela più grande dello stage). Nomi IT/EN.
