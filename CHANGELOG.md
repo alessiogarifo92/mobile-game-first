@@ -2,6 +2,13 @@
 
 ## Non rilasciato
 
+### Stage 11 "Bosco": livelli 101–110 (#121)
+
+- **Stage 11 completo**, primo dell'universo 2 (Natura): dopo la ghianda (101) arrivano porcino, abete, riccio, scoiattolo, nido, castoro, baita, cervo e la quercia (110, boss 14×14). Pixel art originale disegnata a mano, con il marrone nelle figure (tronchi, aculei, nidi, corna); unica meccanica dello stage il marrone.
+- **Curva** (#88): dente di sega con il 109 difficile e il boss il più duro; solo il 101 è molto facile. Vittorie casuali 98 · 82 · 88 · 75 · 80 · 83 · 73 · 83 · 72 · 58%, media 79% (fine dell'universo 1: 65%, inizio: 97%). Nastro 2 e slot 2–3, mai sopra la fine dell'universo 1. Livelli 1–101 identici.
+- Nomi IT/EN di tutti i livelli; foglio di anteprima `docs/levels/stage-11.png`.
+- Test: unit sullo stage (completo, nomi, sola meccanica marrone, ≥ 30% di pixel da mescolare, nastro e slot, dente di sega, media tra fine e inizio dell'universo 1); e2e: la quercia (110) si gioca fino alla vittoria e resta salvata.
+
 ### Meccanica: pixel marrone (#94)
 
 - **Marrone = rosso + giallo + blu**: un pixel marrone (codice `K` nelle immagini) è completo dopo tre colpi, uno per primario, in qualsiasi ordine; finché non arrivano tutti e tre blocca la sua corsia come gli altri pixel non finiti. Le munizioni e il solver contano il colpo in più; il generatore può piazzare pixel marroni in modo deterministico (`special.brown`).
