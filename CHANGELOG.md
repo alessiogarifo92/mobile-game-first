@@ -2,6 +2,13 @@
 
 ## Non rilasciato
 
+### Stage 16 "Fiume": livelli 151–160 (#126)
+
+- **Dieci figure in pixel art originale** sul fiume (`scripts/stages/stage-16.ts`): ninfea, trota, canoa, airone, libellula, anatra, martin pescatore, tife, lontra e il boss, il mulino ad acqua (14×14). Foglio di anteprima in `docs/levels/stage-16.png`; nomi IT/EN.
+- **Pietra + ghiaccio** in ogni livello, niente marrone; nastro 2 e slot 2 in tutto lo stage. Dalla seconda figura in poi ≥ 40% di pixel secondari.
+- **Curva** a dente di sega (#88): vittorie a caso 84 · 72 · 77 · 68 · 73 · 77 · 68 · 73 · 62 · 40%, media 69%; nessun livello molto facile, il boss è il più duro. Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (nomi, tela, meccaniche, quota di secondari, regole della curva); e2e: il livello 151 si gioca fino alla vittoria.
+
 ### Stage 14 "Deserto": livelli 131–140 (#124)
 
 - **Dieci figure in pixel art originale** sul deserto (`scripts/stages/stage-14.ts`): saguaro, dune, oasi, scorpione, fennec, serpente a sonagli, clessidra, piramide, avvoltoio e il boss, il cammello (14×14). Foglio di anteprima in `docs/levels/stage-14.png`; nomi IT/EN.
