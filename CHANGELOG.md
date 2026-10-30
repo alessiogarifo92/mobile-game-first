@@ -36,6 +36,13 @@
 - **Salvataggi compatibili**: gli stili già guadagnati restano validi; uno stile non guadagnato in un salvataggio torna a "classico". Livelli identici.
 - Test: unit su murale (tessere = livelli completati dell'universo + tessera regalo, universo chiuso vuoto, tessere dei livelli che non esistono ancora), skin e varianti secondo i progressi, salvataggi con skin non guadagnate; e2e a 360×640 e 412×915 sulla build con 205 livelli (completare un livello colora la sua tessera nel selettore e nell'album, album per universo, variante sbloccata dal primo stage dell'universo 2, stile dell'universo nella festa), con il controllo "niente fuori schermo" sulle schermate nuove.
 
+### Stage 12 "Montagna": livelli 111–120 (#122)
+
+- **Dieci figure nuove in pixel art**, disegnate a mano sul tema: scarpone, cima innevata, baita, marmotta, stella alpina, zaino, stambecco, funivia, aquila e, come boss, la vetta (14×14, la tela più grande dello stage). Nomi IT/EN.
+- **Marrone + ghiaccio** in ogni livello: roccia, legno e pelo in marrone, il ghiaccio sui pixel primari. Nessuna meccanica nuova, quindi nessun livello molto facile: il respiro (111) si vince a caso nell'88% dei casi. Dopo il respiro ogni figura ha almeno il 30% di pixel misti o marroni. Nastro 2 e slot 2, mai sopra la fine dell'universo 1.
+- **Curva** (#88, dente di sega dello stage): vittorie a caso 88 · 79 · 80 · 68 · 81 · 83 · 73 · 81 · 61 · 53%, media 75%; il boss è il livello più duro. Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (id e boss, nomi IT/EN, meccaniche, tela/nastro/slot, regole della curva); e2e: la vetta (120) si gioca fino alla vittoria.
+
 ## 0.5.0 — universi: selettore, mappa per universo e festa di fine universo (29 ottobre 2026)
 
 Il gioco ora è organizzato in **universi** da 100 livelli: oggi c'è l'universo 1 (Atelier), con i 100 livelli di sempre, e tutto è pronto per i prossimi. La mappa mostra un universo alla volta, con il suo avanzamento x/100; un selettore elenca gli universi, anche quelli ancora chiusi, e finire l'ultimo livello di un universo apre una festa. **I progressi restano validi** e i livelli non cambiano.
