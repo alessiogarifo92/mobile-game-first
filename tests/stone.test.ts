@@ -1,5 +1,5 @@
-import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import levels from '../src/levels/levels.json';
 import { curveLevel } from '../src/core/curve';
 import { generateLevel, placeSpecial } from '../src/core/generator';
 import { HOWTO_PAGES } from '../src/core/howto';
@@ -196,11 +196,25 @@ describe('stone: onboarding and curve', () => {
   });
 });
 
-describe('stone: e2e debut fixture', () => {
-  it('is a valid, solvable level with stones', () => {
-    const fixture = JSON.parse(readFileSync(new URL('../e2e/fixtures/stone-debut.json', import.meta.url), 'utf8'));
-    const l = parseLevel({ id: 141, name: 'test', stage: 15, ...fixture });
-    expect(l.stone.some(Boolean)).toBe(true);
-    expect(solve(l).solvable).toBe(true);
+describe('stone: debut at level 141 (#125)', () => {
+  const debut = parseLevel((levels as LevelDef[]).find((d) => d.id === 141)!);
+
+  it('is the first level with stones, which opens with the one-time stone tip', () => {
+    expect((levels as LevelDef[]).filter((d) => d.id < 141).every((d) => !parseLevel(d).stone.some(Boolean))).toBe(true);
+    expect(debut.stone.some(Boolean)).toBe(true);
+    expect(tipOnLevelStart(debut, ['mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'brown'])).toBe('stone');
+    expect(solve(debut).solvable).toBe(true);
+  });
+
+  it('puts its stones between two pixels of one row, so a shot is stopped on the way to the far one', () => {
+    const { width } = debut;
+    for (const [cell, isStone] of debut.stone.entries()) {
+      if (!isStone) continue;
+      const row = Math.floor(cell / width);
+      const before = debut.targets.slice(row * width, cell).filter(Boolean);
+      const after = debut.targets.slice(cell + 1, (row + 1) * width).filter(Boolean);
+      expect(before.length).toBeGreaterThan(0);
+      expect(after.length).toBeGreaterThan(0);
+    }
   });
 });
