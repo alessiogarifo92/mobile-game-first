@@ -228,6 +228,18 @@ const en = {
   'level.castle': 'Castle',
   'level.dragon': 'Dragon',
   'level.acorn': 'Acorn',
+  // Stage 14 — Desert (#124)
+  'stage.desert': 'Desert',
+  'level.dunes': 'Dunes',
+  'level.saguaro': 'Saguaro',
+  'level.scorpion': 'Scorpion',
+  'level.oasis': 'Oasis',
+  'level.fennec': 'Fennec fox',
+  'level.hourglass': 'Hourglass',
+  'level.rattlesnake': 'Rattlesnake',
+  'level.vulture': 'Vulture',
+  'level.pyramid': 'Pyramid',
+  'level.camel': 'Camel',
 };
 
 export type MessageKey = keyof typeof en;
@@ -461,6 +473,18 @@ const it: Record<MessageKey, string> = {
   'level.castle': 'Castello',
   'level.dragon': 'Drago',
   'level.acorn': 'Ghianda',
+  // Stage 14 — Deserto (#124)
+  'stage.desert': 'Deserto',
+  'level.dunes': 'Dune',
+  'level.saguaro': 'Saguaro',
+  'level.scorpion': 'Scorpione',
+  'level.oasis': 'Oasi',
+  'level.fennec': 'Fennec',
+  'level.hourglass': 'Clessidra',
+  'level.rattlesnake': 'Serpente a sonagli',
+  'level.vulture': 'Avvoltoio',
+  'level.pyramid': 'Piramide',
+  'level.camel': 'Cammello',
 };
 
 export const DICTIONARIES = { en, it } as const;

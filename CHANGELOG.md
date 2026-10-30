@@ -2,6 +2,13 @@
 
 ## Non rilasciato
 
+### Stage 14 "Deserto": livelli 131–140 (#124)
+
+- **Dieci figure in pixel art originale** sul deserto (`scripts/stages/stage-14.ts`): saguaro, dune, oasi, scorpione, fennec, serpente a sonagli, clessidra, piramide, avvoltoio e il boss, il cammello (14×14). Foglio di anteprima in `docs/levels/stage-14.png`; nomi IT/EN.
+- **Marrone, ghiaccio e nascosti insieme** in ogni livello; nastro 2 e slot 2 in tutto lo stage. Dalla seconda figura in poi ≥ 30% di pixel secondari o marroni.
+- **Curva** a dente di sega (#88): respiro 87%, base 80%, gradini 72,5%, difficile 66%, boss 50%; media dello stage 75% di vittorie a caso, nessun livello molto facile. Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (nomi, tela, meccaniche, quota di secondari, regole della curva); e2e: il livello 131 si gioca fino alla vittoria.
+
 ### Meccanica: pixel marrone (#94)
 
 - **Marrone = rosso + giallo + blu**: un pixel marrone (codice `K` nelle immagini) è completo dopo tre colpi, uno per primario, in qualsiasi ordine; finché non arrivano tutti e tre blocca la sua corsia come gli altri pixel non finiti. Le munizioni e il solver contano il colpo in più; il generatore può piazzare pixel marroni in modo deterministico (`special.brown`).
