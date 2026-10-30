@@ -9,6 +9,27 @@
 - **Curva** a dente di sega (#88): respiro 87%, base 80%, gradini 72,5%, difficile 66%, boss 50%; media dello stage 75% di vittorie a caso, nessun livello molto facile. Ogni livello è dimostrato risolvibile dal solver.
 - Test: unit sullo stage (nomi, tela, meccaniche, quota di secondari, regole della curva); e2e: il livello 131 si gioca fino alla vittoria.
 
+### Stage 13 "Prato": livelli 121–130 (#123)
+
+- **Dieci figure nuove in pixel art originale** sul tema del prato, terzo stage dell'universo 2 (Natura): margherita, tarassaco, alveare, cavalletta, cestino da picnic, aquilone, carriola, spaventapasseri, gallo e, come boss, il mulino a vento (14×14). Nomi in italiano e inglese.
+- **Meccaniche**: marrone e pixel nascosti, nessuna novità. Nastro 2 come in tutto l'universo, slot 2 o 3.
+- **Curva** (#88): dente di sega con margherita di respiro (92% di vittorie a caso), base 81%, scalini al 70% e 74%, gallo difficile al 64%, mulino boss al 56%; media dello stage 75,5%, nessun livello molto facile. Figure con il 67–95% di pixel secondari o marroni.
+- Test: e2e che gioca il livello 121 fino alla vittoria; chiavi i18n e regole della curva coperte dai test esistenti su tutti i livelli.
+
+### Stage 12 "Montagna": livelli 111–120 (#122)
+
+- **Dieci figure nuove in pixel art**, disegnate a mano sul tema: scarpone, cima innevata, baita, marmotta, stella alpina, zaino, stambecco, funivia, aquila e, come boss, la vetta (14×14, la tela più grande dello stage). Nomi IT/EN.
+- **Marrone + ghiaccio** in ogni livello: roccia, legno e pelo in marrone, il ghiaccio sui pixel primari. Nessuna meccanica nuova, quindi nessun livello molto facile: il respiro (111) si vince a caso nell'88% dei casi. Dopo il respiro ogni figura ha almeno il 30% di pixel misti o marroni. Nastro 2 e slot 2, mai sopra la fine dell'universo 1.
+- **Curva** (#88, dente di sega dello stage): vittorie a caso 88 · 79 · 80 · 68 · 81 · 83 · 73 · 81 · 61 · 53%, media 75%; il boss è il livello più duro. Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (id e boss, nomi IT/EN, meccaniche, tela/nastro/slot, regole della curva); e2e: la vetta (120) si gioca fino alla vittoria.
+
+### Stage 11 "Bosco": livelli 101–110 (#121)
+
+- **Stage 11 completo**, primo dell'universo 2 (Natura): dopo la ghianda (101) arrivano porcino, abete, riccio, scoiattolo, nido, castoro, baita, cervo e la quercia (110, boss 14×14). Pixel art originale disegnata a mano, con il marrone nelle figure (tronchi, aculei, nidi, corna); unica meccanica dello stage il marrone.
+- **Curva** (#88): dente di sega con il 109 difficile e il boss il più duro; solo il 101 è molto facile. Vittorie casuali 98 · 82 · 88 · 75 · 80 · 83 · 73 · 83 · 72 · 58%, media 79% (fine dell'universo 1: 65%, inizio: 97%). Nastro 2 e slot 2–3, mai sopra la fine dell'universo 1. Livelli 1–101 identici.
+- Nomi IT/EN di tutti i livelli; foglio di anteprima `docs/levels/stage-11.png`.
+- Test: unit sullo stage (completo, nomi, sola meccanica marrone, ≥ 30% di pixel da mescolare, nastro e slot, dente di sega, media tra fine e inizio dell'universo 1); e2e: la quercia (110) si gioca fino alla vittoria e resta salvata.
+
 ### Meccanica: pixel marrone (#94)
 
 - **Marrone = rosso + giallo + blu**: un pixel marrone (codice `K` nelle immagini) è completo dopo tre colpi, uno per primario, in qualsiasi ordine; finché non arrivano tutti e tre blocca la sua corsia come gli altri pixel non finiti. Le munizioni e il solver contano il colpo in più; il generatore può piazzare pixel marroni in modo deterministico (`special.brown`).
