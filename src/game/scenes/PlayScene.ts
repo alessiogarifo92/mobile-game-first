@@ -835,6 +835,8 @@ export class PlayScene extends Phaser.Scene {
       refusals: this.refusals,
       columns: this.layout.columns,
       slots: this.layout.slots,
+      // Waiting slots holding a bucket: playtest telemetry records the highest occupancy (#68).
+      slotsUsed: gs.slots.filter(Boolean).length,
       // Solved on demand (only the guide and tests read it), not at every level start.
       get solution() {
         return solutionOf();
@@ -851,6 +853,8 @@ export class PlayScene extends Phaser.Scene {
       tipButton: { x: VIEW.width / 2, y: (this.scale.height + TIP_H) / 2 - 70 },
       guide: this.guide,
       painted: this.level.targets.filter((t, i) => t && cellDone(this.level, gs, i)).length,
+      // Pixels to paint, so playtest telemetry can say how many were missing (#68).
+      targets: this.level.targets.filter(Boolean).length,
       ice: gs.ice.reduce((a, b) => a + b, 0),
       hidden: gs.hidden.filter(Boolean).length,
       stones: this.level.stone.filter(Boolean).length,
