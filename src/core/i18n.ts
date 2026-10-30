@@ -297,6 +297,18 @@ const en = {
   'level.cattail': 'Cattails',
   'level.otter': 'Otter',
   'level.watermill': 'Watermill',
+  // Stage 17 — Autumn (#127)
+  'stage.autumn': 'Autumn',
+  'level.maple': 'Maple leaf',
+  'level.chestnut': 'Chestnut',
+  'level.pinecone': 'Pine cone',
+  'level.robin': 'Robin',
+  'level.persimmon': 'Persimmon',
+  'level.umbrella': 'Umbrella',
+  'level.woodpecker': 'Woodpecker',
+  'level.boots': 'Rain boots',
+  'level.badger': 'Badger',
+  'level.barn': 'Barn',
 };
 
 export type MessageKey = keyof typeof en;
@@ -599,6 +611,18 @@ const it: Record<MessageKey, string> = {
   'level.cattail': 'Tife',
   'level.otter': 'Lontra',
   'level.watermill': 'Mulino ad acqua',
+  // Stage 17 — Autunno (#127)
+  'stage.autumn': 'Autunno',
+  'level.maple': "Foglia d'acero",
+  'level.chestnut': 'Castagna',
+  'level.pinecone': 'Pigna',
+  'level.robin': 'Pettirosso',
+  'level.persimmon': 'Cachi',
+  'level.umbrella': 'Ombrello',
+  'level.woodpecker': 'Picchio',
+  'level.boots': 'Stivali da pioggia',
+  'level.badger': 'Tasso',
+  'level.barn': 'Fienile',
 };
 
 export const DICTIONARIES = { en, it } as const;
