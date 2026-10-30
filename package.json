@@ -15,7 +15,8 @@
     "test:e2e": "playwright test",
     "gen:levels": "tsx scripts/gen-levels.ts",
     "android:sync": "npm run build && cap sync android",
-    "preview:levels": "tsx scripts/preview-levels.ts"
+    "preview:levels": "tsx scripts/preview-levels.ts",
+    "playtest": "tsx scripts/playtest/cli.ts"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.2",

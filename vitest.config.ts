@@ -5,7 +5,8 @@ export default defineConfig({
     include: ['tests/**/*.test.ts'],
     coverage: {
       provider: 'v8',
-      include: ['src/core/**'],
+      // The pure part of the playtest harness (#68) is held to the same bar as the rules.
+      include: ['src/core/**', 'scripts/playtest/{telemetry,saves,turn,jsonSchema}.ts'],
       reporter: ['text', 'json-summary', 'html'],
       thresholds: { lines: 97, functions: 97, branches: 95, statements: 97 },
     },

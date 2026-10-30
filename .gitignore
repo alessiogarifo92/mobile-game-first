@@ -15,3 +15,5 @@ android/app/build/
 android/build/
 android/.gradle/
 android/local.properties
+dist-playtest/
+playtest-runs/
