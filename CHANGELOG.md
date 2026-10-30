@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Stage 15 "Giungla": livelli 141–150 (#125)
+
+- **Dieci figure in pixel art originale** sulla giungla (`scripts/stages/stage-15.ts`): papaia, tucano, raganella, ara, orchidea, camaleonte, farfalla morpho, mango, pitone e il boss, il tempio perduto (14×14). Foglio di anteprima in `docs/levels/stage-15.png`; nomi IT/EN.
+- **Debutto della pietra** (#95) al livello 141: la papaia è molto facile e ha due pietre disegnate a mano tra la polpa, dove un colpo si ferma per forza; il suggerimento compare una volta. Dal 142 le pietre stanno nei buchi e sui bordi delle figure. Nessun'altra meccanica nello stage; nastro 2 e slot 2 dopo il debutto.
+- **Curva** (#88): vittorie a caso 100 · 79 · 74 · 70 · 75 · 75 · 69 · 78 · 61 · 48%, media 72,9%; solo il debutto è molto facile, il boss è il livello più duro. Dalla seconda figura ≥ 30% di pixel secondari. Ogni livello è dimostrato risolvibile dal solver.
+- La build e2e `more-levels` non sostituisce più il 141 con un livello finto (tolta `e2e/fixtures/stone-debut.json`): il suggerimento della pietra si verifica sul 141 vero.
+- Test: unit sullo stage (nomi, tela, meccaniche, quota di secondari, regole della curva) e sul debutto; e2e: il 141 mostra il suggerimento una volta, un colpo si ferma sulla pietra, il livello si vince.
+
 ### Stage 14 "Deserto": livelli 131–140 (#124)
 
 - **Dieci figure in pixel art originale** sul deserto (`scripts/stages/stage-14.ts`): saguaro, dune, oasi, scorpione, fennec, serpente a sonagli, clessidra, piramide, avvoltoio e il boss, il cammello (14×14). Foglio di anteprima in `docs/levels/stage-14.png`; nomi IT/EN.

@@ -82,5 +82,11 @@
   "key": "desert",
   "color": 3,
   "complete": true
+ },
+ {
+  "id": 15,
+  "key": "jungle",
+  "color": 6,
+  "complete": true
  }
 ]
