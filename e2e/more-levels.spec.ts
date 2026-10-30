@@ -65,7 +65,7 @@ test('a player who finished the game keeps everything and plays the next univers
   expect(headers.map((h) => h.stage)).toEqual(range(stages.length + 1, stages.length * 2));
   const nodes = await mix<{ id: number; unlocked: boolean; boss: boolean }[]>(page, 'nodes');
   expect(nodes.map((n) => n.id)).toEqual(range(shipped + 1, shipped * 2));
-  expect(nodes.filter((n) => n.boss).map((n) => n.id)).toEqual(levels.filter((l) => l.boss).map((l) => l.id + shipped));
+  expect(nodes.filter((n) => n.boss).map((n) => n.id)).toEqual(levels.filter((l) => l.boss && universeOfStage(l.stage) === 1).map((l) => l.id + shipped));
   expect(nodes.filter((n) => n.unlocked).map((n) => n.id)).toEqual([shipped + 1]);
   expect(await mix(page, 'comingSoon')).toBe(false);
   if (shots) await page.screenshot({ path: `${shots}/01-mappa-universo-2.png` });
