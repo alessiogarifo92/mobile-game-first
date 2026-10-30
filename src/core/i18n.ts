@@ -237,6 +237,18 @@ const en = {
   'level.cabin': 'Log cabin',
   'level.deer': 'Deer',
   'level.oak': 'Oak',
+  // Stage 12 — Mountain (#122)
+  'stage.mountain': 'Mountain',
+  'level.hikingboot': 'Hiking boot',
+  'level.snowpeak': 'Snowy peak',
+  'level.alpinehut': 'Alpine hut',
+  'level.marmot': 'Marmot',
+  'level.edelweiss': 'Edelweiss',
+  'level.backpack': 'Backpack',
+  'level.ibex': 'Ibex',
+  'level.cablecar': 'Cable car',
+  'level.eagle': 'Eagle',
+  'level.summit': 'Summit',
 };
 
 export type MessageKey = keyof typeof en;
@@ -479,6 +491,18 @@ const it: Record<MessageKey, string> = {
   'level.cabin': 'Baita',
   'level.deer': 'Cervo',
   'level.oak': 'Quercia',
+  // Stage 12 — Montagna (#122)
+  'stage.mountain': 'Montagna',
+  'level.hikingboot': 'Scarpone',
+  'level.snowpeak': 'Cima innevata',
+  'level.alpinehut': 'Baita',
+  'level.marmot': 'Marmotta',
+  'level.edelweiss': 'Stella alpina',
+  'level.backpack': 'Zaino',
+  'level.ibex': 'Stambecco',
+  'level.cablecar': 'Funivia',
+  'level.eagle': 'Aquila',
+  'level.summit': 'Vetta',
 };
 
 export const DICTIONARIES = { en, it } as const;

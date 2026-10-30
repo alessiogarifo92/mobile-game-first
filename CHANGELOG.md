@@ -2,6 +2,13 @@
 
 ## Non rilasciato
 
+### Stage 12 "Montagna": livelli 111–120 (#122)
+
+- **Dieci figure nuove in pixel art**, disegnate a mano sul tema: scarpone, cima innevata, baita, marmotta, stella alpina, zaino, stambecco, funivia, aquila e, come boss, la vetta (14×14, la tela più grande dello stage). Nomi IT/EN.
+- **Marrone + ghiaccio** in ogni livello: roccia, legno e pelo in marrone, il ghiaccio sui pixel primari. Nessuna meccanica nuova, quindi nessun livello molto facile: il respiro (111) si vince a caso nell'88% dei casi. Dopo il respiro ogni figura ha almeno il 30% di pixel misti o marroni. Nastro 2 e slot 2, mai sopra la fine dell'universo 1.
+- **Curva** (#88, dente di sega dello stage): vittorie a caso 88 · 79 · 80 · 68 · 81 · 83 · 73 · 81 · 61 · 53%, media 75%; il boss è il livello più duro. Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (id e boss, nomi IT/EN, meccaniche, tela/nastro/slot, regole della curva); e2e: la vetta (120) si gioca fino alla vittoria.
+
 ### Stage 11 "Bosco": livelli 101–110 (#121)
 
 - **Stage 11 completo**, primo dell'universo 2 (Natura): dopo la ghianda (101) arrivano porcino, abete, riccio, scoiattolo, nido, castoro, baita, cervo e la quercia (110, boss 14×14). Pixel art originale disegnata a mano, con il marrone nelle figure (tronchi, aculei, nidi, corna); unica meccanica dello stage il marrone.

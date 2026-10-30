@@ -64,5 +64,11 @@
   "key": "forest",
   "color": 6,
   "complete": true
+ },
+ {
+  "id": 12,
+  "key": "mountain",
+  "color": 7,
+  "complete": true
  }
 ]
