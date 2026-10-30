@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/alessiogarifo92/mobile-game-first/docs/playtest/scheda.schema.json",
+  "title": "Scheda di sessione del playtest agent (#66)",
+  "description": "Una scheda per sessione di un agent. `telemetry` la scrive l'harness (#68) da window.__mix e dagli eventi del browser; `feedback` e `bugs` li scrive l'agent. Protocollo: docs/playtest/protocollo-agent.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "sessionId", "agent", "turn", "build", "device", "startSave", "plan", "startedAt", "endedAt", "endReason", "levels", "session", "bugs"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "sessionId": { "type": "string", "pattern": "^T[0-9]{2}-A[0-9]{2}$", "description": "Turno e agent, es. T01-A03." },
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agentId", "profileId"],
+      "properties": {
+        "agentId": { "type": "string", "pattern": "^A[0-9]{2}$" },
+        "profileId": { "type": "string", "pattern": "^P[0-9]{2}$" },
+        "model": { "type": "string", "description": "Modello che ha giocato (solo nella scheda, mai nel codice)." }
+      }
+    },
+    "turn": { "type": "integer", "minimum": 1 },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commit", "version", "variant"],
+      "properties": {
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" },
+        "version": { "type": "string" },
+        "tag": { "type": "string" },
+        "variant": { "enum": ["normale", "senza-copertura"], "description": "senza-copertura: solo per il confronto A/B del secchiello coperto (universo 3)." }
+      }
+    },
+    "device": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["viewport", "language"],
+      "properties": {
+        "viewport": { "enum": ["360x640", "412x915"] },
+        "language": { "enum": ["it", "en"] }
+      }
+    },
+    "startSave": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unlocked", "completedThrough", "seenTips"],
+      "properties": {
+        "unlocked": { "type": "integer", "minimum": 1 },
+        "completedThrough": { "type": "integer", "minimum": 0, "description": "Livelli 1..N già completati nel salvataggio di partenza." },
+        "seenTips": { "type": "array", "items": { "$ref": "#/$defs/tipId" }, "uniqueItems": true }
+      }
+    },
+    "plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["packs", "levelIds"],
+      "properties": {
+        "packs": { "type": "array", "items": { "type": "string", "pattern": "^(U1-ONB|U1-FINE|S[0-9]{2})$" }, "minItems": 1 },
+        "levelIds": { "type": "array", "items": { "$ref": "#/$defs/levelId" }, "minItems": 1, "description": "Livelli assegnati, in ordine di gioco." }
+      }
+    },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "endedAt": { "type": "string", "format": "date-time" },
+    "endReason": { "enum": ["piano-finito", "soglia-abbandono", "budget-azioni", "bloccato-da-bug", "errore-harness"] },
+    "levels": { "type": "array", "items": { "$ref": "#/$defs/level" } },
+    "session": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["telemetry", "feedback"],
+      "properties": {
+        "telemetry": { "$ref": "#/$defs/sessionTelemetry" },
+        "feedback": { "$ref": "#/$defs/sessionFeedback" }
+      }
+    },
+    "bugs": { "type": "array", "items": { "$ref": "#/$defs/bug" } }
+  },
+  "$defs": {
+    "levelId": { "type": "integer", "minimum": 1, "maximum": 500 },
+    "score": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "scoreOrNull": { "type": ["integer", "null"], "minimum": 1, "maximum": 5 },
+    "tipId": { "enum": ["guide", "mixing", "blocked", "slots", "ice", "hidden", "lock", "belt", "brown", "stone", "covered"] },
+    "mechanic": { "enum": ["mixing", "blocked", "slots", "belt", "ice", "hidden", "brown", "stone", "lock", "covered"] },
+    "attemptOutcome": {
+      "enum": ["vinto", "ingorgo", "riprova", "uscita", "budget"],
+      "description": "vinto; ingorgo = pannello di ingorgo e Riprova; riprova = restart a metà; uscita = torna alla mappa a metà (abbandono del livello); budget = l'harness chiude il tentativo per budget di azioni."
+    },
+    "attempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["attempt", "outcome", "durationMs", "ticks", "taps", "offTargetTaps", "launches", "refusals", "jams", "extraSlotUsed", "maxSlotsUsed", "slotCount", "maxBeltUsed", "beltCapacity", "painted", "targets", "tipsShown", "consoleErrors"],
+      "properties": {
+        "attempt": { "type": "integer", "minimum": 1 },
+        "outcome": { "$ref": "#/$defs/attemptOutcome" },
+        "durationMs": { "type": "integer", "minimum": 0, "description": "Tempo reale dall'ingresso nel livello all'esito. Dipende dalla velocità dell'agent: vale solo come confronto tra livelli." },
+        "timeToFirstTapMs": { "type": ["integer", "null"], "minimum": 0 },
+        "ticks": { "type": "integer", "minimum": 0, "description": "window.__mix.tick all'esito: tempo di gioco, indipendente dall'agent." },
+        "taps": { "type": "integer", "minimum": 0, "description": "Tutti i tap dell'agent nella scena play." },
+        "offTargetTaps": { "type": "integer", "minimum": 0, "description": "Tap fuori da colonne, slot e bottoni (rect di __mix.columns/slots/jamButtons/tipButton)." },
+        "launches": { "type": "integer", "minimum": 0, "description": "__mix.moves all'esito." },
+        "refusals": { "type": "integer", "minimum": 0, "description": "__mix.refusals: tocchi rifiutati per nastro pieno." },
+        "jams": { "type": "integer", "minimum": 0, "description": "Volte in cui __mix.overlay è diventato 'jam' (2 se ingorgo, +1 slot, poi di nuovo ingorgo)." },
+        "extraSlotUsed": { "type": "boolean", "description": "Ha premuto '+1 slot e continua' (gratuito, una volta per tentativo)." },
+        "maxSlotsUsed": { "type": "integer", "minimum": 0, "description": "Occupazione massima degli slot d'attesa. Oggi non è in __mix: #68 aggiunge un campo in sola lettura (es. slotsUsed)." },
+        "slotCount": { "type": "integer", "minimum": 1, "description": "Slot del livello (__mix.slots.length all'inizio, prima di un eventuale +1)." },
+        "maxBeltUsed": { "type": "integer", "minimum": 0, "description": "Massimo di __mix.belt.used." },
+        "beltCapacity": { "type": "integer", "minimum": 1, "description": "__mix.belt.capacity." },
+        "painted": { "type": "integer", "minimum": 0, "description": "__mix.painted all'esito." },
+        "targets": { "type": "integer", "minimum": 1, "description": "Pixel da dipingere: targets - painted = 'mancavano N pixel'." },
+        "remaining": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Ostacoli rimasti all'esito, da __mix.",
+          "properties": {
+            "ice": { "type": "integer", "minimum": 0 },
+            "hidden": { "type": "integer", "minimum": 0 },
+            "locked": { "type": "integer", "minimum": 0 },
+            "covered": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "stoneSplashes": { "type": "integer", "minimum": 0, "description": "__mix.stoneSplashes: colpi fermati da una pietra." },
+        "reveals": { "type": "integer", "minimum": 0, "description": "__mix.reveals: secchielli coperti scoperti." },
+        "tipsShown": { "type": "array", "items": { "$ref": "#/$defs/tipId" }, "description": "Schede di suggerimento comparse (__mix.tip, guide)." },
+        "tipDismissMs": { "type": ["integer", "null"], "minimum": 0, "description": "Tempo con la scheda aperta: misura chi salta i testi." },
+        "consoleErrors": { "type": "integer", "minimum": 0 },
+        "screenshots": { "type": "array", "items": { "type": "string" }, "description": "Percorsi relativi alla cartella della sessione." }
+      }
+    },
+    "levelFeedback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["understood", "perceivedDifficulty", "mood", "notUnderstood", "freeText"],
+      "properties": {
+        "understood": { "$ref": "#/$defs/score", "description": "Ho capito cosa fare? 1 = per niente, 5 = subito." },
+        "perceivedDifficulty": { "$ref": "#/$defs/score", "description": "1 = banale, 5 = troppo difficile." },
+        "mood": { "enum": ["divertito", "neutro", "annoiato", "frustrato"] },
+        "beltRefusalUnderstood": { "$ref": "#/$defs/scoreOrNull", "description": "Ho capito perché a volte il tocco non lancia? Null se refusals = 0." },
+        "jamFairness": { "$ref": "#/$defs/scoreOrNull", "description": "Gli ingorghi: 1 = ingiusti, 5 = colpa mia. Null se nessun ingorgo." },
+        "mechanic": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "understood", "fairness"],
+          "description": "Solo ai debutti (101, 141, 161, 201, 241) e quando la meccanica è stata la causa della sconfitta.",
+          "properties": {
+            "id": { "$ref": "#/$defs/mechanic" },
+            "understood": { "$ref": "#/$defs/score" },
+            "fairness": { "$ref": "#/$defs/score", "description": "1 = mi ha fregato, 5 = giusta." },
+            "rememberedColors": { "$ref": "#/$defs/scoreOrNull", "description": "Solo secchiello coperto: quanto ho dovuto ricordare i colori scoperti (1 = mai, 5 = sempre)." }
+          }
+        },
+        "notUnderstood": { "type": "string", "description": "Cosa non ho capito; stringa vuota se niente." },
+        "wouldContinue": { "type": "boolean", "description": "Dopo questo livello giocherei il prossimo?" },
+        "freeText": { "type": "string" }
+      }
+    },
+    "level": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["levelId", "result", "attempts", "feedback"],
+      "properties": {
+        "levelId": { "$ref": "#/$defs/levelId" },
+        "result": { "enum": ["vinto", "abbandonato", "saltato"], "description": "saltato = l'harness ha caricato il salvataggio del livello dopo (limite di tentativi del profilo)." },
+        "attempts": { "type": "array", "items": { "$ref": "#/$defs/attempt" }, "minItems": 1 },
+        "feedback": { "$ref": "#/$defs/levelFeedback" }
+      }
+    },
+    "sessionTelemetry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["durationMs", "actions", "screens", "uncaughtErrors", "stuckScreens"],
+      "properties": {
+        "durationMs": { "type": "integer", "minimum": 0 },
+        "actions": { "type": "integer", "minimum": 0, "description": "Azioni dell'agent (tap, screenshot esclusi)." },
+        "screens": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 },
+          "description": "Ingressi per scena (__mix.scene): menu, play, album, howto, universes, ..."
+        },
+        "languageChanges": { "type": "integer", "minimum": 0 },
+        "uncaughtErrors": { "type": "array", "items": { "$ref": "#/$defs/logEntry" } },
+        "stuckScreens": { "type": "array", "items": { "$ref": "#/$defs/logEntry" }, "description": "Nessun cambio di scena né di tick per N secondi dopo un tap." }
+      }
+    },
+    "logEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["at", "message"],
+      "properties": {
+        "at": { "type": "string", "format": "date-time" },
+        "levelId": { "$ref": "#/$defs/levelId" },
+        "message": { "type": "string" },
+        "screenshot": { "type": "string" }
+      }
+    },
+    "sessionFeedback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fun", "wouldReturn", "stoppedBecause", "freeText"],
+      "properties": {
+        "fun": { "$ref": "#/$defs/score" },
+        "wouldReturn": { "$ref": "#/$defs/score", "description": "Domani lo riaprirei? 1 = no, 5 = sì." },
+        "stoppedBecause": { "type": "string", "description": "Perché ho smesso, con le parole del personaggio." },
+        "bestMoment": { "type": "string" },
+        "worstMoment": { "type": "string" },
+        "freeText": { "type": "string" }
+      }
+    },
+    "bug": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "severity", "category", "steps", "expected", "actual", "screenshots", "reproduced"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^T[0-9]{2}-A[0-9]{2}-B[0-9]{2}$" },
+        "title": { "type": "string", "minLength": 5 },
+        "severity": { "enum": ["alta", "media", "bassa"] },
+        "category": { "enum": ["crash", "blocco", "progressi", "regole", "input", "grafica", "testo", "prestazioni"] },
+        "levelId": { "$ref": "#/$defs/levelId" },
+        "steps": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "expected": { "type": "string" },
+        "actual": { "type": "string" },
+        "screenshots": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "reproduced": { "type": "boolean", "description": "L'agent ha rifatto i passi e il bug si è ripresentato." }
+      }
+    }
+  }
+}

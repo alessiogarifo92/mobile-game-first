@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "T01-A02",
+  "agent": { "agentId": "A02", "profileId": "P02" },
+  "turn": 1,
+  "build": { "commit": "6787174", "version": "0.5.0", "tag": "playtest-u2-1", "variant": "normale" },
+  "device": { "viewport": "412x915", "language": "en" },
+  "startSave": {
+    "unlocked": 95,
+    "completedThrough": 94,
+    "seenTips": ["guide", "mixing", "blocked", "slots", "belt", "ice", "hidden"]
+  },
+  "plan": { "packs": ["U1-FINE", "S11", "S15"], "levelIds": [95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150] },
+  "startedAt": "2026-11-03T10:00:00Z",
+  "endedAt": "2026-11-03T10:42:00Z",
+  "endReason": "soglia-abbandono",
+  "levels": [
+    {
+      "levelId": 101,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 48000,
+          "timeToFirstTapMs": 9000,
+          "ticks": 1210,
+          "taps": 9,
+          "offTargetTaps": 1,
+          "launches": 7,
+          "refusals": 1,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 1,
+          "slotCount": 3,
+          "maxBeltUsed": 3,
+          "beltCapacity": 3,
+          "painted": 64,
+          "targets": 64,
+          "remaining": { "ice": 0, "hidden": 0, "locked": 0, "covered": 0 },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": ["brown"],
+          "tipDismissMs": 2500,
+          "consoleErrors": 0,
+          "screenshots": ["101-1-start.png", "101-1-win.png"]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 1,
+        "mood": "divertito",
+        "beltRefusalUnderstood": 3,
+        "jamFairness": null,
+        "mechanic": { "id": "brown", "understood": 4, "fairness": 5, "rememberedColors": null },
+        "notUnderstood": "",
+        "wouldContinue": true,
+        "freeText": "Brown needs all three colours: the card said it, the trunk proved it."
+      }
+    }
+  ],
+  "session": {
+    "telemetry": {
+      "durationMs": 2520000,
+      "actions": 214,
+      "screens": { "menu": 3, "play": 21, "howto": 1 },
+      "languageChanges": 0,
+      "uncaughtErrors": [],
+      "stuckScreens": []
+    },
+    "feedback": {
+      "fun": 3,
+      "wouldReturn": 3,
+      "stoppedBecause": "Three jams in a row on 144, my stop came.",
+      "bestMoment": "First brown trunk.",
+      "worstMoment": "144: the stone hides which lane is free.",
+      "freeText": ""
+    }
+  },
+  "bugs": [
+    {
+      "id": "T01-A02-B01",
+      "title": "Stage 15 header overlaps the boss star at 412x915",
+      "severity": "bassa",
+      "category": "grafica",
+      "levelId": 150,
+      "steps": ["Open the map", "Scroll to stage 15", "Look at the header above level 150"],
+      "expected": "Header and boss star do not overlap",
+      "actual": "The header text covers half of the star",
+      "screenshots": ["bug-B01.png"],
+      "reproduced": true
+    }
+  ]
+}
