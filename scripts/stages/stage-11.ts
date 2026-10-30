@@ -1,14 +1,15 @@
 import type { StageSpec } from './types';
 
 /**
- * Stage 11 — Bosco, primo stage dell'universo 2 "Natura" (#100).
- * Per ora contiene solo il livello di debutto del marrone (#94): la ghianda, molto facile, insegna senza punire.
- * Nastro 2 come la fine dell'universo 1: il nastro non torna mai più grande.
- * Il resto dello stage arriva con #100.
+ * Stage 11 — Bosco, primo stage dell'universo 2 "Natura" (#100, ticket #121).
+ * Debutto del marrone (#94): la ghianda (101) è molto facile e insegna senza punire; dal 102 il marrone è disegnato
+ * nelle figure (tronchi, ricci, nidi, corna) e conta come pixel da mescolare. Nessun'altra meccanica nello stage.
+ * Nastro 2 come la fine dell'universo 1: il nastro non torna mai più grande. Media ~80% di vittorie casuali.
  * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in.
  */
 const stage: StageSpec = {
   stage: 11, key: 'forest', color: 'G',
+  complete: true,
   levels: [
     { name: 'acorn', columns: 3, ammoChunk: 10, slots: 3, beltCapacity: 2, winRate: [0.95, 1], seed: 11000, image: [
       '...KK...',
@@ -18,6 +19,123 @@ const stage: StageSpec = {
       '.OOOOOO.',
       '..OOOO..',
       '...OO...',
+    ] },
+    { name: 'porcini', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 2, winRate: [0.8, 0.88], seed: 11037, image: [
+      '...KKKK...',
+      '.KKKKKKKK.',
+      'KKKOKKKKKK',
+      'KKKKKKKOKK',
+      '.YYYYYYYY.',
+      '...YYYY...',
+      '...YYYY...',
+      '...YYRY...',
+      '..YYYYYY..',
+      'GGGGGGGGGG',
+    ] },
+    { name: 'pinetree', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 2, winRate: [0.8, 0.88], seed: 11074, image: [
+      '.....G.....',
+      '....GGG....',
+      '...GGKGG...',
+      '....GGG....',
+      '...GGGGG...',
+      '..GGKGGGG..',
+      '...GGGGG...',
+      '..GGGGGGG..',
+      '.GGGGGGKGG.',
+      'GGGGGGGGGGG',
+      '....KKK....',
+      '....KKK....',
+      'YYYYYYYYYYY',
+    ] },
+    { name: 'hedgehog', columns: 4, ammoChunk: 12, slots: 2, beltCapacity: 2, winRate: [0.72, 0.8], seed: 11111, image: [
+      '...K.K.K....',
+      '..KKKKKKK...',
+      '.KKOKKOKKYY.',
+      'KKKKKKKKYYBY',
+      'KOKKOKKYYYYR',
+      'KKKKKKKYYYY.',
+      '.KKKKKKYYY..',
+      '..Y..Y..Y...',
+      'GGGGGGGGGGGG',
+    ] },
+    { name: 'squirrel', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 2, winRate: [0.8, 0.88], seed: 11148, image: [
+      '.OOO........',
+      'OOOOO.......',
+      'OOOOOO..O.O.',
+      'OOYOOO..OOO.',
+      '.OOOOO.OOBOO',
+      '..OOOO.OOOOR',
+      '...OOOOOOO..',
+      '....OOYYOO..',
+      '....OOYYKK..',
+      '...OOOOYKK..',
+      'GGGGGGGGGGGG',
+    ] },
+    { name: 'nest', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, winRate: [0.78, 0.86], seed: 11185, image: [
+      '..BB....BB..',
+      '.BBBB..BBBB.',
+      '.BBBBYYBBBB.',
+      'KBBBYYYYBBBK',
+      'KKKOKKKOKKKK',
+      'KOKKKOKKKOKK',
+      '.KKKKKKKKKK.',
+      '..KKKKKKKK..',
+      'GGGG....GGGG',
+    ] },
+    { name: 'beaver', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, winRate: [0.72, 0.8], seed: 11222, image: [
+      '..KK..KK....',
+      '.KKKKKKKK...',
+      '.KBKKKKBK...',
+      '.KKOOOOKK...',
+      '.KKOROOKK...',
+      '..KOYYOK....',
+      '.KKKYYKKK...',
+      'KKKKKKKKKKBB',
+      'KKKKKKKKKBBB',
+      '.KKKKKKKKBBB',
+      'OOOOOOOOOOOO',
+    ] },
+    { name: 'cabin', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, winRate: [0.8, 0.88], seed: 11259, image: [
+      '........KK..',
+      '....RRRRKK..',
+      '...RRRRRRR..',
+      '..RRRRRRRRR.',
+      '.RRRRRRRRRRR',
+      '..KKKKKKKKK.',
+      '..KYYKKOOKK.',
+      '..KYYKKOOKK.',
+      '..KKKKKOOKK.',
+      'GGGGGGGGGGGG',
+    ] },
+    { name: 'deer', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, winRate: [0.66, 0.74], seed: 11296, image: [
+      '.K.K....K.K.',
+      '.KKK....KKK.',
+      '..KK....KK..',
+      'OO.KK..KK.OO',
+      '.OOOOOOOOOO.',
+      '...OBOOBO...',
+      '...OOOOOO...',
+      '...OOYYOO...',
+      '....OYYO....',
+      '....OKKO....',
+      '.....OO.....',
+      'GGGGGGGGGGGG',
+    ] },
+    { name: 'oak', columns: 4, ammoChunk: 20, slots: 2, beltCapacity: 2, winRate: [0.55, 0.63], seed: 11333, image: [
+      '....GGGGGG....',
+      '..GGGGGGGGGG..',
+      '.GGGKGGGGBGGG.',
+      'GGGGGGGGGKGGGG',
+      'GGKGGGGGGGGGGG',
+      'GGGGGGGKGGGGKG',
+      '.GGGGGGGGGGGG.',
+      '..GGGKKKKGGG..',
+      '.....KKKK.....',
+      '.....KKKK.....',
+      '.....KKKK.....',
+      '.RR.KKKKKK.RR.',
+      '.YY.KKKKKK.YY.',
+      'GGGGGGGGGGGGGG',
     ] },
   ],
 };

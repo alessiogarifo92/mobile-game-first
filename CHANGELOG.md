@@ -2,6 +2,20 @@
 
 ## Non rilasciato
 
+### Stage 12 "Montagna": livelli 111–120 (#122)
+
+- **Dieci figure nuove in pixel art**, disegnate a mano sul tema: scarpone, cima innevata, baita, marmotta, stella alpina, zaino, stambecco, funivia, aquila e, come boss, la vetta (14×14, la tela più grande dello stage). Nomi IT/EN.
+- **Marrone + ghiaccio** in ogni livello: roccia, legno e pelo in marrone, il ghiaccio sui pixel primari. Nessuna meccanica nuova, quindi nessun livello molto facile: il respiro (111) si vince a caso nell'88% dei casi. Dopo il respiro ogni figura ha almeno il 30% di pixel misti o marroni. Nastro 2 e slot 2, mai sopra la fine dell'universo 1.
+- **Curva** (#88, dente di sega dello stage): vittorie a caso 88 · 79 · 80 · 68 · 81 · 83 · 73 · 81 · 61 · 53%, media 75%; il boss è il livello più duro. Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (id e boss, nomi IT/EN, meccaniche, tela/nastro/slot, regole della curva); e2e: la vetta (120) si gioca fino alla vittoria.
+
+### Stage 11 "Bosco": livelli 101–110 (#121)
+
+- **Stage 11 completo**, primo dell'universo 2 (Natura): dopo la ghianda (101) arrivano porcino, abete, riccio, scoiattolo, nido, castoro, baita, cervo e la quercia (110, boss 14×14). Pixel art originale disegnata a mano, con il marrone nelle figure (tronchi, aculei, nidi, corna); unica meccanica dello stage il marrone.
+- **Curva** (#88): dente di sega con il 109 difficile e il boss il più duro; solo il 101 è molto facile. Vittorie casuali 98 · 82 · 88 · 75 · 80 · 83 · 73 · 83 · 72 · 58%, media 79% (fine dell'universo 1: 65%, inizio: 97%). Nastro 2 e slot 2–3, mai sopra la fine dell'universo 1. Livelli 1–101 identici.
+- Nomi IT/EN di tutti i livelli; foglio di anteprima `docs/levels/stage-11.png`.
+- Test: unit sullo stage (completo, nomi, sola meccanica marrone, ≥ 30% di pixel da mescolare, nastro e slot, dente di sega, media tra fine e inizio dell'universo 1); e2e: la quercia (110) si gioca fino alla vittoria e resta salvata.
+
 ### Meccanica: pixel marrone (#94)
 
 - **Marrone = rosso + giallo + blu**: un pixel marrone (codice `K` nelle immagini) è completo dopo tre colpi, uno per primario, in qualsiasi ordine; finché non arrivano tutti e tre blocca la sua corsia come gli altri pixel non finiti. Le munizioni e il solver contano il colpo in più; il generatore può piazzare pixel marroni in modo deterministico (`special.brown`).
@@ -35,13 +49,6 @@
 - **Skin per universo**: gli universi 2–5 hanno uno stile nuovo ciascuno (fiori, francobolli, bolle, orbite), sbloccato finendo l'universo e mostrato nella festa; ogni stage completato del suo universo sblocca una variante di colore (solo cambio di palette, 10 per universo). L'universo 1 tiene i suoi 10 stili per stage. I colori sono token nuovi in `src/game/theme.ts` (`gold`, `SKIN_COLORS`, `MURAL_PAINT`).
 - **Salvataggi compatibili**: gli stili già guadagnati restano validi; uno stile non guadagnato in un salvataggio torna a "classico". Livelli identici.
 - Test: unit su murale (tessere = livelli completati dell'universo + tessera regalo, universo chiuso vuoto, tessere dei livelli che non esistono ancora), skin e varianti secondo i progressi, salvataggi con skin non guadagnate; e2e a 360×640 e 412×915 sulla build con 205 livelli (completare un livello colora la sua tessera nel selettore e nell'album, album per universo, variante sbloccata dal primo stage dell'universo 2, stile dell'universo nella festa), con il controllo "niente fuori schermo" sulle schermate nuove.
-
-### Stage 12 "Montagna": livelli 111–120 (#122)
-
-- **Dieci figure nuove in pixel art**, disegnate a mano sul tema: scarpone, cima innevata, baita, marmotta, stella alpina, zaino, stambecco, funivia, aquila e, come boss, la vetta (14×14, la tela più grande dello stage). Nomi IT/EN.
-- **Marrone + ghiaccio** in ogni livello: roccia, legno e pelo in marrone, il ghiaccio sui pixel primari. Nessuna meccanica nuova, quindi nessun livello molto facile: il respiro (111) si vince a caso nell'88% dei casi. Dopo il respiro ogni figura ha almeno il 30% di pixel misti o marroni. Nastro 2 e slot 2, mai sopra la fine dell'universo 1.
-- **Curva** (#88, dente di sega dello stage): vittorie a caso 88 · 79 · 80 · 68 · 81 · 83 · 73 · 81 · 61 · 53%, media 75%; il boss è il livello più duro. Ogni livello è dimostrato risolvibile dal solver.
-- Test: unit sullo stage (id e boss, nomi IT/EN, meccaniche, tela/nastro/slot, regole della curva); e2e: la vetta (120) si gioca fino alla vittoria.
 
 ## 0.5.0 — universi: selettore, mappa per universo e festa di fine universo (29 ottobre 2026)
 
