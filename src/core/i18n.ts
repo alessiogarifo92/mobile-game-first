@@ -228,6 +228,15 @@ const en = {
   'level.castle': 'Castle',
   'level.dragon': 'Dragon',
   'level.acorn': 'Acorn',
+  'level.porcini': 'Porcini',
+  'level.pinetree': 'Pine tree',
+  'level.hedgehog': 'Hedgehog',
+  'level.squirrel': 'Squirrel',
+  'level.nest': 'Nest',
+  'level.beaver': 'Beaver',
+  'level.cabin': 'Log cabin',
+  'level.deer': 'Deer',
+  'level.oak': 'Oak',
 };
 
 export type MessageKey = keyof typeof en;
@@ -461,6 +470,15 @@ const it: Record<MessageKey, string> = {
   'level.castle': 'Castello',
   'level.dragon': 'Drago',
   'level.acorn': 'Ghianda',
+  'level.porcini': 'Porcino',
+  'level.pinetree': 'Abete',
+  'level.hedgehog': 'Riccio',
+  'level.squirrel': 'Scoiattolo',
+  'level.nest': 'Nido',
+  'level.beaver': 'Castoro',
+  'level.cabin': 'Baita',
+  'level.deer': 'Cervo',
+  'level.oak': 'Quercia',
 };
 
 export const DICTIONARIES = { en, it } as const;
