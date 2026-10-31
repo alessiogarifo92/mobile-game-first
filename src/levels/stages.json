@@ -100,5 +100,11 @@
   "key": "autumn",
   "color": 3,
   "complete": true
+ },
+ {
+  "id": 18,
+  "key": "winter",
+  "color": 5,
+  "complete": true
  }
 ]
