@@ -2,6 +2,13 @@
 
 ## Non rilasciato
 
+### Stage 18 "Inverno": livelli 171–180 (#128)
+
+- **Dieci figure in pixel art originale** sull'inverno (`scripts/stages/stage-18.ts`): abete, muffole, cioccolata calda, pupazzo di neve, pettirosso, slitta, renna, lanterna, volpe nella neve e il boss, la baita innevata (14×14). Foglio di anteprima in `docs/levels/stage-18.png`; nomi IT/EN.
+- **Marrone + pietra + ghiaccio** in ogni livello, nessuna novità; nastro 2 e slot 2 in tutto lo stage. Legno e pellicce marroni, la neve in lilla; dalla seconda figura in poi ≥ 50% di pixel secondari o marroni.
+- **Curva** a dente di sega (#88): vittorie a caso 86 · 67 · 66 · 62 · 67 · 67 · 63 · 70 · 57 · 43%, media 64,7% (sotto il fiume, 69,4%, verso il ~62% di fine universo); nessun livello molto facile, il boss è il più duro. Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (nomi, tela, meccaniche, quota di secondari, regole della curva); e2e: il livello 171 si gioca fino alla vittoria.
+
 ### Stage 16 "Fiume": livelli 151–160 (#126)
 
 - **Dieci figure in pixel art originale** sul fiume (`scripts/stages/stage-16.ts`): ninfea, trota, canoa, airone, libellula, anatra, martin pescatore, tife, lontra e il boss, il mulino ad acqua (14×14). Foglio di anteprima in `docs/levels/stage-16.png`; nomi IT/EN.
