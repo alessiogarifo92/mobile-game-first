@@ -2,6 +2,13 @@
 
 ## Non rilasciato
 
+### Stage 20 "Vulcano": livelli 191–200, fine dell'universo 2 (#130)
+
+- **Dieci figure in pixel art originale** sul vulcano (`scripts/stages/stage-20.ts`): goccia di lava, ossidiana, geyser, salamandra pezzata, roccia lavica, cristalli di zolfo, fenice, sorgente termale, colata di lava e il boss, l'eruzione (14×14). Foglio di anteprima in `docs/levels/stage-20.png`; nomi IT/EN.
+- **Tutte le meccaniche dell'universo** in ogni livello, nessuna novità: marrone, pietra, ghiaccio e nascosti; nastro 2 e slot 2 in tutto lo stage. Roccia viola con venature marroni, lava in rosso e arancio; dalla seconda figura in poi ≥ 51% di pixel secondari o marroni.
+- **Curva** a dente di sega (#88): vittorie a caso 82 · 64,5 · 69 · 61,5 · 67,5 · 64 · 56 · 65 · 51 · 35%, media 61,5% (sotto l'inverno, 64,7%, sul ~62% di fine universo); nessun livello molto facile, il boss è il più duro dello stage e dell'universo 2. Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (nomi, tela, meccaniche, quota di secondari, regole della curva, boss più duro dell'universo); e2e: il livello 191 si gioca fino alla vittoria.
+
 ### Stage 17 "Autunno": livelli 161–170 (#127)
 
 - **Dieci figure in pixel art originale** sull'autunno (`scripts/stages/stage-17.ts`): foglia d'acero, castagna, pigna, pettirosso, cachi, ombrello, picchio, stivali da pioggia, tasso e il boss, il fienile (14×14). Foglio di anteprima in `docs/levels/stage-17.png`; nomi IT/EN.

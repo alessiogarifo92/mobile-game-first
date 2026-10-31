@@ -321,6 +321,18 @@ const en = {
   'level.lantern': 'Lantern',
   'level.winterfox': 'Fox in the snow',
   'level.chalet': 'Snowy chalet',
+  // Stage 20 — Volcano (#130)
+  'stage.volcano': 'Volcano',
+  'level.lavadrop': 'Lava drop',
+  'level.obsidian': 'Obsidian',
+  'level.geyser': 'Geyser',
+  'level.salamander': 'Fire salamander',
+  'level.lavarock': 'Lava rock',
+  'level.sulfur': 'Sulfur crystals',
+  'level.phoenix': 'Phoenix',
+  'level.hotspring': 'Hot spring',
+  'level.lavaflow': 'Lava flow',
+  'level.eruption': 'Eruption',
 };
 
 export type MessageKey = keyof typeof en;
@@ -647,6 +659,18 @@ const it: Record<MessageKey, string> = {
   'level.lantern': 'Lanterna',
   'level.winterfox': 'Volpe nella neve',
   'level.chalet': 'Baita innevata',
+  // Stage 20 — Vulcano (#130)
+  'stage.volcano': 'Vulcano',
+  'level.lavadrop': 'Goccia di lava',
+  'level.obsidian': 'Ossidiana',
+  'level.geyser': 'Geyser',
+  'level.salamander': 'Salamandra pezzata',
+  'level.lavarock': 'Roccia lavica',
+  'level.sulfur': 'Cristalli di zolfo',
+  'level.phoenix': 'Fenice',
+  'level.hotspring': 'Sorgente termale',
+  'level.lavaflow': 'Colata di lava',
+  'level.eruption': 'Eruzione',
 };
 
 export const DICTIONARIES = { en, it } as const;
