@@ -2,6 +2,13 @@
 
 ## Non rilasciato
 
+### Stage 17 "Autunno": livelli 161–170 (#127)
+
+- **Dieci figure in pixel art originale** sull'autunno (`scripts/stages/stage-17.ts`): foglia d'acero, castagna, pigna, pettirosso, cachi, ombrello, picchio, stivali da pioggia, tasso e il boss, il fienile (14×14). Foglio di anteprima in `docs/levels/stage-17.png`; nomi IT/EN.
+- **Combinazione nuova: marrone + pietra** in ogni livello, senza ghiaccio né nascosti; nastro 2 e slot 2 in tutto lo stage. Dalla seconda figura in poi ≥ 50% di pixel secondari o marroni.
+- **Curva** a dente di sega (#88): vittorie a caso 83 · 71 · 73 · 64 · 73 · 73 · 63 · 72 · 56 · 38%, media 66%; nessun livello molto facile (la combinazione non è un debutto), il boss è il più duro. Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (nomi, tela, meccaniche, quota di secondari, regole della curva); e2e: il livello 161 si gioca fino alla vittoria.
+
 ### Stage 16 "Fiume": livelli 151–160 (#126)
 
 - **Dieci figure in pixel art originale** sul fiume (`scripts/stages/stage-16.ts`): ninfea, trota, canoa, airone, libellula, anatra, martin pescatore, tife, lontra e il boss, il mulino ad acqua (14×14). Foglio di anteprima in `docs/levels/stage-16.png`; nomi IT/EN.
