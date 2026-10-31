@@ -321,6 +321,18 @@ const en = {
   'level.lantern': 'Lantern',
   'level.winterfox': 'Fox in the snow',
   'level.chalet': 'Snowy chalet',
+  // Stage 19 — Night in the woods (#129)
+  'stage.nightwood': 'Night in the woods',
+  'level.firefly': 'Firefly',
+  'level.bat': 'Bat',
+  'level.moth': 'Moth',
+  'level.raccoon': 'Raccoon',
+  'level.campfire': 'Campfire',
+  'level.tent': 'Tent',
+  'level.wolf': 'Howling wolf',
+  'level.dormouse': 'Dormouse',
+  'level.eagleowl': 'Eagle owl',
+  'level.treehouse': 'Treehouse',
 };
 
 export type MessageKey = keyof typeof en;
@@ -647,6 +659,18 @@ const it: Record<MessageKey, string> = {
   'level.lantern': 'Lanterna',
   'level.winterfox': 'Volpe nella neve',
   'level.chalet': 'Baita innevata',
+  // Stage 19 — Notte nel bosco (#129)
+  'stage.nightwood': 'Notte nel bosco',
+  'level.firefly': 'Lucciola',
+  'level.bat': 'Pipistrello',
+  'level.moth': 'Falena',
+  'level.raccoon': 'Procione',
+  'level.campfire': 'Fuoco da campo',
+  'level.tent': 'Tenda',
+  'level.wolf': 'Lupo che ulula',
+  'level.dormouse': 'Ghiro',
+  'level.eagleowl': 'Gufo reale',
+  'level.treehouse': 'Casa sull\'albero',
 };
 
 export const DICTIONARIES = { en, it } as const;
