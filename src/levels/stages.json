@@ -94,5 +94,17 @@
   "key": "river",
   "color": 4,
   "complete": true
+ },
+ {
+  "id": 17,
+  "key": "autumn",
+  "color": 3,
+  "complete": true
+ },
+ {
+  "id": 18,
+  "key": "winter",
+  "color": 5,
+  "complete": true
  }
 ]

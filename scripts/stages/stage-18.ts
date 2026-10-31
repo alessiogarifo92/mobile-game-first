@@ -66,7 +66,7 @@ const stage: StageSpec = {
       '..PPPKPPP..',
       'BBBBBBBBBBB',
     ] },
-    { name: 'robin', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { ice: 5, stone: 5, brown: 4 }, winRate: [0.66, 0.72], seed: 18148, image: [
+    { name: 'bullfinch', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { ice: 5, stone: 5, brown: 4 }, winRate: [0.66, 0.72], seed: 18148, image: [
       '...KKK......',
       '..KKKKK.....',
       '.YKBKKKK....',
