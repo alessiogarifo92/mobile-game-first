@@ -119,7 +119,7 @@ const stage: StageSpec = {
       'GGGGGGOOROOG',
       'GGGGGOOROOOO',
     ] },
-    { name: 'eruption', columns: 4, ammoChunk: 20, slots: 2, beltCapacity: 2, special: { ice: 8, hidden: 6, stone: 9, brown: 4 }, winRate: [0.31, 0.37], seed: 20333, image: [
+    { name: 'eruption', columns: 4, ammoChunk: 20, slots: 2, beltCapacity: 2, special: { ice: 8, hidden: 6, stone: 9, brown: 4 }, winRate: [0.32, 0.34], seed: 20333, image: [
       '....R..Y..R...',
       '..R..OYO...R..',
       '.....ROYR.....',
