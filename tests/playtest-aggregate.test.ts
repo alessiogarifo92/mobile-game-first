@@ -54,7 +54,7 @@ describe('aggregate', () => {
       { levelId: 6, result: 'abbandonato', attempts: [] },
     ], { endReason: 'soglia-abbandono', session: { feedback: { fun: 2, wouldReturn: 1, stoppedBecause: 'troppo difficile' } } });
     const b = form('T01-A02', [
-      { levelId: 5, result: 'vinto', attempts: [attempt('vinto', { refusals: 2 })],
+      { levelId: 5, result: 'vinto', attempts: [attempt('vinto', { refusals: 2, ticks: 300, durationMs: 4000 })],
         feedback: { understood: 4, perceivedDifficulty: 4, mood: 'divertito', notUnderstood: '', freeText: '' } },
       { levelId: 4, result: 'vinto', attempts: [attempt('ingorgo'), attempt('vinto')] },
     ]);
@@ -63,12 +63,12 @@ describe('aggregate', () => {
     const l5 = agg.levels[1]!;
     expect(l5).toMatchObject({
       agents: 2, wins: 1, firstTryWins: 1, skipped: 1, attemptsMean: 1.5, jams: 1, refusals: 2, extraSlotUses: 1,
-      missingPixelsOnLoss: [3, 1], perceivedDifficulty: 4.5, understood: 3, wouldNotContinue: 1, anomaly: 'piu-duro-del-previsto',
+      missingPixelsOnLoss: [3, 1], winTicks: 300, winDurationMs: 4000, totalTicks: 300, perceivedDifficulty: 4.5, understood: 3, wouldNotContinue: 1, anomaly: 'piu-duro-del-previsto',
     });
     expect(l5.moods).toEqual({ divertito: 1, neutro: 0, annoiato: 0, frustrato: 1 });
     expect(l5.notUnderstood).toEqual([{ sessionId: 'T01-A01', text: 'perché si blocca' }]);
     const l4 = agg.levels[0]!;
-    expect(l4).toMatchObject({ firstTryWins: 0, wins: 1, perceivedDifficulty: null, understood: null, randomWin: null, anomaly: null });
+    expect(l4).toMatchObject({ winTicks: null, winDurationMs: null, firstTryWins: 0, wins: 1, perceivedDifficulty: null, understood: null, randomWin: null, anomaly: null });
     expect(agg.sessions[0]).toMatchObject({ levelsPlayed: 1, wins: 0, skipped: 1, lastLevel: 5, fun: 2, wouldReturn: 1, stoppedBecause: 'troppo difficile' });
     expect(agg.sessions[1]).toMatchObject({ levelsPlayed: 2, wins: 2, lastLevel: 4, fun: null, wouldReturn: null, stoppedBecause: '' });
   });

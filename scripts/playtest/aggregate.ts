@@ -12,6 +12,8 @@ export interface FormAttempt {
   extraSlotUsed: boolean;
   painted: number;
   targets: number;
+  durationMs?: number;
+  ticks?: number;
 }
 
 export interface FormLevel {
@@ -64,6 +66,10 @@ export interface LevelStats {
   refusals: number;
   extraSlotUses: number;
   missingPixelsOnLoss: number[];
+  /** Game time (`ticks`, independent of the agent) and wall time of the winning attempts: rule 7 of #88. */
+  winTicks: number | null;
+  winDurationMs: number | null;
+  totalTicks: number;
   perceivedDifficulty: number | null;
   understood: number | null;
   moods: Record<Mood, number>;
@@ -122,6 +128,9 @@ function levelStats(levelId: number, entries: { form: Form; level: FormLevel }[]
     jams: attempts.reduce((a, t) => a + t.jams, 0),
     refusals: attempts.reduce((a, t) => a + t.refusals, 0),
     extraSlotUses: attempts.filter((t) => t.extraSlotUsed).length,
+    winTicks: mean(attempts.filter((t) => t.outcome === 'vinto' && t.ticks !== undefined).map((t) => t.ticks!)),
+    winDurationMs: mean(attempts.filter((t) => t.outcome === 'vinto' && t.durationMs !== undefined).map((t) => t.durationMs!)),
+    totalTicks: attempts.reduce((a, t) => a + (t.ticks ?? 0), 0),
     missingPixelsOnLoss: attempts.filter((t) => t.outcome !== 'vinto').map((t) => t.targets - t.painted),
     perceivedDifficulty: perceived,
     understood: mean(feedback.map((f) => f.understood)),
