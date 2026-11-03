@@ -158,7 +158,7 @@ export function aggregate(forms: Form[], randomWin: Record<number, number> = {})
       levelsPlayed: played.length,
       wins: played.filter((l) => l.result === 'vinto').length,
       skipped: played.filter((l) => l.result === 'saltato').length,
-      lastLevel: played.length ? played[played.length - 1].levelId : null,
+      lastLevel: played.at(-1)?.levelId ?? null,
       fun: fb?.fun ?? null,
       wouldReturn: fb?.wouldReturn ?? null,
       stoppedBecause: fb?.stoppedBecause ?? '',
