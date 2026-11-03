@@ -1,16 +1,20 @@
 /**
  * Difficulty curve of the shipped levels (tickets #29, #75): per-level metrics as JSON and a chart.
  * `randomWin` is levelWinRate: random playouts with the game's own rules, so `belt` and `slots` weigh in.
- * Ends with the curve per universe and the curve rule violations (#88).
+ * Ends with a table per stage, the novelties every 20 levels, a stone ablation (#100), the curve per universe and
+ * the curve rule violations (#88). In the cloud container set CHROMIUM_PATH=/opt/pw-browsers/chromium.
  *   npx tsx scripts/difficulty-report.ts
  */
 import { writeFileSync } from 'node:fs';
 import { chromium } from '@playwright/test';
 import levelsJson from '../src/levels/levels.json' with { type: 'json' };
 import { parseLevel, type LevelDef } from '../src/core/level';
-import { levelWinRate, solve } from '../src/core/solver';
+import { levelWinRate, randomWinRate, solve } from '../src/core/solver';
+import { createRng } from '../src/core/rng';
 import { CURVE, checkCurve, curveLevel } from '../src/core/curve';
 import { universeOfStage } from '../src/core/universes';
+import { BROWN } from '../src/core/colors';
+import { formatSpan, novelties, noveltyGaps, summarizeStages } from '../src/core/curveReport';
 import { assignIds } from '../src/core/stages';
 import { STAGE_SPECS } from './stages';
 
@@ -29,6 +33,8 @@ const rows = (levelsJson as LevelDef[]).map((def) => {
     belt: l.beltCapacity,
     ice: l.ice.reduce((a, b) => a + b, 0),
     hidden: l.hidden.filter(Boolean).length,
+    brown: l.targets.filter((t) => t === BROWN).length,
+    stone: l.stone.filter(Boolean).length,
     randomWin: Number(levelWinRate(l).toFixed(3)),
     solutionMoves: solve(l).moves.length,
   };
@@ -65,25 +71,41 @@ const html = `<style>
   <p>Ogni punto è un livello (1–${rows.length}), fasce alterne = stage; rombo = boss.</p>
   ${panel('Vittorie di un giocatore casuale (più basso = più difficile)', (r) => r.randomWin, 1, [0, 0.25, 0.5, 0.75, 1], (v) => `${Math.round(v * 100)}%`)}
   ${panel('Secchielli per livello (decisioni)', (r) => r.shooters, 30, [0, 10, 20, 30], String)}`;
-const browser = await chromium.launch();
+// CHROMIUM_PATH: the cloud container's preinstalled Chromium (/opt/pw-browsers/chromium), newer than the pinned Playwright.
+const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 const page = await browser.newPage({ viewport: { width: 1140, height: 620 } });
 await page.setContent(html);
 await page.screenshot({ path: `${dir}curva-difficolta.png`, fullPage: true });
 await browser.close();
 
-for (const { stage: s } of stageSpans) {
-  const st = rows.filter((r) => r.stage === s);
-  const avg = (f: (r: (typeof rows)[number]) => number) => (st.reduce((a, r) => a + f(r), 0) / st.length).toFixed(2);
-  const span = (f: (r: (typeof rows)[number]) => number) => {
-    const [lo, hi] = [Math.min(...st.map(f)), Math.max(...st.map(f))];
-    return lo === hi ? `${lo}` : `${lo}–${hi}`;
-  };
-  console.log(`| ${s} | ${avg((r) => r.randomWin)} | ${Math.min(...st.map((r) => r.randomWin)).toFixed(2)} | ${span((r) => r.belt)} | ${span((r) => r.slots)} | ${avg((r) => r.shooters)} | ${avg((r) => r.ice)} | ${avg((r) => r.hidden)} | ${st.find((r) => r.boss)?.randomWin ?? '-'} |`);
-}
-
 // Curve per universe (#88): mean of each stage against the universe targets, then every rule violation.
 const specs = assignIds(STAGE_SPECS);
 const curve = (levelsJson as LevelDef[]).map((def, i) => curveLevel(parseLevel(def), rows[i]!.randomWin, !!specs[i]!.curve?.easyBoss));
+const pct = (v: number) => `${Math.round(v * 100)}%`;
+const nameOf = (id: number) => rows.find((r) => r.id === id)!.name;
+console.log('| Stage | Media | ≥ 95% | Più duro | Boss | Nastro | Slot | Secondari/marrone (media) | Sotto 30% | Meccaniche (livelli) |');
+for (const s of summarizeStages(curve)) {
+  const boss = s.boss ? `${s.boss.id} ${nameOf(s.boss.id)} ${pct(s.boss.winRate)}` : '-';
+  const mech = s.mechanics.map((m) => `${m.name} ${m.levels}`).join(', ') || '-';
+  console.log(`| ${s.stage} | ${pct(s.mean)} | ${s.veryEasy} | ${s.hardest.id} ${nameOf(s.hardest.id)} ${pct(s.hardest.winRate)} | ${boss} | ${formatSpan(s.belt)} | ${formatSpan(s.slots)} | ${pct(s.meanSecondary)} | ${s.lowSecondary} | ${mech} |`);
+}
+const lastId = Math.max(...rows.map((r) => r.id));
+console.log(`\nnovelties: ${novelties(curve).map((n) => `${n.id} ${n.name}`).join(' · ')}`);
+// Levels 1–20 teach the base game (mixing); the first mechanic arrives at 31, so windows start at 21.
+const gaps = noveltyGaps(curve, 21, lastId);
+console.log(`20-level windows with nothing new (from 21): ${gaps.map(([a, b]) => `${a}–${b}`).join(' ') || 'none'}`);
+
+// Stone, measured: the same level without its stones (they sit on empty cells, so the inventory stays valid).
+// 1000 playouts on both sides with the same seed, so a difference of a few points is not noise (#100 report).
+const ABLATION_PLAYOUTS = 1000;
+const stoned = (levelsJson as LevelDef[]).map(parseLevel).filter((l) => l.stone.some(Boolean));
+if (stoned.length) {
+  const win = (l: (typeof stoned)[number]) => randomWinRate(l, ABLATION_PLAYOUTS, createRng(l.id));
+  const deltas = stoned.map((l) => ({ id: l.id, d: win({ ...l, stone: l.stone.map(() => false) }) - win(l) }));
+  const ds = deltas.map((x) => x.d);
+  console.log(`stone: ${stoned.length} levels, removing the stones adds ${pct(ds.reduce((a, b) => a + b, 0) / ds.length)} wins on average ` +
+    `(min ${pct(Math.min(...ds))}, max ${pct(Math.max(...ds))}); easier with stones: ${deltas.filter((x) => x.d < 0).map((x) => x.id).join(' ') || 'none'}`);
+}
 for (let u = 1; u <= universeOfStage(Math.max(...rows.map((r) => r.stage))); u++) {
   const stages = [...new Set(rows.filter((r) => universeOfStage(r.stage) === u).map((r) => r.stage))];
   const means = stages.map((s) => { const st = rows.filter((r) => r.stage === s); return st.reduce((a, r) => a + r.randomWin, 0) / st.length; });
