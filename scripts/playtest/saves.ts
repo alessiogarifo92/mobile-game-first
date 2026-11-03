@@ -99,3 +99,15 @@ export function planStep(
   if (next === undefined) return { kind: 'done', skipped: null };
   return next === last + 1 ? { kind: 'none' } : { kind: 'load', levelId: next, skipped: null };
 }
+
+/**
+ * The win panel's "next" opens the level after the one just won, even when the plan jumps (the end of a pack) or
+ * ends there: that level is off the plan, so the harness drops it and loads the next pack's save (#69, T01-A04).
+ */
+export function offPlanStep(plan: readonly number[], playing: number): PlanStep {
+  if (plan.includes(playing)) return { kind: 'none' };
+  const i = plan.indexOf(playing - 1);
+  if (i < 0) return { kind: 'none' };
+  const next = plan[i + 1];
+  return next === undefined ? { kind: 'done', skipped: null } : { kind: 'load', levelId: next, skipped: null };
+}

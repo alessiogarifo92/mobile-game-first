@@ -5,7 +5,7 @@ import { parseLevel, type Level, type LevelDef } from '../src/core/level';
 import { tipOnLevelStart } from '../src/core/onboarding';
 import { sanitize, type LevelRef } from '../src/core/progress';
 import { SchemaError, validate, validateDef, type Schema } from '../scripts/playtest/jsonSchema';
-import { SaveError, packLevels, planLevels, planStep, saveFor, saveStarts, startSaveOf, tipsMetBefore } from '../scripts/playtest/saves';
+import { SaveError, offPlanStep, packLevels, planLevels, planStep, saveFor, saveStarts, startSaveOf, tipsMetBefore } from '../scripts/playtest/saves';
 import { SCHEMA_VERSION, SessionRecorder, StuckWatch, TOP_BAR, onTarget, type MixSnapshot, type SessionHeader } from '../scripts/playtest/telemetry';
 import { MAX_AGENTS, TurnError, parseTurnConfig, parseViewport, sessionId } from '../scripts/playtest/turn';
 
@@ -322,6 +322,22 @@ describe('saves and plans', () => {
     // Universe 2 listed before universe 1: nothing before its first level opens it.
     const broken: Level[] = [{ ...levels[0]!, stage: 11 }, { ...levels[1]!, stage: 1 }];
     expect(() => saveFor(broken, 1, 'en')).toThrow(/not reachable/);
+  });
+
+  describe('offPlanStep', () => {
+    const plan = [99, 100, 101, 141, 142];
+    it('leaves planned levels alone', () => {
+      expect(offPlanStep(plan, 101)).toEqual({ kind: 'none' });
+    });
+    it('sends the level after a pack back onto the next pack', () => {
+      expect(offPlanStep(plan, 102)).toEqual({ kind: 'load', levelId: 141, skipped: null });
+    });
+    it('ends the plan when the last planned level is passed', () => {
+      expect(offPlanStep(plan, 143)).toEqual({ kind: 'done', skipped: null });
+    });
+    it('ignores a level that does not follow a planned one', () => {
+      expect(offPlanStep(plan, 120)).toEqual({ kind: 'none' });
+    });
   });
 
   describe('planStep', () => {
