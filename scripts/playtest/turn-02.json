@@ -1,0 +1,11 @@
+{
+  "turn": 2,
+  "tag": "playtest-u2-add72d4",
+  "variant": "normale",
+  "agents": [
+    { "agentId": "A05", "profileId": "P05", "viewport": "412x915", "language": "it", "packs": ["U1-FINE", "S11", "S14"], "maxAttempts": 4 },
+    { "agentId": "A06", "profileId": "P06", "viewport": "412x915", "language": "en", "packs": ["S15", "S16"], "maxAttempts": 5 },
+    { "agentId": "A07", "profileId": "P07", "viewport": "412x915", "language": "it", "packs": ["S12", "S18"], "maxAttempts": 5 },
+    { "agentId": "A08", "profileId": "P08", "viewport": "360x640", "language": "en", "packs": ["S17", "S19"], "maxAttempts": 5 }
+  ]
+}

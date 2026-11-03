@@ -1,0 +1,333 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "T01-A02",
+  "agent": {
+    "agentId": "A02",
+    "profileId": "P02"
+  },
+  "turn": 1,
+  "build": {
+    "commit": "add72d4d5ae3",
+    "version": "0.5.0",
+    "tag": "playtest-u2-add72d4",
+    "variant": "normale"
+  },
+  "device": {
+    "viewport": "412x915",
+    "language": "en"
+  },
+  "startSave": {
+    "unlocked": 95,
+    "completedThrough": 94,
+    "seenTips": [
+      "guide",
+      "blocked",
+      "slots",
+      "belt",
+      "mixing",
+      "ice",
+      "hidden"
+    ]
+  },
+  "plan": {
+    "packs": [
+      "U1-FINE",
+      "S11",
+      "S15"
+    ],
+    "levelIds": [
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      141,
+      142,
+      143,
+      144,
+      145,
+      146,
+      147,
+      148,
+      149,
+      150
+    ]
+  },
+  "startedAt": "2026-11-03T12:32:07.793Z",
+  "endedAt": "2026-11-03T12:40:58.627Z",
+  "endReason": "soglia-abbandono",
+  "levels": [
+    {
+      "levelId": 95,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 83740,
+          "timeToFirstTapMs": 10383,
+          "ticks": 787,
+          "taps": 11,
+          "offTargetTaps": 0,
+          "launches": 11,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 85,
+          "targets": 85,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0002.png",
+            "0003.png",
+            "0004.png",
+            "0005.png",
+            "0006.png",
+            "0007.png",
+            "0008.png",
+            "0009.png",
+            "0010.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "I did not see where green buckets would come from; the green row filled itself and I could not tell how.",
+        "wouldContinue": true,
+        "freeText": "Cute mushroom, solved in one go, about 2 minutes. Nice that the ? tiles opened by themselves."
+      }
+    },
+    {
+      "levelId": 96,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 112712,
+          "timeToFirstTapMs": 8533,
+          "ticks": 1208,
+          "taps": 16,
+          "offTargetTaps": 0,
+          "launches": 16,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 102,
+          "targets": 102,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0013.png",
+            "0014.png",
+            "0015.png",
+            "0016.png",
+            "0017.png",
+            "0018.png",
+            "0019.png",
+            "0020.png",
+            "0021.png",
+            "0022.png",
+            "0023.png",
+            "0024.png",
+            "0025.png",
+            "0026.png",
+            "0027.png",
+            "0028.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 5,
+        "perceivedDifficulty": 2,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "",
+        "wouldContinue": true,
+        "freeText": "Mostly tapping blue buckets over and over, a bit repetitive but relaxing. Won first try."
+      }
+    },
+    {
+      "levelId": 97,
+      "result": "abbandonato",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "ingorgo",
+          "durationMs": 107949,
+          "timeToFirstTapMs": 8412,
+          "ticks": 1039,
+          "taps": 14,
+          "offTargetTaps": 0,
+          "launches": 12,
+          "refusals": 0,
+          "jams": 2,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 65,
+          "targets": 82,
+          "remaining": {
+            "ice": 1,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0031.png",
+            "0032.png",
+            "0033.png",
+            "0034.png",
+            "0035.png",
+            "0036.png",
+            "0037.png",
+            "0038.png",
+            "0039.png",
+            "0040.png",
+            "0041.png",
+            "0042.png",
+            "0043.png",
+            "0044.png",
+            "0045.png"
+          ]
+        },
+        {
+          "attempt": 2,
+          "outcome": "uscita",
+          "durationMs": 143915,
+          "timeToFirstTapMs": 12082,
+          "ticks": 1411,
+          "taps": 15,
+          "offTargetTaps": 0,
+          "launches": 15,
+          "refusals": 0,
+          "jams": 1,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 1,
+          "beltCapacity": 2,
+          "painted": 76,
+          "targets": 82,
+          "remaining": {
+            "ice": 1,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0046.png",
+            "0047.png",
+            "0048.png",
+            "0049.png",
+            "0050.png",
+            "0051.png",
+            "0052.png",
+            "0053.png",
+            "0054.png",
+            "0055.png",
+            "0056.png",
+            "0057.png",
+            "0058.png",
+            "0059.png",
+            "0060.png",
+            "0061.png",
+            "0062.png",
+            "0063.png",
+            "0064.png",
+            "0065.png",
+            "0066.png",
+            "0067.png",
+            "0068.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 4,
+        "mood": "frustrato",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 2,
+        "notUnderstood": "I could not predict which buckets would leave a little paint behind and fill my two waiting slots. Buckets with 1 or 2 shots left just sit there and block everything, and I did not know in advance how many pixels a bucket would hit. Green pixels needing both blue and yellow also made me waste paint on half-painted tiles.",
+        "wouldContinue": false,
+        "freeText": "Three jams in a row on the dragon egg, on my commute. Each time the waiting slots were clogged by leftover scraps and a bucket had nowhere to go. It felt like my fault only a little, since I could not see the paint amounts working out. I am done for now."
+      }
+    }
+  ],
+  "session": {
+    "telemetry": {
+      "durationMs": 530834,
+      "actions": 60,
+      "screens": {
+        "menu": 2,
+        "play": 4
+      },
+      "languageChanges": 0,
+      "uncaughtErrors": [],
+      "stuckScreens": []
+    },
+    "feedback": {
+      "fun": 3,
+      "wouldReturn": 3,
+      "stoppedBecause": "Three jams in a row on level 97 (Dragon egg); waiting slots clogged with leftover scraps of paint.",
+      "bestMoment": "Finishing the mushroom house on level 95 and seeing the picture appear.",
+      "worstMoment": "Level 97, the third jam when a bucket with nowhere to wait ended my try.",
+      "freeText": "Easy levels are relaxing for a 2-minute ride, but leftover paint in waiting slots feels unpredictable and punishing when mixing colours."
+    }
+  },
+  "bugs": []
+}
