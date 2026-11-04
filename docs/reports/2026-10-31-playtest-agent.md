@@ -181,7 +181,7 @@ Figli dell'epic #66. Li apre il manager.
 |---|---|---|---|
 | Mappa: in inglese a 360×640 l'intestazione dello stage 19 si attacca al contatore ("Night in the woods0/10") | `bug` | `sev: bassa` | B3 (A08, A14, riprodotto) |
 | Pannello di vittoria: un tocco sugli slot appena arriva la vittoria lo chiude e porta alla mappa (bottone "Mappa" sopra gli slot, nessun ritardo prima che i bottoni rispondano) | `bug` | `sev: media` | B4 (A03, A14, riprodotto) |
-| Curva universo 2: ammorbidire i picchi 179 e 184 (livelli non boss con difficoltà percepita 4 e ≥ 3 tentativi) e il boss 200 senza "+1 slot" (0 vittorie su 2 agent che non lo usano o non lo hanno più) | `feature` | — | §10 (3 agent su 179 e 184, 4 sul 200) |
+| Curva universo 2: ammorbidire i picchi 179 e 184 (livelli non boss con difficoltà percepita 4 e ≥ 3 tentativi) e il boss 200 (2 abbandoni su 4, nessuna vittoria senza "+1 slot") | `feature` | — | §10 (3 agent su 179 e 184, 4 sul 200) |
 
 Il boss 200 non ha un ticket proprio: 2 abbandoni su 4 sono ancora un'ipotesi, e finisce nel ticket di curva. Va aggiunto come prova a #145 (ingorghi da avanzi) e a #151 ("+1 slot" una volta per tentativo), insieme alla dipendenza da "+1 slot" del §10.
 
