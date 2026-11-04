@@ -8,6 +8,7 @@ Data: 31 ottobre – 4 novembre 2026 (turni T03–T07 di #156: 4 novembre) · Ep
 - **Stage 20: nessun muro confermato.** 81% di vittorie al 1° tentativo, difficoltà percepita 3,0. Due abbandoni, visti ciascuno da un solo agent (ipotesi):
   - **194:** P16, il prudente che non usa mai "+1 slot", dopo 3 ingorghi;
   - **boss 200:** P14, dopo 3 tentativi persi. Gli altri due agent lo vincono al 1° tentativo, ma entrambi passando da "+1 slot".
+- **Boss 200 senza "+1 slot" (T08, P16 su richiesta):** 3 ingorghi su 3 tentativi, abbandono, difficoltà 5, divertimento 2. Sul boss 200 ci sono quindi **2 vittorie su 4, entrambe con "+1 slot", e 2 abbandoni**: 0 vittorie per chi non lo usa. Sono 2 agent, quindi resta un'ipotesi (§7 del protocollo), ma è il segnale più forte dello stage.
 - **Muri 170, 179, 184 (3 agent ciascuno):**
   - **170 escluso:** 2 agent nuovi su 2 lo vincono al 1° tentativo;
   - **179 e 184 confermati come picchi fuori dai boss:** 179 con 0 vittorie al 1° tentativo su 3, un abbandono e difficoltà 4,0; 184 con 2 agent su 3 a ≥ 3 tentativi e difficoltà 4,0. Proposta: un ticket di curva (§7).
@@ -180,9 +181,9 @@ Figli dell'epic #66. Li apre il manager.
 |---|---|---|---|
 | Mappa: in inglese a 360×640 l'intestazione dello stage 19 si attacca al contatore ("Night in the woods0/10") | `bug` | `sev: bassa` | B3 (A08, A14, riprodotto) |
 | Pannello di vittoria: un tocco sugli slot appena arriva la vittoria lo chiude e porta alla mappa (bottone "Mappa" sopra gli slot, nessun ritardo prima che i bottoni rispondano) | `bug` | `sev: media` | B4 (A03, A14, riprodotto) |
-| Curva universo 2: ammorbidire i picchi 179 e 184 (livelli non boss con difficoltà percepita 4 e ≥ 3 tentativi) | `feature` | — | §10 (3 agent per livello) |
+| Curva universo 2: ammorbidire i picchi 179 e 184 (livelli non boss con difficoltà percepita 4 e ≥ 3 tentativi) e il boss 200 senza "+1 slot" (0 vittorie su 2 agent che non lo usano o non lo hanno più) | `feature` | — | §10 (3 agent su 179 e 184, 4 sul 200) |
 
-Il boss 200 non ha un ticket proprio: l'abbandono di A14 è un dato di un solo agent. Va aggiunto come prova a #145 (ingorghi da avanzi) e a #151 ("+1 slot" una volta per tentativo), insieme alla dipendenza da "+1 slot" del §10.
+Il boss 200 non ha un ticket proprio: 2 abbandoni su 4 sono ancora un'ipotesi, e finisce nel ticket di curva. Va aggiunto come prova a #145 (ingorghi da avanzi) e a #151 ("+1 slot" una volta per tentativo), insieme alla dipendenza da "+1 slot" del §10.
 
 ## 8. Limiti
 - **Limiti dell'epic #66 e del protocollo §1:**
@@ -223,6 +224,7 @@ Turni da 1–2 agent, modello sonnet, build `233a56c` (stesso codice di gioco di
 | T05 | A15 · P15 | `R194-200` (lasciati da A16, regola 2) | piano finito |
 | T06 | A12 · P12 | `R170-170`, `R179-179`, `R184-184` | 3/3 |
 | T07 | A13 · P13 | come T06 | 3/3 |
+| T08 | A16 · P16 | `R200-200` (richiesta dell'utente dopo l'apertura della PR: il boss senza "+1 slot") | abbandono dopo 3 ingorghi |
 
 ### Stage 20 e 180, per livello
 Notazione dei tentativi: v = vinto, i = ingorgo, u = uscita; "+" = "+1 slot" usato nel tentativo. "Casuale" = `levelWinRate`.
@@ -239,7 +241,7 @@ Notazione dei tentativi: v = vinto, i = ingorgo, u = uscita; "+" = "+1 slot" usa
 | 197 | 3 | 3/3 | 2,0 | 56% | tutti al 1°, nessun ingorgo |
 | 198 | 3 | 2/3 | 3,3 | 65% | P14 i+ v+, "frustrato" |
 | 199 | 3 | 3/3 | 3,3 | 51% | tutti al 1° |
-| **200 boss** | 3 | 2/3 | **4,0** | 34% | P11 v+ · P15 v+ · **P14 i+ i+ u, abbandono** |
+| **200 boss** | 4 | 2/4 | **4,25** | 34% | P11 v+ · P15 v+ · **P14 i+ i+ u, abbandono** · **P16 (T08) i i u, abbandono** |
 
 - **Stage 20 nel complesso:**
   - 81% di vittorie al 1° tentativo (25 su 31 sessioni·livello);
@@ -250,7 +252,8 @@ Notazione dei tentativi: v = vinto, i = ingorgo, u = uscita; "+" = "+1 slot" usa
   - Chi l'ha vinto (P11, P15) è passato da "+1 slot";
   - chi non lo usa mai (P16) non ci è arrivato;
   - P14 l'ha usato e ha abbandonato lo stesso.
-  Con 1 abbandono su 3 è un'ipotesi di muro, non un finding (§7 del protocollo).
+  - P16, che non lo usa mai, l'ha giocato in T08: 3 ingorghi su 3, abbandono. Scrive: "il giallo avanza quasi tutto e va negli slot … con due slot soltanto il margine di errore è nullo".
+  Con 2 abbandoni su 4 resta un'ipotesi di muro, non un finding (§7 del protocollo). Ma nessun agent l'ha vinto senza "+1 slot".
 - **Dipendenza da "+1 slot":** 18 vittorie su 32 tra 180 e 191–200 hanno usato "+1 slot" nel tentativo vinto. Il solo profilo che non lo usa (P16) vince 180–193 ma abbandona al 194. Senza "+1 slot" la fine dell'universo 2 è più dura di quanto dicano le vittorie al 1° tentativo. Va riverificato con persone vere in #42.
 - **Cause scritte nelle schede:** ancora gli avanzi negli slot (F1) e i colori che mancano ai pixel marroni (F5).
   - P16 194: "non capisco come prevedere dove finirà la vernice avanzata";
@@ -268,5 +271,5 @@ Proposta (§7): un ticket di curva su 179 e 184. Si possono rendere più facili 
 
 ### Esito per #100
 - **Stage 20: nessun muro segnalato da ≥ 3 agent.** I due abbandoni (194 P16, 200 P14) sono ipotesi da un agent ciascuno.
-- **Riserva:** il boss 200 è il livello percepito più duro dello stage e chi lo vince passa da "+1 slot". Se #100 vuole "nessun muro" anche per chi non usa "+1 slot", serve una prova di P16 sul boss 200, oppure il giudizio di #42.
+- **Riserva sul boss 200:** è il livello percepito più duro dello stage (4,25). Ha 2 vittorie su 4, tutte e due con "+1 slot". P16, che non usa mai "+1 slot", abbandona dopo 3 ingorghi (T08). **Per chi non usa "+1 slot" il boss 200 si comporta da muro** (2 agent: ipotesi). Proposta: includerlo nel ticket di curva insieme a 179 e 184, o decidere con #42.
 - **Muri dell'universo:** 170 escluso; 179 e 184 sono picchi da ammorbidire, non muri, perché tutti e 3 gli agent nuovi li vincono.

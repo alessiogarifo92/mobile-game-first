@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "T08-A16",
+  "agent": {
+    "agentId": "A16",
+    "profileId": "P16"
+  },
+  "turn": 8,
+  "build": {
+    "commit": "5b89420dba45",
+    "version": "0.5.0",
+    "tag": "playtest-u2-233a56c",
+    "variant": "normale"
+  },
+  "device": {
+    "viewport": "360x640",
+    "language": "it"
+  },
+  "startSave": {
+    "unlocked": 200,
+    "completedThrough": 199,
+    "seenTips": [
+      "guide",
+      "blocked",
+      "slots",
+      "belt",
+      "mixing",
+      "ice",
+      "hidden",
+      "brown",
+      "stone"
+    ]
+  },
+  "plan": {
+    "packs": [
+      "R200-200"
+    ],
+    "levelIds": [
+      200
+    ]
+  },
+  "startedAt": "2026-11-04T12:55:51.359Z",
+  "endedAt": "2026-11-04T12:59:18.497Z",
+  "endReason": "soglia-abbandono",
+  "levels": [
+    {
+      "levelId": 200,
+      "result": "abbandonato",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "ingorgo",
+          "durationMs": 37734,
+          "timeToFirstTapMs": 5871,
+          "ticks": 389,
+          "taps": 7,
+          "offTargetTaps": 0,
+          "launches": 6,
+          "refusals": 0,
+          "jams": 1,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 43,
+          "targets": 121,
+          "remaining": {
+            "ice": 5,
+            "hidden": 3,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 23,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0003.png",
+            "0004.png",
+            "0005.png",
+            "0006.png",
+            "0007.png",
+            "0008.png",
+            "0009.png"
+          ]
+        },
+        {
+          "attempt": 2,
+          "outcome": "ingorgo",
+          "durationMs": 61660,
+          "timeToFirstTapMs": 6778,
+          "ticks": 655,
+          "taps": 8,
+          "offTargetTaps": 0,
+          "launches": 7,
+          "refusals": 0,
+          "jams": 1,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 43,
+          "targets": 121,
+          "remaining": {
+            "ice": 5,
+            "hidden": 3,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 27,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0010.png",
+            "0011.png",
+            "0012.png",
+            "0013.png",
+            "0014.png",
+            "0015.png",
+            "0016.png",
+            "0017.png",
+            "0018.png",
+            "0019.png",
+            "0020.png",
+            "0021.png",
+            "0022.png"
+          ]
+        },
+        {
+          "attempt": 3,
+          "outcome": "uscita",
+          "durationMs": 83851,
+          "timeToFirstTapMs": 2194,
+          "ticks": 848,
+          "taps": 10,
+          "offTargetTaps": 0,
+          "launches": 10,
+          "refusals": 0,
+          "jams": 1,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 84,
+          "targets": 121,
+          "remaining": {
+            "ice": 3,
+            "hidden": 1,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 34,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0023.png",
+            "0024.png",
+            "0025.png",
+            "0026.png",
+            "0027.png",
+            "0028.png",
+            "0029.png",
+            "0030.png",
+            "0031.png",
+            "0032.png",
+            "0033.png",
+            "0034.png",
+            "0035.png",
+            "0036.png",
+            "0037.png",
+            "0038.png",
+            "0039.png",
+            "0040.png",
+            "0041.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 5,
+        "mood": "frustrato",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 2,
+        "notUnderstood": "Non capisco in che ordine mandare i secchielli: il giallo avanza quasi tutto e va negli slot, poi gli slot sono pieni e basta un altro avanzo per l'ingorgo. Non vedo come evitarlo senza 'prova e sbaglia'. Anche i pixel con il punto interrogativo e le pietre non so come sbloccarli.",
+        "wouldContinue": false,
+        "freeText": "Tre tentativi, tre ingorghi. Il viola e il verde si fanno bene all'inizio, ma poi il giallo non trova pixel liberi e finisce negli slot. Con due slot soltanto il margine di errore e' nullo. Sono prudente e non uso +1 slot, quindi mi fermo."
+      }
+    }
+  ],
+  "session": {
+    "telemetry": {
+      "durationMs": 207138,
+      "actions": 26,
+      "screens": {
+        "menu": 1,
+        "play": 3
+      },
+      "languageChanges": 0,
+      "uncaughtErrors": [],
+      "stuckScreens": []
+    },
+    "feedback": {
+      "fun": 2,
+      "wouldReturn": 2,
+      "stoppedBecause": "Ho perso tre volte di fila per ingorgo sul boss e non voglio usare +1 slot: preferisco fermarmi che andare avanti a tentoni.",
+      "bestMoment": "Quando il viola e il verde riempivano il fondo del disegno al primo colpo.",
+      "worstMoment": "Il terzo ingorgo, quando avevo gia' quasi finito il disegno ma gli slot erano pieni.",
+      "freeText": "Il boss e' molto piu' duro dei livelli prima: due soli slot e secchielli che lasciano avanzi enormi di giallo. Dopo il primo ingorgo non ho capito cosa cambiare."
+    }
+  },
+  "bugs": []
+}
