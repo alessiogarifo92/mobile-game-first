@@ -27,7 +27,7 @@ npm run playtest -- --config scripts/playtest/turn.example.json
   `Tnn-Ann.draft.json`, written after every action with `endReason: errore-harness`).
 
 The config lists the agents of a turn, with the profile's language, viewport and attempt limit (protocol §4) and the
-packs (§8): `U1-ONB` (1–10), `U1-FINE` (95–100), `Snn` (the levels of stage nn). `variant` is `normale` or
+packs (§8): `U1-ONB` (1–10), `U1-FINE` (95–100), `Snn` (the levels of stage nn), `R<from>-<to>` (a range, to finish a pack a session left halfway without replaying the levels already seen). `variant` is `normale` or
 `senza-copertura` (universe 3 A/B), `tag` the build tag.
 
 ## What an agent can do
@@ -61,3 +61,9 @@ uses 80 actions (closed as `budget`, level restarted), or the session reaches 1,
 - `tests/playtest.test.ts`: the pure part (telemetry, saves and plans, turn config, schema validator); the checks
   against the schema of #67 run once `docs/playtest/` is in the repo.
 - `e2e/playtest-harness.spec.ts`: smoke test, the harness plays level 1 to a win and writes a valid form.
+
+## Aggregating the forms (#69)
+
+`npx tsx scripts/playtest/aggregate-cli.ts --out <file.json> <dir>...` reads every valid `Tnn-Ann.json` (and the
+`Tnn-Ann.parteN.json` of a session split by an interruption), adds the random-play win rate of each level and writes
+per level, per session and the bug list (`aggregate.ts`, protocol §9).
