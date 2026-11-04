@@ -5,7 +5,7 @@ import type { LevelDef } from '../src/core/level';
 import type { Move } from '../src/core/solver';
 import { universeOfStage } from '../src/core/universes';
 
-import { SEEN_ALL, dismissTip, jamSequence, mix, openLevel, play, shots, tap, throttleCpu, waitScene, waitSim, type Rect } from './helpers';
+import { SEEN_ALL, dismissTip, jamSequence, mix, openLevel, play, shots, tap, throttleCpu, waitScene, waitSim, type Rect, PANEL_ARM_WAIT } from './helpers';
 
 test('first launch: English, guided level 1 played to a win, level 2 unlocked', async ({ page }) => {
   const errors: string[] = [];
@@ -67,6 +67,7 @@ test('a jam pauses the belt and +1 slot resumes play', async ({ page }) => {
   if (shots) await page.screenshot({ path: `${shots}/07-ingorgo.png` });
   const slotsBefore = (await mix<Rect[]>(page, 'slots')).length;
   const jam = await mix<{ continue: { x: number; y: number } | null }>(page, 'jamButtons');
+  await page.waitForTimeout(PANEL_ARM_WAIT);
   await tap(page, jam.continue!.x, jam.continue!.y);
   await page.waitForFunction(() => (window as unknown as { __mix: { overlay: string | null } }).__mix.overlay === null);
   expect(await mix(page, 'status')).toBe('playing');
@@ -179,6 +180,7 @@ test('completing a stage unlocks its bucket style in the album', async ({ page }
   if (shots) await page.screenshot({ path: `${shots}/13-stage-completato.png` });
 
   const buttons = await mix<{ second: { x: number; y: number } }>(page, 'winButtons');
+  await page.waitForTimeout(PANEL_ARM_WAIT);
   await tap(page, buttons.second.x, buttons.second.y);
   await waitScene(page, 'album');
   expect(await mix(page, 'stage')).toBe(1);

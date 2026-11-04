@@ -4,7 +4,7 @@ import shippedStages from '../src/levels/stages.json' with { type: 'json' };
 import type { Move } from '../src/core/solver';
 import { LEVELS_PER_STAGE } from '../src/core/stages';
 import { universeOfStage } from '../src/core/universes';
-import { checkOnScreen, dismissTip, mix, openLevel, play, shots, tap, waitScene, waitSim } from './helpers';
+import { checkOnScreen, dismissTip, mix, openLevel, play, shots, tap, waitScene, waitSim, PANEL_ARM_WAIT } from './helpers';
 
 /**
  * The game served with a second universe (as many full stages again) and a half-built stage after it, the start of a
@@ -101,8 +101,10 @@ test('completing the first stage of universe 2 unlocks the first colour of its b
   await waitSim(page, () => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'win');
   expect(await mix(page, 'completedStage')).toBe(stages.length + 1);
   expect(await mix(page, 'completedUniverse')).toBeNull();
-  expect(await mix(page, 'winText')).toBe('Stage complete! New bucket style unlocked');
+  // The stage message comes after the name and the moves, it does not replace them (#155).
+  expect(await mix(page, 'winText')).toMatch(/^".+" painted in \d+ moves\nStage complete! New bucket style unlocked$/);
   const buttons = await mix<{ second: { x: number; y: number } }>(page, 'winButtons');
+  await page.waitForTimeout(PANEL_ARM_WAIT);
   await tap(page, buttons.second.x, buttons.second.y);
   await waitScene(page, 'album');
   expect(await mix(page, 'stage')).toBe(stages.length + 1);
@@ -161,6 +163,7 @@ for (const [name, width, height] of [['360x640', 360, 640], ['412x915', 412, 915
       await checkOnScreen(page, `${name} win panel ending a universe`);
 
       const buttons = await mix<{ next: { x: number; y: number } }>(page, 'winButtons');
+      await page.waitForTimeout(PANEL_ARM_WAIT);
       await tap(page, buttons.next.x, buttons.next.y);
       await waitScene(page, 'universeEnd');
       expect(await mix(page, 'universe')).toBe(2);
@@ -205,6 +208,7 @@ for (const [name, width, height] of [['360x640', 360, 640], ['412x915', 412, 915
       await play(page, await mix<Move[]>(page, 'solution'));
       await waitSim(page, () => (window as unknown as { __mix: { overlay: string } }).__mix.overlay === 'win');
       const buttons = await mix<{ second: { x: number; y: number } }>(page, 'winButtons');
+      await page.waitForTimeout(PANEL_ARM_WAIT);
       await tap(page, buttons.second.x, buttons.second.y);
       await waitScene(page, 'menu');
 

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  HEADER_TOUCH_HALF_HEIGHT, MAP, NODE_TOUCH_RADIUS, clampScroll, computeMapLayout, currentLevel, inertia, keyScrollDelta, mapTapTarget, maxScroll, scrollToLevel,
+  HEADER_TOUCH_HALF_HEIGHT, MAP, fitHeaderTitle, NODE_TOUCH_RADIUS, clampScroll, computeMapLayout, currentLevel, inertia, keyScrollDelta, mapTapTarget, maxScroll, scrollToLevel,
 } from '../src/core/mapLayout';
 
 const levels = Array.from({ length: 100 }, (_, i) => ({ id: i + 1, stage: Math.floor(i / 10) + 1, boss: (i + 1) % 10 === 0 }));
@@ -138,5 +138,27 @@ describe('map taps and keys', () => {
     expect(keyScrollDelta('HOME', 1500)).toBe(-Infinity);
     expect(keyScrollDelta('END', 1500)).toBe(Infinity);
     expect(keyScrollDelta('A', 1500)).toBeNull();
+  });
+});
+
+describe('stage header title fit (#160)', () => {
+  const measure = (s: string, size: number) => s.length * size * 0.5;
+
+  it('leaves a title that fits alone', () => {
+    expect(fitHeaderTitle('Stage 1 · Fruit', 28, 20, 400, measure)).toEqual({ text: 'Stage 1 · Fruit', fontSize: 28 });
+  });
+
+  it('shrinks the font before cutting', () => {
+    const fit = fitHeaderTitle('Stage 19 · Night in the woods', 28, 20, 300, measure);
+    expect(fit.text).toBe('Stage 19 · Night in the woods');
+    expect(fit.fontSize).toBeLessThan(28);
+    expect(measure(fit.text, fit.fontSize)).toBeLessThanOrEqual(300);
+  });
+
+  it('cuts with an ellipsis once the minimum size is reached, never overflowing', () => {
+    const fit = fitHeaderTitle('Stage 19 · Night in the woods', 28, 20, 150, measure);
+    expect(fit.fontSize).toBe(20);
+    expect(fit.text.endsWith('…')).toBe(true);
+    expect(measure(fit.text, fit.fontSize)).toBeLessThanOrEqual(150);
   });
 });

@@ -128,3 +128,27 @@ export function keyScrollDelta(key: string, viewHeight: number): number | null {
   const deltas: Record<string, number> = { UP: -120, DOWN: 120, PAGE_UP: -page, PAGE_DOWN: page, HOME: -Infinity, END: Infinity };
   return deltas[key] ?? null;
 }
+
+/** Gap kept between a stage header's title and its progress counter (#160). */
+export const HEADER_TEXT_GAP = 24;
+/** Smallest font a stage header title shrinks to before it is cut (#160). */
+export const HEADER_MIN_SIZE = 20;
+
+export interface FittedTitle {
+  text: string;
+  fontSize: number;
+}
+
+/**
+ * Fits a stage header's title in `available` logical units next to the counter (#160): first shrinks the font down to
+ * `minSize`, then cuts the text and ends it with an ellipsis. `measure` returns the drawn width of a text at a size,
+ * so the rule stays pure and testable.
+ */
+export function fitHeaderTitle(text: string, size: number, minSize: number, available: number, measure: (s: string, fontSize: number) => number): FittedTitle {
+  for (let fontSize = size; fontSize >= minSize; fontSize -= 1) {
+    if (measure(text, fontSize) <= available) return { text, fontSize };
+  }
+  let cut = text.length;
+  while (cut > 1 && measure(`${text.slice(0, cut).trimEnd()}…`, minSize) > available) cut -= 1;
+  return { text: `${text.slice(0, cut).trimEnd()}…`, fontSize: minSize };
+}
