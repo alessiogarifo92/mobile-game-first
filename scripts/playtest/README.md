@@ -30,6 +30,23 @@ The config lists the agents of a turn, with the profile's language, viewport and
 packs (§8): `U1-ONB` (1–10), `U1-FINE` (95–100), `Snn` (the levels of stage nn), `R<from>-<to>` (a range, to finish a pack a session left halfway without replaying the levels already seen). `variant` is `normale` or
 `senza-copertura` (universe 3 A/B), `tag` the build tag.
 
+## Token cost (read before planning a turn)
+
+Playtest turns are the most expensive work in this project: on #69 and #156 the agents cost ~$120 at list price, because
+every request re-reads the agent's whole context and each screenshot read stays in it for the rest of the session.
+
+- **Ask the tools first.** Questions about the curve (is 184 a spike? is boss 200 a wall?) start from the solver and
+  the random-play win rate (`npm run gen:levels`, `aggregate-cli.ts`). Agents answer what needs a player: whether a
+  rule is understood, a tip is read, a panel feels unfair, a bug shows up.
+- **Only the agents the coverage needs.** Plan the turn from the coverage still missing (protocol §8), 2–3 agents
+  when that is enough; 4 is the ceiling, not the default.
+- **One pack per agent session.** A subagent plays one pack (~10 levels) and ends; the second pack goes to a fresh
+  subagent with its own save. Two packs in one session roughly double the cost of the second.
+- **Brief the agent to read screenshots sparingly:** after `idle` or when a panel is up, not after every tap; use
+  `taps?seq=` for a planned sequence and look once at the end.
+- **Subagents on sonnet**, the turn's orchestration in the main session; a turn never runs in an opus child session
+  of its own just to dispatch agents.
+
 ## What an agent can do
 
 Every action answers JSON with `screenshot` (absolute path of a PNG: read it to see the screen) and sometimes
