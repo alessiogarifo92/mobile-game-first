@@ -5,7 +5,7 @@ import { parseLevel, type Level, type LevelDef } from '../src/core/level';
 import { tipOnLevelStart } from '../src/core/onboarding';
 import { sanitize, type LevelRef } from '../src/core/progress';
 import { SchemaError, validate, validateDef, type Schema } from '../scripts/playtest/jsonSchema';
-import { SaveError, packLevels, planLevels, planStep, saveFor, saveStarts, startSaveOf, tipsMetBefore } from '../scripts/playtest/saves';
+import { SaveError, offPlanStep, packLevels, planLevels, planStep, saveFor, saveStarts, startSaveOf, tipsMetBefore } from '../scripts/playtest/saves';
 import { SCHEMA_VERSION, SessionRecorder, StuckWatch, TOP_BAR, onTarget, type MixSnapshot, type SessionHeader } from '../scripts/playtest/telemetry';
 import { MAX_AGENTS, TurnError, parseTurnConfig, parseViewport, sessionId } from '../scripts/playtest/turn';
 
@@ -277,10 +277,11 @@ describe('saves and plans', () => {
     expect(packLevels(fake, 'U1-ONB')).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     expect(packLevels(fake, 'U1-FINE')).toEqual([95, 96, 97, 98, 99, 100]);
     expect(packLevels(fake, 'S11')).toEqual([101, 102]);
+    expect(packLevels(fake, 'R97-101')).toEqual([97, 98, 99, 100, 101]);
     expect(planLevels(fake, ['U1-FINE', 'S11', 'S03'])).toEqual([95, 96, 97, 98, 99, 100, 101, 102, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]);
   });
 
-  it.each([['bogus'], ['S1'], ['S15']])('rejects pack %s', (p) => {
+  it.each([['bogus'], ['S1'], ['S15'], ['R150-160'], ['R5']])('rejects pack %s', (p) => {
     expect(() => packLevels(fake, p)).toThrow(SaveError);
   });
 
@@ -324,6 +325,22 @@ describe('saves and plans', () => {
     expect(() => saveFor(broken, 1, 'en')).toThrow(/not reachable/);
   });
 
+  describe('offPlanStep', () => {
+    const plan = [99, 100, 101, 141, 142];
+    it('leaves planned levels alone', () => {
+      expect(offPlanStep(plan, 101)).toEqual({ kind: 'none' });
+    });
+    it('sends the level after a pack back onto the next pack', () => {
+      expect(offPlanStep(plan, 102)).toEqual({ kind: 'load', levelId: 141, skipped: null });
+    });
+    it('ends the plan when the last planned level is passed', () => {
+      expect(offPlanStep(plan, 143)).toEqual({ kind: 'done', skipped: null });
+    });
+    it('ignores a level that does not follow a planned one', () => {
+      expect(offPlanStep(plan, 120)).toEqual({ kind: 'none' });
+    });
+  });
+
   describe('planStep', () => {
     const plan = [99, 100, 101, 141, 142];
     const st = (attempts: number, won = false, skipped = false) => ({ attempts, won, skipped });
@@ -360,6 +377,7 @@ describe('turn config', () => {
       ],
     });
     expect(parseTurnConfig({ turn: 2, variant: 'senza-copertura', agents: [agent] }).variant).toBe('senza-copertura');
+    expect(parseTurnConfig({ turn: 2, agents: [{ ...agent, packs: ['R156-160', 'S19'] }] }).agents[0]!.packs).toEqual(['R156-160', 'S19']);
     expect(sessionId(3, 'A07')).toBe('T03-A07');
   });
 

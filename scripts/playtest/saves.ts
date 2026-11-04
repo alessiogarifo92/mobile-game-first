@@ -36,9 +36,12 @@ export function tipsMetBefore(levels: readonly Level[], start: number): string[]
 export function packLevels(levels: readonly LevelRef[], pack: string): number[] {
   const named = NAMED_PACKS[pack];
   const m = /^S(\d{2})$/.exec(pack);
-  if (!named && !m) throw new SaveError(`unknown pack "${pack}" (U1-ONB, U1-FINE, S01…S99)`);
-  const ids = named
-    ? levels.filter((l) => l.id >= named[0] && l.id <= named[1]).map((l) => l.id)
+  // `R156-160`: a range, to finish a pack a session left halfway (#69) without replaying the levels already seen.
+  const r = /^R(\d+)-(\d+)$/.exec(pack);
+  const range = named ?? (r ? [Number(r[1]), Number(r[2])] : undefined);
+  if (!range && !m) throw new SaveError(`unknown pack "${pack}" (U1-ONB, U1-FINE, S01…S99, R<from>-<to>)`);
+  const ids = range
+    ? levels.filter((l) => l.id >= range[0]! && l.id <= range[1]!).map((l) => l.id)
     : levels.filter((l) => l.stage === Number(m![1])).map((l) => l.id);
   if (ids.length === 0) throw new SaveError(`pack "${pack}": the game has no levels for it yet`);
   return ids;
@@ -98,4 +101,16 @@ export function planStep(
   if (!state.won || i < 0) return { kind: 'none' };
   if (next === undefined) return { kind: 'done', skipped: null };
   return next === last + 1 ? { kind: 'none' } : { kind: 'load', levelId: next, skipped: null };
+}
+
+/**
+ * The win panel's "next" opens the level after the one just won, even when the plan jumps (the end of a pack) or
+ * ends there: that level is off the plan, so the harness drops it and loads the next pack's save (#69, T01-A04).
+ */
+export function offPlanStep(plan: readonly number[], playing: number): PlanStep {
+  if (plan.includes(playing)) return { kind: 'none' };
+  const i = plan.indexOf(playing - 1);
+  if (i < 0) return { kind: 'none' };
+  const next = plan[i + 1];
+  return next === undefined ? { kind: 'done', skipped: null } : { kind: 'load', levelId: next, skipped: null };
 }

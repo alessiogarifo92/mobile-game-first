@@ -1,0 +1,1076 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "T01-A04",
+  "agent": {
+    "agentId": "A04",
+    "profileId": "P04"
+  },
+  "turn": 1,
+  "build": {
+    "commit": "add72d4d5ae3",
+    "version": "0.5.0",
+    "tag": "playtest-u2-add72d4",
+    "variant": "normale"
+  },
+  "device": {
+    "viewport": "360x640",
+    "language": "en"
+  },
+  "startSave": {
+    "unlocked": 141,
+    "completedThrough": 140,
+    "seenTips": [
+      "guide",
+      "blocked",
+      "slots",
+      "belt",
+      "mixing",
+      "ice",
+      "hidden",
+      "brown"
+    ]
+  },
+  "plan": {
+    "packs": [
+      "S15",
+      "S20"
+    ],
+    "levelIds": [
+      141,
+      142,
+      143,
+      144,
+      145,
+      146,
+      147,
+      148,
+      149,
+      150,
+      191,
+      192,
+      193,
+      194,
+      195,
+      196,
+      197,
+      198,
+      199,
+      200
+    ]
+  },
+  "startedAt": "2026-11-03T12:32:14.516Z",
+  "endedAt": "2026-11-03T12:58:28.802Z",
+  "endReason": "piano-finito",
+  "levels": [
+    {
+      "levelId": 141,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 85285,
+          "timeToFirstTapMs": 6732,
+          "ticks": 739,
+          "taps": 12,
+          "offTargetTaps": 0,
+          "launches": 11,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 3,
+          "slotCount": 3,
+          "maxBeltUsed": 1,
+          "beltCapacity": 2,
+          "painted": 42,
+          "targets": 42,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 1,
+          "reveals": 0,
+          "tipsShown": [
+            "stone"
+          ],
+          "tipDismissMs": 6324,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0002.png",
+            "0003.png",
+            "0004.png",
+            "0005.png",
+            "0006.png",
+            "0007.png",
+            "0008.png",
+            "0009.png",
+            "0010.png",
+            "0011.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 2,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "mechanic": {
+          "id": "stone",
+          "understood": 2,
+          "fairness": 4
+        },
+        "notUnderstood": "I closed the stone card without reading. Those grey dice-looking blocks in the middle: I never really worked out what they do, the middle just ended up filled anyway.",
+        "wouldContinue": true,
+        "freeText": "Won first try by just sending buckets one by one. A bit long with the little leftover buckets going to waiting slots."
+      }
+    },
+    {
+      "levelId": 142,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 79083,
+          "timeToFirstTapMs": 9063,
+          "ticks": 833,
+          "taps": 11,
+          "offTargetTaps": 0,
+          "launches": 11,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 1,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 71,
+          "targets": 71,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 14,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0014.png",
+            "0015.png",
+            "0016.png",
+            "0017.png",
+            "0018.png",
+            "0019.png",
+            "0020.png",
+            "0021.png",
+            "0022.png",
+            "0023.png",
+            "0024.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "",
+        "wouldContinue": true,
+        "freeText": "A toucan! Nice picture. Won first try, I just sent blue then yellow then red and the leftovers from the waiting slot."
+      }
+    },
+    {
+      "levelId": 143,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 102025,
+          "timeToFirstTapMs": 7882,
+          "ticks": 1048,
+          "taps": 14,
+          "offTargetTaps": 0,
+          "launches": 13,
+          "refusals": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 86,
+          "targets": 86,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 27,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0027.png",
+            "0028.png",
+            "0029.png",
+            "0030.png",
+            "0031.png",
+            "0032.png",
+            "0033.png",
+            "0034.png",
+            "0035.png",
+            "0036.png",
+            "0037.png",
+            "0038.png",
+            "0039.png",
+            "0040.png",
+            "0041.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 3,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 3,
+        "notUnderstood": "I got a jam and honestly I'm not sure why: I sent two buckets, and suddenly every waiting slot was full. I didn't see it coming.",
+        "wouldContinue": true,
+        "freeText": "Cute frog. The jam popup came out of nowhere, I just hit +1 slot and carried on, that felt like a free pass. Won in the end."
+      }
+    },
+    {
+      "levelId": 144,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 119381,
+          "timeToFirstTapMs": 7988,
+          "ticks": 1269,
+          "taps": 14,
+          "offTargetTaps": 0,
+          "launches": 13,
+          "refusals": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 67,
+          "targets": 67,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 12,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0044.png",
+            "0045.png",
+            "0046.png",
+            "0047.png",
+            "0048.png",
+            "0049.png",
+            "0050.png",
+            "0051.png",
+            "0052.png",
+            "0053.png",
+            "0054.png",
+            "0055.png",
+            "0056.png",
+            "0057.png",
+            "0058.png",
+            "0059.png",
+            "0060.png",
+            "0061.png",
+            "0062.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 3,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 3,
+        "mechanic": {
+          "id": "stone",
+          "understood": 2,
+          "fairness": 3
+        },
+        "notUnderstood": "Jam again, I sent two buckets and the waiting slots were suddenly full. I don't really get when a bucket goes to a slot vs. just disappearing. Also the grey blocks: some pixels next to them seemed to stay unpainted for ages.",
+        "wouldContinue": true,
+        "freeText": "Used +1 slot again, then emptied the waiting slots one by one and it worked out. Slightly fiddly at the end with leftover buckets of 1-3 paint."
+      }
+    },
+    {
+      "levelId": 145,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 103805,
+          "timeToFirstTapMs": 7920,
+          "ticks": 1111,
+          "taps": 15,
+          "offTargetTaps": 0,
+          "launches": 14,
+          "refusals": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 86,
+          "targets": 86,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 20,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0065.png",
+            "0066.png",
+            "0067.png",
+            "0068.png",
+            "0069.png",
+            "0070.png",
+            "0071.png",
+            "0072.png",
+            "0073.png",
+            "0074.png",
+            "0075.png",
+            "0076.png",
+            "0077.png",
+            "0078.png",
+            "0079.png",
+            "0080.png",
+            "0081.png",
+            "0082.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 3,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 2,
+        "notUnderstood": "Third jam in a row of levels. I only sent 2 buckets at a time and the leftovers filled the waiting slots. I still don't know how to avoid it other than picking +1 slot.",
+        "wouldContinue": true,
+        "freeText": "Pretty flower. Starting to get annoyed by the jam popup, it feels like the game punishes me for tapping quickly."
+      }
+    },
+    {
+      "levelId": 146,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 83630,
+          "timeToFirstTapMs": 6647,
+          "ticks": 983,
+          "taps": 13,
+          "offTargetTaps": 0,
+          "launches": 13,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 69,
+          "targets": 69,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 14,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0084.png",
+            "0085.png",
+            "0086.png",
+            "0087.png",
+            "0088.png",
+            "0089.png",
+            "0090.png",
+            "0091.png",
+            "0092.png",
+            "0093.png",
+            "0094.png",
+            "0095.png",
+            "0096.png",
+            "0097.png",
+            "0098.png",
+            "0099.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "",
+        "wouldContinue": true,
+        "freeText": "No jam this time. Mostly green, easy. Fine."
+      }
+    },
+    {
+      "levelId": 147,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 88330,
+          "timeToFirstTapMs": 6967,
+          "ticks": 1037,
+          "taps": 13,
+          "offTargetTaps": 0,
+          "launches": 13,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 84,
+          "targets": 84,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 34,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0102.png",
+            "0103.png",
+            "0104.png",
+            "0105.png",
+            "0106.png",
+            "0107.png",
+            "0108.png",
+            "0109.png",
+            "0110.png",
+            "0111.png",
+            "0112.png",
+            "0113.png",
+            "0114.png",
+            "0115.png",
+            "0116.png",
+            "0117.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "Weird that the last blue bucket finished the picture even though some pixels looked like they still needed red.",
+        "wouldContinue": true,
+        "freeText": "Pretty butterfly, won first go by freeing a waiting slot before sending the next bucket."
+      }
+    },
+    {
+      "levelId": 148,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 66842,
+          "timeToFirstTapMs": 7602,
+          "ticks": 777,
+          "taps": 10,
+          "offTargetTaps": 0,
+          "launches": 10,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 1,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 70,
+          "targets": 70,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 20,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0119.png",
+            "0120.png",
+            "0121.png",
+            "0122.png",
+            "0123.png",
+            "0124.png",
+            "0125.png",
+            "0126.png",
+            "0127.png",
+            "0128.png",
+            "0129.png",
+            "0130.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "",
+        "wouldContinue": true,
+        "freeText": "A mango, cute. Easy, no jam. I just kept an eye on the waiting slots."
+      }
+    },
+    {
+      "levelId": 149,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 56660,
+          "timeToFirstTapMs": 6451,
+          "ticks": 667,
+          "taps": 10,
+          "offTargetTaps": 0,
+          "launches": 10,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 1,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 67,
+          "targets": 67,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 18,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0132.png",
+            "0133.png",
+            "0134.png",
+            "0135.png",
+            "0136.png",
+            "0137.png",
+            "0138.png",
+            "0139.png",
+            "0140.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 2,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "",
+        "wouldContinue": true,
+        "freeText": "Snake. Easy again. Nothing to say really, I just tapped through."
+      }
+    },
+    {
+      "levelId": 150,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "ingorgo",
+          "durationMs": 114122,
+          "timeToFirstTapMs": 6860,
+          "ticks": 1221,
+          "taps": 16,
+          "offTargetTaps": 0,
+          "launches": 14,
+          "refusals": 0,
+          "jams": 2,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 88,
+          "targets": 118,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 73,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0143.png",
+            "0144.png",
+            "0145.png",
+            "0146.png",
+            "0147.png",
+            "0148.png",
+            "0149.png",
+            "0150.png",
+            "0151.png",
+            "0152.png",
+            "0153.png",
+            "0154.png",
+            "0155.png",
+            "0156.png",
+            "0157.png",
+            "0158.png",
+            "0159.png",
+            "0160.png",
+            "0161.png"
+          ]
+        },
+        {
+          "attempt": 2,
+          "outcome": "vinto",
+          "durationMs": 129142,
+          "timeToFirstTapMs": 10325,
+          "ticks": 1518,
+          "taps": 16,
+          "offTargetTaps": 0,
+          "launches": 16,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 118,
+          "targets": 118,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 35,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0162.png",
+            "0163.png",
+            "0164.png",
+            "0165.png",
+            "0166.png",
+            "0167.png",
+            "0168.png",
+            "0169.png",
+            "0170.png",
+            "0171.png",
+            "0172.png",
+            "0173.png",
+            "0174.png",
+            "0175.png",
+            "0176.png",
+            "0177.png",
+            "0178.png",
+            "0179.png",
+            "0180.png",
+            "0181.png",
+            "0182.png",
+            "0183.png",
+            "0184.png",
+            "0185.png",
+            "0186.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 4,
+        "mood": "frustrato",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 2,
+        "notUnderstood": "Why did the red bucket just go to a waiting slot without painting anything? And why do buckets so often come back with only 3 or 4 paint left and fill up my waiting slots? I got a jam, took the +1 slot, then a second jam with no +1 option, had to retry, and then won on my second go.",
+        "wouldContinue": true,
+        "freeText": "Long level, lots of buckets and the waiting slots kept filling up. The 'stage complete, new bucket style' screen was a nice reward. But the jam felt like something I couldn't see coming."
+      }
+    },
+    {
+      "levelId": 151,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 85666,
+          "timeToFirstTapMs": 10504,
+          "ticks": 1005,
+          "taps": 11,
+          "offTargetTaps": 0,
+          "launches": 11,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 51,
+          "targets": 51,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 7,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0189.png",
+            "0190.png",
+            "0191.png",
+            "0192.png",
+            "0193.png",
+            "0194.png",
+            "0195.png",
+            "0196.png",
+            "0197.png",
+            "0198.png",
+            "0199.png",
+            "0200.png",
+            "0201.png",
+            "0202.png",
+            "0203.png",
+            "0204.png",
+            "0205.png",
+            "0206.png",
+            "0207.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 2,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "There were some pale pixels with a little snowflake on them. I didn't read what they do. They ended up painted anyway, I couldn't tell you when or how.",
+        "wouldContinue": true,
+        "freeText": "Easy, no jam this time. Water lily. Yellow buckets in my waiting slots did nothing for a while and I didn't know why."
+      }
+    },
+    {
+      "levelId": 152,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 103483,
+          "timeToFirstTapMs": 9850,
+          "ticks": 1163,
+          "taps": 15,
+          "offTargetTaps": 0,
+          "launches": 14,
+          "refusals": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 64,
+          "targets": 64,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 14,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0209.png",
+            "0210.png",
+            "0211.png",
+            "0212.png",
+            "0213.png",
+            "0214.png",
+            "0215.png",
+            "0216.png",
+            "0217.png",
+            "0218.png",
+            "0219.png",
+            "0220.png",
+            "0221.png",
+            "0222.png",
+            "0223.png",
+            "0224.png",
+            "0225.png",
+            "0226.png",
+            "0227.png",
+            "0228.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 3,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 2,
+        "notUnderstood": "Another jam out of nowhere. Buckets with leftover paint keep filling my waiting slots and I only found out when the popup appeared. Those snowflake pixels again: still no idea.",
+        "wouldContinue": true,
+        "freeText": "Won after emptying the waiting slots one by one. A fish. A bit tedious."
+      }
+    },
+    {
+      "levelId": 153,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "uscita",
+          "durationMs": 10631,
+          "timeToFirstTapMs": 10631,
+          "ticks": 126,
+          "taps": 1,
+          "offTargetTaps": 0,
+          "launches": 0,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 0,
+          "slotCount": 2,
+          "maxBeltUsed": 0,
+          "beltCapacity": 2,
+          "painted": 0,
+          "targets": 63,
+          "remaining": {
+            "ice": 4,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0230.png",
+            "0231.png"
+          ]
+        },
+        {
+          "attempt": 2,
+          "outcome": "vinto",
+          "durationMs": 75225,
+          "timeToFirstTapMs": 7895,
+          "ticks": 818,
+          "taps": 13,
+          "offTargetTaps": 0,
+          "launches": 12,
+          "refusals": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 63,
+          "targets": 63,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 12,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0233.png",
+            "0234.png",
+            "0235.png",
+            "0236.png",
+            "0237.png",
+            "0238.png",
+            "0239.png",
+            "0240.png",
+            "0241.png",
+            "0242.png",
+            "0243.png",
+            "0244.png",
+            "0245.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 3,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 2,
+        "notUnderstood": "Jam again. I keep ending up with 3 little leftover buckets in the waiting slots. Also I hit the back arrow by mistake at the start of this level and lost the level progress.",
+        "wouldContinue": true,
+        "freeText": "A canoe? Looks like a bunch of blocks to me. Won after one +1 slot."
+      }
+    },
+    {
+      "levelId": 154,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 93432,
+          "timeToFirstTapMs": 10144,
+          "ticks": 1099,
+          "taps": 12,
+          "offTargetTaps": 0,
+          "launches": 12,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 60,
+          "targets": 60,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 22,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0248.png",
+            "0249.png",
+            "0250.png",
+            "0251.png",
+            "0252.png",
+            "0253.png",
+            "0254.png",
+            "0255.png",
+            "0256.png",
+            "0257.png",
+            "0258.png",
+            "0259.png",
+            "0260.png",
+            "0261.png",
+            "0262.png",
+            "0263.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 2,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "Snowflake pixel again, it just got painted at some point, no idea how.",
+        "wouldContinue": true,
+        "freeText": "A heron. No jam this time because I emptied a waiting slot before each bucket. Fine."
+      }
+    }
+  ],
+  "session": {
+    "telemetry": {
+      "durationMs": 1574286,
+      "actions": 211,
+      "screens": {
+        "menu": 2,
+        "play": 16
+      },
+      "languageChanges": 0,
+      "uncaughtErrors": [],
+      "stuckScreens": []
+    },
+    "feedback": {
+      "fun": 3,
+      "wouldReturn": 3,
+      "stoppedBecause": "I reached the end of the levels I planned. Nothing special made me stop, but I never got moved to the later pack of levels.",
+      "bestMoment": "The 'Stage complete, new bucket style unlocked' screen and the little pictures (toucan, butterfly) at the end of each level.",
+      "worstMoment": "Jam popups out of nowhere (levels 143, 144, 145, 150, 152, 153), especially level 150 where a second jam gave no +1 slot and I had to retry. I also never understood the stones and the snowflake pixels because I skip tips.",
+      "freeText": "Gameplay is easy to just tap through, but the waiting slots filling up with 1-4 paint leftovers is annoying and I could not see it coming. +1 slot felt like a free pass. I wish the game told me when a slot is about to run out without making me read a tip."
+    }
+  },
+  "bugs": []
+}

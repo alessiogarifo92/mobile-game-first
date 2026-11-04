@@ -60,7 +60,7 @@ export function parseTurnConfig(raw: unknown): TurnSpec {
     const where = `agents[${i}]`;
     const e = obj(raw, where);
     const language = str(e, 'language', where, /^(it|en)$/) as 'it' | 'en';
-    if (!Array.isArray(e.packs) || e.packs.length === 0 || !e.packs.every((p) => typeof p === 'string' && /^(U1-ONB|U1-FINE|S\d{2})$/.test(p))) {
+    if (!Array.isArray(e.packs) || e.packs.length === 0 || !e.packs.every((p) => typeof p === 'string' && /^(U1-ONB|U1-FINE|S\d{2}|R\d+-\d+)$/.test(p))) {
       throw new TurnError(`${where}.packs must list packs like "U1-FINE", "S11"`);
     }
     const max = e.maxAttempts;

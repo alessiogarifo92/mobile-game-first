@@ -11,7 +11,7 @@ import type { Browser, BrowserContext, Page } from '@playwright/test';
 import type { Level } from '../../src/core/level';
 import { STORAGE_KEY } from '../../src/core/progress';
 import { validate, validateDef, type Schema } from './jsonSchema';
-import { planStep, saveFor } from './saves';
+import { offPlanStep, planStep, saveFor, type PlanStep } from './saves';
 import { BUDGET, SessionRecorder, StuckWatch, type EndReason, type MixSnapshot, type Scheda, type SessionHeader } from './telemetry';
 
 /** Logical width of the game (src/game/theme.ts VIEW): canvas pixels are scaled from it. */
@@ -327,7 +327,16 @@ export class PlaytestAgent {
     const playing = this.recorder.playing;
     const max = this.opts.maxAttempts;
     const over = playing && max !== null && playing.attempt > max && playing.actions === 0 && !this.recorder.levelState(playing.levelId).won;
-    if (playing && !over) return [];
+    if (playing && !over) {
+      const stray = offPlanStep(this.opts.header.plan.levelIds, playing.levelId);
+      if (stray.kind === 'none') return [];
+      this.paused = true;
+      try {
+        return await this.leavePlan(playing.levelId, stray);
+      } finally {
+        this.paused = false;
+      }
+    }
     this.paused = true;
     try {
       return await this.followPlan(!!over);
@@ -356,6 +365,20 @@ export class PlaytestAgent {
       notes.push(`your save now opens level ${step.levelId}`);
     }
     return notes;
+  }
+
+  /** The agent went past the end of a pack through the game itself: back onto the plan. */
+  private async leavePlan(levelId: number, step: PlanStep): Promise<string[]> {
+    await this.exclusive(() => this.recorder.discardOpen());
+    if (step.kind === 'done') {
+      this.planDone = true;
+      await this.page.reload();
+      await this.waitForGame();
+      return [`level ${levelId} is not in your plan: that was the last planned level, send your feedback, then end the session`];
+    }
+    if (step.kind !== 'load') return [];
+    await this.loadSave(step.levelId);
+    return [`level ${levelId} is not in your plan: your save now opens level ${step.levelId}`];
   }
 
   /** Replaces the save with the one that opens `levelId`, as a new install would hold it, and reloads the game. */
