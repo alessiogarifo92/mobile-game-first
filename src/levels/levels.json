@@ -16397,53 +16397,67 @@
    "...Y.OROO.Y...",
    "......ROR.....",
    ".....PRORP....",
-   "....PPOKOPP...",
+   "....PPOROPP...",
    "...PPKROOPPP..",
    "..PPPPORORPPP.",
-   ".PPKPOROPPOPKP",
-   ".PPPORRPPKPORP",
+   ".KPKPOROPKOPKP",
+   ".PKPORRPPKPORP",
    "PPKPOPPPPPPPOP",
-   "GGPPPPKPPPKPPG",
-   "GGGGPPPKPKPGGK"
+   "GGPPPPKPPPPPPG",
+   "GGGGPPKPPKPGGG"
   ],
   "overlay": [
-   ".....s..s.i...",
-   "...........i..",
-   ".........s.s..",
-   "..si......i...",
+   "..s...........",
+   "..i.s.....sis.",
+   "....s..i...s..",
+   "..........i...",
+   ".....si.is....",
+   "..............",
+   "...........s..",
+   "........h.....",
+   "..h......i....",
    ".......h......",
-   "..........s...",
-   "...sh....h....",
-   "......i...h...",
-   ".......i.i...s",
+   "....h.......i.",
+   "......h.......",
    "..............",
-   "s.h..i.......h",
-   "..............",
-   "..............",
-   ".............."
+   "..h..........."
   ],
   "columns": [
    [
     {
-     "color": 1,
+     "color": 4,
      "ammo": 20
-    },
-    {
-     "color": 1,
-     "ammo": 13
     },
     {
      "color": 4,
      "ammo": 20
+    },
+    {
+     "color": 2,
+     "ammo": 29
     }
    ],
    [
     {
      "color": 4,
-     "ammo": 17
+     "ammo": 16
     },
     {
      "color": 1,
+     "ammo": 20
+    },
+    {
+     "color": 1,
+     "ammo": 20
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 20
+    },
+    {
+     "color": 4,
      "ammo": 20
     },
     {
@@ -16453,22 +16467,8 @@
    ],
    [
     {
-     "color": 2,
-     "ammo": 28
-    },
-    {
-     "color": 4,
-     "ammo": 20
-    },
-    {
-     "color": 4,
-     "ammo": 20
-    }
-   ],
-   [
-    {
      "color": 1,
-     "ammo": 20
+     "ammo": 12
     },
     {
      "color": 1,
@@ -16482,6 +16482,6 @@
   ],
   "slots": 3,
   "beltCapacity": 2,
-  "specHash": "db227345"
+  "specHash": "03f7eaa8"
  }
 ]

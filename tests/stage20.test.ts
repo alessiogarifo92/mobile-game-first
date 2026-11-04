@@ -74,7 +74,7 @@ describe('stage 20 — Volcano', () => {
 
   it('leaves the boss a margin without "+1 slot" (#162): a careful player often wins, and 2 slots still suffice', () => {
     const boss = parsed[9]!;
-    expect(levelCarefulWinRate(boss)).toBeGreaterThanOrEqual(0.4);
+    expect(levelCarefulWinRate(boss)).toBeGreaterThanOrEqual(0.8);
     expect(solve({ ...boss, slots: boss.slots - 1 }).solvable).toBe(true);
   }, 60_000);
 });
