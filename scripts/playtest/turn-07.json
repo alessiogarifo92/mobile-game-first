@@ -1,0 +1,8 @@
+{
+  "turn": 7,
+  "tag": "playtest-u2-233a56c",
+  "variant": "normale",
+  "agents": [
+    { "agentId": "A13", "profileId": "P13", "viewport": "412x915", "language": "it", "packs": ["R170-170", "R179-179", "R184-184"], "maxAttempts": 4 }
+  ]
+}

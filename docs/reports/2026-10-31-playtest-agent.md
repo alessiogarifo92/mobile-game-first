@@ -1,8 +1,20 @@
-# Playtest agent dell'universo 2: report aggregato (ticket #69)
+# Playtest agent dell'universo 2: report aggregato (ticket #69, copertura completata in #156)
 
-Data: 31 ottobre – 4 novembre 2026 · Epic #66 · Protocollo: [`docs/playtest/protocollo-agent.md`](../playtest/protocollo-agent.md) (#67) · Harness: [`scripts/playtest/`](../../scripts/playtest/README.md) (#68) · Build: `add72d4` (tag `playtest-u2-add72d4`, variante `normale`) · Schede: [`docs/playtest/sessioni/`](../playtest/sessioni/) · Dati aggregati: [`2026-10-31-playtest-agent.json`](2026-10-31-playtest-agent.json) · Rigenerare: `npx tsx scripts/playtest/aggregate-cli.ts --out docs/reports/2026-10-31-playtest-agent.json docs/playtest/sessioni/T01 docs/playtest/sessioni/T02`
+Data: 31 ottobre – 4 novembre 2026 (turni T03–T07 di #156: 4 novembre) · Epic #66 · Protocollo: [`docs/playtest/protocollo-agent.md`](../playtest/protocollo-agent.md) (#67) · Harness: [`scripts/playtest/`](../../scripts/playtest/README.md) (#68) · Build: `add72d4` (tag `playtest-u2-add72d4`) per T01–T02, `233a56c` (tag `playtest-u2-233a56c`) per T03–T07, variante `normale`. Il codice di gioco è lo stesso: tra i due commit cambia solo `src/core/curveReport.ts`, che il gioco non usa · Schede: [`docs/playtest/sessioni/`](../playtest/sessioni/) · Dati aggregati: [`2026-10-31-playtest-agent.json`](2026-10-31-playtest-agent.json) · Rigenerare: `npx tsx scripts/playtest/aggregate-cli.ts --out docs/reports/2026-10-31-playtest-agent.json docs/playtest/sessioni/T0*`
 
 ## In breve
+**Aggiornamento #156 (copertura dello stage 20 e muri):** il dettaglio è nel §10.
+- **Copertura raggiunta: 180 e 191–200 visti da ≥ 3 agent (194 da 4).** 6 agent nuovi (P11–P16) in 5 turni da 1–2 agent, per il limite d'uso.
+- **Stage 20: nessun muro confermato.** 81% di vittorie al 1° tentativo, difficoltà percepita 3,0. Due abbandoni, visti ciascuno da un solo agent (ipotesi):
+  - **194:** P16, il prudente che non usa mai "+1 slot", dopo 3 ingorghi;
+  - **boss 200:** P14, dopo 3 tentativi persi. Gli altri due agent lo vincono al 1° tentativo, ma entrambi passando da "+1 slot".
+- **Muri 170, 179, 184 (3 agent ciascuno):**
+  - **170 escluso:** 2 agent nuovi su 2 lo vincono al 1° tentativo;
+  - **179 e 184 confermati come picchi fuori dai boss:** 179 con 0 vittorie al 1° tentativo su 3, un abbandono e difficoltà 4,0; 184 con 2 agent su 3 a ≥ 3 tentativi e difficoltà 4,0. Proposta: un ticket di curva (§7).
+- **"+1 slot" regge la curva finale:** 18 vittorie su 32 tra 180 e 191–200 passano da lì. Rafforza F1 (#145) e F7 (#151).
+- **Bug: le due ipotesi del §5 sono confermate e riprodotte** (B3, B4).
+
+**Report di #69 (T01–T02):**
 - **8 agent-giocatori in 2 turni** (T01: P01–P04, T02: P05–P08), modello sonnet, sul build `add72d4`. Il protocollo ne prevede 16 in 4 turni: il limite d'uso dell'account ne ha permessi 8. T02 è stato interrotto dal limite di 5 ore e ripreso il giorno dopo. Per non rigiocare livelli già visti si è ripartiti dal primo livello mancante (pacchetti `R<da>-<a>`).
 - **Copertura: 95 livelli su 106 (95–200)**: 3 livelli visti da 3 agent, 45 da 2, 47 da 1.
   - **Non coperti:** 180 e tutto lo stage 20 (191–200, compreso il boss finale 200).
@@ -27,6 +39,12 @@ Data: 31 ottobre – 4 novembre 2026 · Epic #66 · Protocollo: [`docs/playtest/
 | T02-A06 | P06 perfezionista | EN 412×915 | 141–160 (20) | 20/20 | 4 · 4 |
 | T02-A07 | P07 over 65 | IT 412×915 | 111–120, 171–179 (19) | **abbandono al 179** (4 ingorghi di fila) | 3 · 2 |
 | T02-A08 | P08 giocatore di match-3 | EN 360×640 | 161–170, 181–190 (20) | 19/20, **170 saltato** dopo 5 tentativi | 3 · 3 |
+| T03-A16 | P16 prudente, mai "+1 slot" | IT 360×640 | 180, 191–194 (5) | **abbandono al 194** (3 ingorghi) | 3 · 2 |
+| T03-A11 | P11 giocatore della sera | EN 412×915 | 180, 191–200 (11) | piano finito, 11/11 | 4 · 4 |
+| T04-A14 | P14 inglese, telefono piccolo | EN 360×640 | 180, 191–200 (11) | 10/11, **abbandono al boss 200** | 3 · 3 |
+| T05-A15 | P15 usa sempre "+1 slot" | EN 412×915 | 194–200 (7) | piano finito, 7/7 al 1° tentativo | 4 · 4 |
+| T06-A12 | P12 adolescente veloce | IT 360×640 | 170, 179, 184 (3) | 3/3 | 3 · 3 |
+| T07-A13 | P13 genitore interrotto | IT 412×915 | 170, 179, 184 (3) | 3/3 | 4 · 4 |
 
 **Note sulle schede:**
 - **A03:** la scheda di fine sessione è stata raccolta dall'agent dopo lo stop dell'harness (`endReason: errore-harness`).
@@ -119,17 +137,20 @@ Nessun agent ha usato `POST bug`. Due difetti, segnalati come confusione, sono *
 | B1 | In italiano la fine di **ogni stage** dice "Mondo completato!", mentre in inglese dice "Stage complete!" e il gioco chiama "universo" il mondo | `sev: media` (testo che confonde stage e universo) | `src/core/i18n.ts:477-478` (`win.stageComplete`, `win.stageCompleteNoSkin`) | IT, vincere il 110 (o un qualsiasi decimo livello) → il pannello dice "Mondo completato! Nuovo stile dei secchielli" (A03 al 130) |
 | B2 | Sul livello che chiude uno stage il pannello di vittoria **non mostra le mosse**: il messaggio di stage prende il posto di nome e mosse. Il secondo bottone diventa "Album" invece di "Mappa" | `sev: bassa` | `src/game/scenes/PlayScene.ts:753-754` e 768 | vincere il 160 → solo "Stage complete!", niente "N mosse" (A06; A03 per il bottone) |
 
-**Ipotesi di bug, non riprodotte:**
-- sulla mappa a 360×640 l'intestazione dello stage 19 si attacca al contatore ("Night in the woods0/10", A08);
-- il tocco sul quarto slot chiude il pannello di vittoria (A03, 166).
+**Le due ipotesi di bug, ricontrollate in #156 con screenshot ([`docs/test-evidence/156-bug/`](../test-evidence/156-bug/)), sono confermate:**
 
-Vanno ricontrollate nel prossimo turno, con screenshot.
+| # | Bug | Gravità | Dove | Passi e prova |
+|---|---|---|---|---|
+| B3 | Sulla mappa a 360×640, in **inglese**, l'intestazione dello stage 19 si attacca al contatore: "Stage 19 · Night in the woods0/10". In italiano c'è spazio | `sev: bassa` (testo) | intestazione di stage della mappa (`MenuScene`) | aprire la mappa in EN a 360×640 con il 180 aperto. Misura (`__mixBounds`, coordinate logiche): il titolo va da x 120 a 514, "0/10" parte da x 511. Visto da A08 e, in #156, segnalato con `POST bug` da A14 (`T04-A14-B01`, riprodotto). Screenshot `01-…-en.png`, `05-T04-A14-…png` |
+| B4 | **Un tocco sugli slot appena arriva la vittoria chiude il pannello "Capolavoro"** e porta alla mappa: il bottone "Mappa" (y 1088–1152) sta sopra la riga degli slot (y 1109–1193) e risponde subito. Il riepilogo (mosse, +1) non si vede; il progresso resta salvato | `sev: media` (input) | `src/game/scenes/PlayScene.ts`, `showWin()`: bottoni a `top + 600` e `top + 700` | 412×915, IT, vincere il 166 e toccare lo slot 2: la scena passa a `menu` (Playwright, screenshot `02`–`04`). Visto da A03 (166) e, in #156, da A14, che con i tocchi rapidi ha saltato il pannello sul 196 e sul 197 |
+
+Nota: anche la mappa in italiano chiama "Mondo 18/19/20" lo stage (screenshot `04`): stesso problema di testo di B1 (#154).
 
 ## 6. Concordanza tra agent
 - **Finding (≥ 3 agent):** F1–F9 del §3. F1 è l'unico visto da quasi tutti (7/8).
-- **Bug confermati:** B1 e B2, nel codice.
+- **Bug confermati:** B1 e B2, nel codice; B3 e B4, riprodotti in #156.
 - **Ipotesi (1–2 agent):**
-  - tutti i "possibili muri" di difficoltà (170, 179, 184, 97);
+  - i "possibili muri" 97, 194 e 200 (un abbandono ciascuno). 170, 179 e 184 sono stati rigiocati in #156 (§10);
   - tutte le anomalie di curva del §2, con un livello per agent: non bastano per un ritocco della curva.
 - **Profili d'accordo e in disaccordo:**
   - chi legge (P03, P07) e chi non legge (P04, P05) concordano su F1, F3 e F4: non è un problema di testi saltati;
@@ -151,9 +172,17 @@ Figli dell'epic #66. Li apre il manager.
 | Ricompensa di fine stage: mostrare il nuovo stile o dire dove applicarlo | `ux` | `sev: bassa` | F9 (6 agent) |
 | IT: "Mondo completato!" a fine stage → "Stage completato!" | `bug` | `sev: media` | B1 |
 | Pannello di vittoria del boss di stage senza numero di mosse | `bug` | `sev: bassa` | B2 |
-| Playtest agent: completare la copertura dell'universo 2 (180, 191–200, e 3 agent per livello) prima del rilascio di #100 | `testing` | — | §8 |
+| Playtest agent: completare la copertura dell'universo 2 (180, 191–200, e 3 agent per livello) prima del rilascio di #100 | `testing` | — | §8 (aperto come #156) |
 
-Nessun ticket di curva: i possibili muri (170, 179, 184) sono visti da un solo agent. Diventano ticket se il turno di copertura li conferma.
+**Proposti da #156** (non aperti: li apre il manager):
+
+| Titolo proposto | Label | Gravità | Da |
+|---|---|---|---|
+| Mappa: in inglese a 360×640 l'intestazione dello stage 19 si attacca al contatore ("Night in the woods0/10") | `bug` | `sev: bassa` | B3 (A08, A14, riprodotto) |
+| Pannello di vittoria: un tocco sugli slot appena arriva la vittoria lo chiude e porta alla mappa (bottone "Mappa" sopra gli slot, nessun ritardo prima che i bottoni rispondano) | `bug` | `sev: media` | B4 (A03, A14, riprodotto) |
+| Curva universo 2: ammorbidire i picchi 179 e 184 (livelli non boss con difficoltà percepita 4 e ≥ 3 tentativi) | `feature` | — | §10 (3 agent per livello) |
+
+Il boss 200 non ha un ticket proprio: l'abbandono di A14 è un dato di un solo agent. Va aggiunto come prova a #145 (ingorghi da avanzi) e a #151 ("+1 slot" una volta per tentativo), insieme alla dipendenza da "+1 slot" del §10.
 
 ## 8. Limiti
 - **Limiti dell'epic #66 e del protocollo §1:**
@@ -163,7 +192,12 @@ Nessun ticket di curva: i possibili muri (170, 179, 184) sono visti da un solo a
   - niente audio né vibrazione;
   - niente ritenzione a giorni.
   Tutto il report è un'ipotesi da confermare con #42.
-- **Copertura parziale:** 8 profili su 16 (P09–P16 non hanno giocato), 1–3 agent per livello invece di 3–4, stage 20 e livello 180 scoperti. Il requisito di #100 ("playtest agent sull'universo, nessun muro segnalato") quindi **non è ancora soddisfatto per 180 e 191–200**.
+- **Copertura parziale:** 14 profili su 16. P09 e P10 non hanno giocato. 180, 191–200, 170, 179 e 184 sono visti da ≥ 3 agent (#156); gli altri livelli 98–190 da 1–2. Per il §8 del protocollo restano sotto i 3 agent 89 livelli (`coverageGaps` nel JSON).
+- **Turni di #156 con 1–2 agent alla volta** (limite d'uso). Il limite delle 5 ore ha fermato T03 a metà:
+  - A16 si era già fermato per la sua soglia. La scheda di sessione è stata raccolta dopo;
+  - A11 è ripartito dal 195 con un agent nuovo, informato per testo. I due tentativi del 195 del primo pezzo sono uniti nella scheda finale (`T03-A11.json`), e non nella `.parte1.json`, per non contare due volte lo stesso agent.
+- **Soglia di A14:** P14 abbandona dopo 4 sconfitte, ma l'agent ha contato gli ingorghi invece dei tentativi e si è fermato dopo 3 tentativi persi sul boss 200. L'abbandono è un dato vero (difficoltà 5, "frustrato"), ma anticipato di un tentativo.
+- **Ripresa di P13:** uscire alla mappa a metà livello fa ripartire il livello da capo (A13, 179). È il comportamento atteso del gioco, ma la persona lo vive come una perdita: un'ipotesi da 1 agent, da guardare in #42.
 - **Interruzioni:** i limiti d'uso hanno fermato T01 (A03) e T02 a metà. Le riprese sono partite da nuovi salvataggi con lo stesso profilo ma un agent nuovo, informato solo per testo su cosa aveva giocato prima. Le schede di sessione di A03 e T02 descrivono quindi un'esperienza in due tempi.
 - **Tempi:** i `ticks` includono il tempo in cui l'agent guarda lo schermo. Sono un tetto, non una misura umana.
 - **"+1 slot":** usato da molti profili, rende i tassi al primo tentativo più alti di quelli di chi non lo usa. P16, il prudente che non lo usa mai, non ha giocato.
@@ -173,8 +207,66 @@ Nessun ticket di curva: i possibili muri (170, 179, 184) sono visti da un solo a
 
 ## 9. Cosa resta per #42 (persone vere)
 - **Ingorghi (F1 e F7):** se gli ingorghi da avanzi sono frustranti anche col dito o se sono parte del gioco. È la decisione più importante: gli agent la segnalano quasi all'unanimità, ma un agent pianifica peggio, o diversamente, di una persona.
-- **Muri di difficoltà:** se 170, 179 e 184 sono muri anche per persone, e il boss 200, che nessun agent ha giocato.
+- **Muri di difficoltà:** se 179 e 184 sono picchi anche per persone, e se il boss 200 (2 vittorie su 3, entrambe con "+1 slot") si vince anche senza "+1 slot".
 - **Pietre (F3):** se le persone le notano e se capiscono la scheda del 141.
 - **Durate:** i tempi di partita veri (mediana per livello e per boss), per fissare il tetto della regola 7.
 - **Plateau 12–14:** se si sente come piano o come respiro prima della pietra.
 - **Album e ricompense (F9):** se l'album e il nuovo stile motivano a continuare.
+
+## 10. Copertura completata (#156): stage 20, 180 e muri 170/179/184
+Turni da 1–2 agent, modello sonnet, build `233a56c` (stesso codice di gioco di `add72d4`). Config in `scripts/playtest/turn-03.json` … `turn-07.json`, schede in `docs/playtest/sessioni/T03` … `T07`.
+
+| Turno | Agent · profilo | Pacchetti | Esito |
+|---|---|---|---|
+| T03 | A16 · P16, A11 · P11 | `R180-180` + `S20` | A16 abbandona al 194; A11 interrotto dal limite delle 5 ore al 195, ripreso dal 195 (`R195-200`), piano finito |
+| T04 | A14 · P14 | `R180-180` + `S20` | abbandono al boss 200 |
+| T05 | A15 · P15 | `R194-200` (lasciati da A16, regola 2) | piano finito |
+| T06 | A12 · P12 | `R170-170`, `R179-179`, `R184-184` | 3/3 |
+| T07 | A13 · P13 | come T06 | 3/3 |
+
+### Stage 20 e 180, per livello
+Notazione dei tentativi: v = vinto, i = ingorgo, u = uscita; "+" = "+1 slot" usato nel tentativo. "Casuale" = `levelWinRate`.
+
+| Livello | Agent | 1° tentativo | Difficoltà percepita | Casuale | Tentativi per agent |
+|---|---|---|---|---|---|
+| 180 | 3 | 1/3 | 3,3 | 43% | P11 i+ v · P16 i v · P14 v |
+| 191 | 3 | 3/3 | 2,7 | 82% | tutti al 1° |
+| 192 | 3 | 3/3 | 2,3 | 65% | tutti al 1° |
+| 193 | 3 | 2/3 | 3,0 | 69% | P11 i+ v |
+| 194 | 4 | 2/4 | 3,5 | 62% | **P16 i i u, abbandono** · P14 i+ v |
+| 195 | 3 | 2/3 | 3,0 | 68% | P11: 5 tentativi (uno è l'interruzione), difficoltà 4 |
+| 196 | 3 | 3/3 | 2,7 | 64% | tutti al 1°, tutti con "+1 slot" |
+| 197 | 3 | 3/3 | 2,0 | 56% | tutti al 1°, nessun ingorgo |
+| 198 | 3 | 2/3 | 3,3 | 65% | P14 i+ v+, "frustrato" |
+| 199 | 3 | 3/3 | 3,3 | 51% | tutti al 1° |
+| **200 boss** | 3 | 2/3 | **4,0** | 34% | P11 v+ · P15 v+ · **P14 i+ i+ u, abbandono** |
+
+- **Stage 20 nel complesso:**
+  - 81% di vittorie al 1° tentativo (25 su 31 sessioni·livello);
+  - difficoltà percepita 3,0, casuale medio 61%;
+  - 38 ingorghi, 26 usi di "+1 slot".
+  È in linea con gli stage 16–19 (§2): **nessun muro confermato**.
+- **Boss 200:** il più duro dello stage, coerente con il 34% casuale. Tempo del tentativo vinto: 148 s, contro 85 s di mediana dello stage (1,7×, sotto il tetto di 2× proposto nel §2).
+  - Chi l'ha vinto (P11, P15) è passato da "+1 slot";
+  - chi non lo usa mai (P16) non ci è arrivato;
+  - P14 l'ha usato e ha abbandonato lo stesso.
+  Con 1 abbandono su 3 è un'ipotesi di muro, non un finding (§7 del protocollo).
+- **Dipendenza da "+1 slot":** 18 vittorie su 32 tra 180 e 191–200 hanno usato "+1 slot" nel tentativo vinto. Il solo profilo che non lo usa (P16) vince 180–193 ma abbandona al 194. Senza "+1 slot" la fine dell'universo 2 è più dura di quanto dicano le vittorie al 1° tentativo. Va riverificato con persone vere in #42.
+- **Cause scritte nelle schede:** ancora gli avanzi negli slot (F1) e i colori che mancano ai pixel marroni (F5).
+  - P16 194: "non capisco come prevedere dove finirà la vernice avanzata";
+  - P14 200: "the last yellow and red buckets kept coming back to the slots";
+  - P15 199: "I could not tell how much paint of each colour was still needed".
+
+### Muri 170, 179, 184 (3 agent ciascuno)
+| Livello | Agent | Esiti | Difficoltà percepita | Casuale | Verdetto |
+|---|---|---|---|---|---|
+| 170 boss | P08 (#69), P12, P13 | P08 saltato dopo 5 tentativi; P12 e P13 vinto al 1°, entrambi con "+1 slot" | 3,7 (5, 3, 3) | 38% | **muro escluso**: 2 agent nuovi su 2 lo vincono al 1° tentativo |
+| 179 | P07 (#69), P12, P13 | P07 abbandono dopo 4 tentativi; P12 vinto al 3° (i+ i v+); P13 vinto al 2° (il 1° è l'uscita per l'interruzione) | 4,0 (5, 4, 3) | 58% | **picco confermato**: 0 vittorie al 1° tentativo su 3, 1 abbandono, 6 usi di "+1 slot". È un livello non boss con il 58% casuale: la difficoltà percepita è più alta di quella misurata (vedi F1, F5) |
+| 184 | P08 (#69), P12, P13 | P08 vinto al 5°; P12 al 3°; P13 al 1° con "+1 slot" | 4,0 (5, 4, 3) | 60% | **picco confermato**: 2 agent su 3 a ≥ 3 tentativi, 8 usi di "+1 slot", "i marroni del bordo volevano anche il giallo" (P12) |
+
+Proposta (§7): un ticket di curva su 179 e 184. Si possono rendere più facili (uno slot in più, oppure meno marroni in fondo alla coda), o spostarli dopo un livello di respiro. Il 170 resta com'è.
+
+### Esito per #100
+- **Stage 20: nessun muro segnalato da ≥ 3 agent.** I due abbandoni (194 P16, 200 P14) sono ipotesi da un agent ciascuno.
+- **Riserva:** il boss 200 è il livello percepito più duro dello stage e chi lo vince passa da "+1 slot". Se #100 vuole "nessun muro" anche per chi non usa "+1 slot", serve una prova di P16 sul boss 200, oppure il giudizio di #42.
+- **Muri dell'universo:** 170 escluso; 179 e 184 sono picchi da ammorbidire, non muri, perché tutti e 3 gli agent nuovi li vincono.
