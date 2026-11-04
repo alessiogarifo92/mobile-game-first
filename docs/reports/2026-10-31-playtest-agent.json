@@ -11,7 +11,14 @@
   "T02-A07.json",
   "T02-A07.parte1.json",
   "T02-A08.json",
-  "T02-A08.parte1.json"
+  "T02-A08.parte1.json",
+  "T03-A11.json",
+  "T03-A11.parte1.json",
+  "T03-A16.json",
+  "T04-A14.json",
+  "T05-A15.json",
+  "T06-A12.json",
+  "T07-A13.json"
  ],
  "builds": [
   {
@@ -36,6 +43,36 @@
    "commit": "edf62e390e72",
    "version": "0.5.0",
    "tag": "playtest-u2-add72d4",
+   "variant": "normale"
+  },
+  {
+   "commit": "044e3bd5376d",
+   "version": "0.5.0",
+   "tag": "playtest-u2-233a56c",
+   "variant": "normale"
+  },
+  {
+   "commit": "233a56c0e067",
+   "version": "0.5.0",
+   "tag": "playtest-u2-233a56c",
+   "variant": "normale"
+  },
+  {
+   "commit": "dd1aa5c449ea",
+   "version": "0.5.0",
+   "tag": "playtest-u2-233a56c",
+   "variant": "normale"
+  },
+  {
+   "commit": "7cefabe76faf",
+   "version": "0.5.0",
+   "tag": "playtest-u2-233a56c",
+   "variant": "normale"
+  },
+  {
+   "commit": "eb5f4c18e66b",
+   "version": "0.5.0",
+   "tag": "playtest-u2-233a56c",
    "variant": "normale"
   }
  ],
@@ -330,10 +367,6 @@
     "agents": 1
    },
    {
-    "levelId": 170,
-    "agents": 1
-   },
-   {
     "levelId": 171,
     "agents": 1
    },
@@ -366,14 +399,6 @@
     "agents": 1
    },
    {
-    "levelId": 179,
-    "agents": 1
-   },
-   {
-    "levelId": 180,
-    "agents": 0
-   },
-   {
     "levelId": 181,
     "agents": 1
    },
@@ -383,10 +408,6 @@
    },
    {
     "levelId": 183,
-    "agents": 1
-   },
-   {
-    "levelId": 184,
     "agents": 1
    },
    {
@@ -412,46 +433,6 @@
    {
     "levelId": 190,
     "agents": 1
-   },
-   {
-    "levelId": 191,
-    "agents": 0
-   },
-   {
-    "levelId": 192,
-    "agents": 0
-   },
-   {
-    "levelId": 193,
-    "agents": 0
-   },
-   {
-    "levelId": 194,
-    "agents": 0
-   },
-   {
-    "levelId": 195,
-    "agents": 0
-   },
-   {
-    "levelId": 196,
-    "agents": 0
-   },
-   {
-    "levelId": 197,
-    "agents": 0
-   },
-   {
-    "levelId": 198,
-    "agents": 0
-   },
-   {
-    "levelId": 199,
-    "agents": 0
-   },
-   {
-    "levelId": 200,
-    "agents": 0
    }
   ]
  },
@@ -623,6 +604,104 @@
    "fun": null,
    "wouldReturn": null,
    "stoppedBecause": ""
+  },
+  {
+   "sessionId": "T03-A11",
+   "profileId": "P11",
+   "viewport": "412x915",
+   "language": "en",
+   "endReason": "piano-finito",
+   "levelsPlayed": 6,
+   "wins": 6,
+   "skipped": 0,
+   "lastLevel": 200,
+   "fun": 4,
+   "wouldReturn": 4,
+   "stoppedBecause": "I reached the end of the volcano stage and finished the whole plan, so I stopped there happily."
+  },
+  {
+   "sessionId": "T03-A11",
+   "profileId": "P11",
+   "viewport": "412x915",
+   "language": "en",
+   "endReason": "errore-harness",
+   "levelsPlayed": 5,
+   "wins": 5,
+   "skipped": 0,
+   "lastLevel": 194,
+   "fun": null,
+   "wouldReturn": null,
+   "stoppedBecause": ""
+  },
+  {
+   "sessionId": "T03-A16",
+   "profileId": "P16",
+   "viewport": "360x640",
+   "language": "it",
+   "endReason": "soglia-abbandono",
+   "levelsPlayed": 5,
+   "wins": 4,
+   "skipped": 0,
+   "lastLevel": 194,
+   "fun": 3,
+   "wouldReturn": 2,
+   "stoppedBecause": "Ho perso tre volte di fila (due ingorghi al livello 194 e uno ancora prima, tutti senza usare +1 slot, che non uso mai). Sono uno che gioca con calma: dopo la terza sconfitta di fila ho preferito fermarmi piuttosto che continuare a provare a caso."
+  },
+  {
+   "sessionId": "T04-A14",
+   "profileId": "P14",
+   "viewport": "360x640",
+   "language": "en",
+   "endReason": "soglia-abbandono",
+   "levelsPlayed": 11,
+   "wins": 10,
+   "skipped": 0,
+   "lastLevel": 200,
+   "fun": 3,
+   "wouldReturn": 3,
+   "stoppedBecause": "I lost four times in a row on the last boss level, all by jam. I could not find a way to keep my waiting slots free, so I stopped instead of tapping blindly."
+  },
+  {
+   "sessionId": "T05-A15",
+   "profileId": "P15",
+   "viewport": "412x915",
+   "language": "en",
+   "endReason": "piano-finito",
+   "levelsPlayed": 7,
+   "wins": 7,
+   "skipped": 0,
+   "lastLevel": 200,
+   "fun": 4,
+   "wouldReturn": 4,
+   "stoppedBecause": "I got to the end: the final boss was painted and the universe was complete, so there was nothing left to play."
+  },
+  {
+   "sessionId": "T06-A12",
+   "profileId": "P12",
+   "viewport": "360x640",
+   "language": "it",
+   "endReason": "piano-finito",
+   "levelsPlayed": 3,
+   "wins": 3,
+   "skipped": 0,
+   "lastLevel": 184,
+   "fun": 3,
+   "wouldReturn": 3,
+   "stoppedBecause": "Ho finito i tre livelli che avevo, non ho mollato: ho perso dei tentativi ma poi ho vinto sempre."
+  },
+  {
+   "sessionId": "T07-A13",
+   "profileId": "P13",
+   "viewport": "412x915",
+   "language": "it",
+   "endReason": "piano-finito",
+   "levelsPlayed": 3,
+   "wins": 3,
+   "skipped": 0,
+   "lastLevel": 184,
+   "fun": 4,
+   "wouldReturn": 4,
+   "stoppedBecause": "Ho finito i tre livelli che mi ero messo da fare, nessuna sconfitta di fila: sono andato in fondo."
   }
  ],
  "levels": [
@@ -3616,26 +3695,28 @@
   {
    "levelId": 170,
    "sessions": [
-    "T02-A08"
+    "T02-A08",
+    "T06-A12",
+    "T07-A13"
    ],
-   "agents": 1,
-   "wins": 0,
-   "firstTryWins": 0,
+   "agents": 3,
+   "wins": 2,
+   "firstTryWins": 2,
    "skipped": 1,
    "attemptsMean": 1,
-   "jams": 2,
+   "jams": 4,
    "refusals": 0,
-   "extraSlotUses": 1,
-   "winTicks": null,
-   "winDurationMs": null,
-   "totalTicks": 1203,
+   "extraSlotUses": 3,
+   "winTicks": 1492.5,
+   "winDurationMs": 131388.5,
+   "totalTicks": 4188,
    "missingPixelsOnLoss": [
     19
    ],
-   "perceivedDifficulty": 5,
+   "perceivedDifficulty": 3.67,
    "understood": 4,
    "moods": {
-    "divertito": 0,
+    "divertito": 2,
     "neutro": 0,
     "annoiato": 0,
     "frustrato": 1
@@ -3645,6 +3726,14 @@
     {
      "sessionId": "T02-A08",
      "text": "Why leftover paint from buckets keeps filling my two waiting slots with tiny leftovers (3, 2, 1 shots) so I jam with a huge pile of brown pixels still needing three colours. I can't tell how to plan which colours hit which lane."
+    },
+    {
+     "sessionId": "T06-A12",
+     "text": "Non ho capito bene perché certi pixel diventavano marroni o verdi, ho solo toccato in fretta."
+    },
+    {
+     "sessionId": "T07-A13",
+     "text": "All'inizio non capivo perche' certi pixel chiari restavano vuoti: alla fine si sono riempiti da soli con gli ultimi secchielli. Non ho capito bene cosa fosse il marrone sui bordi della casa, ma si e' colorato."
     }
    ],
    "mechanics": [
@@ -3949,38 +4038,51 @@
   {
    "levelId": 179,
    "sessions": [
-    "T02-A07"
+    "T02-A07",
+    "T06-A12",
+    "T07-A13"
    ],
-   "agents": 1,
-   "wins": 0,
+   "agents": 3,
+   "wins": 2,
    "firstTryWins": 0,
    "skipped": 0,
-   "attemptsMean": 4,
-   "jams": 6,
+   "attemptsMean": 3,
+   "jams": 11,
    "refusals": 0,
-   "extraSlotUses": 3,
-   "winTicks": null,
-   "winDurationMs": null,
-   "totalTicks": 4583,
+   "extraSlotUses": 6,
+   "winTicks": 1519,
+   "winDurationMs": 134112,
+   "totalTicks": 9856,
    "missingPixelsOnLoss": [
     8,
     66,
     8,
-    7
+    7,
+    46,
+    7,
+    46
    ],
-   "perceivedDifficulty": 5,
-   "understood": 2,
+   "perceivedDifficulty": 4,
+   "understood": 3,
    "moods": {
     "divertito": 0,
-    "neutro": 0,
+    "neutro": 1,
     "annoiato": 0,
-    "frustrato": 1
+    "frustrato": 2
    },
    "wouldNotContinue": 1,
    "notUnderstood": [
     {
      "sessionId": "T02-A07",
      "text": "Non capisco perche' certi secchielli tornano indietro interi senza dipingere niente e restano negli spazi d'attesa a bloccarmi. Non capisco quali caselle posso raggiungere e quali no, ne' in che ordine mandare i colori. Le caselle marroni vogliono tre colori e non so quale manca. Alla fine restavano caselle chiare in mezzo che non riuscivo mai a colorare."
+    },
+    {
+     "sessionId": "T06-A12",
+     "text": "Non capivo quali secchielli mandare per primi: il blu mi ha fatto venire pixel marroni e non avevo capito che servivano. Gli slot si riempivano subito con i rossi avanzati."
+    },
+    {
+     "sessionId": "T07-A13",
+     "text": "Non capivo perche' dei pixel gia' mezzi colorati restavano con un angolino rosso: servivano ancora giallo e blu per fare marrone. Mi aspettavo di finire prima."
     }
    ],
    "mechanics": [
@@ -3992,6 +4094,55 @@
     }
    ],
    "randomWin": 0.575,
+   "anomaly": null
+  },
+  {
+   "levelId": 180,
+   "sessions": [
+    "T03-A11",
+    "T03-A16",
+    "T04-A14"
+   ],
+   "agents": 3,
+   "wins": 3,
+   "firstTryWins": 1,
+   "skipped": 0,
+   "attemptsMean": 1.67,
+   "jams": 3,
+   "refusals": 0,
+   "extraSlotUses": 1,
+   "winTicks": 1482,
+   "winDurationMs": 133465.67,
+   "totalTicks": 5340,
+   "missingPixelsOnLoss": [
+    84,
+    86
+   ],
+   "perceivedDifficulty": 3.33,
+   "understood": 3.67,
+   "moods": {
+    "divertito": 2,
+    "neutro": 1,
+    "annoiato": 0,
+    "frustrato": 0
+   },
+   "wouldNotContinue": 0,
+   "notUnderstood": [
+    {
+     "sessionId": "T03-A11",
+     "text": "I never worked out what the faint pale pixels with the little 3-spoke marks were until they got painted; I just sent colours and watched."
+    },
+    {
+     "sessionId": "T03-A16",
+     "text": "Non capivo bene perché alcuni pixel diventano marroni da soli: credo di aver mescolato i tre colori per sbaglio su pixel che volevano altro. Al primo tentativo ho mandato un secchiello con gli slot già pieni e mi è venuto l'ingorgo: era colpa mia, ma non potevo sapere in anticipo quanta vernice sarebbe avanzata."
+    },
+    {
+     "sessionId": "T04-A14",
+     "text": "I could not tell which pale pixels were purple or pink at this size, so I mostly sent buckets and watched. I also did not know why one tiny bucket (red 1) came back to a slot."
+    }
+   ],
+   "mechanics": [],
+   "randomWin": 0.43,
    "anomaly": null
   },
   {
@@ -4105,30 +4256,34 @@
   {
    "levelId": 184,
    "sessions": [
-    "T02-A08"
+    "T02-A08",
+    "T06-A12",
+    "T07-A13"
    ],
-   "agents": 1,
-   "wins": 1,
-   "firstTryWins": 0,
+   "agents": 3,
+   "wins": 3,
+   "firstTryWins": 1,
    "skipped": 0,
-   "attemptsMean": 5,
-   "jams": 8,
+   "attemptsMean": 3,
+   "jams": 14,
    "refusals": 0,
-   "extraSlotUses": 4,
-   "winTicks": 1736,
-   "winDurationMs": 148269,
-   "totalTicks": 7999,
+   "extraSlotUses": 8,
+   "winTicks": 1704.33,
+   "winDurationMs": 149348.33,
+   "totalTicks": 13914,
    "missingPixelsOnLoss": [
     33,
     20,
     18,
-    12
+    12,
+    47,
+    52
    ],
-   "perceivedDifficulty": 5,
-   "understood": 3,
+   "perceivedDifficulty": 4,
+   "understood": 3.33,
    "moods": {
-    "divertito": 0,
-    "neutro": 0,
+    "divertito": 1,
+    "neutro": 1,
     "annoiato": 0,
     "frustrato": 1
    },
@@ -4137,6 +4292,14 @@
     {
      "sessionId": "T02-A08",
      "text": "Why the leftover scraps of paint (2, 3, 6 shots) sit in my waiting slots forever and kill the run later. I can't predict which bucket will be used up and which won't. Also never worked out what the '?' pixels do."
+    },
+    {
+     "sessionId": "T06-A12",
+     "text": "Mi sono accorto tardi che i pixel marroni del bordo volevano anche il giallo: il rosso e il blu da soli li lasciavano mezzi dipinti e bloccavano la corsia. I punti con il ? non li ho proprio capiti."
+    },
+    {
+     "sessionId": "T07-A13",
+     "text": "All'inizio non capivo perche' mandare secchielli sul nastro non cambiasse niente: poi ho capito che i pixel col mezzo rosso e mezzo blu aspettavano il giallo per diventare marrone. Il punto interrogativo non l'ho dovuto affrontare."
     }
    ],
    "mechanics": [
@@ -4374,7 +4537,465 @@
    "mechanics": [],
    "randomWin": 0.355,
    "anomaly": null
+  },
+  {
+   "levelId": 191,
+   "sessions": [
+    "T03-A11",
+    "T03-A16",
+    "T04-A14"
+   ],
+   "agents": 3,
+   "wins": 3,
+   "firstTryWins": 3,
+   "skipped": 0,
+   "attemptsMean": 1,
+   "jams": 2,
+   "refusals": 0,
+   "extraSlotUses": 2,
+   "winTicks": 775.33,
+   "winDurationMs": 75408.33,
+   "totalTicks": 2326,
+   "missingPixelsOnLoss": [],
+   "perceivedDifficulty": 2.67,
+   "understood": 4,
+   "moods": {
+    "divertito": 3,
+    "neutro": 0,
+    "annoiato": 0,
+    "frustrato": 0
+   },
+   "wouldNotContinue": 0,
+   "notUnderstood": [
+    {
+     "sessionId": "T03-A11",
+     "text": "The two question-mark pixels vanished into brown at the end and I did not really see how they were revealed."
+    },
+    {
+     "sessionId": "T03-A16",
+     "text": "Non so cosa fosse la scatola con il punto interrogativo, ma si è scoperta da sola. Non ho capito bene quando una vernice resta avanzata e quando no."
+    },
+    {
+     "sessionId": "T04-A14",
+     "text": "I did not realise that my buckets wait in slots even when the belt is empty, so I filled all slots by sending two near-empty buckets and jammed. My fault."
+    }
+   ],
+   "mechanics": [],
+   "randomWin": 0.82,
+   "anomaly": null
+  },
+  {
+   "levelId": 192,
+   "sessions": [
+    "T03-A11",
+    "T03-A16",
+    "T04-A14"
+   ],
+   "agents": 3,
+   "wins": 3,
+   "firstTryWins": 3,
+   "skipped": 0,
+   "attemptsMean": 1,
+   "jams": 1,
+   "refusals": 0,
+   "extraSlotUses": 1,
+   "winTicks": 1004,
+   "winDurationMs": 86686,
+   "totalTicks": 3012,
+   "missingPixelsOnLoss": [],
+   "perceivedDifficulty": 2.33,
+   "understood": 4.33,
+   "moods": {
+    "divertito": 3,
+    "neutro": 0,
+    "annoiato": 0,
+    "frustrato": 0
+   },
+   "wouldNotContinue": 0,
+   "notUnderstood": [
+    {
+     "sessionId": "T04-A14",
+     "text": "The brown row along the bottom came out of nowhere for me: I sent a yellow bucket just to get it out of the way and it combined with the red and blue. Happy accident, but I could not predict it."
+    }
+   ],
+   "mechanics": [],
+   "randomWin": 0.645,
+   "anomaly": null
+  },
+  {
+   "levelId": 193,
+   "sessions": [
+    "T03-A11",
+    "T03-A16",
+    "T04-A14"
+   ],
+   "agents": 3,
+   "wins": 3,
+   "firstTryWins": 2,
+   "skipped": 0,
+   "attemptsMean": 1.33,
+   "jams": 3,
+   "refusals": 0,
+   "extraSlotUses": 2,
+   "winTicks": 841.33,
+   "winDurationMs": 72728.67,
+   "totalTicks": 3675,
+   "missingPixelsOnLoss": [
+    5
+   ],
+   "perceivedDifficulty": 3,
+   "understood": 4,
+   "moods": {
+    "divertito": 1,
+    "neutro": 2,
+    "annoiato": 0,
+    "frustrato": 0
+   },
+   "wouldNotContinue": 0,
+   "notUnderstood": [
+    {
+     "sessionId": "T03-A11",
+     "text": "I did not see that the red bucket was the key to unlocking the bottom brown rows until I tried it; the question marks only made sense after that."
+    },
+    {
+     "sessionId": "T03-A16",
+     "text": "I punti interrogativi si sono scoperti da soli, non ho capito esattamente quando. Il disegno finale (un geyser) non assomiglia molto a quello che immaginavo guardando i pixel pallidi all'inizio."
+    },
+    {
+     "sessionId": "T04-A14",
+     "text": "I could not tell in advance how much paint each bucket would waste. The slots filled up while the belt was empty, which feels odd."
+    }
+   ],
+   "mechanics": [],
+   "randomWin": 0.69,
+   "anomaly": null
+  },
+  {
+   "levelId": 194,
+   "sessions": [
+    "T03-A11",
+    "T03-A16",
+    "T04-A14",
+    "T05-A15"
+   ],
+   "agents": 4,
+   "wins": 3,
+   "firstTryWins": 2,
+   "skipped": 0,
+   "attemptsMean": 1.75,
+   "jams": 7,
+   "refusals": 0,
+   "extraSlotUses": 3,
+   "winTicks": 995.33,
+   "winDurationMs": 87804.67,
+   "totalTicks": 6425,
+   "missingPixelsOnLoss": [
+    9,
+    17,
+    4,
+    6
+   ],
+   "perceivedDifficulty": 3.5,
+   "understood": 3.75,
+   "moods": {
+    "divertito": 2,
+    "neutro": 1,
+    "annoiato": 0,
+    "frustrato": 1
+   },
+   "wouldNotContinue": 1,
+   "notUnderstood": [
+    {
+     "sessionId": "T03-A11",
+     "text": "Hard to predict which pixels a bucket will hit before I send it, so my little leftovers of 1 paint kept filling the waiting slots."
+    },
+    {
+     "sessionId": "T03-A16",
+     "text": "Non capisco come prevedere dove finira' la vernice avanzata: il secchiello si ferma sul primo pixel che vuole un altro colore, e a me sembra che l'ordine giusto dei colori sia obbligato ma non lo vedo dal disegno. Ho provato tre ordini diversi e ogni volta restavano pixel pallidi che volevano ancora giallo, mentre il giallo era finito o bloccato."
+    },
+    {
+     "sessionId": "T04-A14",
+     "text": "I could not predict when a bucket would come back with paint left, so I filled the slots without meaning to. After I used the +1 slot the next Jam only offered Retry."
+    },
+    {
+     "sessionId": "T05-A15",
+     "text": "I did not see why my red bucket did nothing for a while when I re-sent it from the waiting slots; I guessed its lanes were blocked."
+    }
+   ],
+   "mechanics": [],
+   "randomWin": 0.615,
+   "anomaly": null
+  },
+  {
+   "levelId": 195,
+   "sessions": [
+    "T03-A11",
+    "T04-A14",
+    "T05-A15"
+   ],
+   "agents": 3,
+   "wins": 3,
+   "firstTryWins": 2,
+   "skipped": 0,
+   "attemptsMean": 2.33,
+   "jams": 8,
+   "refusals": 0,
+   "extraSlotUses": 5,
+   "winTicks": 1340.33,
+   "winDurationMs": 116934.33,
+   "totalTicks": 7369,
+   "missingPixelsOnLoss": [
+    13,
+    12,
+    30,
+    21
+   ],
+   "perceivedDifficulty": 3,
+   "understood": 4.33,
+   "moods": {
+    "divertito": 1,
+    "neutro": 2,
+    "annoiato": 0,
+    "frustrato": 0
+   },
+   "wouldNotContinue": 0,
+   "notUnderstood": [
+    {
+     "sessionId": "T03-A11",
+     "text": "I never really worked out which pixels each bucket would hit, so the leftover paint in my waiting slots kept surprising me and clogging them."
+    },
+    {
+     "sessionId": "T04-A14",
+     "text": "Blue buckets came back full because purple pixels in front needed red first; I only understood that after the jam. The final picture is a rock, but I could not see that while painting."
+    }
+   ],
+   "mechanics": [],
+   "randomWin": 0.675,
+   "anomaly": null
+  },
+  {
+   "levelId": 196,
+   "sessions": [
+    "T03-A11",
+    "T04-A14",
+    "T05-A15"
+   ],
+   "agents": 3,
+   "wins": 3,
+   "firstTryWins": 3,
+   "skipped": 0,
+   "attemptsMean": 1,
+   "jams": 3,
+   "refusals": 0,
+   "extraSlotUses": 3,
+   "winTicks": 1000.67,
+   "winDurationMs": 89315.33,
+   "totalTicks": 3002,
+   "missingPixelsOnLoss": [],
+   "perceivedDifficulty": 2.67,
+   "understood": 4.33,
+   "moods": {
+    "divertito": 2,
+    "neutro": 1,
+    "annoiato": 0,
+    "frustrato": 0
+   },
+   "wouldNotContinue": 0,
+   "notUnderstood": [
+    {
+     "sessionId": "T04-A14",
+     "text": "A big red bucket jammed me while a few small buckets sat in slots. I still do not see how I was meant to avoid that."
+    }
+   ],
+   "mechanics": [],
+   "randomWin": 0.64,
+   "anomaly": null
+  },
+  {
+   "levelId": 197,
+   "sessions": [
+    "T03-A11",
+    "T04-A14",
+    "T05-A15"
+   ],
+   "agents": 3,
+   "wins": 3,
+   "firstTryWins": 3,
+   "skipped": 0,
+   "attemptsMean": 1,
+   "jams": 0,
+   "refusals": 0,
+   "extraSlotUses": 0,
+   "winTicks": 864,
+   "winDurationMs": 73427,
+   "totalTicks": 2592,
+   "missingPixelsOnLoss": [],
+   "perceivedDifficulty": 2,
+   "understood": 4.67,
+   "moods": {
+    "divertito": 3,
+    "neutro": 0,
+    "annoiato": 0,
+    "frustrato": 0
+   },
+   "wouldNotContinue": 0,
+   "notUnderstood": [],
+   "mechanics": [],
+   "randomWin": 0.56,
+   "anomaly": null
+  },
+  {
+   "levelId": 198,
+   "sessions": [
+    "T03-A11",
+    "T04-A14",
+    "T05-A15"
+   ],
+   "agents": 3,
+   "wins": 3,
+   "firstTryWins": 2,
+   "skipped": 0,
+   "attemptsMean": 1.33,
+   "jams": 5,
+   "refusals": 0,
+   "extraSlotUses": 4,
+   "winTicks": 1407,
+   "winDurationMs": 124246.33,
+   "totalTicks": 5453,
+   "missingPixelsOnLoss": [
+    6
+   ],
+   "perceivedDifficulty": 3.33,
+   "understood": 3.67,
+   "moods": {
+    "divertito": 2,
+    "neutro": 0,
+    "annoiato": 0,
+    "frustrato": 1
+   },
+   "wouldNotContinue": 0,
+   "notUnderstood": [
+    {
+     "sessionId": "T03-A11",
+     "text": "I did not see the last jam coming, because a bucket I thought was a different one came out when I tapped a column twice."
+    },
+    {
+     "sessionId": "T04-A14",
+     "text": "I could not tell which lanes the blue paint would be stopped in. The eight purple pixels at the top are far from the rest and needed red plus blue, but my blue went to the edge ones first and I never worked out a safe order. I also lost one run to a jam where every bucket left was useless."
+    },
+    {
+     "sessionId": "T05-A15",
+     "text": "I found it hard to tell in advance which pixel still needed which colour once a lane was half painted, so I sent a blue bucket that jammed me when the slots were full."
+    }
+   ],
+   "mechanics": [],
+   "randomWin": 0.65,
+   "anomaly": null
+  },
+  {
+   "levelId": 199,
+   "sessions": [
+    "T03-A11",
+    "T04-A14",
+    "T05-A15"
+   ],
+   "agents": 3,
+   "wins": 3,
+   "firstTryWins": 3,
+   "skipped": 0,
+   "attemptsMean": 1,
+   "jams": 2,
+   "refusals": 0,
+   "extraSlotUses": 2,
+   "winTicks": 1563.33,
+   "winDurationMs": 136147,
+   "totalTicks": 4690,
+   "missingPixelsOnLoss": [],
+   "perceivedDifficulty": 3.33,
+   "understood": 4,
+   "moods": {
+    "divertito": 2,
+    "neutro": 1,
+    "annoiato": 0,
+    "frustrato": 0
+   },
+   "wouldNotContinue": 0,
+   "notUnderstood": [
+    {
+     "sessionId": "T05-A15",
+     "text": "With so many mixed colours I could not plan the order. I ran out of yellow with one pixel left and was only saved because the jam gave me a free slot, so I never knew how much paint each colour really needed."
+    }
+   ],
+   "mechanics": [],
+   "randomWin": 0.51,
+   "anomaly": null
+  },
+  {
+   "levelId": 200,
+   "sessions": [
+    "T03-A11",
+    "T04-A14",
+    "T05-A15"
+   ],
+   "agents": 3,
+   "wins": 2,
+   "firstTryWins": 2,
+   "skipped": 0,
+   "attemptsMean": 1.67,
+   "jams": 7,
+   "refusals": 0,
+   "extraSlotUses": 4,
+   "winTicks": 1744.5,
+   "winDurationMs": 153678.5,
+   "totalTicks": 8351,
+   "missingPixelsOnLoss": [
+    8,
+    50,
+    7
+   ],
+   "perceivedDifficulty": 4,
+   "understood": 3.67,
+   "moods": {
+    "divertito": 2,
+    "neutro": 0,
+    "annoiato": 0,
+    "frustrato": 1
+   },
+   "wouldNotContinue": 1,
+   "notUnderstood": [
+    {
+     "sessionId": "T04-A14",
+     "text": "I never found an order that kept the waiting slots free. Paint kept coming back to the slots because pixels in front of it were not ready yet, and the final yellow bucket always seemed to be the one that jammed me. I cannot see how much paint is really needed before I send a bucket."
+    },
+    {
+     "sessionId": "T05-A15",
+     "text": "Same as before: it is hard to know how much paint of each colour is left versus what the picture still needs. I got one jam near the end."
+    }
+   ],
+   "mechanics": [],
+   "randomWin": 0.335,
+   "anomaly": null
   }
  ],
- "bugs": []
+ "bugs": [
+  {
+   "title": "Stage header text runs into the counter",
+   "severity": "bassa",
+   "category": "testo",
+   "levelId": 180,
+   "steps": [
+    "Open the map at level 180",
+    "Read the blue stage banner"
+   ],
+   "expected": "A gap between the stage name and the 0/10 counter, or the name shortened with an ellipsis",
+   "actual": "The banner reads 'Stage 19 · Night in the woods0/10' with no space; the name is jammed against the counter",
+   "screenshots": [
+    "/home/user/mobile-game-first/.claude/worktrees/playtest-copertura-u2/playtest-runs/T04/T04-A14/0002.png"
+   ],
+   "reproduced": true,
+   "id": "T04-A14-B01",
+   "sessionId": "T04-A14",
+   "profileId": "P14"
+  }
+ ]
 }
