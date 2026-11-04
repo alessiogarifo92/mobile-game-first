@@ -36,9 +36,12 @@ export function tipsMetBefore(levels: readonly Level[], start: number): string[]
 export function packLevels(levels: readonly LevelRef[], pack: string): number[] {
   const named = NAMED_PACKS[pack];
   const m = /^S(\d{2})$/.exec(pack);
-  if (!named && !m) throw new SaveError(`unknown pack "${pack}" (U1-ONB, U1-FINE, S01…S99)`);
-  const ids = named
-    ? levels.filter((l) => l.id >= named[0] && l.id <= named[1]).map((l) => l.id)
+  // `R156-160`: a range, to finish a pack a session left halfway (#69) without replaying the levels already seen.
+  const r = /^R(\d+)-(\d+)$/.exec(pack);
+  const range = named ?? (r ? [Number(r[1]), Number(r[2])] : undefined);
+  if (!range && !m) throw new SaveError(`unknown pack "${pack}" (U1-ONB, U1-FINE, S01…S99, R<from>-<to>)`);
+  const ids = range
+    ? levels.filter((l) => l.id >= range[0]! && l.id <= range[1]!).map((l) => l.id)
     : levels.filter((l) => l.stage === Number(m![1])).map((l) => l.id);
   if (ids.length === 0) throw new SaveError(`pack "${pack}": the game has no levels for it yet`);
   return ids;

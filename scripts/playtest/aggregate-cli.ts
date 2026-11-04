@@ -15,7 +15,7 @@ import { aggregate, coverageGaps, type Form } from './aggregate';
 const { values: args, positionals } = parseArgs({ options: { out: { type: 'string' } }, allowPositionals: true });
 if (!args.out || positionals.length === 0) throw new Error('usage: aggregate-cli.ts --out <file.json> <dir>...');
 
-const files = positionals.flatMap((dir) => readdirSync(dir).filter((f) => /^T\d{2}-A\d{2}\.json$/.test(f)).map((f) => join(dir, f)));
+const files = positionals.flatMap((dir) => readdirSync(dir).filter((f) => /^T\d{2}-A\d{2}(\.parte\d)?\.json$/.test(f)).map((f) => join(dir, f)));
 const forms = files.map((f) => JSON.parse(readFileSync(f, 'utf8')) as Form);
 const seen = new Set(forms.flatMap((f) => f.levels.map((l) => l.levelId)));
 const randomWin: Record<number, number> = {};
