@@ -18,7 +18,8 @@
   "T04-A14.json",
   "T05-A15.json",
   "T06-A12.json",
-  "T07-A13.json"
+  "T07-A13.json",
+  "T08-A16.json"
  ],
  "builds": [
   {
@@ -71,6 +72,12 @@
   },
   {
    "commit": "eb5f4c18e66b",
+   "version": "0.5.0",
+   "tag": "playtest-u2-233a56c",
+   "variant": "normale"
+  },
+  {
+   "commit": "5b89420dba45",
    "version": "0.5.0",
    "tag": "playtest-u2-233a56c",
    "variant": "normale"
@@ -702,6 +709,20 @@
    "fun": 4,
    "wouldReturn": 4,
    "stoppedBecause": "Ho finito i tre livelli che mi ero messo da fare, nessuna sconfitta di fila: sono andato in fondo."
+  },
+  {
+   "sessionId": "T08-A16",
+   "profileId": "P16",
+   "viewport": "360x640",
+   "language": "it",
+   "endReason": "soglia-abbandono",
+   "levelsPlayed": 1,
+   "wins": 0,
+   "skipped": 0,
+   "lastLevel": 200,
+   "fun": 2,
+   "wouldReturn": 2,
+   "stoppedBecause": "Ho perso tre volte di fila per ingorgo sul boss e non voglio usare +1 slot: preferisco fermarmi che andare avanti a tentoni."
   }
  ],
  "levels": [
@@ -4935,33 +4956,37 @@
    "sessions": [
     "T03-A11",
     "T04-A14",
-    "T05-A15"
+    "T05-A15",
+    "T08-A16"
    ],
-   "agents": 3,
+   "agents": 4,
    "wins": 2,
    "firstTryWins": 2,
    "skipped": 0,
-   "attemptsMean": 1.67,
-   "jams": 7,
+   "attemptsMean": 2,
+   "jams": 10,
    "refusals": 0,
    "extraSlotUses": 4,
    "winTicks": 1744.5,
    "winDurationMs": 153678.5,
-   "totalTicks": 8351,
+   "totalTicks": 10243,
    "missingPixelsOnLoss": [
     8,
     50,
-    7
+    7,
+    78,
+    78,
+    37
    ],
-   "perceivedDifficulty": 4,
-   "understood": 3.67,
+   "perceivedDifficulty": 4.25,
+   "understood": 3.5,
    "moods": {
     "divertito": 2,
     "neutro": 0,
     "annoiato": 0,
-    "frustrato": 1
+    "frustrato": 2
    },
-   "wouldNotContinue": 1,
+   "wouldNotContinue": 2,
    "notUnderstood": [
     {
      "sessionId": "T04-A14",
@@ -4970,6 +4995,10 @@
     {
      "sessionId": "T05-A15",
      "text": "Same as before: it is hard to know how much paint of each colour is left versus what the picture still needs. I got one jam near the end."
+    },
+    {
+     "sessionId": "T08-A16",
+     "text": "Non capisco in che ordine mandare i secchielli: il giallo avanza quasi tutto e va negli slot, poi gli slot sono pieni e basta un altro avanzo per l'ingorgo. Non vedo come evitarlo senza 'prova e sbaglia'. Anche i pixel con il punto interrogativo e le pietre non so come sbloccarli."
     }
    ],
    "mechanics": [],
