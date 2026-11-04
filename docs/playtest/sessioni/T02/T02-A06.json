@@ -1,0 +1,534 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "T02-A06",
+  "agent": {
+    "agentId": "A06",
+    "profileId": "P06"
+  },
+  "turn": 2,
+  "build": {
+    "commit": "edf62e390e72",
+    "version": "0.5.0",
+    "tag": "playtest-u2-add72d4",
+    "variant": "normale"
+  },
+  "device": {
+    "viewport": "412x915",
+    "language": "en"
+  },
+  "startSave": {
+    "unlocked": 156,
+    "completedThrough": 155,
+    "seenTips": [
+      "guide",
+      "blocked",
+      "slots",
+      "belt",
+      "mixing",
+      "ice",
+      "hidden",
+      "brown",
+      "stone"
+    ]
+  },
+  "plan": {
+    "packs": [
+      "R156-160"
+    ],
+    "levelIds": [
+      156,
+      157,
+      158,
+      159,
+      160
+    ]
+  },
+  "startedAt": "2026-11-04T06:44:01.234Z",
+  "endedAt": "2026-11-04T07:02:38.823Z",
+  "endReason": "piano-finito",
+  "levels": [
+    {
+      "levelId": 156,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "ingorgo",
+          "durationMs": 96874,
+          "timeToFirstTapMs": 8806,
+          "ticks": 757,
+          "taps": 12,
+          "offTargetTaps": 0,
+          "launches": 10,
+          "refusals": 0,
+          "jams": 2,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 52,
+          "targets": 66,
+          "remaining": {
+            "ice": 1,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 10,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0003.png",
+            "0004.png",
+            "0005.png",
+            "0006.png",
+            "0007.png",
+            "0008.png",
+            "0009.png",
+            "0010.png",
+            "0011.png",
+            "0012.png",
+            "0013.png",
+            "0014.png",
+            "0015.png"
+          ]
+        },
+        {
+          "attempt": 2,
+          "outcome": "vinto",
+          "durationMs": 169138,
+          "timeToFirstTapMs": 6308,
+          "ticks": 1545,
+          "taps": 21,
+          "offTargetTaps": 0,
+          "launches": 20,
+          "refusals": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 66,
+          "targets": 66,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 20,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0016.png",
+            "0017.png",
+            "0018.png",
+            "0019.png",
+            "0020.png",
+            "0021.png",
+            "0022.png",
+            "0023.png",
+            "0024.png",
+            "0025.png",
+            "0026.png",
+            "0027.png",
+            "0028.png",
+            "0029.png",
+            "0030.png",
+            "0031.png",
+            "0032.png",
+            "0033.png",
+            "0034.png",
+            "0035.png",
+            "0036.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 4,
+        "mood": "frustrato",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 2,
+        "mechanic": {
+          "id": "stone",
+          "understood": 3,
+          "fairness": 2
+        },
+        "notUnderstood": "I never know in which order to send the buckets. Buckets that still have paint left keep filling the waiting slots and I jam. Some red buckets just sat there doing nothing because pixels in front needed blue first.",
+        "wouldContinue": true,
+        "freeText": "Won on my 3rd try (took the +1 slot twice), 20 moves, which feels like far too many for a perfectionist. I wanted to replay it for fewer moves but I tapped the map and landed in 157 by mistake, so I let it go."
+      }
+    },
+    {
+      "levelId": 157,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 131435,
+          "timeToFirstTapMs": 15226,
+          "ticks": 1214,
+          "taps": 17,
+          "offTargetTaps": 0,
+          "launches": 16,
+          "refusals": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 79,
+          "targets": 79,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 27,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0040.png",
+            "0041.png",
+            "0042.png",
+            "0043.png",
+            "0044.png",
+            "0045.png",
+            "0046.png",
+            "0047.png",
+            "0048.png",
+            "0049.png",
+            "0050.png",
+            "0051.png",
+            "0052.png",
+            "0053.png",
+            "0054.png",
+            "0055.png",
+            "0056.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 3,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 3,
+        "notUnderstood": "Why a bucket sometimes uses only a few pixels and keeps the rest of its paint. I only learned by trial that blue goes first from the outside.",
+        "wouldContinue": true,
+        "freeText": "Won in 16 moves after a jam in the middle that I fixed with +1 slot. I was not thrilled by the move count but it felt okay, so I did not replay."
+      }
+    },
+    {
+      "levelId": 158,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "ingorgo",
+          "durationMs": 122399,
+          "timeToFirstTapMs": 10808,
+          "ticks": 1047,
+          "taps": 14,
+          "offTargetTaps": 0,
+          "launches": 12,
+          "refusals": 0,
+          "jams": 2,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 61,
+          "targets": 70,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 26,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0059.png",
+            "0060.png",
+            "0061.png",
+            "0062.png",
+            "0063.png",
+            "0064.png",
+            "0065.png",
+            "0066.png",
+            "0067.png",
+            "0068.png",
+            "0069.png",
+            "0070.png",
+            "0071.png",
+            "0072.png",
+            "0073.png",
+            "0074.png",
+            "0075.png"
+          ]
+        },
+        {
+          "attempt": 2,
+          "outcome": "vinto",
+          "durationMs": 132400,
+          "timeToFirstTapMs": 6081,
+          "ticks": 1313,
+          "taps": 16,
+          "offTargetTaps": 0,
+          "launches": 15,
+          "refusals": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 1,
+          "beltCapacity": 2,
+          "painted": 70,
+          "targets": 70,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 24,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0076.png",
+            "0077.png",
+            "0078.png",
+            "0079.png",
+            "0080.png",
+            "0081.png",
+            "0082.png",
+            "0083.png",
+            "0084.png",
+            "0085.png",
+            "0086.png",
+            "0087.png",
+            "0088.png",
+            "0089.png",
+            "0090.png",
+            "0091.png",
+            "0092.png",
+            "0093.png",
+            "0094.png",
+            "0095.png",
+            "0096.png",
+            "0097.png",
+            "0098.png",
+            "0099.png",
+            "0100.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 3,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 3,
+        "mechanic": {
+          "id": "stone",
+          "understood": 4,
+          "fairness": 3
+        },
+        "notUnderstood": "The order of colours matters a lot (blue, then yellow, then red) and the game never says so. A bucket stuck in a waiting slot is useless until I change the picture first, which I only worked out after jamming.",
+        "wouldContinue": true,
+        "freeText": "Jammed twice, then solved it in 15 moves by sending the red before the yellow leftovers. The solution felt clean in the end. I did not replay, 15 seems fine."
+      }
+    },
+    {
+      "levelId": 159,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 117862,
+          "timeToFirstTapMs": 10470,
+          "ticks": 1133,
+          "taps": 13,
+          "offTargetTaps": 0,
+          "launches": 13,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 78,
+          "targets": 78,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 39,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0103.png",
+            "0104.png",
+            "0105.png",
+            "0106.png",
+            "0107.png",
+            "0108.png",
+            "0109.png",
+            "0110.png",
+            "0111.png",
+            "0112.png",
+            "0113.png",
+            "0114.png",
+            "0115.png",
+            "0116.png",
+            "0117.png",
+            "0118.png",
+            "0119.png",
+            "0120.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 5,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "",
+        "wouldContinue": true,
+        "freeText": "First try, 13 moves, no waste. Once I started with blue and kept going colour by colour it all clicked. I did not replay, I could not see how to do it with fewer moves."
+      }
+    },
+    {
+      "levelId": 160,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 230739,
+          "timeToFirstTapMs": 11499,
+          "ticks": 2175,
+          "taps": 25,
+          "offTargetTaps": 0,
+          "launches": 24,
+          "refusals": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 129,
+          "targets": 129,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 68,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0123.png",
+            "0124.png",
+            "0125.png",
+            "0126.png",
+            "0127.png",
+            "0128.png",
+            "0129.png",
+            "0130.png",
+            "0131.png",
+            "0132.png",
+            "0133.png",
+            "0134.png",
+            "0135.png",
+            "0136.png",
+            "0137.png",
+            "0138.png",
+            "0139.png",
+            "0140.png",
+            "0141.png",
+            "0142.png",
+            "0143.png",
+            "0144.png",
+            "0145.png",
+            "0146.png",
+            "0147.png",
+            "0148.png",
+            "0149.png",
+            "0150.png",
+            "0151.png",
+            "0152.png",
+            "0153.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 3,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 3,
+        "mechanic": {
+          "id": "ice",
+          "understood": 4,
+          "fairness": 4
+        },
+        "notUnderstood": "The win panel for the boss level did not show the move count, only 'Stage complete'. I missed it as a perfectionist. Also I still do not know what the new bucket style does or where I see it.",
+        "wouldContinue": true,
+        "freeText": "Boss was big but fine. I sent blue, then yellow, then red, and kept resending the leftover buckets from the waiting slots, one jam near the end fixed with +1 slot. The pixel art with the watermill is lovely. No replay because I could not see my move count."
+      }
+    }
+  ],
+  "session": {
+    "telemetry": {
+      "durationMs": 1117589,
+      "actions": 124,
+      "screens": {
+        "menu": 2,
+        "play": 7
+      },
+      "languageChanges": 0,
+      "uncaughtErrors": [],
+      "stuckScreens": []
+    },
+    "feedback": {
+      "fun": 4,
+      "wouldReturn": 4,
+      "stoppedBecause": "Plan finished, 156 to 160 played, the boss won.",
+      "bestMoment": "Level 159, the otter: first try, 13 moves, every bucket used up with nothing wasted. Also the pretty finished pictures on the win panel.",
+      "worstMoment": "Level 156 (duck): three attempts, two jams, 20 moves, and I could not tell what I did wrong. Buckets with leftover paint fill the waiting slots and I get stuck.",
+      "freeText": "Across yesterday's 141-155 (several needed 2 or 3 attempts) and today's 156-160 I enjoy the loop of choosing a colour order, but the game never tells me the order matters or that a bucket's leftover paint stays unusable until the picture changes. Jams feel unfair when buckets are stacked in a column in a fixed order. I would like a visible move count on every win panel (it was missing on the stage boss) and a hint of an 'ideal' number of moves so I know if replaying is worth it. The replay path is awkward: from the map I accidentally opened the next level instead of the one I wanted. The +1 slot button saved me several times."
+    }
+  },
+  "bugs": []
+}
