@@ -3,7 +3,7 @@ import { buildLanes, parseLevel, type LevelDef } from '../src/core/level';
 import { createGame, launchFromColumn, launchFromSlot, step } from '../src/core/sim';
 import { createBoard } from '../src/core/rules';
 import { createRng } from '../src/core/rng';
-import { levelWinRate, playoutTickLimit, randomWinRate, runLoop, solve, type Move } from '../src/core/solver';
+import { carefulWinRate, levelCarefulWinRate, levelWinRate, playoutTickLimit, randomWinRate, runLoop, solve, type Move } from '../src/core/solver';
 import levels from '../src/levels/levels.json';
 import { BLUE, RED, YELLOW, level } from './helpers';
 
@@ -98,6 +98,49 @@ describe('randomWinRate', () => {
     expect(rate(def, 4, 2) - rate(def, 1, 2)).toBeGreaterThan(0.1);
     expect(rate(def, 2, 4) - rate(def, 2, 1)).toBeGreaterThan(0.1);
   });
+});
+
+describe('carefulWinRate', () => {
+  const trap = () => level(['BBBBB', 'BRBRB', 'BBBBB'], [[[RED, 1], [RED, 1], [BLUE, 13]]], { slots: 1, beltCapacity: 1 });
+  // Solvable (the solver finds an order) and won by a random tapper 3 times in 4, yet painting the most pixels at
+  // every step always parks the wrong leftovers in the one slot: the careful player never wins it.
+  const greedyTrap = () =>
+    level(['YYBR', 'OPYY', 'YGPB'], [
+      [[RED, 1], [YELLOW, 2], [YELLOW, 1], [YELLOW, 3]],
+      [[RED, 3], [BLUE, 1], [YELLOW, 1], [BLUE, 4]],
+    ], { slots: 1, beltCapacity: 1 });
+
+  it('is 1 for a level with no wrong move and 0 for a level that always jams', () => {
+    expect(carefulWinRate(level(['RR'], [[[RED, 2]]]), 20, createRng(1))).toBe(1);
+    expect(carefulWinRate(trap(), 20, createRng(1))).toBe(0);
+  });
+
+  it('loses where the greedy order jams, even when the level is solvable and a random tapper often wins', () => {
+    const l = greedyTrap();
+    expect(solve(l).solvable).toBe(true);
+    expect(randomWinRate(l, 200, createRng(1))).toBeGreaterThan(0.5);
+    expect(carefulWinRate(l, 50, createRng(1))).toBe(0);
+  });
+
+  it('never jams while a safe move exists: it parks a blocked shooter instead of losing at once', () => {
+    // Red is walled in by blue and comes first: its only move paints nothing and parks it, then blue, then red again.
+    const l = level(['BBB', 'BRB', 'BBB'], [[[RED, 1], [BLUE, 8]]], { slots: 1, beltCapacity: 1 });
+    expect(carefulWinRate(l, 20, createRng(3))).toBe(1);
+  });
+
+  it('counts a board it can never finish as lost instead of looping', () => {
+    const stuck = level(['RB'], [[[RED, 1]], [[BLUE, 1]]], { overlay: ['hh'] });
+    expect(carefulWinRate(stuck, 5, createRng(1))).toBe(0);
+  });
+
+  it('is deterministic and gains margin with a slot more', () => {
+    const def = shipped(200);
+    const l = parseLevel(def);
+    expect(levelCarefulWinRate(l)).toBe(carefulWinRate(l, 200, createRng(200)));
+    expect(carefulWinRate(parseLevel({ ...def, slots: def.slots + 1 }), 100, createRng(1))).toBeGreaterThanOrEqual(
+      carefulWinRate(l, 100, createRng(1)),
+    );
+  }, 20_000);
 });
 
 describe('solver slot positions', () => {

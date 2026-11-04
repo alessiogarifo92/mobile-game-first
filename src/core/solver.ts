@@ -52,6 +52,55 @@ function key(node: Node): string {
   return `${b.paint.join('')}|${b.ice.join('')}|${b.hidden.map(Number).join('')}|${b.locked.map(Number).join('')}|${node.heads.join(',')}|${slots}`;
 }
 
+/** A move from a node and where it leads, with the pixels it paints. */
+interface Candidate {
+  move: Move;
+  next: Node;
+  hits: number;
+}
+
+/**
+ * Every move a sequential player can make from `node` without jamming: launch a column's front shooter or a slot
+ * shooter, which loops once and parks its leftover in the first free slot. A move that would need a slot when none
+ * is free (a jam) is left out, and so is relaunching a slot shooter that paints nothing.
+ */
+function expand(level: Level, lanes: number[][], node: Node): Candidate[] {
+  const candidates: Candidate[] = [];
+  const tryShooter = (move: Move, shooter: Waiting, base: Node) => {
+    const board = cloneBoard(base.board);
+    const left = runLoop(level, lanes, board, shooter.color, shooter.ammo);
+    const hits = shooter.ammo - left;
+    if (move.from === 'slot' && hits === 0) return; // relaunching a blocked shooter changes nothing
+    const slots = base.slots.slice();
+    if (left > 0) {
+      const free = slots.indexOf(null);
+      if (free < 0) return; // would jam
+      slots[free] = { color: shooter.color, ammo: left };
+    }
+    candidates.push({ move, next: { board, heads: base.heads, slots }, hits });
+  };
+  level.columns.forEach((column, c) => {
+    const shooter = column[node.heads[c]!];
+    if (!shooter) return;
+    const heads = node.heads.slice();
+    heads[c]! += 1;
+    tryShooter({ from: 'column', index: c }, shooter, { ...node, heads });
+  });
+  node.slots.forEach((shooter, s) => {
+    if (!shooter) return;
+    const slots = node.slots.slice();
+    slots[s] = null;
+    tryShooter({ from: 'slot', index: s }, shooter, { ...node, slots });
+  });
+  return candidates;
+}
+
+const startNode = (level: Level): Node => ({
+  board: createBoard(level),
+  heads: level.columns.map(() => 0),
+  slots: Array.from({ length: level.slots }, () => null),
+});
+
 /**
  * Depth-first search over sequential play (one shooter on the belt at a time). Any level solvable
  * this way is solvable in the real game, because a player can always wait for the belt to empty.
@@ -74,35 +123,7 @@ export function solve(level: Level, nodeBudget = 200_000): SolveResult {
     seen.add(k);
     nodes += 1;
 
-    const candidates: { move: Move; next: Node; hits: number }[] = [];
-    const tryShooter = (move: Move, shooter: Waiting, base: Node) => {
-      const board = cloneBoard(base.board);
-      const left = runLoop(level, lanes, board, shooter.color, shooter.ammo);
-      const hits = shooter.ammo - left;
-      if (move.from === 'slot' && hits === 0) return; // relaunching a blocked shooter changes nothing
-      const slots = base.slots.slice();
-      if (left > 0) {
-        const free = slots.indexOf(null);
-        if (free < 0) return; // would jam
-        slots[free] = { color: shooter.color, ammo: left };
-      }
-      candidates.push({ move, next: { board, heads: base.heads, slots }, hits });
-    };
-
-    level.columns.forEach((column, c) => {
-      const shooter = column[node.heads[c]!];
-      if (!shooter) return;
-      const heads = node.heads.slice();
-      heads[c]! += 1;
-      tryShooter({ from: 'column', index: c }, shooter, { ...node, heads });
-    });
-    node.slots.forEach((shooter, s) => {
-      if (!shooter) return;
-      const slots = node.slots.slice();
-      slots[s] = null;
-      tryShooter({ from: 'slot', index: s }, shooter, { ...node, slots });
-    });
-
+    const candidates = expand(level, lanes, node);
     candidates.sort((a, b) => b.hits - a.hits);
     for (const c of candidates) {
       const found = dfs(c.next, [...path, c.move]);
@@ -111,8 +132,7 @@ export function solve(level: Level, nodeBudget = 200_000): SolveResult {
     return null;
   };
 
-  const start: Node = { board: createBoard(level), heads: level.columns.map(() => 0), slots: Array.from({ length: level.slots }, () => null) };
-  const moves = dfs(start, []);
+  const moves = dfs(startNode(level), []);
   return { solvable: moves !== null, exhaustive: !exhausted, moves: moves ?? [], nodes };
 }
 
@@ -154,4 +174,36 @@ export const WIN_RATE_PLAYOUTS = 200;
 /** A level's difficulty: `randomWinRate` with a fixed sample and the level id as seed, so anyone can reproduce it. */
 export function levelWinRate(level: Level): number {
   return randomWinRate(level, WIN_RATE_PLAYOUTS, createRng(level.id));
+}
+
+/**
+ * Margin probe for a careful player (#162): share of playouts won by a player who plays one shooter at a time,
+ * always launches the one that paints the most pixels (ties at random), never jams while a safe move exists and
+ * never takes "+1 slot". A playout is lost when every remaining move would jam. Where `randomWinRate` measures how
+ * much room there is for random mistakes, this measures whether the obvious sensible play leaves room for the
+ * leftovers it parks in the slots: a level a careful player rarely wins only rewards trial and error.
+ */
+export function carefulWinRate(level: Level, playouts: number, rng: () => number): number {
+  const lanes = buildLanes(level.width, level.height);
+  let wins = 0;
+  for (let p = 0; p < playouts; p++) {
+    let node = startNode(level);
+    for (;;) {
+      if (boardDone(level, node.board)) {
+        wins += 1;
+        break;
+      }
+      const candidates = expand(level, lanes, node);
+      if (candidates.length === 0) break;
+      const best = Math.max(...candidates.map((c) => c.hits));
+      const top = candidates.filter((c) => c.hits === best);
+      node = top[Math.floor(rng() * top.length)]!.next;
+    }
+  }
+  return wins / playouts;
+}
+
+/** A level's careful-player margin: `carefulWinRate` with the same sample and seed as `levelWinRate`. */
+export function levelCarefulWinRate(level: Level): number {
+  return carefulWinRate(level, WIN_RATE_PLAYOUTS, createRng(level.id));
 }

@@ -4,7 +4,7 @@ import { BROWN, isPrimary } from '../src/core/colors';
 import { checkCurve, curveLevel, CURVE } from '../src/core/curve';
 import { LEVEL_NAME_KEYS, STAGE_NAME_KEYS, translate } from '../src/core/i18n';
 import { parseLevel, type LevelDef } from '../src/core/level';
-import { levelWinRate } from '../src/core/solver';
+import { levelCarefulWinRate, levelWinRate, solve } from '../src/core/solver';
 import { universeOfStage } from '../src/core/universes';
 import stage from '../scripts/stages/stage-20';
 
@@ -37,15 +37,15 @@ describe('stage 20 — Volcano', () => {
     expect(area[9]).toBe(Math.max(...area));
   });
 
-  it('plays brown, stones, ice and hidden pixels on every level, with belt and slots no bigger than the end of universe 1', () => {
+  it('plays brown, stones, ice and hidden pixels on every level, belt 2 everywhere and slots 2 except the boss', () => {
     for (const l of parsed) {
       expect(l.targets).toContain(BROWN);
       expect(l.stone.some(Boolean)).toBe(true);
       expect(l.ice.some((n) => n > 0)).toBe(true);
       expect(l.hidden.some(Boolean)).toBe(true);
       expect(l.beltCapacity).toBe(2);
-      expect(l.slots).toBe(2);
     }
+    expect(parsed.map((l) => l.slots)).toEqual([...Array(9).fill(2), 3]);
   });
 
   it('draws figures with at least 30% secondary pixels after the rest level', () => {
@@ -70,5 +70,11 @@ describe('stage 20 — Volcano', () => {
     const bosses = all.filter((d) => d.boss && d.stage && universeOfStage(d.stage) === 2).map((d) => levelWinRate(parseLevel(d)));
     expect(Math.min(...bosses)).toBe(winRates()[9]);
     expect(winRates()[9]).toBeGreaterThanOrEqual(CURVE.universes[1]!.hardestBoss);
+  }, 60_000);
+
+  it('leaves the boss a margin without "+1 slot" (#162): a careful player often wins, and 2 slots still suffice', () => {
+    const boss = parsed[9]!;
+    expect(levelCarefulWinRate(boss)).toBeGreaterThanOrEqual(0.8);
+    expect(solve({ ...boss, slots: boss.slots - 1 }).solvable).toBe(true);
   }, 60_000);
 });

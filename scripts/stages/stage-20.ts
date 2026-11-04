@@ -4,8 +4,12 @@ import type { StageSpec } from './types';
  * Stage 20 — Vulcano, ultimo stage dell'universo 2 "Natura" (#130, #100).
  * Tutte le meccaniche dell'universo insieme, nessuna novità: marrone, pietra, ghiaccio e nascosti. La roccia vulcanica
  * è viola con venature marroni, la lava in rosso e arancio; le pietre stanno sui bordi delle figure.
- * Nessun livello molto facile; nastro 2 e slot 2 in tutto lo stage, come nel resto dell'universo.
+ * Nessun livello molto facile; nastro 2 in tutto lo stage, slot 2 tranne il boss.
  * Respiro: la goccia di lava; difficile: la colata; boss: l'eruzione, il livello più duro dell'universo.
+ * Il boss ha 3 slot (#162): con 2 i suoi avanzi di giallo riempivano gli slot e senza "+1 slot" non lo vinceva nessun
+ * agent; il giocatore attento (levelCarefulWinRate) vinceva l'8% delle partite. Con 3 slot e la stessa fascia casuale
+ * vince il 91% e il livello si risolve anche con 2 slot: resta il più duro, ma con un margine di errore. Il seed è
+ * scelto fra le distribuzioni nella fascia: a parità di vittorie casuali il giocatore attento va dal 7% al 96%.
  * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places
  * ice, hidden pixels, stones and brown.
  */
@@ -119,7 +123,7 @@ const stage: StageSpec = {
       'GGGGGGOOROOG',
       'GGGGGOOROOOO',
     ] },
-    { name: 'eruption', columns: 4, ammoChunk: 20, slots: 2, beltCapacity: 2, special: { ice: 8, hidden: 6, stone: 9, brown: 4 }, winRate: [0.32, 0.34], seed: 20333, image: [
+    { name: 'eruption', columns: 4, ammoChunk: 20, slots: 3, beltCapacity: 2, special: { ice: 8, hidden: 6, stone: 9, brown: 4 }, winRate: [0.32, 0.35], seed: 20423, image: [
       '....R..Y..R...',
       '..R..OYO...R..',
       '.....ROYR.....',
