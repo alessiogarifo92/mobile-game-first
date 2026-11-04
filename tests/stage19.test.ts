@@ -35,14 +35,14 @@ describe('stage 19 — Night in the woods', () => {
     expect(area[9]).toBe(Math.max(...area));
   });
 
-  it('plays brown, stones and hidden pixels on every level, with belt and slots no bigger than the end of universe 1', () => {
+  it('plays brown, stones and hidden pixels on every level, belt 2 everywhere and slots 2 except the raccoon (184), #162', () => {
     for (const l of parsed) {
       expect(l.targets).toContain(BROWN);
       expect(l.stone.some(Boolean)).toBe(true);
       expect(l.hidden.some(Boolean)).toBe(true);
       expect(l.beltCapacity).toBe(2);
-      expect(l.slots).toBe(2);
     }
+    expect(parsed.map((l) => l.slots)).toEqual(Array.from({ length: 10 }, (_, i) => (i === 3 ? 3 : 2)));
   });
 
   it('draws figures with at least 30% secondary pixels after the rest level', () => {

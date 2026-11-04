@@ -35,14 +35,14 @@ describe('stage 18 — Winter', () => {
     expect(area[9]).toBe(Math.max(...area));
   });
 
-  it('plays brown, stones and ice on every level, with belt and slots no bigger than the end of universe 1', () => {
+  it('plays brown, stones and ice on every level, belt 2 everywhere and slots 2 except the fox (179), #162', () => {
     for (const l of parsed) {
       expect(l.targets).toContain(BROWN);
       expect(l.stone.some(Boolean)).toBe(true);
       expect(l.ice.some((n) => n > 0)).toBe(true);
       expect(l.beltCapacity).toBe(2);
-      expect(l.slots).toBe(2);
     }
+    expect(parsed.map((l) => l.slots)).toEqual(Array.from({ length: 10 }, (_, i) => (i === 8 ? 3 : 2)));
   });
 
   it('draws figures with at least 30% secondary pixels after the rest level', () => {

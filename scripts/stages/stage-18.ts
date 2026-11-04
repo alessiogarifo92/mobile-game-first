@@ -3,8 +3,10 @@ import type { StageSpec } from './types';
 /**
  * Stage 18 — Inverno, ottavo stage dell'universo 2 "Natura" (#128, #100).
  * Marrone + pietra + ghiaccio, nessuna novità: legno e pellicce marroni, la neve in lilla, il ghiaccio sulle figure,
- * le pietre tra i cumuli. Nessun livello molto facile; nastro 2 e slot 2 in tutto lo stage.
+ * le pietre tra i cumuli. Nessun livello molto facile; nastro 2 in tutto lo stage, slot 2 tranne la volpe (179).
  * Respiro: l'abete; difficile: la volpe nella neve; boss: la baita innevata.
+ * La volpe ha 3 slot e un marrone in meno (#162): 3 agent su 3 la sentivano dura per gli slot pieni di avanzi;
+ * la fascia sale a 59–61%, sempre 5 punti sotto la base dello stage (66,5%), come vuole il «duro travestito».
  * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places ice, stones and brown.
  */
 const stage: StageSpec = {
@@ -119,7 +121,7 @@ const stage: StageSpec = {
       '.KKKKKKKK.',
       '..KKKKKK..',
     ] },
-    { name: 'winterfox', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { ice: 5, stone: 6, brown: 4 }, winRate: [0.53, 0.59], seed: 18296, image: [
+    { name: 'winterfox', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 2, special: { ice: 5, stone: 6, brown: 3 }, winRate: [0.59, 0.61], seed: 18296, image: [
       'O...O.......',
       'OO.OO.......',
       'OOOOO.......',

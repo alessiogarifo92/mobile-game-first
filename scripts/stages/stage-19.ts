@@ -4,8 +4,10 @@ import type { StageSpec } from './types';
  * Stage 19 — Notte nel bosco, nono stage dell'universo 2 "Natura" (#129, #100).
  * Marrone + pietra + nascosti: combinazione nuova, ma nessuna meccanica al debutto, quindi nessun livello molto facile.
  * Le creature della notte in viola e marrone, la luna e le luci in giallo; le pietre tra le radici, i nascosti nel buio.
- * Nastro 2 e slot 2 in tutto lo stage.
+ * Nastro 2 in tutto lo stage, slot 2 tranne il procione (184).
  * Respiro: la lucciola; difficile: il gufo reale; boss: la casa sull'albero.
+ * Il procione ha 3 slot e una fascia più alta, 63–66% (#162): 2 agent su 3 ci restavano ≥ 3 tentativi per gli
+ * avanzi negli slot; resta un gradino sotto la base dello stage (69%).
  * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places hidden pixels, stones and brown.
  */
 const stage: StageSpec = {
@@ -51,7 +53,7 @@ const stage: StageSpec = {
       '.OO..KK..OO.',
       '.....KK.....',
     ] },
-    { name: 'raccoon', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { hidden: 4, stone: 5, brown: 3 }, winRate: [0.57, 0.63], seed: 19111, image: [
+    { name: 'raccoon', columns: 4, ammoChunk: 14, slots: 3, beltCapacity: 2, special: { hidden: 4, stone: 5, brown: 3 }, winRate: [0.63, 0.66], seed: 19111, image: [
       '.KK......KK.',
       'KPPK....KPPK',
       'KPKKKKKKKKPK',
