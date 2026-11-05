@@ -1,11 +1,13 @@
 import { expect, test } from '@playwright/test';
 import levels from '../src/levels/levels.json' with { type: 'json' };
 import { HOWTO_PAGES } from '../src/core/howto';
-import type { LevelDef } from '../src/core/level';
+import { parseLevel, type LevelDef } from '../src/core/level';
+import { forecastLeftover } from '../src/core/leftover';
+import { createGame } from '../src/core/sim';
 import type { Move } from '../src/core/solver';
 import { universeOfStage } from '../src/core/universes';
 
-import { SEEN_ALL, dismissTip, jamSequence, mix, openLevel, play, shots, tap, throttleCpu, waitScene, waitSim, type Rect, PANEL_ARM_WAIT } from './helpers';
+import { LAST_LEVEL, SEEN_ALL, dismissTip, jamSequence, mix, openLevel, play, shots, tap, throttleCpu, waitScene, waitSim, type Rect, PANEL_ARM_WAIT } from './helpers';
 
 test('first launch: English, guided level 1 played to a win, level 2 unlocked', async ({ page }) => {
   const errors: string[] = [];
@@ -72,6 +74,24 @@ test('a jam pauses the belt and +1 slot resumes play', async ({ page }) => {
   await page.waitForFunction(() => (window as unknown as { __mix: { overlay: string | null } }).__mix.overlay === null);
   expect(await mix(page, 'status')).toBe('playing');
   expect((await mix<Rect[]>(page, 'slots')).length).toBe(slotsBefore + 1);
+});
+
+test('buckets that would return paint show a "↩N" pill (#145)', async ({ page }) => {
+  await page.addInitScript((p) => localStorage.setItem('mix-and-splash/progress/v1', p), SEEN_ALL);
+  await page.goto('/');
+  await waitScene(page, 'menu');
+  // The first level of the first universe whose opening bucket would bring paint back.
+  const withLeftover = (levels as LevelDef[]).slice(0, LAST_LEVEL).find((d) => {
+    const gs = createGame(parseLevel(d));
+    return gs.queues.some((q) => q[0] && forecastLeftover(gs, q[0].color, q[0].ammo).leftover > 0);
+  })!;
+  await openLevel(page, withLeftover.id);
+  const hints = () => mix<string[]>(page, 'leftoverHints');
+  await page.waitForFunction(() => (window as unknown as { __mix: { leftoverHints: string[] } }).__mix.leftoverHints.length > 0);
+  const labels = await hints();
+  expect(labels.length).toBeGreaterThan(0);
+  for (const l of labels) expect(l).toMatch(/^↩\d+!?$/);
+  if (shots) await page.screenshot({ path: `${shots}/08-avanzi.png` });
 });
 
 test('the language is chosen in Settings and remembered; How to play pages through', async ({ page }) => {

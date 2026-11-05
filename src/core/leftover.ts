@@ -41,3 +41,19 @@ export function forecastLeftover(state: GameState, color: Primary, ammo: number)
 export function freeSlots(state: GameState): number {
   return state.slots.filter((s) => s === null).length;
 }
+
+export interface LeftoverHint {
+  /** Shots that would come back to the waiting slots. */
+  leftover: number;
+  /** Warning level: the return takes the last free slot, or finds none. */
+  risky: boolean;
+  /** Pill text, e.g. "↩16" or "↩3!". */
+  label: string;
+}
+
+/** What the board shows on a bucket for its forecast, or null when nothing would come back. */
+export function leftoverHint(f: LeftoverForecast): LeftoverHint | null {
+  if (f.leftover <= 0) return null;
+  const risky = f.fillsLastSlot || f.jams;
+  return { leftover: f.leftover, risky, label: `↩${f.leftover}${risky ? '!' : ''}` };
+}

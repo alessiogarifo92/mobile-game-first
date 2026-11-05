@@ -6,7 +6,7 @@ import type { StoneEvent } from '../../core/sim';
 import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, slotAt, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
 import { currentLevel } from '../../core/mapLayout';
-import { forecastLeftover, freeSlots } from '../../core/leftover';
+import { forecastLeftover, freeSlots, leftoverHint, type LeftoverForecast } from '../../core/leftover';
 import { PANEL_ARM_MS, jamHintKey } from '../../core/panelInput';
 import { newlyCompletedUniverse } from '../../core/universeMenu';
 import { universeLevels, universeOf } from '../../core/universes';
@@ -46,6 +46,9 @@ export class PlayScene extends Phaser.Scene {
   private acc = 0;
   private pixels!: Phaser.GameObjects.Graphics;
   private dynamic!: Phaser.GameObjects.Graphics;
+  private forecasts = new Map<string, LeftoverForecast>();
+  /** Labels drawn on the buckets this frame (debug hook for e2e). */
+  private hintLabels: string[] = [];
   private texts: Phaser.GameObjects.Text[] = [];
   private textIndex = 0;
   /** Pixels changed since the last redraw: several hits in one frame cost a single redraw. */
@@ -587,25 +590,21 @@ export class PlayScene extends Phaser.Scene {
       if (queue.length > 3) this.text(r.x + r.w / 2, r.y + 3 * layout.columnStep + 36, `+${queue.length - 3}`, THEME.type.sm, THEME.subCss);
     });
 
-    this.drawLeftoverProto();
+    this.drawLeftoverHints();
 
     for (let i = this.textIndex; i < this.texts.length; i++) this.texts[i]!.setVisible(false);
   }
 
-  /** PROTOTYPE (#145), only with ?proto=a|b: design directions for the leftover shots, to compare. */
-  private drawLeftoverProto(): void {
-    const proto = new URLSearchParams(window.location.search).get('proto');
-    if (proto !== 'a' && proto !== 'b') return;
+  /**
+   * Leftover preview (#145): a pill "↩N" on every bucket that could be launched (top of a column, or waiting in a slot)
+   * and would come back with N shots. Red, with a "!", when that return takes the last free slot or has none left.
+   * The forecast ignores the buckets already on the belt, so it is exact on a quiet belt and an estimate otherwise.
+   */
+  private drawLeftoverHints(): void {
     const { layout, gs } = this;
+    this.hintLabels = [];
+    if (gs.status !== 'playing') return;
     const g = this.dynamic;
-    const free = freeSlots(gs);
-    const pill = (cx: number, cy: number, w: number, value: string): void => {
-      g.fillStyle(THEME.gold, 1);
-      g.fillRoundedRect(cx - w / 2, cy - 18, w, 36, 18);
-      g.lineStyle(3, THEME.ink, 1);
-      g.strokeRoundedRect(cx - w / 2, cy - 18, w, 36, 18);
-      this.text(cx, cy, value, THEME.type.xs, THEME.inkCss);
-    };
     const buckets: { s: Shooter; x: number; y: number; size: number }[] = [];
     gs.queues.forEach((q, c) => {
       const r = layout.columns[c]!;
@@ -615,20 +614,27 @@ export class PlayScene extends Phaser.Scene {
       const r = layout.slots[i];
       if (s && r) buckets.push({ s, x: r.x + r.w / 2, y: r.y + r.h / 2, size: r.w - 8 });
     });
-    if (proto === 'b' && free <= 1) {
-      g.lineStyle(6, THEME.gold, 1);
-      gs.slots.forEach((s, i) => {
-        const r = layout.slots[i];
-        if (!s && r) g.strokeRoundedRect(r.x, r.y, r.w, r.h, THEME.radius.jar);
-      });
-      pill(VIEW.width / 2, layout.slots[0]!.y - 58, 360, free === 1 ? 'Last free slot!' : 'No free slot!');
-    }
+    const free = freeSlots(gs);
     for (const b of buckets) {
-      const f = forecastLeftover(gs, b.s.color, b.s.ammo);
+      const key = `${gs.tick}:${free}:${b.s.id}`;
+      let f = this.forecasts.get(key);
+      if (!f) {
+        if (this.forecasts.size > 64) this.forecasts.clear();
+        f = forecastLeftover(gs, b.s.color, b.s.ammo);
+        this.forecasts.set(key, f);
+      }
+      const hint = leftoverHint(f);
+      if (!hint) continue;
+      const risky = hint.risky;
+      this.hintLabels.push(hint.label);
       const cx = b.x + b.size / 2 - 6;
       const cy = b.y - b.size / 2 - 4;
-      if (proto === 'a' && f.leftover > 0) pill(cx, cy, 64, `↩${f.leftover}`);
-      if (proto === 'b' && f.returns && free <= 1) pill(cx, cy, 44, '!');
+      const w = risky ? 76 : 64;
+      g.fillStyle(risky ? PAINT[RED]! : THEME.gold, 1);
+      g.fillRoundedRect(cx - w / 2, cy - 18, w, 36, 18);
+      g.lineStyle(3, THEME.ink, 1);
+      g.strokeRoundedRect(cx - w / 2, cy - 18, w, 36, 18);
+      this.text(cx, cy, hint.label, THEME.type.xs, risky ? '#FFFFFF' : THEME.inkCss);
     }
   }
 
@@ -885,6 +891,8 @@ export class PlayScene extends Phaser.Scene {
       slots: this.layout.slots,
       // Waiting slots holding a bucket: playtest telemetry records the highest occupancy (#68).
       slotsUsed: gs.slots.filter(Boolean).length,
+      // Leftover pills currently drawn on the buckets (#145).
+      leftoverHints: [...this.hintLabels],
       // Solved on demand (only the guide and tests read it), not at every level start.
       get solution() {
         return solutionOf();

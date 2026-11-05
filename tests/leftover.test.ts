@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { BLUE, RED, YELLOW, level } from './helpers';
-import { forecastLeftover } from '../src/core/leftover';
+import { forecastLeftover, leftoverHint } from '../src/core/leftover';
 import { createGame, launchFromColumn, step, type GameState } from '../src/core/sim';
 import type { Primary } from '../src/core/colors';
 
@@ -96,5 +96,19 @@ describe('forecastLeftover', () => {
     expect(check(g, RED, 5)).toMatchObject({ fillsLastSlot: false, jams: true });
     // a bucket that is emptied never fills a slot
     expect(check(g, RED, 2)).toMatchObject({ returns: false, fillsLastSlot: false, jams: false });
+  });
+});
+
+describe('leftoverHint', () => {
+  const base = { hits: 3, leftover: 0, returns: false, fillsLastSlot: false, jams: false };
+  it('shows nothing when no paint comes back', () => {
+    expect(leftoverHint(base)).toBeNull();
+  });
+  it('is a calm pill when slots are free', () => {
+    expect(leftoverHint({ ...base, leftover: 5, returns: true })).toEqual({ leftover: 5, risky: false, label: '↩5' });
+  });
+  it('turns into a warning when it takes the last slot or jams', () => {
+    expect(leftoverHint({ ...base, leftover: 2, returns: true, fillsLastSlot: true })).toEqual({ leftover: 2, risky: true, label: '↩2!' });
+    expect(leftoverHint({ ...base, leftover: 2, returns: true, jams: true })?.risky).toBe(true);
   });
 });
