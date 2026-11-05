@@ -2,6 +2,13 @@
 
 ## Non rilasciato
 
+### Universo 1: la pietra debutta nei livelli 81–100 (#157, epic #87)
+
+- **Novità nella finestra 81–100**, l'unica del gioco che ne era priva: la **pietra** (già nel gioco dal 141) debutta al livello 81, la stella, con due pietre disegnate a mano tra i pixel di una riga (un colpo si ferma per forza); il suggerimento compare una volta. La riprendono 85 (ufo) e 88 (alieno) con pietre messe dal generatore. Ghiaccio e nascosti restano come prima: il 81 è la combinazione nuova ghiaccio + nascosti + pietra.
+- **Il 141 non è più il debutto**: la papaia (slot 3 → 2, vittorie a caso 100% → 91%) è ora un normale primo livello dell'universo 2, fuori dalla regola "molto facile solo se debutto". Id, nomi e numero dei livelli non cambiano, quindi i progressi restano validi; cambiano solo 81, 85, 88 e 141.
+- **Curva** non peggiorata: stage 9 da 63,9% a 64,5% (l'85 passa da 57,5% a 62%, l'88 da 62,5% a 60,5%), stage 10 invariato (65%), stage 15 da 73% a 72%. Il controllo "una novità ogni 20 livelli" passa su tutto il gioco (finestre vuote dal 21: nessuna).
+- Test: la pietra debutta al 81 (primo livello con pietre, suggerimento, pietre tra due pixel di una riga, solo 81/85/88 prima del 101), nessuna finestra di 20 livelli senza novità sul gioco vero; l'e2e del debutto passa dal 141 all'81 (`e2e/stone-debut.spec.ts`). `preview:levels` accetta `CHROMIUM_PATH` come `difficulty-report`.
+
 ### Stage 20 "Vulcano": livelli 191–200, fine dell'universo 2 (#130)
 
 - **Dieci figure in pixel art originale** sul vulcano (`scripts/stages/stage-20.ts`): goccia di lava, ossidiana, geyser, salamandra pezzata, roccia lavica, cristalli di zolfo, fenice, sorgente termale, colata di lava e il boss, l'eruzione (14×14). Foglio di anteprima in `docs/levels/stage-20.png`; nomi IT/EN.

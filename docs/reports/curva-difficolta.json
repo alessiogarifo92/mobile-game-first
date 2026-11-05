@@ -1453,7 +1453,7 @@
   "ice": 3,
   "hidden": 2,
   "brown": 0,
-  "stone": 0,
+  "stone": 2,
   "randomWin": 1,
   "solutionMoves": 8
  },
@@ -1525,9 +1525,9 @@
   "ice": 4,
   "hidden": 3,
   "brown": 0,
-  "stone": 0,
-  "randomWin": 0.575,
-  "solutionMoves": 11
+  "stone": 3,
+  "randomWin": 0.62,
+  "solutionMoves": 9
  },
  {
   "id": 86,
@@ -1579,8 +1579,8 @@
   "ice": 5,
   "hidden": 4,
   "brown": 0,
-  "stone": 0,
-  "randomWin": 0.625,
+  "stone": 3,
+  "randomWin": 0.605,
   "solutionMoves": 14
  },
  {
@@ -2528,14 +2528,14 @@
   "pixels": 42,
   "shooters": 8,
   "columns": 3,
-  "slots": 3,
+  "slots": 2,
   "belt": 2,
   "ice": 0,
   "hidden": 0,
   "brown": 0,
   "stone": 2,
-  "randomWin": 1,
-  "solutionMoves": 9
+  "randomWin": 0.905,
+  "solutionMoves": 10
  },
  {
   "id": 142,
@@ -3212,14 +3212,14 @@
   "pixels": 78,
   "shooters": 12,
   "columns": 4,
-  "slots": 2,
+  "slots": 3,
   "belt": 2,
   "ice": 5,
   "hidden": 0,
-  "brown": 11,
+  "brown": 10,
   "stone": 6,
-  "randomWin": 0.575,
-  "solutionMoves": 15
+  "randomWin": 0.605,
+  "solutionMoves": 17
  },
  {
   "id": 180,
@@ -3302,14 +3302,14 @@
   "pixels": 88,
   "shooters": 17,
   "columns": 4,
-  "slots": 2,
+  "slots": 3,
   "belt": 2,
   "ice": 0,
   "hidden": 4,
   "brown": 61,
   "stone": 5,
-  "randomWin": 0.6,
-  "solutionMoves": 20
+  "randomWin": 0.65,
+  "solutionMoves": 19
  },
  {
   "id": 185,
@@ -3590,13 +3590,13 @@
   "pixels": 121,
   "shooters": 12,
   "columns": 4,
-  "slots": 2,
+  "slots": 3,
   "belt": 2,
   "ice": 8,
   "hidden": 6,
   "brown": 11,
   "stone": 9,
-  "randomWin": 0.335,
-  "solutionMoves": 22
+  "randomWin": 0.33,
+  "solutionMoves": 19
  }
 ]

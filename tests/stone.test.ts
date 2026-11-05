@@ -6,6 +6,7 @@ import { HOWTO_PAGES } from '../src/core/howto';
 import { DICTIONARIES } from '../src/core/i18n';
 import { buildLanes, checkReachable, paintNeeds, parseImage, parseLevel, parseOverlay, walledIn, LevelError, type LevelDef } from '../src/core/level';
 import { tipOnLevelStart } from '../src/core/onboarding';
+import { novelties, noveltyGaps } from '../src/core/curveReport';
 import { createRng } from '../src/core/rng';
 import { blockingStone, boardDone, cellDone, createBoard, findTarget } from '../src/core/rules';
 import { createGame, launchFromColumn, step } from '../src/core/sim';
@@ -196,18 +197,19 @@ describe('stone: onboarding and curve', () => {
   });
 });
 
-describe('stone: debut at level 141 (#125)', () => {
-  const debut = parseLevel((levels as LevelDef[]).find((d) => d.id === 141)!);
+describe('stone: debut at level 81 (#157, was 141 in #125)', () => {
+  const debut = parseLevel((levels as LevelDef[]).find((d) => d.id === 81)!);
 
   it('is the first level with stones, which opens with the one-time stone tip', () => {
-    expect((levels as LevelDef[]).filter((d) => d.id < 141).every((d) => !parseLevel(d).stone.some(Boolean))).toBe(true);
+    expect((levels as LevelDef[]).filter((d) => d.id < 81).every((d) => !parseLevel(d).stone.some(Boolean))).toBe(true);
     expect(debut.stone.some(Boolean)).toBe(true);
-    expect(tipOnLevelStart(debut, ['mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'brown'])).toBe('stone');
+    expect(tipOnLevelStart(debut, ['mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt'])).toBe('stone');
     expect(solve(debut).solvable).toBe(true);
   });
 
   it('puts its stones between two pixels of one row, so a shot is stopped on the way to the far one', () => {
     const { width } = debut;
+    expect(debut.stone.filter(Boolean).length).toBe(2);
     for (const [cell, isStone] of debut.stone.entries()) {
       if (!isStone) continue;
       const row = Math.floor(cell / width);
@@ -216,5 +218,18 @@ describe('stone: debut at level 141 (#125)', () => {
       expect(before.length).toBeGreaterThan(0);
       expect(after.length).toBeGreaterThan(0);
     }
+  });
+
+  it('is followed by stones in 85 and 88 and is still before the brown debut (101)', () => {
+    const withStone = (levels as LevelDef[]).filter((d) => d.id <= 100 && parseLevel(d).stone.some(Boolean)).map((d) => d.id);
+    expect(withStone).toEqual([81, 85, 88]);
+  });
+});
+
+describe('a novelty in every 20-level window of the whole game (#157)', () => {
+  it('leaves no window from level 21 on without a new mechanic or combination', () => {
+    const curve = (levels as LevelDef[]).map((d) => curveLevel(parseLevel(d), 0.5));
+    expect(noveltyGaps(curve, 21, curve.length)).toEqual([]);
+    expect(novelties(curve).filter((n) => n.id >= 81 && n.id <= 100).map((n) => n.name)).toContain('stone');
   });
 });
