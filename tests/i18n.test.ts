@@ -51,3 +51,17 @@ describe('i18n', () => {
     for (const s of STAGE_SPECS) for (const lang of LANGUAGES) expect(stageName(lang, s.key)).not.toBe(`stage.${s.key}`);
   });
 });
+
+describe('stage vs universe wording (#154)', () => {
+  it('calls the end of a stage "Stage", never "Mondo", in Italian', () => {
+    expect(translate('it', 'win.stageComplete')).toBe('Stage completato! Nuovo stile dei secchielli');
+    expect(translate('it', 'win.stageCompleteNoSkin')).toBe('Stage completato!');
+    expect(translate('it', 'map.stage', { n: 3 })).toBe('Stage 3');
+    expect(translate('en', 'win.stageCompleteNoSkin')).toBe('Stage complete!');
+  });
+
+  it('keeps "mondo" out of every Italian text', () => {
+    const offenders = Object.entries(DICTIONARIES.it).filter(([, v]) => /\bmond[oi]\b/i.test(v));
+    expect(offenders).toEqual([]);
+  });
+});

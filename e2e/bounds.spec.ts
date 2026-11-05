@@ -3,7 +3,7 @@ import levels from '../src/levels/levels.json' with { type: 'json' };
 import { HOWTO_PAGES } from '../src/core/howto';
 import type { LevelDef } from '../src/core/level';
 import type { Move } from '../src/core/solver';
-import { LAST_LEVEL, SEEN_ALL, checkOnScreen as check, dismissTip, jamSequence, mix, play, shots, tap, waitScene, waitSim } from './helpers';
+import { LAST_LEVEL, SEEN_ALL, checkOnScreen as check, dismissTip, jamSequence, mix, play, shots, tap, waitScene, waitSim, PANEL_ARM_WAIT } from './helpers';
 
 /**
  * Nothing the game draws or lets you tap may be outside the screen, on any device. This walks every screen and
@@ -231,6 +231,7 @@ for (const [name, width, height] of [['360x640', 360, 640], ['412x915', 412, 915
       await check(page, 'jam panel with +1 slot');
       if (shots) await page.screenshot({ path: `${shots}/bounds/${name}-jam.png` });
       const jam = await mix<{ continue: { x: number; y: number } | null }>(page, 'jamButtons');
+      await page.waitForTimeout(PANEL_ARM_WAIT);
       await tap(page, jam.continue!.x, jam.continue!.y);
       await page.waitForFunction(() => (window as unknown as { __mix: { overlay: string | null } }).__mix.overlay === null);
       await check(page, 'level after +1 slot');

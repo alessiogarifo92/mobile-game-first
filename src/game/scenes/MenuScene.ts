@@ -3,7 +3,7 @@ import { COLOR_CODES } from '../../core/colors';
 import { LANGUAGES, LANGUAGE_NAMES } from '../../core/i18n';
 import { VIEW } from '../../core/layout';
 import {
-  MAP, clampScroll, computeMapLayout, currentLevel, inertia, keyScrollDelta, mapTapTarget, scrollToLevel, type MapLayout,
+  HEADER_MIN_SIZE, HEADER_TEXT_GAP, MAP, clampScroll, computeMapLayout, currentLevel, fitHeaderTitle, inertia, keyScrollDelta, mapTapTarget, scrollToLevel, type MapLayout,
 } from '../../core/mapLayout';
 import { moreLevelsComing, stageInfo } from '../../core/stages';
 import { mapUniverse } from '../../core/universeMenu';
@@ -111,9 +111,19 @@ export class MenuScene extends Phaser.Scene {
       const done = LEVELS.filter((l) => l.stage === h.stage && completed.includes(l.id)).length;
       g.fillStyle(PAINT[info?.color ?? 1]!, 1);
       g.fillRoundedRect(80, h.y - 34, VIEW.width - 160, 68, 34);
-      this.lazy(h.y, () => label(this, 120, h.y, `${t('map.stage', { n: h.stage })} · ${info ? stageTitle(info.key) : ''}`, THEME.type.sm, '#ffffff')
-        .setOrigin(0, 0.5));
-      this.lazy(h.y, () => label(this, VIEW.width - 120, h.y, `${t('map.progress', { done, total: h.count })}  ▸`, THEME.type.sm, '#ffffff').setOrigin(1, 0.5));
+      const counter = `${t('map.progress', { done, total: h.count })}  ▸`;
+      const title = `${t('map.stage', { n: h.stage })} · ${info ? stageTitle(info.key) : ''}`;
+      this.lazy(h.y, () => {
+        // The title yields to the counter: it shrinks, then is cut with an ellipsis, so the two never touch (#160).
+        const probe = label(this, 0, 0, counter, THEME.type.sm, '#ffffff');
+        const counterWidth = probe.width;
+        probe.destroy();
+        const available = VIEW.width - 240 - counterWidth - HEADER_TEXT_GAP;
+        const text = label(this, 120, h.y, title, THEME.type.sm, '#ffffff').setOrigin(0, 0.5);
+        const fit = fitHeaderTitle(title, THEME.type.sm, HEADER_MIN_SIZE, available, (s, size) => text.setFontSize(size).setText(s).width);
+        return text.setFontSize(fit.fontSize).setText(fit.text);
+      });
+      this.lazy(h.y, () => label(this, VIEW.width - 120, h.y, counter, THEME.type.sm, '#ffffff').setOrigin(1, 0.5));
     }
   }
 

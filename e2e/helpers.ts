@@ -7,6 +7,8 @@ import { runLoop, type Move } from '../src/core/solver';
 import { universeOfStage } from '../src/core/universes';
 
 export type Rect = { x: number; y: number; w: number; h: number };
+/** The win and jam panel buttons ignore taps for 450 ms after they appear (#161): wait that out before pressing one. */
+export const PANEL_ARM_WAIT = 500;
 export const shots = process.env.SHOTS_DIR;
 
 export async function mix<T = unknown>(page: Page, key: string): Promise<T> {

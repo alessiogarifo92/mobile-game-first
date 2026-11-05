@@ -6,6 +6,7 @@ import type { StoneEvent } from '../../core/sim';
 import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, slotAt, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
 import { currentLevel } from '../../core/mapLayout';
+import { PANEL_ARM_MS } from '../../core/panelInput';
 import { newlyCompletedUniverse } from '../../core/universeMenu';
 import { universeLevels, universeOf } from '../../core/universes';
 import { COLOR_CODES } from '../../core/colors';
@@ -738,7 +739,7 @@ export class PlayScene extends Phaser.Scene {
   private showWin(): void {
     const c = this.panel(t('win.title'), 760);
     const top = (this.scale.height - 760) / 2;
-    const size = 280;
+    const size = 240;
     const cell = Math.floor(size / Math.max(this.level.width, this.level.height));
     const ox = VIEW.width / 2 - (cell * this.level.width) / 2;
     const oy = top + 140;
@@ -751,11 +752,12 @@ export class PlayScene extends Phaser.Scene {
     c.add(g);
     // A stage beyond the skin list is celebrated without promising a new style.
     const stageDone = this.completedStage && (stageSkin(this.completedStage) ? t('win.stageComplete') : t('win.stageCompleteNoSkin'));
-    const summary = stageDone || t('win.summary', { name: levelTitle(this.level.id), moves: this.moves });
-    this.winText = summary;
-    c.add(label(this, VIEW.width / 2, oy + size + 36, summary, THEME.type.sm, this.completedStage ? THEME.inkCss : THEME.subCss, !!this.completedStage)
-      .setWordWrapWidth(520));
-    this.addUniverseProgress(c, top + 512);
+    // The stage message adds to the name and moves, it does not replace them (#155).
+    const summary = t('win.summary', { name: levelTitle(this.level.id), moves: this.moves });
+    this.winText = stageDone ? `${summary}\n${stageDone}` : summary;
+    c.add(label(this, VIEW.width / 2, oy + size + 32, summary, THEME.type.sm, THEME.subCss, false).setWordWrapWidth(520));
+    if (stageDone) c.add(label(this, VIEW.width / 2, oy + size + 96, stageDone, THEME.type.sm, THEME.inkCss, true).setWordWrapWidth(520));
+    this.addUniverseProgress(c, top + 538);
     const isLast = this.level.id >= LEVELS.length;
     const party = this.completedUniverse;
     const nextLabel = party ? t('universes.celebrate') : t(isLast ? 'win.map' : 'win.next');
@@ -763,12 +765,12 @@ export class PlayScene extends Phaser.Scene {
       if (party) this.scene.start('universeEnd', { universe: party });
       else if (isLast) this.scene.start('menu');
       else this.scene.start('play', { levelId: this.level.id + 1 });
-    }, { name: 'next' }));
+    }, { name: 'next', armMs: PANEL_ARM_MS }));
     const stage = this.completedStage;
     c.add(button(this, VIEW.width / 2, top + 700, 260, 64, t(stage ? 'win.album' : 'win.map'), () => {
       if (stage) this.scene.start('album', { stage });
       else this.scene.start('menu');
-    }, { fill: THEME.belt, color: THEME.inkCss, size: THEME.type.sm, name: stage ? 'album' : 'map' }));
+    }, { fill: THEME.belt, color: THEME.inkCss, size: THEME.type.sm, name: stage ? 'album' : 'map', armMs: PANEL_ARM_MS }));
     this.publish();
   }
 
@@ -800,12 +802,13 @@ export class PlayScene extends Phaser.Scene {
         this.overlay = null;
         this.ended = false;
         this.publish();
-      }, { name: 'continue' }));
+      }, { name: 'continue', armMs: PANEL_ARM_MS }));
     }
     c.add(button(this, VIEW.width / 2, top + (this.gs.extraSlotUsed ? 300 : 385), 300, 80, t('jam.retry'), () => this.restart(), {
       fill: this.gs.extraSlotUsed ? THEME.ink : THEME.belt,
       color: this.gs.extraSlotUsed ? '#ffffff' : THEME.inkCss,
       name: 'retry-panel',
+      armMs: PANEL_ARM_MS,
     }));
     this.publish();
   }
