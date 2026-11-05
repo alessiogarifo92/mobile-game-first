@@ -14,7 +14,8 @@ import { css, PAINT } from '../src/game/theme';
 const levels = (levelsJson as LevelDef[]).map(parseLevel);
 const dir = new URL('../docs/levels/', import.meta.url).pathname;
 mkdirSync(dir, { recursive: true });
-const browser = await chromium.launch();
+// CHROMIUM_PATH: the cloud container's preinstalled Chromium (/opt/pw-browsers/chromium), as in difficulty-report.ts.
+const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 
 for (const stage of stagesJson as StageInfo[]) {
   const inStage = levels.filter((l) => l.stage === stage.id);
