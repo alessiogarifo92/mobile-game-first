@@ -4,13 +4,15 @@ import type { StageSpec } from './types';
  * Stage 9 — Spazio (ticket #38).
  * Tutte le meccaniche, tele fino a 14×14.
  * Nastro 2 in tutto lo stage (#75).
+ * Pietre (#157): la stella (81) debutta la pietra, con due pietre disegnate a mano tra i pixel di una riga (un colpo si
+ * ferma per forza); 85 e 88 la riprendono con `special`. Così la finestra 81–100 ha la sua novità.
  * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places ice/hidden pixels.
  */
 const stage: StageSpec = {
   stage: 9, key: 'space', color: 'B',
   complete: true,
   levels: [
-    { name: 'star', columns: 4, ammoChunk: 8, slots: 3, beltCapacity: 2, special: { ice: 3, hidden: 2 }, winRate: [0.68, 1], seed: 9000, image: [
+    { name: 'star', columns: 4, ammoChunk: 8, slots: 3, beltCapacity: 2, winRate: [0.68, 1], seed: 9000, image: [
       '.....YY.....',
       '.....YY.....',
       '....YYYY....',
@@ -21,6 +23,17 @@ const stage: StageSpec = {
       '..YYYY.YYY..',
       '.YYY....YYY.',
       'YY........YY',
+    ], overlay: [
+      '......i.....',
+      '............',
+      '............',
+      '....h.......',
+      '............',
+      '.....i......',
+      '.......i....',
+      '...h..s.....',
+      '.....s......',
+      '............',
     ] },
     { name: 'moon', columns: 4, ammoChunk: 12, slots: 2, beltCapacity: 2, special: { ice: 3, hidden: 2 }, winRate: [0.8, 0.88], seed: 9037, image: [
       'PBBYYYYBBBPB',
@@ -57,7 +70,7 @@ const stage: StageSpec = {
       'BBBBBYYBBBBB',
       'BBBBBOBBBBBB',
     ] },
-    { name: 'ufo', columns: 4, ammoChunk: 12, slots: 2, beltCapacity: 2, special: { ice: 4, hidden: 3 }, winRate: [0.54, 0.74], seed: 9148, image: [
+    { name: 'ufo', columns: 4, ammoChunk: 12, slots: 2, beltCapacity: 2, special: { ice: 4, hidden: 3, stone: 3 }, winRate: [0.5, 0.64], seed: 9148, image: [
       '.....GG.....',
       '....GBBG....',
       '...GBBBBG...',
@@ -89,7 +102,7 @@ const stage: StageSpec = {
       'PPPPOPOPPPPP',
       'PPPOPPPOPPPP',
     ] },
-    { name: 'alien', columns: 4, ammoChunk: 18, slots: 2, beltCapacity: 2, special: { ice: 5, hidden: 4 }, winRate: [0.51, 0.68], seed: 9259, image: [
+    { name: 'alien', columns: 4, ammoChunk: 18, slots: 2, beltCapacity: 2, special: { ice: 5, hidden: 4, stone: 3 }, winRate: [0.47, 0.65], seed: 9259, image: [
       '..G......G..',
       '...G....G...',
       '...GGGGGG...',

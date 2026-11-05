@@ -7,7 +7,7 @@ import { parseLevel, type LevelDef } from '../src/core/level';
 import { levelWinRate } from '../src/core/solver';
 import stage from '../scripts/stages/stage-15';
 
-/** Stage 15 "Giungla" (#125): stones debut at level 141, then stones alone, levels 141–150. */
+/** Stage 15 "Giungla" (#125): stones alone, levels 141–150 (the stone debut moved to level 81 in #157). */
 const defs = (levels as LevelDef[]).filter((d) => d.stage === 15);
 const parsed = defs.map((d) => parseLevel(d));
 let rates: number[] | undefined;
@@ -43,24 +43,23 @@ describe('stage 15 — Jungle', () => {
       expect(l.hidden.some(Boolean)).toBe(false);
       expect(l.beltCapacity).toBe(2);
     }
-    // After the debut, belt and slots are no bigger than the end of universe 1.
-    for (const l of parsed.slice(1)) expect(l.slots).toBe(2);
+    // Stones are no longer new here: belt and slots are no bigger than the end of universe 1 from the first level.
+    for (const l of parsed) expect(l.slots).toBe(2);
   });
 
-  it('draws figures with at least 30% secondary pixels after the debut', () => {
+  it('draws figures with at least 30% secondary pixels after the first (the hand-drawn papaya)', () => {
     for (const l of parsed.slice(1)) {
       const pixels = l.targets.filter((t) => t !== 0);
       expect(pixels.filter((t) => !isPrimary(t)).length / pixels.length).toBeGreaterThanOrEqual(CURVE.minSecondaryShare);
     }
   });
 
-  it('follows the saw-tooth (#88): only the debut is very easy, the boss is the hardest', () => {
+  it('follows the saw-tooth (#88): no level is very easy (stones debuted at 81), the boss is the hardest', () => {
     const curve = parsed.map((l, i) => curveLevel(l, winRates()[i]!));
     expect(checkCurve(curve)).toEqual([]);
-    expect(winRates()[0]).toBeGreaterThanOrEqual(CURVE.veryEasy);
-    expect(winRates().slice(1).filter((r) => r >= CURVE.veryEasy)).toEqual([]);
+    expect(winRates().filter((r) => r >= CURVE.veryEasy)).toEqual([]);
     expect(Math.min(...winRates())).toBe(winRates()[9]);
-    // Between stage 14 (~75%) and the end of universe 2 (~62%), the easy debut included.
+    // Between stage 14 (~75%) and the end of universe 2 (~62%).
     const mean = winRates().reduce((a, b) => a + b, 0) / 10;
     expect(mean).toBeGreaterThan(0.62);
     expect(mean).toBeLessThan(0.75);

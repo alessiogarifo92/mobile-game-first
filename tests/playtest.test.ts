@@ -310,11 +310,11 @@ describe('saves and plans', () => {
     expect(startSaveOf(save)).toEqual({ unlocked: 50, completedThrough: 49, seenTips: save.seenTips });
   });
 
-  it('the save of universe 2 matches the protocol of #67 (universe 1 tips, brown still to come)', () => {
+  it('the save of universe 2 matches the protocol of #67 (universe 1 tips, stones included since #157; brown still to come)', () => {
     const start = packLevels(levels, 'S11')[0]!;
     const save = saveFor(levels, start, 'it');
     expect(save.completed).toHaveLength(start - 1);
-    expect([...save.seenTips].sort()).toEqual(['belt', 'blocked', 'guide', 'hidden', 'ice', 'leftover', 'mixing', 'queue', 'slots']);
+    expect([...save.seenTips].sort()).toEqual(['belt', 'blocked', 'guide', 'hidden', 'ice', 'leftover', 'mixing', 'queue', 'slots', 'stone']);
   });
 
   it('rejects an unknown language or level and a level the game would not open', () => {
