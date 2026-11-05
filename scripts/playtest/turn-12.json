@@ -1,0 +1,10 @@
+{
+  "turn": 12,
+  "tag": "playtest-u2-100b",
+  "variant": "normale",
+  "agents": [
+    { "agentId": "A16", "profileId": "P16", "viewport": "360x640", "language": "it", "packs": ["R200-200"], "maxAttempts": 5 },
+    { "agentId": "A06", "profileId": "P06", "viewport": "412x915", "language": "en", "packs": ["R200-200"], "maxAttempts": 5 },
+    { "agentId": "A04", "profileId": "P04", "viewport": "360x640", "language": "en", "packs": ["R200-200"], "maxAttempts": 4 }
+  ]
+}
