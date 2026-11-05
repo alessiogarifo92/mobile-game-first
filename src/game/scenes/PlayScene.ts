@@ -6,6 +6,8 @@ import type { StoneEvent } from '../../core/sim';
 import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, slotAt, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
 import { currentLevel } from '../../core/mapLayout';
+import { refuseSlotLaunch } from '../../core/blocked';
+import { missingDots } from '../../core/brownPixel';
 import { forecastLeftover, freeSlots, leftoverHint, type LeftoverForecast } from '../../core/leftover';
 import { PANEL_ARM_MS, jamHintKey } from '../../core/panelInput';
 import { newlyCompletedUniverse } from '../../core/universeMenu';
@@ -15,7 +17,7 @@ import {
   beltFull, beltLoad, continueWithExtraSlot, createGame, launchFromColumn, launchFromSlot, step, type GameState, type HitEvent, type Shooter,
 } from '../../core/sim';
 import {
-  guideAllows, guideStep, needsGuide, tipOnFullBelt, tipOnLevelStart, tipOnReturn, type CardTip, type GuideStep,
+  COLUMN_SHOWN, guideAllows, guideStep, needsGuide, tipOnBlockedTap, tipOnFullBelt, tipOnLevelStart, tipOnReturn, type CardTip, type GuideStep,
 } from '../../core/onboarding';
 import { solve } from '../../core/solver';
 import { sfx } from '../audio';
@@ -31,6 +33,8 @@ const BELT_JAR = 54;
 const TIP_H = 620;
 /** How long a refused tap shakes its column and highlights the belt indicator. */
 const REFUSE_MS = 450;
+/** How long the pixels that block a refused waiting bucket stay circled (#146). */
+const BLOCKERS_MS = 1600;
 /** Belt-load pips: one per bucket the belt holds, drawn only while they fit beside the "waiting" label. */
 const PIP = 16;
 const PIP_GAP = 6;
@@ -79,8 +83,11 @@ export class PlayScene extends Phaser.Scene {
   private winText = '';
   private beltText!: Phaser.GameObjects.Text;
   /** Last launch refused because the belt was full: the tapped column or slot shakes for a moment. */
-  private refused: { column: number; slot: number; at: number } | null = null;
+  private refused: { column: number; slot: number; at: number; belt: boolean } | null = null;
   private refusals = 0;
+  /** Last waiting bucket refused because it could not land a shot (#146): the pixels in its way, circled for a moment. */
+  private blockers: { cells: number[]; at: number } | null = null;
+  private blockedTaps = 0;
   /** Shots stopped by a stone so far (for tests). */
   private stoneSplashes = 0;
 
@@ -203,6 +210,11 @@ export class PlayScene extends Phaser.Scene {
       this.refuse(column, slot);
       return;
     }
+    const stuck = slot >= 0 ? refuseSlotLaunch(this.gs, slot) : null;
+    if (stuck) {
+      this.refuseBlocked(slot, stuck.blockers);
+      return;
+    }
     if (column >= 0 ? !launchFromColumn(this.gs, column) : !launchFromSlot(this.gs, slot)) return;
     this.launchAmmo.set(wanted.id, wanted.ammo);
     this.moves += 1;
@@ -213,12 +225,27 @@ export class PlayScene extends Phaser.Scene {
 
   /** A tap the full belt cannot take: shake what was tapped, light up the belt indicator, explain once. */
   private refuse(column: number, slot: number): void {
-    this.refused = { column, slot, at: this.time.now };
+    this.refused = { column, slot, at: this.time.now, belt: true };
     this.refusals += 1;
     sfx.refuse();
     const tip = tipOnFullBelt(getProgress().seenTips);
     // A short delay lets the shake and the indicator be seen before the card covers them.
     if (tip && !this.guide) this.time.delayedCall(REFUSE_MS, () => this.showTip(tip));
+    this.publish();
+  }
+
+  /**
+   * A waiting bucket that would ride a whole lap without landing a shot (#146): it stays put and shakes, the pixels in
+   * its way are circled, and the blocked-lane tip explains the rule the first time.
+   */
+  private refuseBlocked(slot: number, cells: number[]): void {
+    this.refused = { column: -1, slot, at: this.time.now, belt: false };
+    this.blockers = { cells, at: this.time.now };
+    this.blockedTaps += 1;
+    sfx.refuse();
+    const tip = tipOnBlockedTap(getProgress().seenTips);
+    // The card waits for the circles to be seen first.
+    if (tip && !this.guide) this.time.delayedCall(BLOCKERS_MS * 0.6, () => this.showTip(tip));
     this.publish();
   }
 
@@ -386,6 +413,54 @@ export class PlayScene extends Phaser.Scene {
       sq(cx + 80, y, PAINT[RED]!);
       sq(cx + 140, y, THEME.emptyPixel);
       sq(cx + 140, y, PAINT[BLUE]!, 0.3);
+    } else if (id === 'blocked') {
+      // Blue shot → an unfinished orange pixel in the way (circled) → the blue pixel behind it stays out of reach.
+      const y = y0 + 200;
+      card.add(label(this, cx - 200, y, '●→', THEME.type.sm, css(PAINT[BLUE]!)));
+      sq(cx - 110, y, THEME.emptyPixel);
+      sq(cx - 110, y, PAINT[ORANGE]!, 0.3);
+      g.lineStyle(5, THEME.ink, 1);
+      g.strokeCircle(cx - 110, y, 38);
+      card.add(label(this, cx - 20, y, '✕', THEME.type.md, THEME.inkCss));
+      sq(cx + 70, y, THEME.emptyPixel);
+      sq(cx + 70, y, PAINT[BLUE]!, 0.3);
+    } else if (id === 'queue') {
+      // A column shows three buckets and "+2": two more wait behind them, out of sight.
+      const jarAt = (bx: number, by: number, fill: number, alpha: number) => {
+        g.fillStyle(fill, alpha);
+        g.fillRoundedRect(bx - 22, by - 18, 44, 36, THEME.radius.jar / 2);
+        g.lineStyle(2, THEME.ink, alpha);
+        g.strokeRoundedRect(bx - 22, by - 18, 44, 36, THEME.radius.jar / 2);
+      };
+      const colX = cx - 110;
+      g.fillStyle(THEME.ink, 0.06);
+      g.fillRoundedRect(colX - 34, y0 + 104, 68, 140, THEME.radius.jar);
+      [RED, YELLOW, BLUE].forEach((col, k) => jarAt(colX, y0 + 128 + k * 44, PAINT[col]!, k === 0 ? 1 : 0.55));
+      card.add(label(this, colX, y0 + 262, '+2', THEME.type.sm, THEME.subCss));
+      card.add(label(this, cx, y0 + 190, '=', THEME.type.lg));
+      jarAt(cx + 90, y0 + 190, THEME.hidden, 0.35);
+      jarAt(cx + 150, y0 + 190, THEME.hidden, 0.35);
+      card.add(label(this, cx + 120, y0 + 236, '2', THEME.type.sm, THEME.subCss));
+    } else if (id === 'leftover') {
+      // A bucket of 4 finds only 3 pixels of its colour in reach: 1 shot of paint comes back ("↩1").
+      const y = y0 + 190;
+      const bucket = (bx: number, n: string) => {
+        g.fillStyle(PAINT[RED]!, 1);
+        g.fillRoundedRect(bx - 30, y - 30, 60, 60, THEME.radius.jar);
+        g.lineStyle(3, THEME.ink, 1);
+        g.strokeRoundedRect(bx - 30, y - 30, 60, 60, THEME.radius.jar);
+        card.add(label(this, bx, y, n, THEME.type.md, '#ffffff'));
+      };
+      bucket(cx - 220, '4');
+      card.add(label(this, cx - 155, y, '→', THEME.type.lg));
+      [0, 1, 2].forEach((k) => sq(cx - 90 + k * 56, y, PAINT[RED]!));
+      card.add(label(this, cx + 85, y, '→', THEME.type.lg));
+      bucket(cx + 170, '1');
+      g.fillStyle(THEME.gold, 1);
+      g.fillRoundedRect(cx + 170 - 32, y - 66, 64, 32, 16);
+      g.lineStyle(3, THEME.ink, 1);
+      g.strokeRoundedRect(cx + 170 - 32, y - 66, 64, 32, 16);
+      card.add(label(this, cx + 170, y - 50, '↩1', THEME.type.xs, THEME.inkCss));
     }
     const bodyY = id === 'mixing' ? y0 + 340 : y0 + 290;
     card.add(label(this, VIEW.width / 2, bodyY, t(`tip.${id}.body` as const, { n: this.level.beltCapacity }), THEME.type.sm, THEME.subCss, false)
@@ -466,6 +541,13 @@ export class PlayScene extends Phaser.Scene {
         // Half-mixed secondary: the received primary fills the upper-left triangle.
         g.fillStyle(PAINT[paint]!, 1);
         g.fillTriangle(x, y, x + w, y, x, y + h);
+      }
+      // What it still needs (#149): a dot of each missing primary, so a half-mixed pixel never reads as finished.
+      for (const d of missingDots(target, paint, x, y, w, h)) {
+        g.fillStyle(PAINT[d.color]!, 1);
+        g.fillCircle(d.x, d.y, d.r);
+        g.lineStyle(d.r > 6 ? 2 : 1.5, THEME.ink, 1);
+        g.strokeCircle(d.x, d.y, d.r);
       }
       if (this.gs.locked[i]) {
         // Locked: the colour still shows (so the player can plan), under a veil and an ink padlock.
@@ -574,7 +656,8 @@ export class PlayScene extends Phaser.Scene {
     const flashing = since < REFUSE_MS;
     // Decaying side-to-side shake of whatever was tapped.
     const shake = flashing ? Math.sin(since / 25) * 8 * (1 - since / REFUSE_MS) : 0;
-    this.drawBeltLoad(flashing);
+    this.drawBeltLoad(flashing && !!this.refused?.belt);
+    this.drawBlockers();
     gs.slots.forEach((s, i) => {
       const r = layout.slots[i];
       const dx = this.refused?.slot === i ? shake : 0;
@@ -583,11 +666,13 @@ export class PlayScene extends Phaser.Scene {
     gs.queues.forEach((queue, c) => {
       const r = layout.columns[c]!;
       const dx = this.refused?.column === c ? shake : 0;
-      queue.slice(0, 3).forEach((s, k) => {
+      queue.slice(0, COLUMN_SHOWN).forEach((s, k) => {
         const face = this.columnFace(s, k);
         this.jar(r.x + r.w / 2 + dx, r.y + layout.jar / 2 + 6 + k * layout.columnStep, k === 0 ? layout.jar : layout.jar - 14, s, k === 0 ? 1 : 0.55, face.covered, face.squash);
       });
-      if (queue.length > 3) this.text(r.x + r.w / 2, r.y + 3 * layout.columnStep + 36, `+${queue.length - 3}`, THEME.type.sm, THEME.subCss);
+      if (queue.length > COLUMN_SHOWN) {
+        this.text(r.x + r.w / 2, r.y + COLUMN_SHOWN * layout.columnStep + 36, `+${queue.length - COLUMN_SHOWN}`, THEME.type.sm, THEME.subCss);
+      }
     });
 
     this.drawLeftoverHints();
@@ -638,6 +723,26 @@ export class PlayScene extends Phaser.Scene {
       g.lineStyle(3, risky ? 0xffffff : THEME.ink, 1);
       g.strokeRoundedRect(cx - w / 2, cy - h / 2, w, h, h / 2);
       this.text(cx, cy, hint.label, THEME.type.xs, risky ? '#FFFFFF' : THEME.inkCss);
+    }
+  }
+
+  /** Pulsing ink ring, white inside, around each pixel that blocks the waiting bucket just refused (#146). */
+  private drawBlockers(): void {
+    const b = this.blockers;
+    if (!b) return;
+    const since = this.time.now - b.at;
+    if (since >= BLOCKERS_MS) {
+      this.blockers = null;
+      return;
+    }
+    const g = this.dynamic;
+    const alpha = 0.55 + 0.45 * Math.cos((since / BLOCKERS_MS) * Math.PI * 6);
+    for (const cell of b.cells) {
+      const r = cellRect(this.layout, this.level.width, cell);
+      g.lineStyle(5, THEME.ink, alpha);
+      g.strokeRoundedRect(r.x - 3, r.y - 3, r.w + 6, r.h + 6, THEME.radius.cell + 2);
+      g.lineStyle(2, THEME.white, alpha);
+      g.strokeRoundedRect(r.x + 1, r.y + 1, r.w - 2, r.h - 2, THEME.radius.cell);
     }
   }
 
@@ -890,6 +995,14 @@ export class PlayScene extends Phaser.Scene {
       beltBusy: gs.belt.length + gs.pending.length > 0,
       belt: beltLoad(gs),
       refusals: this.refusals,
+      // Waiting buckets refused because they could not land a shot, and the pixels circled for the last one (#146).
+      blockedTaps: this.blockedTaps,
+      blockers: this.blockers ? [...this.blockers.cells] : [],
+      // Started mixed or brown pixels and the primaries their dots show (#149).
+      missing: this.level.targets.flatMap((target, i) => {
+        const colors = gs.hidden[i] ? [] : missingDots(target, gs.paint[i]!, 0, 0, 1, 1).map((d) => d.color);
+        return colors.length ? [{ cell: i, colors }] : [];
+      }),
       columns: this.layout.columns,
       slots: this.layout.slots,
       // Waiting slots holding a bucket: playtest telemetry records the highest occupancy (#68).

@@ -131,7 +131,7 @@ export async function play(page: Page, moves: Move[]): Promise<string[]> {
 /** Last level of universe 1: it sits at the top of that universe's map (the map a fresh save opens on). */
 export const LAST_LEVEL = (levels as LevelDef[]).filter((l) => universeOfStage(l.stage) === 1).length;
 
-export const SEEN_ALL = JSON.stringify({ unlocked: LAST_LEVEL, completed: [], sound: false, language: 'en', seenTips: ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden'] });
+export const SEEN_ALL = JSON.stringify({ unlocked: LAST_LEVEL, completed: [], sound: false, language: 'en', seenTips: ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'queue', 'leftover'] });
 
 
 /** Column launches (sequential play) that end in a jam, found offline with the core rules. */

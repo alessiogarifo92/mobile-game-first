@@ -10,7 +10,7 @@ import { isLanguage } from '../../src/core/i18n';
 import { canOpenLevel } from '../../src/core/universes';
 
 /** Tips met while playing rather than at a level start: anyone past level 1 has had them. */
-const PLAY_TIPS = ['guide', 'blocked', 'slots', 'belt'];
+const PLAY_TIPS = ['guide', 'blocked', 'slots', 'belt', 'leftover'];
 
 /** Packs that are not a whole stage (protocol §8). */
 const NAMED_PACKS: Record<string, [number, number]> = { 'U1-ONB': [1, 10], 'U1-FINE': [95, 100] };

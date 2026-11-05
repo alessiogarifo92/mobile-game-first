@@ -6,7 +6,7 @@ import { LAST_LEVEL, mix, openLevel, play, shots, waitScene, waitSim } from './h
 const KEY = 'mix-and-splash/progress/v1';
 const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
 const BOSS = LAST_LEVEL + 10;
-const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'brown'];
+const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'brown', 'queue', 'leftover'];
 
 test('the oak, boss of stage 11, plays to a win and is saved as completed', async ({ page }) => {
   const save = { sound: false, language: 'it', unlocked: BOSS, completed: range(1, BOSS - 1), seenTips: TIPS };

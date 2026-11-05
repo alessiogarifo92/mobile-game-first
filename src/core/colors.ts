@@ -50,3 +50,13 @@ export function codeOf(mask: number): string {
   const entry = Object.entries(COLOR_CODES).find(([, v]) => v === mask);
   return entry ? entry[0] : '.';
 }
+
+/**
+ * Primaries a mixed or brown pixel still needs once it has started taking paint (#149), in R, Y, B order: the board
+ * marks them with a dot, so "half orange" no longer reads as finished. Empty for a primary pixel, for one not hit yet
+ * (its ghost already shows the whole target) and for a complete one.
+ */
+export function missingPrimaries(target: number, paint: number): Primary[] {
+  if (target === 0 || isPrimary(target) || paint === 0 || isComplete(target, paint)) return [];
+  return primariesOf(target & ~paint);
+}

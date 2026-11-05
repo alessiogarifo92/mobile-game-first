@@ -3,7 +3,11 @@ import type { Level } from './level';
 
 /** One-time onboarding tips, shown the first time the mechanic they explain shows up. */
 /** Tips shown as a card; 'guide' is the guided level 1 instead. */
-export type CardTip = 'mixing' | 'blocked' | 'slots' | 'ice' | 'hidden' | 'lock' | 'belt' | 'brown' | 'stone' | 'covered';
+export type CardTip =
+  | 'mixing' | 'blocked' | 'slots' | 'ice' | 'hidden' | 'lock' | 'belt' | 'brown' | 'stone' | 'covered' | 'queue' | 'leftover';
+
+/** Buckets a column shows; the rest wait behind, counted by the "+N" under it. */
+export const COLUMN_SHOWN = 3;
 export type TipId = 'guide' | CardTip;
 
 /** Level 1 is played as a guided tutorial until the player has seen it once. */
@@ -13,8 +17,8 @@ export function needsGuide(level: Level, seen: readonly string[]): boolean {
 
 /**
  * Tip to show when a level starts, the first time it contains something new: secondary colours,
- * brown (three primaries), ice, hidden pixels, stones, locked pixels or covered buckets. One tip per level start, in
- * that order.
+ * brown (three primaries), ice, hidden pixels, stones, locked pixels, covered buckets or a column longer than it shows
+ * (its "+N", #148). One tip per level start, in that order.
  */
 export function tipOnLevelStart(level: Level, seen: readonly string[]): CardTip | null {
   const present: [CardTip, boolean][] = [
@@ -25,18 +29,27 @@ export function tipOnLevelStart(level: Level, seen: readonly string[]): CardTip 
     ['stone', level.stone.some(Boolean)],
     ['lock', level.locked.some(Boolean)],
     ['covered', level.columns.some((column) => column.some((s) => s.covered))],
+    ['queue', level.columns.some((column) => column.length > COLUMN_SHOWN)],
   ];
   return present.find(([tip, here]) => here && !seen.includes(tip))?.[0] ?? null;
 }
 
 /**
  * Tip to show when a bucket comes back to a waiting slot. A bucket that could not shoot at all is
- * the confusing case, so it explains blocked lanes first; otherwise it explains the slots.
+ * the confusing case, so it explains blocked lanes first; otherwise it explains the slots. Once the slots are known,
+ * the next bucket that painted and still came back explains why it did (#172): no pixel of its colour was left in
+ * reach for the paint it carried.
  */
 export function tipOnReturn(hadHits: boolean, seen: readonly string[]): CardTip | null {
   if (!hadHits && !seen.includes('blocked')) return 'blocked';
   if (!seen.includes('slots')) return 'slots';
+  if (hadHits && !seen.includes('leftover')) return 'leftover';
   return null;
+}
+
+/** Tip to show when a tap on a waiting bucket is refused because it could not land a shot (#146). */
+export function tipOnBlockedTap(seen: readonly string[]): CardTip | null {
+  return seen.includes('blocked') ? null : 'blocked';
 }
 
 /**

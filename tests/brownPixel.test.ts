@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { brownWedges } from '../src/core/brownPixel';
-import { PRIMARIES } from '../src/core/colors';
+import { brownWedges, missingDots } from '../src/core/brownPixel';
+import { BROWN, GREEN, ORANGE, PRIMARIES, PURPLE } from '../src/core/colors';
 import { RED, YELLOW, BLUE } from './helpers';
 
 /** Shoelace area of a polygon. */
@@ -48,3 +48,42 @@ describe('brownWedges', () => {
     expect(Math.max(...areas) / Math.min(...areas)).toBeLessThan(1.6);
   });
 });
+
+describe('missingDots (#149)', () => {
+  it('a mixed pixel puts its missing primary in the lower-right half', () => {
+    const [d, ...rest] = missingDots(ORANGE, RED, 0, 0, 60, 60);
+    expect(rest).toEqual([]);
+    expect(d).toMatchObject({ color: YELLOW });
+    expect(d!.x).toBeGreaterThan(30);
+    expect(d!.y).toBeGreaterThan(30);
+    expect(d!.x + d!.y).toBeGreaterThan(60); // below the diagonal the received colour fills
+  });
+
+  it('a brown pixel puts each dot inside the empty wedge of its colour', () => {
+    const dots = missingDots(BROWN, RED, 10, 20, 60, 60);
+    expect(dots.map((d) => d.color)).toEqual([YELLOW, BLUE]);
+    const wedges = brownWedges(10, 20, 60, 60);
+    for (const d of dots) expect(inside([d.x, d.y], wedges[d.color])).toBe(true);
+  });
+
+  it('stays visible on a small pixel and scales with a big one', () => {
+    expect(missingDots(GREEN, BLUE, 0, 0, 14, 14)[0]!.r).toBe(4);
+    expect(missingDots(GREEN, BLUE, 0, 0, 100, 100)[0]!.r).toBeCloseTo(13);
+  });
+
+  it('no dots on a complete or untouched pixel', () => {
+    expect(missingDots(BROWN, BROWN, 0, 0, 60, 60)).toEqual([]);
+    expect(missingDots(PURPLE, 0, 0, 0, 60, 60)).toEqual([]);
+  });
+});
+
+/** Ray casting: whether a point lies inside a polygon. */
+function inside([px, py]: readonly [number, number], poly: readonly (readonly [number, number])[]): boolean {
+  let hit = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, yi] = poly[i]!;
+    const [xj, yj] = poly[j]!;
+    if (yi > py !== yj > py && px < ((xj - xi) * (py - yi)) / (yj - yi) + xi) hit = !hit;
+  }
+  return hit;
+}

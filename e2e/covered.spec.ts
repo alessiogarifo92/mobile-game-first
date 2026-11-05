@@ -12,7 +12,7 @@ test.use({ baseURL: 'http://localhost:4175' });
 const shipped = levels.length;
 const debut = shipped + 1;
 const KEY = 'mix-and-splash/progress/v1';
-const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt'];
+const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'queue', 'leftover'];
 type Colors = (number | null)[][];
 
 async function start(page: Page) {

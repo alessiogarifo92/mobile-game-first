@@ -5,7 +5,7 @@ import { LAST_LEVEL, dismissTip, mix, openLevel, play, shots, tap, waitScene, wa
 /** Brown pixels (#94): the one-time tip at the debut level (101, first of universe 2) and the "How to play" page. */
 const KEY = 'mix-and-splash/progress/v1';
 const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
-const TIPS_BEFORE = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt'];
+const TIPS_BEFORE = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'queue', 'leftover'];
 
 async function start(page: Page, save: object) {
   await page.addInitScript(([key, value]) => localStorage.setItem(key, value), [KEY, JSON.stringify({ sound: false, language: 'en', ...save })] as const);

@@ -299,7 +299,7 @@ describe('saves and plans', () => {
   });
 
   it('a later save has seen the tips of the levels before it, and none of those still to come', () => {
-    expect(tipsMetBefore(levels, 2)).toEqual(['guide', 'blocked', 'slots', 'belt']);
+    expect(tipsMetBefore(levels, 2)).toEqual(['guide', 'blocked', 'slots', 'belt', 'leftover']);
     const firstMixing = levels.find((l) => tipOnLevelStart(l, []) === 'mixing')!.id;
     expect(tipsMetBefore(levels, firstMixing)).not.toContain('mixing');
     expect(tipsMetBefore(levels, firstMixing + 1)).toContain('mixing');
@@ -314,7 +314,7 @@ describe('saves and plans', () => {
     const start = packLevels(levels, 'S11')[0]!;
     const save = saveFor(levels, start, 'it');
     expect(save.completed).toHaveLength(start - 1);
-    expect([...save.seenTips].sort()).toEqual(['belt', 'blocked', 'guide', 'hidden', 'ice', 'mixing', 'slots']);
+    expect([...save.seenTips].sort()).toEqual(['belt', 'blocked', 'guide', 'hidden', 'ice', 'leftover', 'mixing', 'queue', 'slots']);
   });
 
   it('rejects an unknown language or level and a level the game would not open', () => {

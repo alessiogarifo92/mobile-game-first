@@ -5,7 +5,7 @@ import { mix, openLevel, play, shots, waitScene, waitSim } from './helpers';
 
 /** Stage 13 "Prato" (#123): its first level (the daisy, with hidden pixels) plays to a win from the map. */
 const KEY = 'mix-and-splash/progress/v1';
-const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'brown'];
+const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'brown', 'queue', 'leftover'];
 const first = levels.find((l) => l.stage === 13)!;
 const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
 
