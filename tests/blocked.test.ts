@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { BLUE, RED, YELLOW, level } from './helpers';
-import { blockingCells, cloneGame, refuseSlotLaunch, slotLaunchHits } from '../src/core/blocked';
+import { BLOCKERS_PULSE_MS, BLOCKERS_REST_ALPHA, blockExample, blockerAlpha, blockerSignature, blockingCells, cloneGame, refuseSlotLaunch, slotLaunchHits, unlockColors } from '../src/core/blocked';
 import { createGame, launchFromColumn, launchFromSlot, step, type GameState } from '../src/core/sim';
 
 /** Runs the belt until it is empty (or the game ends). */
@@ -136,5 +136,104 @@ describe('refuseSlotLaunch', () => {
     expect(refuseSlotLaunch(g, 1)).toBeNull();
     launchFromColumn(g, 0);
     expect(refuseSlotLaunch(g, 0)).toBeNull();
+  });
+});
+
+describe('unlockColors (#176)', () => {
+  const ORANGE = RED | YELLOW;
+  it('an unfinished mixed pixel needs every primary it still misses, in R, Y, B order', () => {
+    const g = createGame(level(['O'], [[[RED, 1]], [[YELLOW, 1]]]));
+    expect(unlockColors(g.level, g, 0)).toEqual([RED, YELLOW]);
+    g.paint[0] = RED;
+    expect(unlockColors(g.level, g, 0)).toEqual([YELLOW]);
+  });
+
+  it('nothing for a finished pixel, an empty cell or out of range', () => {
+    const g = createGame(level(['R.'], [[[RED, 1]]]));
+    g.paint[0] = RED;
+    expect(unlockColors(g.level, g, 0)).toEqual([]);
+    expect(unlockColors(g.level, g, 1)).toEqual([]);
+    expect(unlockColors(g.level, g, 99)).toEqual([]);
+    expect(ORANGE).toBe(RED | YELLOW);
+  });
+
+  it('a frozen pixel needs its own colour to break the ice', () => {
+    const g = createGame(level(['R'], [[[RED, 2]]], { overlay: ['i'] }));
+    expect(g.ice[0]).toBeGreaterThan(0);
+    expect(unlockColors(g.level, g, 0)).toEqual([RED]);
+  });
+
+  it('no colour opens a stone, a hidden pixel or a locked one', () => {
+    const stone = createGame(level(['R.R'], [[[RED, 2]]], { overlay: ['.s.'] }));
+    expect(unlockColors(stone.level, stone, 1)).toEqual([]);
+    const hidden = createGame(level(['RR'], [[[RED, 2]]], { overlay: ['.h'] }));
+    expect(unlockColors(hidden.level, hidden, 1)).toEqual([]);
+    const locked = createGame(level(['RR'], [[[RED, 2]]]));
+    locked.locked[1] = true;
+    expect(unlockColors(locked.level, locked, 1)).toEqual([]);
+  });
+});
+
+describe('blockExample (#176)', () => {
+  it('describes the refused bucket: its colour, the red pixel in the way (opened by red), the yellow pixel behind', () => {
+    const g = walled();
+    const refusal = refuseSlotLaunch(g, 0)!;
+    const ex = blockExample(g.level, g, g.lanes, YELLOW, refusal.blockers);
+    expect(ex).toEqual({ color: YELLOW, front: { kind: 'pixel', target: RED, paint: 0, ice: false, unlock: [RED] }, behind: YELLOW });
+  });
+
+  it('reports a stone, a hidden or a locked front by kind, without colours to open it', () => {
+    const g = walled();
+    const front = refuseSlotLaunch(g, 0)!.blockers[0]!;
+    g.locked[front] = true;
+    expect(blockExample(g.level, g, g.lanes, YELLOW, [front])!.front).toEqual({ kind: 'locked', target: RED });
+    g.locked[front] = false;
+    g.hidden[front] = true;
+    expect(blockExample(g.level, g, g.lanes, YELLOW, [front])!.front).toEqual({ kind: 'hidden', target: RED });
+  });
+
+  it('a stone front', () => {
+    // Row R s Y: from the left, a yellow shot meets the stone before the yellow pixel.
+    const g = createGame(level(['R.Y'], [[[RED, 1]], [[YELLOW, 1]]], { overlay: ['.s.'] }));
+    const lane = g.lanes.find((l) => l[0] === 1 && l.includes(2));
+    const ex = blockExample(g.level, g, lane ? [lane] : [[1, 2]], YELLOW, [1]);
+    expect(ex?.front).toEqual({ kind: 'stone', target: 0 });
+    expect(ex?.behind).toBe(YELLOW);
+  });
+
+  it('null when no lane has one of the blockers in front of a pixel wanting the colour', () => {
+    const g = walled();
+    expect(blockExample(g.level, g, g.lanes, YELLOW, [])).toBeNull();
+    // Blue is wanted nowhere: no lane qualifies even with the right fronts.
+    expect(blockExample(g.level, g, g.lanes, BLUE, refuseSlotLaunch(g, 0)!.blockers)).toBeNull();
+  });
+});
+
+describe('blocker circles timing and fingerprint (#176)', () => {
+  it('pulse three times over 3 s, then rest steady and fainter', () => {
+    expect(blockerAlpha(0)).toBe(1);
+    expect(blockerAlpha(BLOCKERS_PULSE_MS / 2)).toBeCloseTo(0.1);
+    expect(blockerAlpha(BLOCKERS_PULSE_MS)).toBe(BLOCKERS_REST_ALPHA);
+    expect(blockerAlpha(60_000)).toBe(BLOCKERS_REST_ALPHA);
+    expect(blockerAlpha(-10)).toBe(1);
+    expect(BLOCKERS_PULSE_MS).toBeGreaterThanOrEqual(2500);
+  });
+
+  it('the fingerprint changes when a circled pixel is painted, thawed, revealed or unlocked, not otherwise', () => {
+    const g = walled();
+    const cells = refuseSlotLaunch(g, 0)!.blockers;
+    const sig = blockerSignature(g, cells);
+    expect(blockerSignature(cloneGame(g), cells)).toBe(sig);
+    const other = g.level.targets.findIndex((_, i) => !cells.includes(i));
+    const moved = cloneGame(g);
+    moved.paint[other] = RED;
+    expect(blockerSignature(moved, cells)).toBe(sig);
+    for (const change of [(s: GameState) => { s.paint[cells[0]!] = RED; }, (s: GameState) => { s.ice[cells[0]!] = 1; },
+      (s: GameState) => { s.hidden[cells[0]!] = true; }, (s: GameState) => { s.locked[cells[0]!] = true; }]) {
+      const c = cloneGame(g);
+      change(c);
+      expect(blockerSignature(c, cells)).not.toBe(sig);
+    }
+    expect(blockerSignature(g, [])).toBe('');
   });
 });

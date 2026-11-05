@@ -15,6 +15,8 @@ export const THEME = {
   subCss: '#66637A',
   white: 0xffffff,
   ice: 0xcfe8f7,
+  /** Ice rim and cracks (#176): white cracks on the pale cover read at 1.26:1; this blue reaches 4.2:1 on it. */
+  iceDark: 0x356f9c,
   /** Stone block (#95): cool grey, apart from the warm hidden cover; bevel and speckles carry it without colour. */
   stone: 0xa3a6ad,
   stoneDark: 0x5f626b,
@@ -39,6 +41,24 @@ export const PAINT: Record<number, number> = {
 
 /** Colour-blind support: every primary also has a shape. */
 export const SYMBOL: Record<number, string> = { [RED]: '●', [YELLOW]: '▲', [BLUE]: '■' };
+
+/** WCAG relative luminance of a 0xRRGGBB colour. */
+export function luminance(color: number): number {
+  const lin = (v: number) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+  const [r, g, b] = [16, 8, 0].map((s) => lin(((color >> s) & 255) / 255)) as [number, number, number];
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+/** WCAG contrast ratio between two 0xRRGGBB colours (1 to 21). */
+export function contrast(a: number, b: number): number {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x) as [number, number];
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+/** `top` laid at `alpha` over `under`, as the canvas blends it. */
+export function blend(top: number, under: number, alpha: number): number {
+  return [16, 8, 0].reduce((acc, s) => acc | (Math.round(((top >> s) & 255) * alpha + ((under >> s) & 255) * (1 - alpha)) << s), 0);
+}
 
 export function css(color: number): string {
   return `#${color.toString(16).padStart(6, '0')}`;

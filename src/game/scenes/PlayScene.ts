@@ -6,7 +6,8 @@ import type { StoneEvent } from '../../core/sim';
 import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, slotAt, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
 import { currentLevel } from '../../core/mapLayout';
-import { refuseSlotLaunch } from '../../core/blocked';
+import { blockExample, blockerAlpha, blockerSignature, refuseSlotLaunch, unlockColors, type BlockExample } from '../../core/blocked';
+import type { Primary } from '../../core/colors';
 import { missingDots } from '../../core/brownPixel';
 import { forecastLeftover, freeSlots, leftoverHint, type LeftoverForecast } from '../../core/leftover';
 import { PANEL_ARM_MS, jamHintKey } from '../../core/panelInput';
@@ -26,7 +27,7 @@ import { LEVELS, UNIVERSES, canOpen, getProgress, levelHint, levelTitle, markCom
 import { BLUE, BROWN, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
 import { PAINT, SYMBOL, THEME, css } from '../theme';
 import { drawSkin } from '../skins';
-import { brownPixel, button, drawStone, keyIcon, label, lockIcon, progressBar, screenBackground } from '../ui';
+import { brownPixel, button, drawIce, drawStone, keyIcon, label, lockIcon, progressBar, screenBackground } from '../ui';
 
 const TICK_MS = 85;
 const BELT_JAR = 54;
@@ -34,7 +35,8 @@ const TIP_H = 620;
 /** How long a refused tap shakes its column and highlights the belt indicator. */
 const REFUSE_MS = 450;
 /** How long the pixels that block a refused waiting bucket stay circled (#146). */
-const BLOCKERS_MS = 1600;
+/** The blocked-lane tip waits this long after a refusal, so the circles and their colour dots are seen first (#176). */
+const BLOCKERS_TIP_MS = 1800;
 /** Belt-load pips: one per bucket the belt holds, drawn only while they fit beside the "waiting" label. */
 const PIP = 16;
 const PIP_GAP = 6;
@@ -86,7 +88,14 @@ export class PlayScene extends Phaser.Scene {
   private refused: { column: number; slot: number; at: number; belt: boolean } | null = null;
   private refusals = 0;
   /** Last waiting bucket refused because it could not land a shot (#146): the pixels in its way, circled for a moment. */
-  private blockers: { cells: number[]; at: number } | null = null;
+  /**
+   * Pixels circled after a refused waiting bucket (#146), with the colours that open each one (#176). They stay until the
+   * next tap or until one of them changes (`sig`); `gs` ties them to the game they were drawn for, since the scene
+   * instance is reused from level to level.
+   */
+  private blockers: { cells: number[]; unlock: Primary[][]; at: number; sig: string; gs: GameState } | null = null;
+  /** The case the blocked-lane tip illustrates: the bucket just refused (#176). */
+  private blockedCase: BlockExample | null = null;
   private blockedTaps = 0;
   /** Shots stopped by a stone so far (for tests). */
   private stoneSplashes = 0;
@@ -199,6 +208,11 @@ export class PlayScene extends Phaser.Scene {
   private tap(x: number, y: number): void {
     sfx.unlock();
     if (this.overlay || this.tip || this.gs.status !== 'playing') return;
+    // Any tap moves on from the last refusal: its circles have had their say (#176).
+    if (this.blockers) {
+      this.blockers = null;
+      this.publish();
+    }
     const pt = { x, y };
     const column = this.layout.columns.findIndex((r) => contains(r, pt));
     // Logical units per real pixel: a tap target is never smaller than 44 px, however small the screen.
@@ -239,13 +253,17 @@ export class PlayScene extends Phaser.Scene {
    * its way are circled, and the blocked-lane tip explains the rule the first time.
    */
   private refuseBlocked(slot: number, cells: number[]): void {
+    const { gs } = this;
     this.refused = { column: -1, slot, at: this.time.now, belt: false };
-    this.blockers = { cells, at: this.time.now };
+    const unlock = cells.map((c) => unlockColors(this.level, gs, c));
+    this.blockers = { cells, unlock, at: this.time.now, sig: blockerSignature(gs, cells), gs };
+    const color = gs.slots[slot]?.color;
+    this.blockedCase = color ? blockExample(this.level, gs, gs.lanes, color, cells) : null;
     this.blockedTaps += 1;
     sfx.refuse();
     const tip = tipOnBlockedTap(getProgress().seenTips);
-    // The card waits for the circles to be seen first.
-    if (tip && !this.guide) this.time.delayedCall(BLOCKERS_MS * 0.6, () => this.showTip(tip));
+    // The card waits for the circles and their colour dots to be seen first.
+    if (tip && !this.guide) this.time.delayedCall(BLOCKERS_TIP_MS, () => this.showTip(tip));
     this.publish();
   }
 
@@ -317,14 +335,7 @@ export class PlayScene extends Phaser.Scene {
       g.fillStyle(fill, alpha);
       g.fillRoundedRect(gx - 24, gy - 24, 48, 48, THEME.radius.cell);
     };
-    const cracks = (gx: number, gy: number) => {
-      g.fillStyle(THEME.ice, 0.6);
-      g.fillRoundedRect(gx - 24, gy - 24, 48, 48, THEME.radius.cell);
-      g.lineStyle(2, THEME.white, 0.9);
-      g.lineBetween(gx - 14, gy - 12, gx, gy);
-      g.lineBetween(gx, gy, gx - 2, gy + 18);
-      g.lineBetween(gx, gy, gx + 16, gy - 4);
-    };
+    const cracks = (gx: number, gy: number) => drawIce(g, gx - 24, gy - 24, 48, 48);
     const cx = VIEW.width / 2;
     if (id === 'mixing') {
       // Visual equations: the whole tip in one glance.
@@ -414,16 +425,36 @@ export class PlayScene extends Phaser.Scene {
       sq(cx + 140, y, THEME.emptyPixel);
       sq(cx + 140, y, PAINT[BLUE]!, 0.3);
     } else if (id === 'blocked') {
-      // Blue shot → an unfinished orange pixel in the way (circled) → the blue pixel behind it stays out of reach.
+      // The bucket just refused (#176): its shot → the first cell in its way (circled, with what opens it) → the pixel
+      // it wanted behind. Without a case (never expected), a blue shot stopped by an orange pixel.
+      const ex: BlockExample = this.blockedCase ?? { color: BLUE, front: { kind: 'pixel', target: ORANGE, paint: 0, ice: false, unlock: [RED, YELLOW] }, behind: BLUE };
       const y = y0 + 200;
-      card.add(label(this, cx - 200, y, '●→', THEME.type.sm, css(PAINT[BLUE]!)));
-      sq(cx - 110, y, THEME.emptyPixel);
-      sq(cx - 110, y, PAINT[ORANGE]!, 0.3);
+      const fx = cx - 110;
+      card.add(label(this, cx - 200, y, `${SYMBOL[ex.color]}→`, THEME.type.sm, css(PAINT[ex.color]!)));
+      const f = ex.front;
+      if (f.kind === 'stone') drawStone(g, fx - 24, y - 24, 48, 48);
+      else if (f.kind === 'hidden') {
+        sq(fx, y, THEME.hidden);
+        card.add(label(this, fx, y, '?', THEME.type.md, '#ffffff'));
+      } else {
+        sq(fx, y, THEME.emptyPixel);
+        sq(fx, y, PAINT[f.target]!, 0.3);
+        if (f.kind === 'locked') lockIcon(g, fx, y, 36);
+        else {
+          if (f.target === BROWN) brownPixel(g, fx - 24, y - 24, 48, 48, f.paint);
+          else if (f.paint) {
+            g.fillStyle(PAINT[f.paint]!, 1);
+            g.fillTriangle(fx - 24, y - 24, fx + 24, y - 24, fx - 24, y + 24);
+          }
+          if (f.ice) drawIce(g, fx - 24, y - 24, 48, 48);
+        }
+      }
       g.lineStyle(5, THEME.ink, 1);
-      g.strokeCircle(cx - 110, y, 38);
+      g.strokeCircle(fx, y, 38);
+      if (f.kind === 'pixel') this.unlockDots(g, f.unlock, fx, y - 38, 13, (dx, dy, s) => card.add(label(this, dx, dy, s, 14, THEME.inkCss)));
       card.add(label(this, cx - 20, y, '✕', THEME.type.md, THEME.inkCss));
       sq(cx + 70, y, THEME.emptyPixel);
-      sq(cx + 70, y, PAINT[BLUE]!, 0.3);
+      sq(cx + 70, y, PAINT[ex.behind]!, 0.3);
     } else if (id === 'queue') {
       // A column shows three buckets and "+2": two more wait behind them, out of sight.
       const jarAt = (bx: number, by: number, fill: number, alpha: number) => {
@@ -451,18 +482,25 @@ export class PlayScene extends Phaser.Scene {
         g.strokeRoundedRect(bx - 30, y - 30, 60, 60, THEME.radius.jar);
         card.add(label(this, bx, y, n, THEME.type.md, '#ffffff'));
       };
-      bucket(cx - 220, '4');
-      card.add(label(this, cx - 155, y, '→', THEME.type.lg));
-      [0, 1, 2].forEach((k) => sq(cx - 90 + k * 56, y, PAINT[RED]!));
-      card.add(label(this, cx + 85, y, '→', THEME.type.lg));
-      bucket(cx + 170, '1');
-      g.fillStyle(THEME.gold, 1);
-      g.fillRoundedRect(cx + 170 - 32, y - 66, 64, 32, 16);
-      g.lineStyle(3, THEME.ink, 1);
-      g.strokeRoundedRect(cx + 170 - 32, y - 66, 64, 32, 16);
-      card.add(label(this, cx + 170, y - 50, '↩1', THEME.type.xs, THEME.inkCss));
+      // Then the same pill as a warning (#176): "!" when that paint would take the last free slot.
+      const pill = (px: number, text: string, risky: boolean) => {
+        const pw = risky ? 76 : 64;
+        g.fillStyle(risky ? THEME.ink : THEME.gold, 1);
+        g.fillRoundedRect(px - pw / 2, y - 66, pw, 32, 16);
+        g.lineStyle(3, risky ? THEME.white : THEME.ink, 1);
+        g.strokeRoundedRect(px - pw / 2, y - 66, pw, 32, 16);
+        card.add(label(this, px, y - 50, text, THEME.type.xs, risky ? '#FFFFFF' : THEME.inkCss));
+      };
+      bucket(cx - 240, '4');
+      card.add(label(this, cx - 180, y, '→', THEME.type.md));
+      [0, 1, 2].forEach((k) => sq(cx - 122 + k * 54, y, PAINT[RED]!));
+      card.add(label(this, cx - 6, y, '→', THEME.type.md));
+      bucket(cx + 64, '1');
+      pill(cx + 64, '↩1', false);
+      bucket(cx + 200, '1');
+      pill(cx + 200, '↩1!', true);
     }
-    const bodyY = id === 'mixing' ? y0 + 340 : y0 + 290;
+    const bodyY = id === 'mixing' ? y0 + 340 : id === 'leftover' ? y0 + 250 : y0 + 290;
     card.add(label(this, VIEW.width / 2, bodyY, t(`tip.${id}.body` as const, { n: this.level.beltCapacity }), THEME.type.sm, THEME.subCss, false)
       .setWordWrapWidth(w - 60).setOrigin(0.5, 0));
     card.add(button(this, VIEW.width / 2, y0 + h - 70, 300, 80, t('tip.gotIt'), () => {
@@ -558,15 +596,8 @@ export class PlayScene extends Phaser.Scene {
         // Key: what opens the padlocks, until it is done.
         keyIcon(g, x + w / 2, y + h / 2, w * 0.78);
       }
-      if (this.gs.ice[i]! > 0) {
-        // Ice: frosted cover with cracks.
-        g.fillStyle(THEME.ice, 0.6);
-        g.fillRoundedRect(x, y, w, h, THEME.radius.cell);
-        g.lineStyle(2, THEME.white, 0.9);
-        g.lineBetween(x + w * 0.2, y + h * 0.25, x + w * 0.5, y + h * 0.5);
-        g.lineBetween(x + w * 0.5, y + h * 0.5, x + w * 0.45, y + h * 0.85);
-        g.lineBetween(x + w * 0.5, y + h * 0.5, x + w * 0.85, y + h * 0.4);
-      }
+      // Ice: frosted cover with a dark rim and cracks (#176).
+      if (this.gs.ice[i]! > 0) drawIce(g, x, y, w, h);
     });
   }
 
@@ -726,24 +757,57 @@ export class PlayScene extends Phaser.Scene {
     }
   }
 
-  /** Pulsing ink ring, white inside, around each pixel that blocks the waiting bucket just refused (#146). */
-  private drawBlockers(): void {
+  /** The blocker circles, when they belong to this game and none of their pixels has changed since; else none. */
+  private liveBlockers(): NonNullable<PlayScene['blockers']> | null {
     const b = this.blockers;
-    if (!b) return;
-    const since = this.time.now - b.at;
-    if (since >= BLOCKERS_MS) {
+    if (!b) return null;
+    if (b.gs !== this.gs || blockerSignature(this.gs, b.cells) !== b.sig) {
       this.blockers = null;
+      return null;
+    }
+    return b;
+  }
+
+  /**
+   * Ink ring, white inside, around each pixel that blocks the waiting bucket just refused (#146): three pulses over
+   * 3 s, then steady and fainter until the next tap or a change to those pixels (#176). A dot of each colour that would
+   * open the pixel sits on the ring's corner, with its shape for colour-blind players.
+   */
+  private drawBlockers(): void {
+    const had = this.blockers !== null;
+    const b = this.liveBlockers();
+    if (!b) {
+      if (had) this.publish();
       return;
     }
     const g = this.dynamic;
-    const alpha = 0.55 + 0.45 * Math.cos((since / BLOCKERS_MS) * Math.PI * 6);
-    for (const cell of b.cells) {
+    const alpha = blockerAlpha(this.time.now - b.at);
+    // Two dots side by side stay within the pixel's width, so neighbouring circles never overlap theirs.
+    const r0 = Math.max(8, Math.floor((this.layout.cell - 4) / 4));
+    b.cells.forEach((cell, k) => {
       const r = cellRect(this.layout, this.level.width, cell);
       g.lineStyle(5, THEME.ink, alpha);
       g.strokeRoundedRect(r.x - 3, r.y - 3, r.w + 6, r.h + 6, THEME.radius.cell + 2);
       g.lineStyle(2, THEME.white, alpha);
       g.strokeRoundedRect(r.x + 1, r.y + 1, r.w - 2, r.h - 2, THEME.radius.cell);
-    }
+      this.unlockDots(g, b.unlock[k]!, r.x + r.w / 2, r.y - 3, r0, (x, y, s) => this.text(x, y, s, Math.max(12, Math.round(r0 * 1.1)), THEME.inkCss));
+    });
+  }
+
+  /**
+   * Dots of the colours that open a blocking pixel (#176), side by side and centred on (x, y), the top edge of its
+   * ring: full colour, ink rim, and the primary's shape drawn by `mark`.
+   */
+  private unlockDots(g: Phaser.GameObjects.Graphics, colors: readonly Primary[], x: number, y: number, r: number, mark: (x: number, y: number, s: string) => void): void {
+    const step = 2 * r + 2;
+    colors.forEach((c, k) => {
+      const dx = x + (k - (colors.length - 1) / 2) * step;
+      g.fillStyle(PAINT[c]!, 1);
+      g.fillCircle(dx, y, r);
+      g.lineStyle(2, THEME.ink, 1);
+      g.strokeCircle(dx, y, r);
+      mark(dx, y, SYMBOL[c]!);
+    });
   }
 
   /** "BELT 1/2" and one pip per place, filled when taken; darker when full or just refused a tap. */
@@ -997,7 +1061,10 @@ export class PlayScene extends Phaser.Scene {
       refusals: this.refusals,
       // Waiting buckets refused because they could not land a shot, and the pixels circled for the last one (#146).
       blockedTaps: this.blockedTaps,
-      blockers: this.blockers ? [...this.blockers.cells] : [],
+      blockers: this.liveBlockers()?.cells.slice() ?? [],
+      // The colours dotted on each circle (#176), and the case the blocked-lane tip draws.
+      blockerUnlock: this.liveBlockers()?.unlock.map((u) => u.slice()) ?? [],
+      blockedCase: this.blockedCase,
       // Started mixed or brown pixels and the primaries their dots show (#149).
       missing: this.level.targets.flatMap((target, i) => {
         const colors = gs.hidden[i] ? [] : missingDots(target, gs.paint[i]!, 0, 0, 1, 1).map((d) => d.color);

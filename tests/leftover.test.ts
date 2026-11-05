@@ -3,6 +3,8 @@ import { BLUE, RED, YELLOW, level } from './helpers';
 import { forecastLeftover, leftoverHint } from '../src/core/leftover';
 import { createGame, launchFromColumn, step, type GameState } from '../src/core/sim';
 import type { Primary } from '../src/core/colors';
+import levels83 from '../src/levels/levels.json';
+import { parseLevel, type LevelDef } from '../src/core/level';
 
 /** Real outcome: launches column 0 alone and rides one lap; returns the ammo it comes back with (0 if emptied). */
 function realLeftover(g: GameState): number {
@@ -110,5 +112,19 @@ describe('leftoverHint', () => {
   it('turns into a warning when it takes the last slot or jams', () => {
     expect(leftoverHint({ ...base, leftover: 2, returns: true, fillsLastSlot: true })).toEqual({ leftover: 2, risky: true, label: '↩2!' });
     expect(leftoverHint({ ...base, leftover: 2, returns: true, jams: true })?.risky).toBe(true);
+  });
+});
+
+describe('"↩10" on a bucket never launched, level 83 (#176, P4)', () => {
+  it('is the forecast of #145, not a display bug: the blue 12 has only 2 pixels in reach at the start', () => {
+    const def = (levels83 as LevelDef[]).find((d) => d.id === 83)!;
+    const g = createGame(parseLevel(def));
+    const blueTop = g.queues.findIndex((q) => q[0]?.color === BLUE);
+    expect(blueTop).toBeGreaterThanOrEqual(0);
+    const bucket = g.queues[blueTop]![0]!;
+    expect(bucket.ammo).toBe(12);
+    const f = forecastLeftover(g, BLUE, bucket.ammo);
+    expect(f).toMatchObject({ hits: 2, leftover: 10, returns: true });
+    expect(leftoverHint(f)?.label).toBe('↩10');
   });
 });

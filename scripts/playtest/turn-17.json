@@ -1,0 +1,9 @@
+{
+  "turn": 17,
+  "tag": "playtest-feedback-176-s10",
+  "variant": "normale",
+  "agents": [
+    { "agentId": "A09", "profileId": "P09", "viewport": "360x640", "language": "it", "packs": ["S10"], "maxAttempts": 2 },
+    { "agentId": "A16", "profileId": "P16", "viewport": "360x640", "language": "it", "packs": ["S10"], "maxAttempts": 5 }
+  ]
+}
