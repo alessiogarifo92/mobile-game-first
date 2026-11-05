@@ -5,7 +5,7 @@ import { mix, openLevel, play, shots, waitScene, waitSim } from './helpers';
 /** Stage 18 "Inverno" (#128): a player at level 171 plays it to a win, with brown, stones and ice on the canvas. */
 const KEY = 'mix-and-splash/progress/v1';
 const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
-const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'brown', 'stone'];
+const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'brown', 'stone', 'queue', 'leftover'];
 
 async function start(page: Page, save: object) {
   await page.addInitScript(([key, value]) => localStorage.setItem(key, value), [KEY, JSON.stringify({ sound: false, language: 'en', seenTips: TIPS, ...save })] as const);

@@ -189,7 +189,7 @@ test('completing a stage unlocks its bucket style in the album', async ({ page }
   // Levels 1–9 done: winning level 10 (the boss) completes stage 1.
   await page.addInitScript(() => localStorage.setItem('mix-and-splash/progress/v1', JSON.stringify({
     unlocked: 10, completed: [1, 2, 3, 4, 5, 6, 7, 8, 9], sound: false, language: 'en',
-    seenTips: ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden'],
+    seenTips: ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'queue', 'leftover'],
   })));
   await page.goto('/');
   await waitScene(page, 'menu');

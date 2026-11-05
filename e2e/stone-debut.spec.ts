@@ -5,7 +5,7 @@ import { checkOnScreen, dismissTip, mix, openLevel, play, shots, waitScene, wait
 /** Stones debut at level 81, the star (#157, was the star 81 in #125), with their one-time tip. */
 const KEY = 'mix-and-splash/progress/v1';
 const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
-const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'brown'];
+const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'brown', 'queue', 'leftover'];
 
 /** Seeds the save once: a reload keeps what the game saved since (the tip seen, the level won). */
 async function start(page: Page, save: object) {

@@ -16,7 +16,7 @@ const SCREENS: [string, number, number][] = [
 ];
 
 const SAVE = JSON.stringify({
-  unlocked: LAST_LEVEL, completed: [], sound: false, language: 'en', seenTips: ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden'],
+  unlocked: LAST_LEVEL, completed: [], sound: false, language: 'en', seenTips: ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'queue', 'leftover'],
 });
 
 /** The canvas is entirely inside the window: nothing is cut off. */

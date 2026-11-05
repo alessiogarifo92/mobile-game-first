@@ -18,7 +18,7 @@ const stages = shippedStages.filter((s) => universeOfStage(s.id) === 1);
 const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
 const all = range(1, shipped);
 const KEY = 'mix-and-splash/progress/v1';
-const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt'];
+const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'queue', 'leftover'];
 
 async function start(page: Page, save: object) {
   await page.addInitScript(([key, value]) => localStorage.setItem(key, value), [KEY, JSON.stringify({ sound: false, language: 'en', seenTips: TIPS, ...save })] as const);

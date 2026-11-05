@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BLUE, BROWN, GREEN, ORANGE, PURPLE, RED, YELLOW, accepts, codeOf, isComplete, isPrimary, primariesOf } from '../src/core/colors';
+import { BLUE, BROWN, GREEN, ORANGE, PURPLE, RED, YELLOW, accepts, codeOf, isComplete, isPrimary, missingPrimaries, primariesOf } from '../src/core/colors';
 
 describe('colors', () => {
   it('secondaries are the mix of two primaries', () => {
@@ -29,5 +29,26 @@ describe('colors', () => {
     expect(codeOf(PURPLE)).toBe('P');
     expect(codeOf(BROWN)).toBe('K');
     expect(codeOf(8)).toBe('.');
+  });
+});
+
+describe('missingPrimaries (#149)', () => {
+  it('a started mixed pixel needs the other half of its mix', () => {
+    expect(missingPrimaries(ORANGE, RED)).toEqual([YELLOW]);
+    expect(missingPrimaries(GREEN, BLUE)).toEqual([YELLOW]);
+    expect(missingPrimaries(PURPLE, BLUE)).toEqual([RED]);
+  });
+
+  it('a started brown pixel needs one or two primaries, in R, Y, B order', () => {
+    expect(missingPrimaries(BROWN, RED)).toEqual([YELLOW, BLUE]);
+    expect(missingPrimaries(BROWN, RED | BLUE)).toEqual([YELLOW]);
+  });
+
+  it('nothing to mark on a complete, untouched, primary or empty pixel', () => {
+    expect(missingPrimaries(ORANGE, ORANGE)).toEqual([]);
+    expect(missingPrimaries(BROWN, BROWN)).toEqual([]);
+    expect(missingPrimaries(ORANGE, 0)).toEqual([]);
+    expect(missingPrimaries(RED, 0)).toEqual([]);
+    expect(missingPrimaries(0, 0)).toEqual([]);
   });
 });

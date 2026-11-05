@@ -6,7 +6,7 @@ import { mix, openLevel, play, shots, waitScene, waitSim } from './helpers';
 const KEY = 'mix-and-splash/progress/v1';
 const BOSS = 120;
 const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
-const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'brown'];
+const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'brown', 'queue', 'leftover'];
 
 async function start(page: Page) {
   const save = { sound: false, language: 'it', unlocked: BOSS, completed: range(1, BOSS - 1), seenTips: TIPS };

@@ -3,7 +3,7 @@ import type { Move } from '../src/core/solver';
 import { mix, openLevel, play, shots, tap, waitScene, waitSim, type Rect } from './helpers';
 
 const KEY = 'mix-and-splash/progress/v1';
-const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'brown', 'stone'];
+const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'brown', 'stone', 'queue', 'leftover'];
 const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
 
 async function start(page: Page, save: object) {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { guideAllows, guideStep, needsGuide, tipOnFullBelt, tipOnLevelStart, tipOnReturn } from '../src/core/onboarding';
+import { COLUMN_SHOWN, guideAllows, guideStep, needsGuide, tipOnBlockedTap, tipOnFullBelt, tipOnLevelStart, tipOnReturn } from '../src/core/onboarding';
 import { BLUE, RED, YELLOW, level } from './helpers';
 
 describe('onboarding', () => {
@@ -33,6 +33,31 @@ describe('onboarding', () => {
     expect(tipOnReturn(true, [])).toBe('slots');
     expect(tipOnReturn(false, ['blocked'])).toBe('slots');
     expect(tipOnReturn(false, ['blocked', 'slots'])).toBeNull();
+  });
+
+  it('explains why a bucket came back once the slots are known, only for one that painted (#172)', () => {
+    expect(tipOnReturn(true, ['slots'])).toBe('leftover');
+    expect(tipOnReturn(true, ['blocked', 'slots'])).toBe('leftover');
+    expect(tipOnReturn(false, ['blocked', 'slots'])).toBeNull(); // landed nothing: it is a blocked lane, not a leftover
+    expect(tipOnReturn(true, ['slots', 'leftover'])).toBeNull();
+  });
+
+  it('explains a blocked lane when a waiting bucket is refused, once (#146)', () => {
+    expect(tipOnBlockedTap([])).toBe('blocked');
+    expect(tipOnBlockedTap(['slots'])).toBe('blocked');
+    expect(tipOnBlockedTap(['blocked'])).toBeNull();
+  });
+
+  it('explains "+N" the first time a column holds more buckets than it shows, after any other new tip (#148)', () => {
+    const tall = level(['R'.repeat(4)], [[[RED, 1], [RED, 1], [RED, 1], [RED, 1]]], { id: 5 });
+    const short = level(['R'.repeat(3)], [[[RED, 1], [RED, 1], [RED, 1]]], { id: 5 });
+    expect(COLUMN_SHOWN).toBe(3);
+    expect(tipOnLevelStart(tall, [])).toBe('queue');
+    expect(tipOnLevelStart(tall, ['queue'])).toBeNull();
+    expect(tipOnLevelStart(short, [])).toBeNull();
+    const mixedTall = level(['ORR'], [[[RED, 1], [RED, 1], [RED, 1], [YELLOW, 1]]], { id: 5 });
+    expect(tipOnLevelStart(mixedTall, [])).toBe('mixing');
+    expect(tipOnLevelStart(mixedTall, ['mixing'])).toBe('queue');
   });
 
   it('explains the belt limit the first time a full belt refuses a launch, once', () => {
