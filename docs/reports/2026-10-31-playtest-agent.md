@@ -273,3 +273,34 @@ Proposta (§7): un ticket di curva su 179 e 184. Si possono rendere più facili 
 - **Stage 20: nessun muro segnalato da ≥ 3 agent.** I due abbandoni (194 P16, 200 P14) sono ipotesi da un agent ciascuno.
 - **Riserva sul boss 200:** è il livello percepito più duro dello stage (4,25). Ha 2 vittorie su 4, tutte e due con "+1 slot". P16, che non usa mai "+1 slot", abbandona dopo 3 ingorghi (T08). **Per chi non usa "+1 slot" il boss 200 si comporta da muro** (2 agent: ipotesi). Proposta: includerlo nel ticket di curva insieme a 179 e 184, o decidere con #42.
 - **Muri dell'universo:** 170 escluso; 179 e 184 sono picchi da ammorbidire, non muri, perché tutti e 3 gli agent nuovi li vincono.
+
+## 11. Dopo #145/#151: 184 senza "+1 slot" e boss 200 a 2 slot (#100)
+Build `d94056d` (tag `playtest-u2-100a`, T11: livelli come sono su main, anteprima avanzi "↩N" e suggerimento "+1 slot" attivi) e la stessa base con il solo boss a 2 slot, non rilasciato (tag `playtest-u2-100b`, T12). Schede in [`T11`](../playtest/sessioni/T11/) e [`T12`](../playtest/sessioni/T12/); config in `scripts/playtest/turn-11.json` e `turn-12.json`. Tutti sonnet, 3 agent per turno, un pacchetto ciascuno. Sono pochi agent: i numeri sono ipotesi (§7 del protocollo).
+
+### Build attuale (boss a 3 slot)
+| Livello | Agent | Esito | Ingorghi | "+1 slot" | Difficoltà percepita |
+|---|---|---|---|---|---|
+| 184 | P16 (mai "+1 slot") | vinto al 1° tentativo | 0 | no | 3 |
+| 184 | P03 esperto | vinto al 1° tentativo | 0 | no | 2 |
+| 184 | P09 si scoraggia (2 tentativi) | **saltato**, abbandono | 4 pannelli (2 per tentativo) | sì, in entrambi, non è bastato | 5 |
+| 200 | P16 | vinto al **2°** tentativo (1° finito in ingorgo, Riprova) | 1 | no | 4 |
+| 200 | P03 | vinto al 1° tentativo | 0 | no | 3 |
+| 200 | P09 | non giocato (abbandonato al 184) | – | – | – |
+
+- **184 senza "+1 slot":** P16 lo vince al 1° tentativo. Vittorie al 1° tentativo 2 su 3; l'unico abbandono è P09, il profilo che smette alla seconda sconfitta. Non è un muro, resta un picco per i giocatori fragili. Punto (a) di #100 chiuso.
+- **Boss 200:** P16 lo vince senza "+1 slot" al 2° tentativo (entro 3), P03 al 1°. Vittorie 2 su 2 tra chi lo gioca in questo turno; con i turni precedenti (§10) i giocatori che non usano "+1 slot" passano da 0 vittorie su 2 a 1 su 1 (P16 prima abbandonava dopo 3 ingorghi, T08/T09).
+- **Anteprima "↩N": utile per 3 agent su 3 che l'hanno usata bene** (P03 sceglie l'ordine dei secchielli, P16 tiene libero l'ultimo slot). P09 l'ha trovata in parte confusa: capisce quanta vernice torna ma non cosa farne. Resta da capire il perché dei ritorni (P16: "non ho capito perché alcuni secchielli tornano interi").
+- Nessun bug segnalato.
+
+### Boss 200 a 2 slot (variante)
+Misure del solver (`npx tsx scripts/careful-probe.ts 200`, stesso seed 20423, che il generatore tiene per tutti i seed fino a 20424): giocatore casuale 35% (soglia ≥ 30%, 190 al 36%), **giocatore attento 66%** (a 3 slot: 91%), risolvibile anche con 1 slot. Gli altri seed in fascia 32–35% danno attento 3–13% (un solo seed, 20600, il 55%, ma senza prova di soluzione entro il budget).
+
+| Agent | Esito | Ingorghi | "+1 slot" | Difficoltà |
+|---|---|---|---|---|
+| P16 (mai "+1 slot") | **saltato**, 3 tentativi, abbandono | 3 | no | 5 |
+| P06 perfezionista | vinto al 3° tentativo | 2 | no | 4 |
+| P04 impaziente | vinto al 2° tentativo | 2 (nel 1°, anche con "+1 slot") | sì | 4 |
+
+P16 perde sempre negli ultimi pixel: due slot occupati da secchielli con avanzo e un rosso da 20 che con ↩2–3 prende l'ultimo slot. Giudica gli ingorghi ingiusti (2/5).
+
+**Verdetto: il boss resta a 3 slot.** Le due condizioni poste non reggono: P16 non vince entro 3 tentativi e il giocatore attento è al 66%, sotto il ~70%. A 3 slot P16 vince al 2° tentativo e il giocatore attento è al 91%. Nessun livello è stato cambiato, quindi `gen:levels` non è stato rilanciato.
