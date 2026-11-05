@@ -55,7 +55,7 @@ for (const size of [{ width: 360, height: 640 }, { width: 412, height: 915 }]) {
       expect(ex.color).toBe(BLUE);
       expect(ex.front.kind).toBe('pixel');
       expect(ex.behind & BLUE).toBe(BLUE);
-      expect(await texts(page)).toContain('■→');
+      expect(await texts(page)).toEqual(expect.arrayContaining(['■', '→']));
       await shot(page, '02-scheda-dal-secchiello');
       expect(await dismissTip(page)).toBe('blocked');
 

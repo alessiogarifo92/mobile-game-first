@@ -430,7 +430,14 @@ export class PlayScene extends Phaser.Scene {
       const ex: BlockExample = this.blockedCase ?? { color: BLUE, front: { kind: 'pixel', target: ORANGE, paint: 0, ice: false, unlock: [RED, YELLOW] }, behind: BLUE };
       const y = y0 + 200;
       const fx = cx - 110;
-      card.add(label(this, cx - 200, y, `${SYMBOL[ex.color]}→`, THEME.type.sm, css(PAINT[ex.color]!)));
+      // The refused bucket itself, as big as the pixels: a small "■→" alone read as "the picture is orange" (T17).
+      const bx = cx - 236;
+      g.fillStyle(PAINT[ex.color]!, 1);
+      g.fillRoundedRect(bx - 26, y - 26, 52, 52, THEME.radius.jar);
+      g.lineStyle(3, THEME.ink, 1);
+      g.strokeRoundedRect(bx - 26, y - 26, 52, 52, THEME.radius.jar);
+      card.add(label(this, bx, y, SYMBOL[ex.color]!, THEME.type.sm, '#ffffff'));
+      card.add(label(this, cx - 178, y, '→', THEME.type.md, css(PAINT[ex.color]!)));
       const f = ex.front;
       if (f.kind === 'stone') drawStone(g, fx - 24, y - 24, 48, 48);
       else if (f.kind === 'hidden') {
