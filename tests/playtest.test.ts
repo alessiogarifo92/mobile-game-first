@@ -26,7 +26,7 @@ const T0 = Date.parse('2026-11-03T10:00:00Z');
 const COL = { x: 100, y: 1000, w: 120, h: 300 };
 const SLOT = { x: 100, y: 900, w: 80, h: 80 };
 const play = (o: Partial<MixSnapshot> = {}): MixSnapshot => ({
-  scene: 'play', levelId: 95, status: 'playing', overlay: null, tip: null, guide: null, tick: 0, moves: 0, refusals: 0,
+  scene: 'play', levelId: 95, status: 'playing', overlay: null, tip: null, guide: null, tick: 0, moves: 0, refusals: 0, blockedTaps: 0,
   belt: { used: 0, capacity: 3 }, columns: [COL], slots: [SLOT, { ...SLOT, x: 200 }, { ...SLOT, x: 300 }], slotsUsed: 0, painted: 0, targets: 40,
   ice: 0, hidden: 0, locked: 0, covered: 0, stoneSplashes: 0, reveals: 0,
   jamButtons: { continue: { x: 360, y: 600 }, retry: { x: 360, y: 700 } }, tipButton: { x: 360, y: 900 }, ...o,
@@ -67,20 +67,31 @@ describe('SessionRecorder', () => {
     r.tap(play({ tick: 2 }), play({ tick: 3, moves: 1, belt: { used: 1, capacity: 3 } }), { x: 150, y: 1100 }, T0 + 5000);
     r.screenshot('0003.png');
     r.consoleError('oops', T0 + 5500);
-    r.observe(play({ tick: 30, moves: 2, refusals: 1, slotsUsed: 2, belt: { used: 3, capacity: 3 }, painted: 20, ice: 1, stoneSplashes: 2, reveals: 1 }), T0 + 6000);
+    r.observe(play({ tick: 30, moves: 2, refusals: 1, blockedTaps: 2, slotsUsed: 2, belt: { used: 3, capacity: 3 }, painted: 20, ice: 1, stoneSplashes: 2, reveals: 1 }), T0 + 6000);
     r.observe(play({ tick: 50, moves: 3, refusals: 1, status: 'won', overlay: 'win', painted: 40 }), T0 + 9000);
     r.tap(play({ tick: 50, moves: 3, status: 'won', overlay: 'win' }), menu(), { x: 360, y: 700 }, T0 + 9500); // after the win: not in the attempt
     r.screenshot('0004.png');
     const s = r.scheda(T0 + 10_000, 'piano-finito');
     expect(s.levels).toEqual([{ levelId: 95, result: 'vinto', attempts: [{
       attempt: 1, outcome: 'vinto', durationMs: 8000, timeToFirstTapMs: 2500, ticks: 50, taps: 3, offTargetTaps: 1, launches: 3,
-      refusals: 1, jams: 0, extraSlotUsed: false, maxSlotsUsed: 2, slotCount: 3, maxBeltUsed: 3, beltCapacity: 3, painted: 40, targets: 40,
+      refusals: 1, blockedTaps: 2, jams: 0, extraSlotUsed: false, maxSlotsUsed: 2, slotCount: 3, maxBeltUsed: 3, beltCapacity: 3, painted: 40, targets: 40,
       remaining: { ice: 0, hidden: 0, locked: 0, covered: 0 }, stoneSplashes: 2, reveals: 1, tipsShown: ['brown'], tipDismissMs: 2500,
       consoleErrors: 1, screenshots: ['0003.png'],
     }] }]);
     expect(s).toMatchObject({ schemaVersion: SCHEMA_VERSION, sessionId: 'T01-A02', startedAt: '2026-11-03T10:00:00.000Z', endedAt: '2026-11-03T10:00:10.000Z', endReason: 'piano-finito', bugs: [] });
     expect(s.session.telemetry).toEqual({ durationMs: 10_000, actions: 4, screens: { menu: 2, play: 1 }, languageChanges: 0, uncaughtErrors: [], stuckScreens: [] });
     expect(r.missingFeedback()).toEqual([95]);
+  });
+
+  it('counts blocked taps from the value at entry (the game does not reset it between levels)', () => {
+    const r = new SessionRecorder(HEADER, T0);
+    r.observe(menu(), T0);
+    r.observe(play({ levelId: 96, blockedTaps: 3 }), T0 + 1000);
+    r.observe(play({ levelId: 96, tick: 5, blockedTaps: 5 }), T0 + 2000);
+    r.observe(play({ levelId: 96, tick: 9, status: 'won', overlay: 'win', blockedTaps: 5 }), T0 + 3000);
+    r.observe(play({ levelId: 97, blockedTaps: 5 }), T0 + 4000);
+    r.observe(play({ levelId: 97, tick: 4, blockedTaps: 6 }), T0 + 5000);
+    expect(r.scheda(T0 + 6000, 'piano-finito').levels.map((l) => l.attempts.map((a) => a.blockedTaps))).toEqual([[2], [1]]);
   });
 
   it('tells a jam retry, a restart, an exit and the budget apart, and counts +1 slot', () => {
@@ -299,7 +310,7 @@ describe('saves and plans', () => {
   });
 
   it('a later save has seen the tips of the levels before it, and none of those still to come', () => {
-    expect(tipsMetBefore(levels, 2)).toEqual(['guide', 'blocked', 'slots', 'belt', 'leftover']);
+    expect(tipsMetBefore(levels, 2)).toEqual(['guide', 'slots', 'belt']);
     const firstMixing = levels.find((l) => tipOnLevelStart(l, []) === 'mixing')!.id;
     expect(tipsMetBefore(levels, firstMixing)).not.toContain('mixing');
     expect(tipsMetBefore(levels, firstMixing + 1)).toContain('mixing');
@@ -314,7 +325,7 @@ describe('saves and plans', () => {
     const start = packLevels(levels, 'S11')[0]!;
     const save = saveFor(levels, start, 'it');
     expect(save.completed).toHaveLength(start - 1);
-    expect([...save.seenTips].sort()).toEqual(['belt', 'blocked', 'guide', 'hidden', 'ice', 'leftover', 'mixing', 'queue', 'slots', 'stone']);
+    expect([...save.seenTips].sort()).toEqual(['belt', 'guide', 'hidden', 'ice', 'mixing', 'queue', 'slots', 'stone']);
   });
 
   it('rejects an unknown language or level and a level the game would not open', () => {

@@ -28,6 +28,7 @@ export interface MixSnapshot {
   tick?: number;
   moves?: number;
   refusals?: number;
+  blockedTaps?: number;
   belt?: { used: number; capacity: number };
   columns?: Rect[];
   slots?: Rect[];
@@ -59,6 +60,8 @@ export interface AttemptTelemetry {
   offTargetTaps: number;
   launches: number;
   refusals: number;
+  /** Waiting buckets refused because they could not land a shot (#146): a shake and the blockers circled. */
+  blockedTaps: number;
   jams: number;
   extraSlotUsed: boolean;
   maxSlotsUsed: number;
@@ -138,6 +141,8 @@ export function onTarget(snap: MixSnapshot, p: Point): boolean {
 
 interface Open extends AttemptTelemetry {
   levelId: number;
+  /** `__mix.blockedTaps` when the attempt opened: the game does not reset it between levels. */
+  blockedBase: number;
   startedAt: number;
   endedAt: number | null;
   actions: number;
@@ -211,6 +216,8 @@ export class SessionRecorder {
     a.launches = a.lastMoves;
     a.durationMs = t - a.startedAt;
     a.refusals = Math.max(a.refusals, snap.refusals ?? 0);
+    // `__mix.blockedTaps` is not reset between levels (the play scene instance is reused): count from the value at entry.
+    a.blockedTaps = Math.max(a.blockedTaps, (snap.blockedTaps ?? 0) - a.blockedBase);
     a.maxSlotsUsed = Math.max(a.maxSlotsUsed, snap.slotsUsed ?? 0);
     if ((snap.slots?.length ?? 0) > a.slotCount) a.extraSlotUsed = true;
     if (snap.belt) {
@@ -336,7 +343,7 @@ export class SessionRecorder {
     const a: Open = {
       levelId: snap.levelId!, startedAt: t, endedAt: null, actions: 0, lastTick: snap.tick ?? 0, lastMoves: snap.moves ?? 0, lastOverlay: null, tipSince: null,
       attempt: this.attempts.filter((x) => x.levelId === snap.levelId).length + 1,
-      outcome: 'uscita', durationMs: 0, timeToFirstTapMs: null, ticks: 0, taps: 0, offTargetTaps: 0, launches: 0, refusals: 0, jams: 0,
+      outcome: 'uscita', durationMs: 0, timeToFirstTapMs: null, ticks: 0, taps: 0, offTargetTaps: 0, launches: 0, refusals: 0, blockedTaps: 0, blockedBase: snap.blockedTaps ?? 0, jams: 0,
       extraSlotUsed: false, maxSlotsUsed: 0, slotCount: snap.slots?.length ?? 1, maxBeltUsed: 0, beltCapacity: snap.belt?.capacity ?? 1,
       painted: 0, targets: snap.targets ?? 1, remaining: { ice: 0, hidden: 0, locked: 0, covered: 0 }, stoneSplashes: 0, reveals: 0,
       tipsShown: [], tipDismissMs: null, consoleErrors: 0, screenshots: [],
@@ -366,7 +373,7 @@ export class SessionRecorder {
       outcome: open ? 'uscita' : a.outcome,
       durationMs: Math.max(0, Math.round(open ? t - a.startedAt : a.durationMs)),
       timeToFirstTapMs: a.timeToFirstTapMs === null ? null : Math.max(0, Math.round(a.timeToFirstTapMs)),
-      ticks: a.ticks, taps: a.taps, offTargetTaps: a.offTargetTaps, launches: a.launches, refusals: a.refusals, jams: a.jams,
+      ticks: a.ticks, taps: a.taps, offTargetTaps: a.offTargetTaps, launches: a.launches, refusals: a.refusals, blockedTaps: a.blockedTaps, jams: a.jams,
       extraSlotUsed: a.extraSlotUsed, maxSlotsUsed: a.maxSlotsUsed, slotCount: a.slotCount, maxBeltUsed: a.maxBeltUsed,
       beltCapacity: a.beltCapacity, painted: a.painted, targets: a.targets, remaining: { ...a.remaining },
       stoneSplashes: a.stoneSplashes, reveals: a.reveals, tipsShown: [...a.tipsShown],

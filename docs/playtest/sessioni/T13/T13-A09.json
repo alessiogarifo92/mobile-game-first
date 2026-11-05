@@ -1,0 +1,737 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "T13-A09",
+  "agent": {
+    "agentId": "A09",
+    "profileId": "P09"
+  },
+  "turn": 13,
+  "build": {
+    "commit": "9af2dd95350d",
+    "version": "0.5.0",
+    "tag": "playtest-ux-174-onb",
+    "variant": "normale"
+  },
+  "device": {
+    "viewport": "360x640",
+    "language": "it"
+  },
+  "startSave": {
+    "unlocked": 1,
+    "completedThrough": 0,
+    "seenTips": []
+  },
+  "plan": {
+    "packs": [
+      "U1-ONB"
+    ],
+    "levelIds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ]
+  },
+  "startedAt": "2026-11-05T13:30:06.642Z",
+  "endedAt": "2026-11-05T13:41:26.362Z",
+  "endReason": "piano-finito",
+  "levels": [
+    {
+      "levelId": 1,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 20403,
+          "timeToFirstTapMs": 5934,
+          "ticks": 237,
+          "taps": 4,
+          "offTargetTaps": 0,
+          "launches": 4,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 0,
+          "slotCount": 4,
+          "maxBeltUsed": 1,
+          "beltCapacity": 5,
+          "painted": 40,
+          "targets": 40,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "guide"
+          ],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0003.png",
+            "0004.png",
+            "0005.png",
+            "0006.png",
+            "0007.png",
+            "0008.png",
+            "0009.png",
+            "0010.png",
+            "0011.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 5,
+        "perceivedDifficulty": 1,
+        "mood": "divertito",
+        "notUnderstood": "",
+        "wouldContinue": true,
+        "freeText": "Primo livello: una manina mi ha indicato la colonna da toccare (schermo scurito con la colonna evidenziata, 0004.png). Poi frasi corte in alto: Manda il prossimo, Ora completa il quadro. Chiarissimo e semplice. Non ho letto nessuna scheda lunga. Alla fine Capolavoro col cuore, bello. Dopo il pannello la frase Ora completa il quadro! resta visibile dietro, cosa minima."
+      }
+    },
+    {
+      "levelId": 2,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 61802,
+          "timeToFirstTapMs": 7386,
+          "ticks": 599,
+          "taps": 11,
+          "offTargetTaps": 0,
+          "launches": 9,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 1,
+          "slotCount": 4,
+          "maxBeltUsed": 2,
+          "beltCapacity": 5,
+          "painted": 64,
+          "targets": 64,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "slots",
+            "leftover"
+          ],
+          "tipDismissMs": 11148,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0014.png",
+            "0015.png",
+            "0016.png",
+            "0017.png",
+            "0018.png",
+            "0019.png",
+            "0020.png",
+            "0021.png",
+            "0022.png",
+            "0023.png",
+            "0024.png",
+            "0025.png",
+            "0026.png",
+            "0027.png",
+            "0028.png",
+            "0029.png",
+            "0030.png",
+            "0031.png",
+            "0032.png",
+            "0033.png",
+            "0034.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 2,
+        "mood": "neutro",
+        "notUnderstood": "Il numero con la freccia ↩ sui secchielli (↩10, ↩6, ↩4...) lo capisco solo a metà: so che torna indietro con vernice avanzata, ma non il significato preciso dei due numeri (8 e ↩6 sullo stesso secchiello). Non mi è chiaro nemmeno perché il giallo ne abbia dipinti solo 2 all inizio.",
+        "wouldContinue": true,
+        "freeText": "Due schede una dopo l altra. 1) Slot d attesa (0019.png): appare appena il giallo torna agli slot; testo letto e capito (secchielli con vernice avanzata aspettano qui, toccali per rilanciarli, slot pieni = ingorgo). Nel pannello c è un grosso spazio vuoto in mezzo tra titolo e testo, come se mancasse un disegno. Compare nel momento giusto ma ha coperto la plancia mentre il giallo era appena tornato. 2) Perché è tornato (0025.png): appare quando tocco il secchiello nello slot; ha un esempio con 4 -> tre quadratini -> 1 con ↩1. Letta, capita a grandi linee: torna quando non ci sono pixel del suo colore raggiungibili. È arrivata alla seconda scheda subito dopo la prima, un po troppo testo di fila, ma non erano sovrapposte. Vinto in 9 mosse con 2 rilanci dagli slot; ho dovuto lanciare prima il blu per liberare il giallo, ci sono arrivato per tentativi."
+      }
+    },
+    {
+      "levelId": 3,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 29388,
+          "timeToFirstTapMs": 7089,
+          "ticks": 347,
+          "taps": 8,
+          "offTargetTaps": 0,
+          "launches": 8,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 3,
+          "slotCount": 4,
+          "maxBeltUsed": 2,
+          "beltCapacity": 5,
+          "painted": 42,
+          "targets": 42,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0038.png",
+            "0039.png",
+            "0040.png",
+            "0041.png",
+            "0042.png",
+            "0043.png",
+            "0044.png",
+            "0045.png",
+            "0046.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "notUnderstood": "Il secchiello rosa che dopo il lancio diventa rosso con un numero ↩4: non so bene se è lo stesso secchiello o un altro. La vernice sembra riempire da fuori verso dentro, mi sembra di capirlo, ma non so dirlo con certezza.",
+        "wouldContinue": true,
+        "freeText": "Nessuna scheda in questo livello. Ho lanciato i secchielli nell ordine in cui li vedevo e alla fine ho svuotato gli slot. Vinto in 8 mosse. Mi è piaciuto il fungo. Rilanciare dagli slot ormai lo so fare."
+      }
+    },
+    {
+      "levelId": 4,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 39295,
+          "timeToFirstTapMs": 5939,
+          "ticks": 398,
+          "taps": 7,
+          "offTargetTaps": 0,
+          "launches": 6,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 1,
+          "slotCount": 3,
+          "maxBeltUsed": 2,
+          "beltCapacity": 5,
+          "painted": 41,
+          "targets": 41,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "mixing"
+          ],
+          "tipDismissMs": 5709,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0050.png",
+            "0051.png",
+            "0052.png",
+            "0053.png",
+            "0054.png",
+            "0055.png",
+            "0056.png",
+            "0057.png",
+            "0058.png",
+            "0059.png",
+            "0060.png",
+            "0061.png",
+            "0062.png",
+            "0063.png",
+            "0064.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "notUnderstood": "Non ho capito subito se i pixel a metà (triangolo rosso con pallino giallo) fossero sbagliati; poi ho intuito che sono pixel arancioni a cui manca ancora un colore.",
+        "wouldContinue": true,
+        "freeText": "Scheda Mescola sulla tela (0052.png): compare appena entro nel livello 4, per primo. L ho letta e capita al volo: rosso+giallo=arancione ecc. con esempi a colori, molto chiara. Ha coperto la plancia ma all inizio non c è ancora niente da fare, quindi nessun problema. Ho notato che ora gli slot sono 3 invece di 4, non so perché. Pallini sui pixel misti già iniziati (0058.png, 0061.png): il pallino colorato mi è sembrato indicare il colore che manca, l ho capito anche grazie alla scheda. Vinto in 6 mosse con la fiamma."
+      }
+    },
+    {
+      "levelId": 5,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 63835,
+          "timeToFirstTapMs": 6468,
+          "ticks": 681,
+          "taps": 13,
+          "offTargetTaps": 0,
+          "launches": 12,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 3,
+          "maxBeltUsed": 2,
+          "beltCapacity": 5,
+          "painted": 52,
+          "targets": 52,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "queue"
+          ],
+          "tipDismissMs": 6164,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0068.png",
+            "0069.png",
+            "0070.png",
+            "0071.png",
+            "0072.png",
+            "0073.png",
+            "0074.png",
+            "0075.png",
+            "0076.png",
+            "0077.png",
+            "0078.png",
+            "0079.png",
+            "0080.png",
+            "0081.png",
+            "0082.png",
+            "0083.png",
+            "0084.png",
+            "0085.png",
+            "0086.png",
+            "0087.png",
+            "0088.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 3,
+        "mood": "divertito",
+        "notUnderstood": "Il +N sotto la colonna lo capisco grazie alla scheda; senza scheda no. Non ho capito bene perché certi pixel restano a metà con un pallino colorato finché non arriva l altro secchiello.",
+        "wouldContinue": true,
+        "freeText": "Scheda Altri secchielli in coda (0070.png): compare appena entro nel livello 5, come unica scheda; letta e capita: ogni colonna mostra solo i primi 3 secchielli, +2 vuol dire altri 2 dietro. Momento giusto (le colonne sono lunghe proprio qui) ma sta sopra la plancia e vicino ai +2 che spiega, mi tocca chiuderla per vederli bene; non ha coperto bottoni. Sotto le colonne i +2, poi +1, poi niente, quindi ho visto scendere il numero. Pallini sui pixel misti (0076.png, 0079.png): ho capito che il pallino è il colore che manca. Livello più lungo (12 mosse) ma nessuna sconfitta."
+      }
+    },
+    {
+      "levelId": 6,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 16353,
+          "timeToFirstTapMs": 6369,
+          "ticks": 195,
+          "taps": 5,
+          "offTargetTaps": 0,
+          "launches": 5,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 1,
+          "slotCount": 3,
+          "maxBeltUsed": 2,
+          "beltCapacity": 5,
+          "painted": 30,
+          "targets": 30,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0092.png",
+            "0093.png",
+            "0094.png",
+            "0095.png",
+            "0096.png",
+            "0097.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 5,
+        "perceivedDifficulty": 1,
+        "mood": "divertito",
+        "notUnderstood": "",
+        "wouldContinue": true,
+        "freeText": "Nessuna scheda. Livello facile e veloce, 5 mosse. Un secchiello rosso con 1 è tornato negli slot e l ho rilanciato senza problemi: questa volta nessuna scheda sul ritorno, ormai lo sapevo."
+      }
+    },
+    {
+      "levelId": 7,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 27307,
+          "timeToFirstTapMs": 6479,
+          "ticks": 323,
+          "taps": 8,
+          "offTargetTaps": 0,
+          "launches": 8,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 1,
+          "slotCount": 3,
+          "maxBeltUsed": 2,
+          "beltCapacity": 5,
+          "painted": 38,
+          "targets": 38,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0101.png",
+            "0102.png",
+            "0103.png",
+            "0104.png",
+            "0105.png",
+            "0106.png",
+            "0107.png",
+            "0108.png",
+            "0109.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 5,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "notUnderstood": "",
+        "wouldContinue": true,
+        "freeText": "Nessuna scheda. Gemma viola, rosso + blu, avevo già capito il meccanismo. Pallini sui pixel misti (0106.png) chiari: il pallino rosso su blu = manca il rosso. Il +1 sotto la colonna sparito da solo. Vinto in 8 mosse. Nessun rifiuto."
+      }
+    },
+    {
+      "levelId": 8,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 42122,
+          "timeToFirstTapMs": 7612,
+          "ticks": 495,
+          "taps": 8,
+          "offTargetTaps": 0,
+          "launches": 8,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 3,
+          "maxBeltUsed": 2,
+          "beltCapacity": 5,
+          "painted": 48,
+          "targets": 48,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0113.png",
+            "0114.png",
+            "0115.png",
+            "0116.png",
+            "0117.png",
+            "0118.png",
+            "0119.png",
+            "0120.png",
+            "0121.png",
+            "0122.png",
+            "0123.png",
+            "0124.png",
+            "0125.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 5,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "notUnderstood": "",
+        "wouldContinue": true,
+        "freeText": "Nessuna scheda. Arcobaleno, vinto in 8 mosse al primo tentativo. La frase in alto Pochi slot d attesa: scegli l ordine! l ho letta e mi ha messo un po di ansia, quindi ho lanciato prima i secchielli piccoli dagli slot prima dei gialli per non intasare. Nessun rifiuto, nessun ingorgo."
+      }
+    },
+    {
+      "levelId": 9,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 94854,
+          "timeToFirstTapMs": 11100,
+          "ticks": 1116,
+          "taps": 11,
+          "offTargetTaps": 0,
+          "launches": 11,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 1,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 5,
+          "painted": 60,
+          "targets": 60,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0128.png",
+            "0129.png",
+            "0130.png",
+            "0131.png",
+            "0132.png",
+            "0133.png",
+            "0134.png",
+            "0135.png",
+            "0136.png",
+            "0137.png",
+            "0138.png",
+            "0139.png",
+            "0140.png",
+            "0141.png",
+            "0142.png",
+            "0143.png",
+            "0144.png",
+            "0145.png",
+            "0146.png",
+            "0147.png",
+            "0148.png",
+            "0149.png",
+            "0150.png",
+            "0151.png",
+            "0152.png",
+            "0153.png",
+            "0154.png",
+            "0155.png",
+            "0156.png",
+            "0157.png",
+            "0158.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 3,
+        "mood": "neutro",
+        "notUnderstood": "I secchielli con ↩N! (numero con il punto esclamativo, sfondo scuro, 0145.png e 0151.png): non so cosa voglia dire il punto esclamativo, ho intuito che stia per ritornare tanta vernice. Non ho capito perché certi secchielli riescono a dipingere solo qualche pixel (sembra che la vernice parta dai bordi e vada verso dentro).",
+        "wouldContinue": true,
+        "freeText": "Nessuna scheda. Livello più teso: solo 2 slot, mi sono sentito sul filo e ho rischiato l ingorgo. Ho lanciato i secchielli al buio e ho avuto fortuna, non so spiegare bene perché ha funzionato; se avessi sbagliato un ordine avrei perso. Tre volte un secchiello è tornato negli slot con vernice avanzata (rosso 3, rosso 5, giallo 1): ora lo capisco senza scheda, ma i numeri sul secchiello (5 e ↩3!) li leggo male. Il +1 sotto le colonne lo capivo. Pallini sui pixel misti (blu su giallo) capiti. Vinto in 11 mosse."
+      }
+    },
+    {
+      "levelId": 10,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 127382,
+          "timeToFirstTapMs": 8120,
+          "ticks": 1499,
+          "taps": 17,
+          "offTargetTaps": 0,
+          "launches": 17,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 5,
+          "painted": 83,
+          "targets": 83,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0161.png",
+            "0162.png",
+            "0163.png",
+            "0164.png",
+            "0165.png",
+            "0166.png",
+            "0167.png",
+            "0168.png",
+            "0169.png",
+            "0170.png",
+            "0171.png",
+            "0172.png",
+            "0173.png",
+            "0174.png",
+            "0175.png",
+            "0176.png",
+            "0177.png",
+            "0178.png",
+            "0179.png",
+            "0180.png",
+            "0181.png",
+            "0182.png",
+            "0183.png",
+            "0184.png",
+            "0185.png",
+            "0186.png",
+            "0187.png",
+            "0188.png",
+            "0189.png",
+            "0190.png",
+            "0191.png",
+            "0192.png",
+            "0193.png",
+            "0194.png",
+            "0195.png",
+            "0196.png",
+            "0197.png",
+            "0198.png",
+            "0199.png",
+            "0200.png",
+            "0201.png",
+            "0202.png",
+            "0203.png",
+            "0204.png",
+            "0205.png",
+            "0206.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 4,
+        "mood": "neutro",
+        "notUnderstood": "Ho vinto ma ci sono arrivato più per fortuna che per capire: ho lanciato i secchielli quasi a caso e ho aspettato di vedere dove dipingevano. Non capisco bene da dove parte la vernice (sembra dai bordi verso l interno) e quindi non so pianificare l ordine. Il blu 8 con ↩7 all inizio mi ha fatto capire di non toccarlo subito, ma solo per intuito.",
+        "wouldContinue": true,
+        "freeText": "Nessuna scheda. Livello lungo (17 mosse), 2 slot e 3 colonne con +2 sotto: più testa. Non ho mai avuto un ingorgo ma ero teso. Alla fine scritta Stage completato! Nuovo stile dei secchielli e bottone Album: bello ma non so cosa sia l Album. Alla seconda sconfitta avrei smesso, per fortuna non ci è arrivata."
+      }
+    }
+  ],
+  "session": {
+    "telemetry": {
+      "durationMs": 679720,
+      "actions": 102,
+      "screens": {
+        "menu": 1,
+        "play": 10
+      },
+      "languageChanges": 0,
+      "uncaughtErrors": [],
+      "stuckScreens": []
+    },
+    "feedback": {
+      "fun": 4,
+      "wouldReturn": 4,
+      "stoppedBecause": "Ho finito i 10 livelli del primo stage senza perdere neanche una volta, quindi non mi sono scoraggiato. Se avessi perso due volte di fila avrei smollato.",
+      "bestMoment": "Il fungo e la fiamma che compaiono nel Capolavoro; e quando ho capito che il pallino sul pixel è il colore che manca.",
+      "worstMoment": "Livelli 9 e 10 con pochi slot: lanciavo al buio e avevo paura dell ingorgo; i numeri tipo 5 e ↩3! non li capisco.",
+      "freeText": "1) Schede: Slot d attesa e Perché è tornato (liv. 2, una dopo l altra, 0019.png e 0025.png), Mescola sulla tela (liv. 4, 0052.png), Altri secchielli in coda (liv. 5, 0070.png). Le ho lette e capite tutte, tempi giusti, nessuna sovrapposta a pannelli o bottoni; nel livello 1 solo una manina con testi corti. Nella scheda Slot d attesa c è un buco vuoto grande tra titolo e testo. 2) Rifiuti di un secchiello in attesa: mai successo, nessun cerchio sui blocchi visto. 3) Pallini sui pixel misti: capiti, indicano il colore che manca, grazie alla scheda del livello 4. 4) Ritorno agli slot col numero ↩: lo capisco dopo la scheda; non il significato di ↩N! con punto esclamativo né dei due numeri insieme. 5) +N sotto la colonna: capito grazie alla scheda del livello 5, vuol dire secchielli nascosti dietro. 6) Nessun bug grafico grave; la frase di aiuto Ora completa il quadro! del livello 1 restava visibile dietro al pannello finale."
+    }
+  },
+  "bugs": [
+    {
+      "title": "Schede Perché è tornato e Altri secchielli in coda: id non valido nella scheda",
+      "severity": "media",
+      "category": "testo",
+      "levelId": 2,
+      "steps": [
+        "Gioco livello 2 da salvataggio vuoto e rilancio il secchiello dagli slot: compare Perché è tornato",
+        "Gioco livello 5: compare Altri secchielli in coda",
+        "Provo a chiudere la sessione con end?reason=piano-finito"
+      ],
+      "expected": "La sessione si chiude e le schede viste sono registrate",
+      "actual": "end rifiuta il modulo: tipsShown[1] del livello 2 e tipsShown[0] del livello 5 non sono tra guide, mixing, blocked, slots, ice, hidden, lock, belt, brown, stone, covered (le due schede nuove hanno un id fuori elenco)",
+      "screenshots": [
+        "/home/user/mobile-game-first/playtest-runs/T13/T13-A09/0025.png",
+        "/home/user/mobile-game-first/playtest-runs/T13/T13-A09/0070.png"
+      ],
+      "reproduced": true,
+      "id": "T13-A09-B01"
+    }
+  ]
+}

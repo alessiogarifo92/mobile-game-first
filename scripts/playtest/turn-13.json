@@ -1,0 +1,9 @@
+{
+  "turn": 13,
+  "tag": "playtest-ux-174-onb",
+  "variant": "normale",
+  "agents": [
+    { "agentId": "A09", "profileId": "P09", "viewport": "360x640", "language": "it", "packs": ["U1-ONB"], "maxAttempts": 2 },
+    { "agentId": "A16", "profileId": "P16", "viewport": "360x640", "language": "it", "packs": ["U1-ONB"], "maxAttempts": 5 }
+  ]
+}

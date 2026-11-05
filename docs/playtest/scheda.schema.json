@@ -78,7 +78,7 @@
     "levelId": { "type": "integer", "minimum": 1, "maximum": 500 },
     "score": { "type": "integer", "minimum": 1, "maximum": 5 },
     "scoreOrNull": { "type": ["integer", "null"], "minimum": 1, "maximum": 5 },
-    "tipId": { "enum": ["guide", "mixing", "blocked", "slots", "ice", "hidden", "lock", "belt", "brown", "stone", "covered"] },
+    "tipId": { "enum": ["guide", "mixing", "blocked", "slots", "ice", "hidden", "lock", "belt", "brown", "stone", "covered", "queue", "leftover"] },
     "mechanic": { "enum": ["mixing", "blocked", "slots", "belt", "ice", "hidden", "brown", "stone", "lock", "covered"] },
     "attemptOutcome": {
       "enum": ["vinto", "ingorgo", "riprova", "uscita", "budget"],
@@ -98,6 +98,7 @@
         "offTargetTaps": { "type": "integer", "minimum": 0, "description": "Tap fuori da colonne, slot e bottoni (rect di __mix.columns/slots/jamButtons/tipButton)." },
         "launches": { "type": "integer", "minimum": 0, "description": "__mix.moves all'esito." },
         "refusals": { "type": "integer", "minimum": 0, "description": "__mix.refusals: tocchi rifiutati per nastro pieno." },
+        "blockedTaps": { "type": "integer", "minimum": 0, "description": "__mix.blockedTaps: tocchi su un secchiello in attesa rifiutati perché non poteva colpire nulla (#146): scossa e blocchi cerchiati. Assente nelle schede precedenti al 5 novembre 2026. Nelle schede T15 il valore è cumulativo per sessione (il gioco non azzera il contatore tra i livelli): il numero di rifiuti di un tentativo è la differenza con il massimo dei tentativi precedenti." },
         "jams": { "type": "integer", "minimum": 0, "description": "Volte in cui __mix.overlay è diventato 'jam' (2 se ingorgo, +1 slot, poi di nuovo ingorgo)." },
         "extraSlotUsed": { "type": "boolean", "description": "Ha premuto '+1 slot e continua' (gratuito, una volta per tentativo)." },
         "maxSlotsUsed": { "type": "integer", "minimum": 0, "description": "Occupazione massima degli slot d'attesa. Oggi non è in __mix: #68 aggiunge un campo in sola lettura (es. slotsUsed)." },
