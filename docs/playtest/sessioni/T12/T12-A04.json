@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "T12-A04",
+  "agent": {
+    "agentId": "A04",
+    "profileId": "P04"
+  },
+  "turn": 12,
+  "build": {
+    "commit": "1ec752f48eed",
+    "version": "0.5.0",
+    "tag": "playtest-u2-100b",
+    "variant": "normale"
+  },
+  "device": {
+    "viewport": "360x640",
+    "language": "en"
+  },
+  "startSave": {
+    "unlocked": 200,
+    "completedThrough": 199,
+    "seenTips": [
+      "guide",
+      "blocked",
+      "slots",
+      "belt",
+      "mixing",
+      "ice",
+      "hidden",
+      "brown",
+      "stone"
+    ]
+  },
+  "plan": {
+    "packs": [
+      "R200-200"
+    ],
+    "levelIds": [
+      200
+    ]
+  },
+  "startedAt": "2026-11-05T10:40:08.852Z",
+  "endedAt": "2026-11-05T10:48:50.625Z",
+  "endReason": "piano-finito",
+  "levels": [
+    {
+      "levelId": 200,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "ingorgo",
+          "durationMs": 220883,
+          "timeToFirstTapMs": 11059,
+          "ticks": 2316,
+          "taps": 18,
+          "offTargetTaps": 0,
+          "launches": 16,
+          "refusals": 0,
+          "jams": 2,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 83,
+          "targets": 121,
+          "remaining": {
+            "ice": 2,
+            "hidden": 1,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 14,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0002.png",
+            "0003.png",
+            "0004.png",
+            "0005.png",
+            "0006.png",
+            "0007.png",
+            "0008.png",
+            "0009.png",
+            "0010.png",
+            "0011.png",
+            "0012.png",
+            "0013.png",
+            "0014.png",
+            "0015.png",
+            "0016.png",
+            "0017.png",
+            "0018.png",
+            "0019.png",
+            "0020.png",
+            "0021.png",
+            "0022.png",
+            "0023.png",
+            "0024.png",
+            "0025.png",
+            "0026.png",
+            "0027.png",
+            "0028.png",
+            "0029.png",
+            "0030.png",
+            "0031.png",
+            "0032.png",
+            "0033.png",
+            "0034.png"
+          ]
+        },
+        {
+          "attempt": 2,
+          "outcome": "vinto",
+          "durationMs": 218633,
+          "timeToFirstTapMs": 5753,
+          "ticks": 2552,
+          "taps": 20,
+          "offTargetTaps": 0,
+          "launches": 20,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 121,
+          "targets": 121,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 24,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0035.png",
+            "0036.png",
+            "0037.png",
+            "0038.png",
+            "0039.png",
+            "0040.png",
+            "0041.png",
+            "0042.png",
+            "0043.png",
+            "0044.png",
+            "0045.png",
+            "0046.png",
+            "0047.png",
+            "0048.png",
+            "0049.png",
+            "0050.png",
+            "0051.png",
+            "0052.png",
+            "0053.png",
+            "0054.png",
+            "0055.png",
+            "0056.png",
+            "0057.png",
+            "0058.png",
+            "0059.png",
+            "0060.png",
+            "0061.png",
+            "0062.png",
+            "0063.png",
+            "0064.png",
+            "0065.png",
+            "0066.png",
+            "0067.png",
+            "0068.png",
+            "0069.png",
+            "0070.png",
+            "0071.png",
+            "0072.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 4,
+        "mood": "neutro",
+        "beltRefusalUnderstood": 3,
+        "jamFairness": 3,
+        "notUnderstood": "I did not get why a tap on a waiting bucket sometimes does nothing (no target for its colour yet), and I could not tell in advance which colour order unlocks the cells. The red arrow preview helped a bit but I still jammed once on the first try.",
+        "wouldContinue": true,
+        "freeText": "Boss: first try I jammed fast, used +1 slot and still jammed. Second try I cleared yellow and red first, kept slots free and won. Lots of tapping and waiting for a boss, but the result screen felt good. No tip cards showed up, which suited me."
+      }
+    }
+  ],
+  "session": {
+    "telemetry": {
+      "durationMs": 521773,
+      "actions": 39,
+      "screens": {
+        "menu": 1,
+        "play": 2
+      },
+      "languageChanges": 0,
+      "uncaughtErrors": [],
+      "stuckScreens": []
+    },
+    "feedback": {
+      "fun": 3,
+      "wouldReturn": 3,
+      "stoppedBecause": "I finished the boss and my plan was just that one level, so I am done.",
+      "bestMoment": "The Masterpiece screen after the volcano filled in.",
+      "worstMoment": "The first jam, where every slot was full and I could not see it coming.",
+      "freeText": "The arrow preview was useful to avoid the second jam, but I only understood it by trial. Too many waits for an impatient player."
+    }
+  },
+  "bugs": []
+}

@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "T11-A03",
+  "agent": {
+    "agentId": "A03",
+    "profileId": "P03"
+  },
+  "turn": 11,
+  "build": {
+    "commit": "d94056d2fc71",
+    "version": "0.5.0",
+    "tag": "playtest-u2-100a",
+    "variant": "normale"
+  },
+  "device": {
+    "viewport": "412x915",
+    "language": "it"
+  },
+  "startSave": {
+    "unlocked": 184,
+    "completedThrough": 183,
+    "seenTips": [
+      "guide",
+      "blocked",
+      "slots",
+      "belt",
+      "mixing",
+      "ice",
+      "hidden",
+      "brown",
+      "stone"
+    ]
+  },
+  "plan": {
+    "packs": [
+      "R184-184",
+      "R200-200"
+    ],
+    "levelIds": [
+      184,
+      200
+    ]
+  },
+  "startedAt": "2026-11-05T10:25:52.892Z",
+  "endedAt": "2026-11-05T10:34:23.666Z",
+  "endReason": "piano-finito",
+  "levels": [
+    {
+      "levelId": 184,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 194322,
+          "timeToFirstTapMs": 12895,
+          "ticks": 2239,
+          "taps": 19,
+          "offTargetTaps": 0,
+          "launches": 19,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 3,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 88,
+          "targets": 88,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 41,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0002.png",
+            "0003.png",
+            "0004.png",
+            "0005.png",
+            "0006.png",
+            "0007.png",
+            "0008.png",
+            "0009.png",
+            "0010.png",
+            "0011.png",
+            "0012.png",
+            "0013.png",
+            "0014.png",
+            "0015.png",
+            "0016.png",
+            "0017.png",
+            "0018.png",
+            "0019.png",
+            "0020.png",
+            "0021.png",
+            "0022.png",
+            "0023.png",
+            "0024.png",
+            "0025.png",
+            "0026.png",
+            "0027.png",
+            "0028.png",
+            "0029.png",
+            "0030.png",
+            "0031.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "Non sapevo che le caselle con simbolo marrone volessero tutti e tre i colori finché non le ho viste riempirsi a metà. Nessun ingorgo, i punti interrogativi non li ho nemmeno dovuti gestire.",
+        "wouldContinue": true,
+        "freeText": "Ho osservato prima: l anteprima ↩N mi ha detto quando un secchiello avrebbe sprecato vernice (il rosso con ↩16 non andava toccato) e mi ha aiutato a scegliere l ordine. Vinto al primo tentativo, senza usare lo slot extra."
+      }
+    },
+    {
+      "levelId": 200,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 198930,
+          "timeToFirstTapMs": 12123,
+          "ticks": 2265,
+          "taps": 20,
+          "offTargetTaps": 0,
+          "launches": 20,
+          "refusals": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 3,
+          "slotCount": 3,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 121,
+          "targets": 121,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 49,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0035.png",
+            "0036.png",
+            "0037.png",
+            "0038.png",
+            "0039.png",
+            "0040.png",
+            "0041.png",
+            "0042.png",
+            "0043.png",
+            "0044.png",
+            "0045.png",
+            "0046.png",
+            "0047.png",
+            "0048.png",
+            "0049.png",
+            "0050.png",
+            "0051.png",
+            "0052.png",
+            "0053.png",
+            "0054.png",
+            "0055.png",
+            "0056.png",
+            "0057.png",
+            "0058.png",
+            "0059.png",
+            "0060.png",
+            "0061.png",
+            "0062.png",
+            "0063.png",
+            "0064.png",
+            "0065.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 3,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "Non ho capito subito che le caselle chiare con mezzo triangolo aspettano il secondo colore. Mi sarebbe piaciuto sapere in anticipo quali caselle rimanevano scoperte alla fine.",
+        "wouldContinue": true,
+        "freeText": "Boss ben fatto: leggevo la barra dei secchielli e la anteprima ↩N, lasciavo liberi gli slot prima di toccare secchielli con ↩N rossa, e ho usato gli slot come parcheggio per gli avanzi. Vinto al primo tentativo con 3 slot, senza +1 slot. Il finale con il vulcano pixel art e piacevole. Un poco di tensione quando ho visto tutti e tre gli slot pieni con colonne vuote."
+      }
+    }
+  ],
+  "session": {
+    "telemetry": {
+      "durationMs": 510774,
+      "actions": 41,
+      "screens": {
+        "menu": 2,
+        "play": 2
+      },
+      "languageChanges": 0,
+      "uncaughtErrors": [],
+      "stuckScreens": []
+    },
+    "feedback": {
+      "fun": 4,
+      "wouldReturn": 4,
+      "stoppedBecause": "Ho finito il piano: due livelli vinti al primo colpo, il boss mi ha soddisfatto.",
+      "bestMoment": "Il vulcano che compare alla fine del 200 dopo aver gestito slot e anteprime.",
+      "worstMoment": "Nessuno davvero: solo un attimo di ansia con gli slot quasi pieni e le colonne vuote.",
+      "freeText": "Le anteprime ↩N mi hanno dato qualcosa su cui ragionare, e le trovo utili. Per un esperto la difficolta e medio-bassa, con pochi errori da fare."
+    }
+  },
+  "bugs": []
+}

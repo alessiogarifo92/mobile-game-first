@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "T11-A09",
+  "agent": {
+    "agentId": "A09",
+    "profileId": "P09"
+  },
+  "turn": 11,
+  "build": {
+    "commit": "d94056d2fc71",
+    "version": "0.5.0",
+    "tag": "playtest-u2-100a",
+    "variant": "normale"
+  },
+  "device": {
+    "viewport": "360x640",
+    "language": "it"
+  },
+  "startSave": {
+    "unlocked": 184,
+    "completedThrough": 183,
+    "seenTips": [
+      "guide",
+      "blocked",
+      "slots",
+      "belt",
+      "mixing",
+      "ice",
+      "hidden",
+      "brown",
+      "stone"
+    ]
+  },
+  "plan": {
+    "packs": [
+      "R184-184",
+      "R200-200"
+    ],
+    "levelIds": [
+      184,
+      200
+    ]
+  },
+  "startedAt": "2026-11-05T10:25:55.453Z",
+  "endedAt": "2026-11-05T10:31:42.329Z",
+  "endReason": "soglia-abbandono",
+  "levels": [
+    {
+      "levelId": 184,
+      "result": "saltato",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "ingorgo",
+          "durationMs": 126614,
+          "timeToFirstTapMs": 10965,
+          "ticks": 1238,
+          "taps": 19,
+          "offTargetTaps": 0,
+          "launches": 17,
+          "refusals": 0,
+          "jams": 2,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 4,
+          "slotCount": 3,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 65,
+          "targets": 88,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 47,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0002.png",
+            "0003.png",
+            "0004.png",
+            "0005.png",
+            "0006.png",
+            "0007.png",
+            "0008.png",
+            "0009.png",
+            "0010.png",
+            "0011.png",
+            "0012.png",
+            "0013.png",
+            "0014.png",
+            "0015.png",
+            "0016.png",
+            "0017.png",
+            "0018.png",
+            "0019.png",
+            "0020.png"
+          ]
+        },
+        {
+          "attempt": 2,
+          "outcome": "uscita",
+          "durationMs": 126715,
+          "timeToFirstTapMs": 11853,
+          "ticks": 1145,
+          "taps": 17,
+          "offTargetTaps": 2,
+          "launches": 14,
+          "refusals": 0,
+          "jams": 2,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 4,
+          "slotCount": 3,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 58,
+          "targets": 88,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 41,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0021.png",
+            "0022.png",
+            "0023.png",
+            "0024.png",
+            "0025.png",
+            "0026.png",
+            "0027.png",
+            "0028.png",
+            "0029.png",
+            "0030.png",
+            "0031.png",
+            "0032.png",
+            "0033.png",
+            "0034.png",
+            "0035.png",
+            "0036.png",
+            "0037.png",
+            "0038.png",
+            "0039.png",
+            "0040.png",
+            "0041.png",
+            "0042.png",
+            "0043.png",
+            "0044.png",
+            "0045.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 5,
+        "mood": "frustrato",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 2,
+        "notUnderstood": "Non capisco come scegliere l ordine dei secchielli: ogni volta che ne tocco uno non so dove va a finire. Le frecce con il numero mi dicono qualcosa ma non so cosa farci.",
+        "wouldContinue": false,
+        "freeText": "Due ingorghi di fila, anche usando il +1 slot. Il livello sembra pieno di cose e io tocco a caso sperando. Non mi diverto, sto per mollare."
+      }
+    }
+  ],
+  "session": {
+    "telemetry": {
+      "durationMs": 346876,
+      "actions": 37,
+      "screens": {
+        "menu": 2,
+        "play": 2
+      },
+      "languageChanges": 0,
+      "uncaughtErrors": [],
+      "stuckScreens": []
+    },
+    "feedback": {
+      "fun": 2,
+      "wouldReturn": 2,
+      "stoppedBecause": "Ho perso due volte di fila al 184 e mi sono stancato: non sento di capire cosa sbaglio, quindi smetto.",
+      "bestMoment": "Quando la prima volta il disegno si riempiva di marrone e sembrava che stessi andando bene.",
+      "worstMoment": "Il pannello Ingorgo la seconda volta, dopo aver usato anche il +1 slot.",
+      "freeText": "Troppo difficile per me. Il numero con la freccia sui secchielli mi confonde."
+    }
+  },
+  "bugs": []
+}
