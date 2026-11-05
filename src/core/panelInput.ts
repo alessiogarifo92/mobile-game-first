@@ -8,3 +8,8 @@ export const PANEL_ARM_MS = 450;
 export function panelArmed(now: number, shownAt: number, armMs: number = PANEL_ARM_MS): boolean {
   return now - shownAt >= armMs;
 }
+
+/** #151: the jam panel says "+1 slot" works once per attempt, and once it is spent explains why only "Retry" is left. */
+export function jamHintKey(extraSlotUsed: boolean): 'jam.once' | 'jam.used' {
+  return extraSlotUsed ? 'jam.used' : 'jam.once';
+}
