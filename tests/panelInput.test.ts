@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { PANEL_ARM_MS, panelArmed } from '../src/core/panelInput';
+import { PANEL_ARM_MS, jamHintKey, panelArmed } from '../src/core/panelInput';
+import { translate } from '../src/core/i18n';
 
 describe('panel input arming (#161)', () => {
   it('ignores taps right after the panel appears', () => {
@@ -17,5 +18,16 @@ describe('panel input arming (#161)', () => {
   it('honours a custom delay', () => {
     expect(panelArmed(150, 0, 100)).toBe(true);
     expect(panelArmed(50, 0, 100)).toBe(false);
+  });
+});
+
+describe('jam panel hint (#151)', () => {
+  it('first jam says +1 slot works once per attempt; the second explains why only Retry is offered', () => {
+    expect(jamHintKey(false)).toBe('jam.once');
+    expect(jamHintKey(true)).toBe('jam.used');
+    expect(translate('en', 'jam.once')).toContain('once per attempt');
+    expect(translate('it', 'jam.once')).toContain('una volta per tentativo');
+    expect(translate('en', 'jam.used')).toContain('already used');
+    expect(translate('it', 'jam.used')).toContain('già usato');
   });
 });

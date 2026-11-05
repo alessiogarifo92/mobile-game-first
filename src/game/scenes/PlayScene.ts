@@ -6,7 +6,7 @@ import type { StoneEvent } from '../../core/sim';
 import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, slotAt, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
 import { currentLevel } from '../../core/mapLayout';
-import { PANEL_ARM_MS } from '../../core/panelInput';
+import { PANEL_ARM_MS, jamHintKey } from '../../core/panelInput';
 import { newlyCompletedUniverse } from '../../core/universeMenu';
 import { universeLevels, universeOf } from '../../core/universes';
 import { COLOR_CODES } from '../../core/colors';
@@ -792,7 +792,9 @@ export class PlayScene extends Phaser.Scene {
   private showJam(): void {
     const c = this.panel(t('jam.title'), 480);
     const top = (this.scale.height - 480) / 2;
-    c.add(label(this, VIEW.width / 2, top + 150, t('jam.body'), THEME.type.sm, THEME.subCss, false));
+    c.add(label(this, VIEW.width / 2, top + 130, t('jam.body'), THEME.type.sm, THEME.subCss, false));
+    // #151: say why the panel offers "+1 slot" (once per attempt) or only "Retry".
+    c.add(label(this, VIEW.width / 2, top + (this.gs.extraSlotUsed ? 205 : 210), t(jamHintKey(this.gs.extraSlotUsed)), THEME.type.xs, THEME.inkCss, false));
     if (!this.gs.extraSlotUsed) {
       c.add(button(this, VIEW.width / 2, top + 280, 420, 88, t('jam.continue'), () => {
         continueWithExtraSlot(this.gs);
