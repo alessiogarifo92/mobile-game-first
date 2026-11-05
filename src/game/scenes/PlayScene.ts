@@ -605,14 +605,14 @@ export class PlayScene extends Phaser.Scene {
     this.hintLabels = [];
     if (gs.status !== 'playing') return;
     const g = this.dynamic;
-    const buckets: { s: Shooter; x: number; y: number; size: number }[] = [];
+    const buckets: { s: Shooter; x: number; y: number; size: number; slot: boolean }[] = [];
     gs.queues.forEach((q, c) => {
       const r = layout.columns[c]!;
-      if (q[0]) buckets.push({ s: q[0], x: r.x + r.w / 2, y: r.y + layout.jar / 2 + 6, size: layout.jar });
+      if (q[0]) buckets.push({ s: q[0], x: r.x + r.w / 2, y: r.y + layout.jar / 2 + 6, size: layout.jar, slot: false });
     });
     gs.slots.forEach((s, i) => {
       const r = layout.slots[i];
-      if (s && r) buckets.push({ s, x: r.x + r.w / 2, y: r.y + r.h / 2, size: r.w - 8 });
+      if (s && r) buckets.push({ s, x: r.x + r.w / 2, y: r.y + r.h / 2, size: r.w - 8, slot: true });
     });
     const free = freeSlots(gs);
     for (const b of buckets) {
@@ -627,13 +627,16 @@ export class PlayScene extends Phaser.Scene {
       if (!hint) continue;
       const risky = hint.risky;
       this.hintLabels.push(hint.label);
-      const cx = b.x + b.size / 2 - 6;
-      const cy = b.y - b.size / 2 - 4;
+      // Columns: pill on the top-right corner. Slots: centred under the bucket, so "WAITING" above stays readable.
+      const h = b.slot ? 30 : 36;
+      const cx = b.slot ? b.x : b.x + b.size / 2 - 6;
+      const cy = b.slot ? b.y + b.size / 2 + h / 2 - 2 : b.y - b.size / 2 - 4;
       const w = risky ? 76 : 64;
-      g.fillStyle(risky ? PAINT[RED]! : THEME.gold, 1);
-      g.fillRoundedRect(cx - w / 2, cy - 18, w, 36, 18);
-      g.lineStyle(3, THEME.ink, 1);
-      g.strokeRoundedRect(cx - w / 2, cy - 18, w, 36, 18);
+      // Risky: ink pill with a white rim, so it stands out even on top of a red bucket.
+      g.fillStyle(risky ? THEME.ink : THEME.gold, 1);
+      g.fillRoundedRect(cx - w / 2, cy - h / 2, w, h, h / 2);
+      g.lineStyle(3, risky ? 0xffffff : THEME.ink, 1);
+      g.strokeRoundedRect(cx - w / 2, cy - h / 2, w, h, h / 2);
       this.text(cx, cy, hint.label, THEME.type.xs, risky ? '#FFFFFF' : THEME.inkCss);
     }
   }
