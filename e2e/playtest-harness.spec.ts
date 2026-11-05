@@ -48,7 +48,11 @@ test('playtest harness: an agent plays level 1 to a win and the form records it'
   expect(await agent.tapColumn(9)).toMatchObject({ notes: ['there is no column 9 on screen'] });
 
   for (const move of solve(parsed[0]!).moves) {
-    if (move.from === 'column') await agent.tapColumn(move.index + 1);
+    // `column?n` counts only the columns that still hold a bucket (H2): turn the solver's layout index into that number.
+    if (move.from === 'column') {
+      const left = await mix<number[]>(page, 'columnsLeft');
+      await agent.tapColumn(left.slice(0, move.index + 1).filter((n) => n > 0).length);
+    }
     else await agent.tapSlot(move.index + 1);
     await agent.waitIdle();
     // A tip card may come up when a bucket returns: close it with its button, as a player would.

@@ -6,7 +6,7 @@ import { tipOnLevelStart } from '../src/core/onboarding';
 import { sanitize, type LevelRef } from '../src/core/progress';
 import { SchemaError, validate, validateDef, type Schema } from '../scripts/playtest/jsonSchema';
 import { SaveError, offPlanStep, packLevels, planLevels, planStep, saveFor, saveStarts, startSaveOf, tipsMetBefore } from '../scripts/playtest/saves';
-import { SCHEMA_VERSION, SessionRecorder, StuckWatch, TOP_BAR, onTarget, type MixSnapshot, type SessionHeader } from '../scripts/playtest/telemetry';
+import { SCHEMA_VERSION, SessionRecorder, StuckWatch, TOP_BAR, onTarget, visibleColumns, type MixSnapshot, type SessionHeader } from '../scripts/playtest/telemetry';
 import { MAX_AGENTS, TurnError, parseTurnConfig, parseViewport, sessionId } from '../scripts/playtest/turn';
 
 // The form's schema lives with the protocol of #67; these checks run once it is in the repo.
@@ -57,6 +57,21 @@ describe('onTarget', () => {
   });
 });
 
+describe('visibleColumns', () => {
+  const cols = [0, 1, 2].map((i) => ({ ...COL, x: 100 + i * 150 }));
+
+  it('numbers only the columns that still hold a bucket, so column 1 is the first one with something to tap (H2)', () => {
+    expect(visibleColumns({ columns: cols, columnsLeft: [0, 2, 1] })).toEqual([cols[1], cols[2]]);
+    expect(visibleColumns({ columns: cols, columnsLeft: [0, 0, 3] })).toEqual([cols[2]]);
+    expect(visibleColumns({ columns: cols, columnsLeft: [0, 0, 0] })).toEqual([]);
+  });
+
+  it('keeps every column when the game does not say how many buckets each holds', () => {
+    expect(visibleColumns({ columns: cols })).toEqual(cols);
+    expect(visibleColumns({})).toEqual([]);
+  });
+});
+
 describe('SessionRecorder', () => {
   it('records a won attempt with every field of the form', () => {
     const r = new SessionRecorder(HEADER, T0);
@@ -83,14 +98,14 @@ describe('SessionRecorder', () => {
     expect(r.missingFeedback()).toEqual([95]);
   });
 
-  it('counts blocked taps from the value at entry (the game does not reset it between levels)', () => {
+  it('counts blocked taps per level, as the game reports them (it resets them on every level)', () => {
     const r = new SessionRecorder(HEADER, T0);
     r.observe(menu(), T0);
-    r.observe(play({ levelId: 96, blockedTaps: 3 }), T0 + 1000);
-    r.observe(play({ levelId: 96, tick: 5, blockedTaps: 5 }), T0 + 2000);
-    r.observe(play({ levelId: 96, tick: 9, status: 'won', overlay: 'win', blockedTaps: 5 }), T0 + 3000);
-    r.observe(play({ levelId: 97, blockedTaps: 5 }), T0 + 4000);
-    r.observe(play({ levelId: 97, tick: 4, blockedTaps: 6 }), T0 + 5000);
+    r.observe(play({ levelId: 96, blockedTaps: 1 }), T0 + 1000);
+    r.observe(play({ levelId: 96, tick: 5, blockedTaps: 2 }), T0 + 2000);
+    r.observe(play({ levelId: 96, tick: 9, status: 'won', overlay: 'win', blockedTaps: 2 }), T0 + 3000);
+    r.observe(play({ levelId: 97, blockedTaps: 0 }), T0 + 4000);
+    r.observe(play({ levelId: 97, tick: 4, blockedTaps: 1 }), T0 + 5000);
     expect(r.scheda(T0 + 6000, 'piano-finito').levels.map((l) => l.attempts.map((a) => a.blockedTaps))).toEqual([[2], [1]]);
   });
 

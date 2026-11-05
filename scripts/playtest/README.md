@@ -57,7 +57,7 @@ of 80 actions per attempt and 1,500 per session.
 |---|---|
 | `GET /A01/screenshot` | look at the screen |
 | `GET /A01/tap?x=180&y=420` | tap a point of the screenshot (CSS pixels) |
-| `GET /A01/column?n=2` · `GET /A01/slot?n=1` | tap the n-th visible column / waiting slot (1 = leftmost) |
+| `GET /A01/column?n=2` · `GET /A01/slot?n=1` | tap the n-th visible column (one that still holds a bucket) / waiting slot (1 = leftmost) |
 | `GET /A01/taps?seq=c1,c2,s1,180:420` | quick taps, ~150 ms apart (each is one action) |
 | `GET /A01/menu` · `GET /A01/restart` | the ◀ and ⟲ buttons of a level |
 | `GET /A01/swipe?dy=-300` | drag the map |

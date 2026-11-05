@@ -122,6 +122,9 @@ export class PlayScene extends Phaser.Scene {
     this.pixelsDirty = false;
     this.refused = null;
     this.refusals = 0;
+    // The scene instance is reused: circles and the count of a previous level must not carry over (#179).
+    this.blockers = null;
+    this.blockedTaps = 0;
     this.stoneSplashes = 0;
   }
 
@@ -1004,6 +1007,8 @@ export class PlayScene extends Phaser.Scene {
         return colors.length ? [{ cell: i, colors }] : [];
       }),
       columns: this.layout.columns,
+      // Buckets still in each column: the playtest harness numbers only the columns that hold one.
+      columnsLeft: gs.queues.map((q) => q.length),
       slots: this.layout.slots,
       // Waiting slots holding a bucket: playtest telemetry records the highest occupancy (#68).
       slotsUsed: gs.slots.filter(Boolean).length,
