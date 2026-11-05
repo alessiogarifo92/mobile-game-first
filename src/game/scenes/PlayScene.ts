@@ -6,6 +6,7 @@ import type { StoneEvent } from '../../core/sim';
 import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, slotAt, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
 import { currentLevel } from '../../core/mapLayout';
+import { forecastLeftover, freeSlots } from '../../core/leftover';
 import { PANEL_ARM_MS, jamHintKey } from '../../core/panelInput';
 import { newlyCompletedUniverse } from '../../core/universeMenu';
 import { universeLevels, universeOf } from '../../core/universes';
@@ -586,7 +587,49 @@ export class PlayScene extends Phaser.Scene {
       if (queue.length > 3) this.text(r.x + r.w / 2, r.y + 3 * layout.columnStep + 36, `+${queue.length - 3}`, THEME.type.sm, THEME.subCss);
     });
 
+    this.drawLeftoverProto();
+
     for (let i = this.textIndex; i < this.texts.length; i++) this.texts[i]!.setVisible(false);
+  }
+
+  /** PROTOTYPE (#145), only with ?proto=a|b: design directions for the leftover shots, to compare. */
+  private drawLeftoverProto(): void {
+    const proto = new URLSearchParams(window.location.search).get('proto');
+    if (proto !== 'a' && proto !== 'b') return;
+    const { layout, gs } = this;
+    const g = this.dynamic;
+    const free = freeSlots(gs);
+    const pill = (cx: number, cy: number, w: number, value: string): void => {
+      g.fillStyle(THEME.gold, 1);
+      g.fillRoundedRect(cx - w / 2, cy - 18, w, 36, 18);
+      g.lineStyle(3, THEME.ink, 1);
+      g.strokeRoundedRect(cx - w / 2, cy - 18, w, 36, 18);
+      this.text(cx, cy, value, THEME.type.xs, THEME.inkCss);
+    };
+    const buckets: { s: Shooter; x: number; y: number; size: number }[] = [];
+    gs.queues.forEach((q, c) => {
+      const r = layout.columns[c]!;
+      if (q[0]) buckets.push({ s: q[0], x: r.x + r.w / 2, y: r.y + layout.jar / 2 + 6, size: layout.jar });
+    });
+    gs.slots.forEach((s, i) => {
+      const r = layout.slots[i];
+      if (s && r) buckets.push({ s, x: r.x + r.w / 2, y: r.y + r.h / 2, size: r.w - 8 });
+    });
+    if (proto === 'b' && free <= 1) {
+      g.lineStyle(6, THEME.gold, 1);
+      gs.slots.forEach((s, i) => {
+        const r = layout.slots[i];
+        if (!s && r) g.strokeRoundedRect(r.x, r.y, r.w, r.h, THEME.radius.jar);
+      });
+      pill(VIEW.width / 2, layout.slots[0]!.y - 58, 360, free === 1 ? 'Last free slot!' : 'No free slot!');
+    }
+    for (const b of buckets) {
+      const f = forecastLeftover(gs, b.s.color, b.s.ammo);
+      const cx = b.x + b.size / 2 - 6;
+      const cy = b.y - b.size / 2 - 4;
+      if (proto === 'a' && f.leftover > 0) pill(cx, cy, 64, `↩${f.leftover}`);
+      if (proto === 'b' && f.returns && free <= 1) pill(cx, cy, 44, '!');
+    }
   }
 
   /** "BELT 1/2" and one pip per place, filled when taken; darker when full or just refused a tap. */
