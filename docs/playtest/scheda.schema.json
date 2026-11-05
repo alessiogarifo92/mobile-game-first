@@ -98,6 +98,7 @@
         "offTargetTaps": { "type": "integer", "minimum": 0, "description": "Tap fuori da colonne, slot e bottoni (rect di __mix.columns/slots/jamButtons/tipButton)." },
         "launches": { "type": "integer", "minimum": 0, "description": "__mix.moves all'esito." },
         "refusals": { "type": "integer", "minimum": 0, "description": "__mix.refusals: tocchi rifiutati per nastro pieno." },
+        "blockedTaps": { "type": "integer", "minimum": 0, "description": "__mix.blockedTaps: tocchi su un secchiello in attesa rifiutati perché non poteva colpire nulla (#146): scossa e blocchi cerchiati. Assente nelle schede precedenti al 5 novembre 2026." },
         "jams": { "type": "integer", "minimum": 0, "description": "Volte in cui __mix.overlay è diventato 'jam' (2 se ingorgo, +1 slot, poi di nuovo ingorgo)." },
         "extraSlotUsed": { "type": "boolean", "description": "Ha premuto '+1 slot e continua' (gratuito, una volta per tentativo)." },
         "maxSlotsUsed": { "type": "integer", "minimum": 0, "description": "Occupazione massima degli slot d'attesa. Oggi non è in __mix: #68 aggiunge un campo in sola lettura (es. slotsUsed)." },

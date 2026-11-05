@@ -407,7 +407,7 @@ export class PlaytestAgent {
         if (!m?.scene) return null;
         return {
           scene: m.scene, levelId: m.levelId, status: m.status, overlay: m.overlay, tip: m.tip, guide: m.guide, tick: m.tick,
-          moves: m.moves, refusals: m.refusals, belt: m.belt, columns: m.columns, slots: m.slots, slotsUsed: m.slotsUsed,
+          moves: m.moves, refusals: m.refusals, blockedTaps: m.blockedTaps, belt: m.belt, columns: m.columns, slots: m.slots, slotsUsed: m.slotsUsed,
           painted: m.painted, targets: m.targets, ice: m.ice, hidden: m.hidden, locked: m.locked, covered: m.covered,
           stoneSplashes: m.stoneSplashes, reveals: m.reveals, jamButtons: m.jamButtons, tipButton: m.tipButton,
           language: m.language, scrollY: m.scrollY,

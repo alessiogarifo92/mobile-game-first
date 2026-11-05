@@ -9,8 +9,13 @@ import { tipOnLevelStart } from '../../src/core/onboarding';
 import { isLanguage } from '../../src/core/i18n';
 import { canOpenLevel } from '../../src/core/universes';
 
-/** Tips met while playing rather than at a level start: anyone past level 1 has had them. */
-const PLAY_TIPS = ['guide', 'blocked', 'slots', 'belt', 'leftover'];
+/**
+ * Tips met while playing rather than at a level start, which a player who cleared the levels before `start` in order
+ * has had: the guide of level 1 and the two older cards (slots, belt). `blocked` (#146) and `leftover` (#172) are
+ * left out on purpose: they are shown by what happens on the board, which the levels do not tell, and a save from
+ * before they existed has not seen them. The playtest must be able to show them the first time they apply.
+ */
+const PLAY_TIPS = ['guide', 'slots', 'belt'];
 
 /** Packs that are not a whole stage (protocol §8). */
 const NAMED_PACKS: Record<string, [number, number]> = { 'U1-ONB': [1, 10], 'U1-FINE': [95, 100] };
