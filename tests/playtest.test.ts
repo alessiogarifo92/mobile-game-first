@@ -83,6 +83,17 @@ describe('SessionRecorder', () => {
     expect(r.missingFeedback()).toEqual([95]);
   });
 
+  it('counts blocked taps from the value at entry (the game does not reset it between levels)', () => {
+    const r = new SessionRecorder(HEADER, T0);
+    r.observe(menu(), T0);
+    r.observe(play({ levelId: 96, blockedTaps: 3 }), T0 + 1000);
+    r.observe(play({ levelId: 96, tick: 5, blockedTaps: 5 }), T0 + 2000);
+    r.observe(play({ levelId: 96, tick: 9, status: 'won', overlay: 'win', blockedTaps: 5 }), T0 + 3000);
+    r.observe(play({ levelId: 97, blockedTaps: 5 }), T0 + 4000);
+    r.observe(play({ levelId: 97, tick: 4, blockedTaps: 6 }), T0 + 5000);
+    expect(r.scheda(T0 + 6000, 'piano-finito').levels.map((l) => l.attempts.map((a) => a.blockedTaps))).toEqual([[2], [1]]);
+  });
+
   it('tells a jam retry, a restart, an exit and the budget apart, and counts +1 slot', () => {
     const r = new SessionRecorder(HEADER, T0);
     r.observe(play({ tick: 10 }), T0);
