@@ -78,7 +78,7 @@
     "levelId": { "type": "integer", "minimum": 1, "maximum": 500 },
     "score": { "type": "integer", "minimum": 1, "maximum": 5 },
     "scoreOrNull": { "type": ["integer", "null"], "minimum": 1, "maximum": 5 },
-    "tipId": { "enum": ["guide", "mixing", "blocked", "slots", "ice", "hidden", "lock", "belt", "brown", "stone", "covered"] },
+    "tipId": { "enum": ["guide", "mixing", "blocked", "slots", "ice", "hidden", "lock", "belt", "brown", "stone", "covered", "queue", "leftover"] },
     "mechanic": { "enum": ["mixing", "blocked", "slots", "belt", "ice", "hidden", "brown", "stone", "lock", "covered"] },
     "attemptOutcome": {
       "enum": ["vinto", "ingorgo", "riprova", "uscita", "budget"],
