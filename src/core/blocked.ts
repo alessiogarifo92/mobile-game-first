@@ -1,4 +1,4 @@
-import { accepts, type Primary } from './colors';
+import { accepts, primariesOf, type Primary } from './colors';
 import type { Level } from './level';
 import { cellDone, type Board } from './rules';
 import { beltFull, launchFromSlot, step, type GameState } from './sim';
@@ -88,4 +88,73 @@ export function refuseSlotLaunch(state: GameState, slot: number): SlotRefusal | 
   const shooter = state.slots[slot];
   if (!shooter || slotLaunchHits(state, slot) !== 0) return null;
   return { blockers: blockingCells(state.level, state, state.lanes, shooter.color) };
+}
+
+/**
+ * Colours that would move a blocking `cell` along (#176): the primaries its target still misses, so the board can say
+ * on the circle which colour opens the lane. Empty for what no colour opens (a stone, a hidden or locked pixel, a
+ * finished pixel, an empty cell).
+ */
+export function unlockColors(level: Level, board: Board, cell: number): Primary[] {
+  const target = level.targets[cell] ?? 0;
+  if (target === 0 || level.stone[cell] || board.hidden[cell] || board.locked[cell] || cellDone(level, board, cell)) return [];
+  return primariesOf(target & ~board.paint[cell]!);
+}
+
+/** What stands first in a blocked lane, as the blocked-lane tip draws it. */
+export type BlockFront =
+  | { kind: 'pixel'; target: number; paint: number; ice: boolean; unlock: Primary[] }
+  | { kind: 'stone'; target: number }
+  | { kind: 'hidden'; target: number }
+  | { kind: 'locked'; target: number };
+
+/** The case the blocked-lane tip illustrates (#176): the refused bucket's colour, the cell in its way, the pixel behind. */
+export interface BlockExample {
+  color: Primary;
+  front: BlockFront;
+  /** Target colour of the pixel the bucket wanted, behind the front. */
+  behind: number;
+}
+
+/**
+ * The lane case behind a refusal, for the tip's illustration (#176), so the card shows the colour of the bucket the
+ * player tapped rather than a fixed example. It takes the first lane whose front is one of `blockers` and has a pixel
+ * further down still wanting `color`. null when no lane matches (the tip then falls back to its generic picture).
+ */
+export function blockExample(level: Level, board: Board, lanes: readonly (readonly number[])[], color: Primary, blockers: readonly number[]): BlockExample | null {
+  const wanted = new Set(blockers);
+  for (const lane of lanes) {
+    const open = lane.filter((cell) => level.stone[cell] || !cellDone(level, board, cell));
+    const front = open[0];
+    if (front === undefined || !wanted.has(front)) continue;
+    const behind = open.slice(1).find((cell) => wants(level, board, cell, color));
+    if (behind === undefined) continue;
+    const target = level.targets[front] ?? 0;
+    const f: BlockFront = level.stone[front] ? { kind: 'stone', target }
+      : board.hidden[front] ? { kind: 'hidden', target }
+      : board.locked[front] ? { kind: 'locked', target }
+      : { kind: 'pixel', target, paint: board.paint[front]!, ice: board.ice[front]! > 0, unlock: unlockColors(level, board, front) };
+    return { color, front: f, behind: level.targets[behind]! };
+  }
+  return null;
+}
+
+/** The circles pulse this long after a refusal, then stay, steady and fainter, until something changes (#176). */
+export const BLOCKERS_PULSE_MS = 3000;
+/** Opacity of the circles once they stop pulsing. */
+export const BLOCKERS_REST_ALPHA = 0.5;
+
+/** Opacity of the blocker circles `since` ms after the refusal: three slow pulses, then a steady, fainter ring. */
+export function blockerAlpha(since: number): number {
+  if (since < 0) return 1;
+  if (since >= BLOCKERS_PULSE_MS) return BLOCKERS_REST_ALPHA;
+  return 0.55 + 0.45 * Math.cos((since / BLOCKERS_PULSE_MS) * Math.PI * 6);
+}
+
+/**
+ * Fingerprint of the blocking cells' state: the circles go as soon as it changes (a blocker painted, its ice broken,
+ * revealed or unlocked), since the lane they point at may be open by then.
+ */
+export function blockerSignature(board: Board, cells: readonly number[]): string {
+  return cells.map((c) => `${board.paint[c]}.${board.ice[c]}.${board.hidden[c] ? 1 : 0}.${board.locked[c] ? 1 : 0}`).join('|');
 }
