@@ -31,6 +31,8 @@ export interface MixSnapshot {
   blockedTaps?: number;
   belt?: { used: number; capacity: number };
   columns?: Rect[];
+  /** Buckets still waiting in each column, same order as `columns` (absent in older builds). */
+  columnsLeft?: number[];
   slots?: Rect[];
   slotsUsed?: number;
   painted?: number;
@@ -124,6 +126,12 @@ const around = (c: Point, w: number, h: number): Rect => ({ x: c.x - w / 2, y: c
 /** Top-bar buttons of a level (PlayScene.create): ◀ menu, ♪ sound, ⟲ restart. */
 export const TOP_BAR: readonly Rect[] = [around({ x: 60, y: 64 }, 84, 64), around({ x: 540, y: 64 }, 84, 64), around({ x: 660, y: 64 }, 84, 64)];
 
+/** The columns an agent sees as tappable, left to right: those that still hold a bucket (an emptied column is blank space). */
+export function visibleColumns(snap: Pick<MixSnapshot, 'columns' | 'columnsLeft'>): Rect[] {
+  const left = snap.columnsLeft;
+  return (snap.columns ?? []).filter((_, i) => !left || (left[i] ?? 0) > 0);
+}
+
 /**
  * Whether a tap (logical coordinates) lands on something it can act on: a column, a slot, the top bar, or — when a
  * panel or tip covers the board — that panel's buttons only.
@@ -141,8 +149,6 @@ export function onTarget(snap: MixSnapshot, p: Point): boolean {
 
 interface Open extends AttemptTelemetry {
   levelId: number;
-  /** `__mix.blockedTaps` when the attempt opened: the game does not reset it between levels. */
-  blockedBase: number;
   startedAt: number;
   endedAt: number | null;
   actions: number;
@@ -216,8 +222,7 @@ export class SessionRecorder {
     a.launches = a.lastMoves;
     a.durationMs = t - a.startedAt;
     a.refusals = Math.max(a.refusals, snap.refusals ?? 0);
-    // `__mix.blockedTaps` is not reset between levels (the play scene instance is reused): count from the value at entry.
-    a.blockedTaps = Math.max(a.blockedTaps, (snap.blockedTaps ?? 0) - a.blockedBase);
+    a.blockedTaps = Math.max(a.blockedTaps, snap.blockedTaps ?? 0);
     a.maxSlotsUsed = Math.max(a.maxSlotsUsed, snap.slotsUsed ?? 0);
     if ((snap.slots?.length ?? 0) > a.slotCount) a.extraSlotUsed = true;
     if (snap.belt) {
@@ -343,7 +348,7 @@ export class SessionRecorder {
     const a: Open = {
       levelId: snap.levelId!, startedAt: t, endedAt: null, actions: 0, lastTick: snap.tick ?? 0, lastMoves: snap.moves ?? 0, lastOverlay: null, tipSince: null,
       attempt: this.attempts.filter((x) => x.levelId === snap.levelId).length + 1,
-      outcome: 'uscita', durationMs: 0, timeToFirstTapMs: null, ticks: 0, taps: 0, offTargetTaps: 0, launches: 0, refusals: 0, blockedTaps: 0, blockedBase: snap.blockedTaps ?? 0, jams: 0,
+      outcome: 'uscita', durationMs: 0, timeToFirstTapMs: null, ticks: 0, taps: 0, offTargetTaps: 0, launches: 0, refusals: 0, blockedTaps: 0, jams: 0,
       extraSlotUsed: false, maxSlotsUsed: 0, slotCount: snap.slots?.length ?? 1, maxBeltUsed: 0, beltCapacity: snap.belt?.capacity ?? 1,
       painted: 0, targets: snap.targets ?? 1, remaining: { ice: 0, hidden: 0, locked: 0, covered: 0 }, stoneSplashes: 0, reveals: 0,
       tipsShown: [], tipDismissMs: null, consoleErrors: 0, screenshots: [],

@@ -49,6 +49,24 @@ for (const size of [{ width: 360, height: 640 }, { width: 412, height: 915 }]) {
       expect(await mix<string | null>(page, 'tip')).toBeNull();
     });
 
+    test('a retry right after a blocked tap leaves no circles and restarts the count (#179)', async ({ page }) => {
+      await start(page, []);
+      await openLevel(page, 10);
+      expect(await play(page, [{ from: 'column', index: 0 }])).toEqual([]);
+      const slots = await mix<Rect[]>(page, 'slots');
+      await tap(page, slots[0]!.x + slots[0]!.w / 2, slots[0]!.y + slots[0]!.h / 2);
+      expect(await mix<number>(page, 'blockedTaps')).toBe(1);
+      expect((await mix<number[]>(page, 'blockers')).length).toBeGreaterThan(0);
+      await tap(page, 660, 64); // ⟲ retry, well inside the 1.6 s the circles last
+      await page.waitForFunction(() => (window as unknown as { __mix: { moves: number } }).__mix.moves === 0);
+      expect(await mix<number[]>(page, 'blockers')).toEqual([]);
+      expect(await mix<number>(page, 'blockedTaps')).toBe(0);
+      // The fresh level counts its own refusals from zero.
+      expect(await play(page, [{ from: 'column', index: 0 }])).toEqual([]);
+      await tap(page, slots[0]!.x + slots[0]!.w / 2, slots[0]!.y + slots[0]!.h / 2);
+      expect(await mix<number>(page, 'blockedTaps')).toBe(1);
+    });
+
     test('the first level with "+N" under a column explains it once (#148)', async ({ page }) => {
       await start(page, ['queue']);
       await openLevel(page, 5);

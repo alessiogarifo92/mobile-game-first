@@ -12,7 +12,7 @@ import type { Level } from '../../src/core/level';
 import { STORAGE_KEY } from '../../src/core/progress';
 import { validate, validateDef, type Schema } from './jsonSchema';
 import { offPlanStep, planStep, saveFor, type PlanStep } from './saves';
-import { BUDGET, SessionRecorder, StuckWatch, type EndReason, type MixSnapshot, type Scheda, type SessionHeader } from './telemetry';
+import { BUDGET, SessionRecorder, StuckWatch, visibleColumns, type EndReason, type MixSnapshot, type Scheda, type SessionHeader } from './telemetry';
 
 /** Logical width of the game (src/game/theme.ts VIEW): canvas pixels are scaled from it. */
 const LOGICAL_WIDTH = 720;
@@ -42,8 +42,6 @@ export interface ActionResult {
   /** What the harness did on its own or could not do (skip, new save, budget, no such column). */
   notes?: string[];
 }
-
-type Rect = { x: number; y: number; w: number; h: number };
 
 export class PlaytestAgent {
   private shotCount = 0;
@@ -407,7 +405,7 @@ export class PlaytestAgent {
         if (!m?.scene) return null;
         return {
           scene: m.scene, levelId: m.levelId, status: m.status, overlay: m.overlay, tip: m.tip, guide: m.guide, tick: m.tick,
-          moves: m.moves, refusals: m.refusals, blockedTaps: m.blockedTaps, belt: m.belt, columns: m.columns, slots: m.slots, slotsUsed: m.slotsUsed,
+          moves: m.moves, refusals: m.refusals, blockedTaps: m.blockedTaps, belt: m.belt, columns: m.columns, columnsLeft: m.columnsLeft, slots: m.slots, slotsUsed: m.slotsUsed,
           painted: m.painted, targets: m.targets, ice: m.ice, hidden: m.hidden, locked: m.locked, covered: m.covered,
           stoneSplashes: m.stoneSplashes, reveals: m.reveals, jamButtons: m.jamButtons, tipButton: m.tipButton,
           language: m.language, scrollY: m.scrollY,
@@ -464,7 +462,8 @@ export class PlaytestAgent {
   }
 
   private async targetPoint(kind: 'columns' | 'slots', n: number): Promise<{ x: number; y: number } | null> {
-    const rects = await this.page.evaluate((k) => (window.__mix?.scene === 'play' ? (window.__mix[k] as Rect[]) : null), kind).catch(() => null);
+    const snap = await this.read();
+    const rects = snap?.scene !== 'play' ? null : kind === 'columns' ? visibleColumns(snap) : snap.slots;
     const r = rects?.[n - 1];
     if (!r) return null;
     // Aim at the top of the column, where the next bucket sits; a slot is a single cell.
