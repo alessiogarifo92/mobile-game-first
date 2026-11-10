@@ -98,7 +98,7 @@ test.describe('map stage headers do not touch their counter (#160)', () => {
         }
         const before = await mix<number>(page, 'scrollY');
         await page.mouse.move(180, 320);
-        await page.mouse.wheel(0, 300);
+        await page.mouse.wheel(0, 800); // 800 of the 1280 world units on screen: every header is whole in some frame, in ~40 steps (300 took ~105 and timed out on CI)
         await page.waitForTimeout(150);
         still = (await mix<number>(page, 'scrollY')) === before ? still + 1 : 0;
       }
