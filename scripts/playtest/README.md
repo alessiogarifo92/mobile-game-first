@@ -6,7 +6,9 @@ the format of #67 (`docs/playtest/scheda.schema.json`, protocol in `docs/playtes
 - The agent **looks at screenshots and taps**, like a player. `window.__mix` is read only by the harness, to aim
   `column`/`slot` taps and to record telemetry: no part of it reaches the agent.
 - Each agent starts from a known save: levels 1…N−1 completed, N open, the tips a player meets before N
-  (`saves.ts`). The second pack of a plan starts from its own save.
+  (`saves.ts`). The second pack of a plan starts from its own save. A mechanic that shows up in the planned levels
+  keeps its card unseen even if it debuted earlier (#182): the agent has no memory of the levels it did not play,
+  so it meets the card and its drawing at the first planned level with that mechanic (ice in S09).
 - The harness writes the telemetry; the agent sends feedback and bugs; at the end the form is checked against the
   schema (hand-written validator, `jsonSchema.ts`) and written as `<out>/Tnn-Ann.json`, screenshots in `<out>/Tnn-Ann/`.
 

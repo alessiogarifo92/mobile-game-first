@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import levelsJson from '../src/levels/levels.json' with { type: 'json' };
 import { parseLevel, type Level, type LevelDef } from '../src/core/level';
-import { tipOnLevelStart } from '../src/core/onboarding';
+import { tipOnLevelStart, tipsPresent } from '../src/core/onboarding';
 import { sanitize, type LevelRef } from '../src/core/progress';
 import { SchemaError, validate, validateDef, type Schema } from '../scripts/playtest/jsonSchema';
 import { SaveError, offPlanStep, packLevels, planLevels, planStep, saveFor, saveStarts, startSaveOf, tipsMetBefore } from '../scripts/playtest/saves';
@@ -341,6 +341,33 @@ describe('saves and plans', () => {
     const save = saveFor(levels, start, 'it');
     expect(save.completed).toHaveLength(start - 1);
     expect([...save.seenTips].sort()).toEqual(['belt', 'guide', 'hidden', 'ice', 'mixing', 'queue', 'slots', 'stone']);
+  });
+
+  it('leaves unseen the cards of the mechanics the planned pack shows (#182: ice at 81, debuting at 66)', () => {
+    const s09 = packLevels(levels, 'S09');
+    const firstIce = levels.find((l) => tipsPresent(l).includes('ice'))!.id;
+    expect(firstIce).toBeLessThan(s09[0]!);
+    expect(tipsMetBefore(levels, s09[0]!)).toContain('ice'); // a real player met it before
+    const inPack = new Set(levels.filter((l) => s09.includes(l.id)).flatMap(tipsPresent));
+    expect(inPack.has('ice')).toBe(true);
+    const save = saveFor(levels, s09[0]!, 'it', false, s09);
+    expect(save.seenTips).not.toContain('ice');
+    for (const tip of inPack) expect(save.seenTips).not.toContain(tip);
+    // Cards met before but not in the pack stay seen, and so do the cards met in play.
+    expect(save.seenTips).toEqual(tipsMetBefore(levels, s09[0]!).filter((t) => !inPack.has(t as never)));
+    expect(save.seenTips).toEqual(expect.arrayContaining(['guide', 'slots', 'belt']));
+    expect(sanitize(JSON.parse(JSON.stringify(save)), levels)).toEqual(save);
+  });
+
+  it('a pack with no mechanic of its own and the onboarding pack change nothing', () => {
+    expect(saveFor(levels, 1, 'en', false, packLevels(levels, 'U1-ONB')).seenTips).toEqual([]);
+    expect(tipsMetBefore(levels, 50, [])).toEqual(tipsMetBefore(levels, 50));
+    expect(tipsMetBefore(levels, 50, [9999])).toEqual(tipsMetBefore(levels, 50)); // an id the game does not have
+    // The game then shows the card again at the pack's first level with that mechanic.
+    const s09 = packLevels(levels, 'S09');
+    const seen = saveFor(levels, s09[0]!, 'en', false, s09).seenTips;
+    const firstIceInPack = levels.find((l) => s09.includes(l.id) && tipsPresent(l).includes('ice'))!;
+    expect(tipsPresent(firstIceInPack).filter((t) => !seen.includes(t))).toContain('ice');
   });
 
   it('rejects an unknown language or level and a level the game would not open', () => {

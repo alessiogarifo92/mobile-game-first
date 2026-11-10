@@ -21,6 +21,11 @@ export function needsGuide(level: Level, seen: readonly string[]): boolean {
  * (its "+N", #148). One tip per level start, in that order.
  */
 export function tipOnLevelStart(level: Level, seen: readonly string[]): CardTip | null {
+  return tipsPresent(level).find((tip) => !seen.includes(tip)) ?? null;
+}
+
+/** The level-start tips whose mechanic is on the board of `level`, in the order `tipOnLevelStart` shows them. */
+export function tipsPresent(level: Level): CardTip[] {
   const present: [CardTip, boolean][] = [
     ['mixing', level.targets.some((t) => t !== 0 && !isPrimary(t))],
     ['brown', level.targets.includes(BROWN)],
@@ -31,7 +36,7 @@ export function tipOnLevelStart(level: Level, seen: readonly string[]): CardTip 
     ['covered', level.columns.some((column) => column.some((s) => s.covered))],
     ['queue', level.columns.some((column) => column.length > COLUMN_SHOWN)],
   ];
-  return present.find(([tip, here]) => here && !seen.includes(tip))?.[0] ?? null;
+  return present.filter(([, here]) => here).map(([tip]) => tip);
 }
 
 /**

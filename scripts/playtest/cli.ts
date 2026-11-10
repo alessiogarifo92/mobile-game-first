@@ -128,7 +128,7 @@ async function main(): Promise<void> {
       turn: turn.turn,
       build: { commit, version, ...(turn.tag ? { tag: turn.tag } : {}), variant: turn.variant },
       device: { viewport: `${a.viewport.width}x${a.viewport.height}`, language: a.language },
-      startSave: startSaveOf(saveFor(levels, plan[0]!, a.language)),
+      startSave: startSaveOf(saveFor(levels, plan[0]!, a.language, false, plan)),
       plan: { packs: a.packs, levelIds: plan },
     };
     agents.set(a.agentId, await PlaytestAgent.start(browser, { header, levels, gameUrl: game.url, outDir: out, maxAttempts: a.maxAttempts, schema, stuckMs: Number(args['stuck-ms']) }));
