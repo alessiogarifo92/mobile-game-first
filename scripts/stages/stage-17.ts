@@ -48,7 +48,7 @@ const stage: StageSpec = {
       '...KOOK...',
       '....KK....',
     ] },
-    { name: 'robin', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { stone: 5 }, winRate: [0.61, 0.67], seed: 17111, image: [
+    { name: 'robin', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { stone: 5, stonePlacement: 'blocking' }, stoneBite: 0.03, winRate: [0.61, 0.67], seed: 17111, image: [
       '...KKKK.....',
       '..KKKKKK....',
       '.KKBKKKKYY..',

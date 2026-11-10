@@ -388,16 +388,6 @@ export class PlayScene extends Phaser.Scene {
       brownPixel(g, cx - 104, y2 - 24, 48, 48, RED | YELLOW);
       inner.add(label(this, cx, y2, `${SYMBOL[BLUE]}→`, THEME.type.sm, css(PAINT[BLUE]!)));
       sq(cx + 80, y2, PAINT[BROWN]!);
-    } else if (id === 'stone') {
-      // Belt → stone: the drop stops; the pixel behind is painted from the other side.
-      const y = y0 + 200;
-      inner.add(label(this, cx - 220, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
-      drawStone(g, cx - 164, y - 24, 48, 48);
-      sq(cx - 80, y, THEME.emptyPixel);
-      sq(cx - 80, y, PAINT[RED]!, 0.3);
-      inner.add(label(this, cx, y, '←●', THEME.type.sm, css(PAINT[RED]!)));
-      inner.add(label(this, cx + 80, y, '=', THEME.type.md));
-      sq(cx + 160, y, PAINT[RED]!);
     } else if (id === 'lock') {
       // Key done → padlock opens → the pixel can be painted.
       const y = y0 + 200;

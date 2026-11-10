@@ -2,17 +2,17 @@ import Phaser from 'phaser';
 import { BLUE, RED, YELLOW } from '../core/colors';
 import type { CardTip } from '../core/onboarding';
 import { PAINT, THEME, css } from './theme';
-import { drawIce, label } from './ui';
+import { drawIce, drawStone, label } from './ui';
 
 /** Tips whose illustration is shared by the in-game card and How to play (#183): the rules How to play has no base page for. */
-export type SharedTipArt = 'ice' | 'belt' | 'hidden' | 'queue' | 'leftover';
+export type SharedTipArt = 'ice' | 'belt' | 'hidden' | 'queue' | 'leftover' | 'stone';
 
 export function hasSharedArt(id: CardTip): id is SharedTipArt {
-  return id === 'ice' || id === 'belt' || id === 'hidden' || id === 'queue' || id === 'leftover';
+  return id === 'ice' || id === 'belt' || id === 'hidden' || id === 'queue' || id === 'leftover' || id === 'stone';
 }
 
 /** Horizontal extent of each illustration (belt at 4 buckets), so How to play can scale it to its card. */
-export const TIP_ART_WIDTH: Record<SharedTipArt, number> = { ice: 370, belt: 370, hidden: 390, queue: 320, leftover: 500 };
+export const TIP_ART_WIDTH: Record<SharedTipArt, number> = { ice: 370, belt: 370, hidden: 390, queue: 320, leftover: 500, stone: 300 };
 
 /**
  * Draws a tip's illustration around (cx, y0): y0 is the top of the in-game tip card, so the art sits where it always has.
@@ -61,6 +61,23 @@ export function drawTipArt(
     sq(cx + 80, y, PAINT[RED]!);
     sq(cx + 140, y, THEME.emptyPixel);
     sq(cx + 140, y, PAINT[BLUE]!, 0.3);
+  } else if (id === 'stone') {
+    // Two lanes through the same stone and pixel (#147). Top: the drop from the left bursts on the stone and the pixel
+    // behind stays unpainted (✕). Bottom: the drop from the right meets the pixel first and paints it.
+    const ya = y0 + 140;
+    const yb = y0 + 220;
+    const stoneX = cx - 40;
+    const pixelX = cx + 20;
+    add(label(scene, cx - 110, ya, '●→', THEME.type.sm, css(PAINT[RED]!)));
+    drawStone(g, stoneX - 24, ya - 24, 48, 48);
+    g.fillStyle(THEME.stoneDark, 1);
+    [[-30, -10, 4], [-34, 6, 3], [-28, 16, 2]].forEach(([dx, dy, r]) => g.fillCircle(stoneX + dx!, ya + dy!, r!));
+    sq(pixelX, ya, THEME.emptyPixel);
+    sq(pixelX, ya, PAINT[RED]!, 0.3);
+    add(label(scene, pixelX, ya, '✕', THEME.type.md, THEME.inkCss));
+    drawStone(g, stoneX - 24, yb - 24, 48, 48);
+    sq(pixelX, yb, PAINT[RED]!);
+    add(label(scene, cx + 90, yb, '←●', THEME.type.sm, css(PAINT[RED]!)));
   } else if (id === 'queue') {
     // A column shows three buckets and "+2": two more wait behind them, out of sight.
     const jarAt = (bx: number, by: number, fill: number, alpha: number) => {

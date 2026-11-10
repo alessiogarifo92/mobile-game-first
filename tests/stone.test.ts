@@ -195,6 +195,21 @@ describe('stone: onboarding and curve', () => {
     expect(HOWTO_PAGES).toBeGreaterThanOrEqual(5);
     expect(DICTIONARIES.it['howto.5.title']).toBe('Pietre');
   });
+
+  it('explains that the pixel behind a stone stays blank and is painted from the other side (#147)', () => {
+    const { en, it: itd } = DICTIONARIES;
+    expect(en['tip.stone.body']).toMatch(/stays blank/);
+    expect(en['tip.stone.body']).toMatch(/other side of the belt/);
+    expect(itd['tip.stone.body']).toMatch(/resta vuoto/);
+    expect(itd['tip.stone.body']).toMatch(/lato opposto/);
+    expect(en['howto.5.body']).toMatch(/stay blank/);
+    expect(itd['howto.5.body']).toMatch(/restano vuoti/);
+    // The in-game card breaks into two lines; How to play wraps on its own.
+    for (const d of [en, itd]) {
+      expect(d['tip.stone.body'].split('\n')).toHaveLength(2);
+      expect(d['howto.5.body']).not.toContain('\n');
+    }
+  });
 });
 
 describe('stone: debut at level 81 (#157, was 141 in #125)', () => {

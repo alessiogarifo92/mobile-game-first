@@ -5,9 +5,9 @@ import { VIEW } from '../../core/layout';
 import type { MessageKey } from '../../core/i18n';
 import { publishDebug } from '../debug';
 import { getProgress, t } from '../store';
-import { PAINT, SYMBOL, THEME, css } from '../theme';
+import { PAINT, SYMBOL, THEME } from '../theme';
 import { TIP_ART_WIDTH, drawTipArt, hasSharedArt } from '../tipArt';
-import { brownPixel, button, drawStone, keyIcon, label, lockIcon, screenBackground } from '../ui';
+import { brownPixel, button, keyIcon, label, lockIcon, screenBackground } from '../ui';
 
 /** Gap, in logical units, between the base dots and the "unlocked rule" dots. */
 const DOT_STEP = 32;
@@ -204,15 +204,12 @@ export class HowToScene extends Phaser.Scene {
       label(this, cx + 90, 540, '→', THEME.type.lg);
       this.pixel(g, cx + 170, 540, BROWN, 90);
     } else if (page === 4) {
-      // Stones (#95): the drop from the left stops on the stone; the pixel behind takes paint from the right.
-      label(this, cx - 170, 420, '●→', THEME.type.lg, css(PAINT[RED]!));
-      drawStone(g, cx - 100, 375, 90, 90);
-      // An unfinished pixel: the ghost of the colour it still needs.
-      g.fillStyle(THEME.emptyPixel, 1);
-      g.fillRoundedRect(cx + 20, 375, 90, 90, THEME.radius.cell);
-      g.fillStyle(PAINT[RED]!, 0.3);
-      g.fillRoundedRect(cx + 36, 391, 58, 58, THEME.radius.cell);
-      label(this, cx + 180, 420, '←●', THEME.type.lg, css(PAINT[RED]!));
+      // Stones (#95, #147): the same two lanes as the in-game card, scaled up and centred on the card, which grows on
+      // taller screens (create()).
+      const box = this.add.container(cx, 470 + (this.scale.height - VIEW.height) / 4);
+      box.add(g);
+      drawTipArt(this, g, (o) => box.add(o), 'stone', 0, -183, 4);
+      box.setScale(Math.min(1.5, 540 / TIP_ART_WIDTH.stone));
     } else if (page === 5) {
       // A key pixel, then the padlocked pixel it opens.
       this.pixel(g, cx - 150, 420, YELLOW);
