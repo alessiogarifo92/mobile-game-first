@@ -35,16 +35,34 @@ export function tipOnLevelStart(level: Level, seen: readonly string[]): CardTip 
 }
 
 /**
+ * Cards that answer something that just went wrong on screen: a refused tap, a bucket that came back without
+ * painting, a full belt. They show whenever the player hits that case, even after another card in the same level.
+ */
+export const CORRECTIVE_TIPS: readonly CardTip[] = ['blocked', 'belt'];
+
+/**
+ * How many cards one level may show (#177). Every card that only teaches (a new mechanic at level start, the
+ * slots, why a bucket came back) counts, and at most one of them shows per level: the second waits for a later
+ * level, where it fires on the same trigger. Corrective cards (`CORRECTIVE_TIPS`) do not count and are never held
+ * back, because without them the player is stuck on a refusal with no explanation.
+ */
+export function tipAllowed(tip: CardTip, shownThisLevel: readonly CardTip[]): boolean {
+  return CORRECTIVE_TIPS.includes(tip) || shownThisLevel.every((t) => CORRECTIVE_TIPS.includes(t));
+}
+
+/**
  * Tip to show when a bucket comes back to a waiting slot. A bucket that could not shoot at all is
  * the confusing case, so it explains blocked lanes first; otherwise it explains the slots. Once the slots are known,
- * the next bucket that painted and still came back explains why it did (#172): no pixel of its colour was left in
- * reach for the paint it carried.
+ * a bucket that painted and still came back explains why it did (#172): no pixel of its colour was left in
+ * reach for the paint it carried. `shownThisLevel` applies the one-card-per-level rule (`tipAllowed`): in level 2
+ * the slots card fires on the first return, so "why it came back" waits for the next level instead of following it.
  */
-export function tipOnReturn(hadHits: boolean, seen: readonly string[]): CardTip | null {
-  if (!hadHits && !seen.includes('blocked')) return 'blocked';
-  if (!seen.includes('slots')) return 'slots';
-  if (hadHits && !seen.includes('leftover')) return 'leftover';
-  return null;
+export function tipOnReturn(hadHits: boolean, seen: readonly string[], shownThisLevel: readonly CardTip[] = []): CardTip | null {
+  const next = !hadHits && !seen.includes('blocked') ? 'blocked'
+    : !seen.includes('slots') ? 'slots'
+    : hadHits && !seen.includes('leftover') ? 'leftover'
+    : null;
+  return next && tipAllowed(next, shownThisLevel) ? next : null;
 }
 
 /** Tip to show when a tap on a waiting bucket is refused because it could not land a shot (#146). */
