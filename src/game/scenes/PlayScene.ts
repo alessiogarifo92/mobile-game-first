@@ -10,7 +10,7 @@ import { blockExample, blockerAlpha, blockerSignature, refuseSlotLaunch, unlockC
 import type { Primary } from '../../core/colors';
 import { missingDots } from '../../core/brownPixel';
 import { forecastLeftover, freeSlots, leftoverHint, type LeftoverForecast } from '../../core/leftover';
-import { PANEL_ARM_MS, jamHintKey } from '../../core/panelInput';
+import { PANEL_ARM_MS, PANEL_FADE_MS, jamHintKey } from '../../core/panelInput';
 import { newlyCompletedUniverse } from '../../core/universeMenu';
 import { universeLevels, universeOf } from '../../core/universes';
 import { COLOR_CODES } from '../../core/colors';
@@ -872,10 +872,10 @@ export class PlayScene extends Phaser.Scene {
       this.completedUniverse = newlyCompletedUniverse(LEVELS, before, this.level.id);
       this.firstWin = !before.includes(this.level.id);
       markCompleted(this.level.id);
-      this.time.delayedCall(450, () => {
-        sfx.win();
-        this.showWin();
-      });
+      // #178: the panel opens now, fading in, rather than after a dead gap in which a tap meant for the board would
+      // land on a panel button the moment it armed.
+      sfx.win();
+      this.showWin();
     } else {
       sfx.jam();
       this.showJam();
@@ -929,6 +929,8 @@ export class PlayScene extends Phaser.Scene {
       if (stage) this.scene.start('album', { stage });
       else this.scene.start('menu');
     }, { fill: THEME.belt, color: THEME.inkCss, size: THEME.type.sm, name: stage ? 'album' : 'map', armMs: PANEL_ARM_MS }));
+    c.setAlpha(0);
+    this.tweens.add({ targets: c, alpha: 1, duration: PANEL_FADE_MS, ease: 'Quad.easeOut' });
     this.publish();
   }
 

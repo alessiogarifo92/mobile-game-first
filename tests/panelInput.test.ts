@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PANEL_ARM_MS, jamHintKey, panelArmed } from '../src/core/panelInput';
+import { PANEL_ARM_MS, PANEL_FADE_MS, jamHintKey, panelArmed } from '../src/core/panelInput';
 import { translate } from '../src/core/i18n';
 
 describe('panel input arming (#161)', () => {
@@ -18,6 +18,17 @@ describe('panel input arming (#161)', () => {
   it('honours a custom delay', () => {
     expect(panelArmed(150, 0, 100)).toBe(true);
     expect(panelArmed(50, 0, 100)).toBe(false);
+  });
+});
+
+describe('win panel reveal (#178)', () => {
+  it('fades in fast enough not to read as a delay', () => {
+    expect(PANEL_FADE_MS).toBeGreaterThan(0);
+    expect(PANEL_FADE_MS).toBeLessThanOrEqual(250);
+  });
+  it('is fully visible before its buttons arm, so no tap lands on a button the player cannot see yet', () => {
+    expect(PANEL_FADE_MS).toBeLessThan(PANEL_ARM_MS);
+    expect(panelArmed(PANEL_FADE_MS, 0)).toBe(false);
   });
 });
 

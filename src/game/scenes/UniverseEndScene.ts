@@ -10,6 +10,7 @@ import { publishDebug } from '../debug';
 import { LEVELS, UNIVERSES, getProgress, t } from '../store';
 import { PAINT, THEME } from '../theme';
 import { drawSkin } from '../skins';
+import { PANEL_ARM_MS } from '../../core/panelInput';
 import { button, drawMural, drawMuralTile, label, lockIcon, screenBackground } from '../ui';
 
 /** Time between two tiles joining the mural, and how long each takes to appear. */
@@ -111,7 +112,7 @@ export class UniverseEndScene extends Phaser.Scene {
     const by = Math.min(this.scale.height - 80, cardY + 220);
     button(this, VIEW.width / 2, by, 460, 88, next ? t('universes.next', { n: next.id }) : t('win.map'), () => {
       this.scene.start('menu', next ? { universe: next.id } : {});
-    }, { name: 'go' });
+    }, { name: 'go', armMs: PANEL_ARM_MS });
     this.next = next?.id ?? null;
     this.goButton = { x: VIEW.width / 2, y: by };
     this.publish();
