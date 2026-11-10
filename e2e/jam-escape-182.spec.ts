@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { translate } from '../src/core/i18n';
-import { LAST_LEVEL, checkOnScreen, mix, openLevel, play, waitScene } from './helpers';
+import { LAST_LEVEL, checkOnScreen, mix, play, tapLevel, waitScene } from './helpers';
 
 /**
  * #182 N2: while a "!" warns of a jam, the line under the title says how to get out of it, and a gold ring marks the
@@ -12,6 +12,17 @@ const ALL_TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt'
 const evidence = process.env.EVIDENCE;
 type Escape = { kind: string; from?: string; index?: number; key: string } | null;
 const escape = (page: Page) => mix<Escape>(page, 'escape');
+
+/** On the 360x640 map a tap can land while the map still glides after the scroll: tap again, up to three times. */
+async function openLevel(page: Page, id: number) {
+  for (let i = 0; i < 3; i++) {
+    await tapLevel(page, id);
+    const opened = await page.waitForFunction(() => (window as unknown as { __mix: { scene: string } }).__mix.scene === 'play', null, { timeout: 3000 })
+      .then(() => true, () => false);
+    if (opened) return;
+  }
+  throw new Error(`level ${id} did not open`);
+}
 
 for (const size of [{ width: 360, height: 640 }, { width: 412, height: 915 }]) {
   test.describe(`on a ${size.width}x${size.height} phone`, () => {
