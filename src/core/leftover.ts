@@ -57,3 +57,37 @@ export function leftoverHint(f: LeftoverForecast): LeftoverHint | null {
   const risky = f.fillsLastSlot || f.jams;
   return { leftover: f.leftover, risky, label: `↩${f.leftover}${risky ? '!' : ''}` };
 }
+
+/**
+ * How to get out of the jam a "!" warns about (#182), from the buckets the player could launch now:
+ * - `empty`: one of them would not come back (no "↩"). Launch it first; from a waiting slot it also frees that slot.
+ *   A slot is preferred to a column, then the leftmost.
+ * - `extraSlot`: none is safe, but the jam panel will still offer "+1 slot" (once per attempt).
+ * - `order`: none is safe and "+1 slot" is used: only another order of launches avoids the jam.
+ * Null when no bucket shows a "!", so there is nothing to warn about. Same forecast as the pills, so an estimate
+ * while other buckets ride the belt.
+ */
+export type JamEscape =
+  | { kind: 'empty'; from: 'slot' | 'column'; index: number }
+  | { kind: 'extraSlot' }
+  | { kind: 'order' };
+
+export function jamEscape(state: GameState): JamEscape | null {
+  if (state.status !== 'playing') return null;
+  const launchable: { from: 'slot' | 'column'; index: number; f: LeftoverForecast }[] = [];
+  state.slots.forEach((s, index) => {
+    if (s) launchable.push({ from: 'slot', index, f: forecastLeftover(state, s.color, s.ammo) });
+  });
+  state.queues.forEach((q, index) => {
+    if (q[0]) launchable.push({ from: 'column', index, f: forecastLeftover(state, q[0].color, q[0].ammo) });
+  });
+  if (!launchable.some((b) => leftoverHint(b.f)?.risky)) return null;
+  const safe = launchable.find((b) => !b.f.returns);
+  if (safe) return { kind: 'empty', from: safe.from, index: safe.index };
+  return state.extraSlotUsed ? { kind: 'order' } : { kind: 'extraSlot' };
+}
+
+/** The i18n key of the line that tells the player the way out (`escape.*`). */
+export function escapeKey(e: JamEscape): 'escape.column' | 'escape.slot' | 'escape.extraSlot' | 'escape.order' {
+  return e.kind === 'empty' ? (e.from === 'slot' ? 'escape.slot' : 'escape.column') : e.kind === 'extraSlot' ? 'escape.extraSlot' : 'escape.order';
+}
