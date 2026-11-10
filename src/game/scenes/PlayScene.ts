@@ -32,7 +32,6 @@ import { brownPixel, button, drawIce, drawStone, keyIcon, label, lockIcon, progr
 
 const TICK_MS = 85;
 const BELT_JAR = 54;
-const TIP_H = 620;
 /** How long a refused tap shakes its column and highlights the belt indicator. */
 const REFUSE_MS = 450;
 /** How long the pixels that block a refused waiting bucket stay circled (#146). */
@@ -71,6 +70,11 @@ export class PlayScene extends Phaser.Scene {
   private guide: GuideStep | null = null;
   private guideLayer: Phaser.GameObjects.Container | null = null;
   private tip: { id: CardTip; card: Phaser.GameObjects.Container } | null = null;
+  /** Y of the open card's OK button, published for the e2e helpers. */
+  private tipOkY = 0;
+  private tipBox = { y: 0, h: 0 };
+  /** Cards shown in this level: at most one teaching card per level (#177, rule in core/onboarding). */
+  private tipsShown: CardTip[] = [];
   /** Ammo each shooter had when it was launched, to tell whether its loop hit anything. */
   private launchAmmo = new Map<number, number>();
   private hiddenMarks = new Map<number, Phaser.GameObjects.Text>();
@@ -84,6 +88,7 @@ export class PlayScene extends Phaser.Scene {
   private firstWin = false;
   private universeDone: { done: number; total: number; plusOne: boolean } | null = null;
   private winText = '';
+  private winHint = '';
   private beltText!: Phaser.GameObjects.Text;
   /** Last launch refused because the belt was full: the tapped column or slot shakes for a moment. */
   private refused: { column: number; slot: number; at: number; belt: boolean } | null = null;
@@ -124,9 +129,13 @@ export class PlayScene extends Phaser.Scene {
     this.firstWin = false;
     this.universeDone = null;
     this.winText = '';
+    this.winHint = '';
     this.guide = null;
     this.guideLayer = null;
     this.tip = null;
+    this.tipOkY = 0;
+    this.tipBox = { y: 0, h: 0 };
+    this.tipsShown = [];
     this.launchAmmo = new Map();
     this.reveals = new Map();
     this.pixelsDirty = false;
@@ -325,66 +334,81 @@ export class PlayScene extends Phaser.Scene {
 
   private showTip(id: CardTip): void {
     if (this.tip || tipSeen(id) || this.gs.status !== 'playing') return;
+    // The card is drawn in its own coordinates (top = 0), sized to its content, then docked just below the belt so the
+    // belt and the slots it talks about stay in view (#177).
     const w = 600;
-    const h = TIP_H;
     const x0 = (VIEW.width - w) / 2;
-    const y0 = (this.scale.height - h) / 2;
+    const y0 = 0;
     const shade = screenBackground(this, THEME.ink, 0.45).setInteractive();
+    const bg = this.add.graphics();
     const g = this.add.graphics();
-    g.fillStyle(THEME.bg, 1);
-    g.fillRoundedRect(x0, y0, w, h, THEME.radius.panel);
-    const card = this.add.container(0, 0, [shade, g]).setDepth(12);
-    card.add(label(this, VIEW.width / 2, y0 + 60, t(`tip.${id}.title` as const), THEME.type.lg));
+    const inner = this.add.container(0, 0, [bg, g]);
+    const card = this.add.container(0, 0, [shade, inner]).setDepth(12);
+    inner.add(label(this, VIEW.width / 2, y0 + 60, t(`tip.${id}.title` as const), THEME.type.lg));
     const sq = (gx: number, gy: number, fill: number, alpha = 1) => {
       g.fillStyle(fill, alpha);
       g.fillRoundedRect(gx - 24, gy - 24, 48, 48, THEME.radius.cell);
     };
     const cx = VIEW.width / 2;
-    if (hasSharedArt(id)) drawTipArt(this, g, (o) => card.add(o), id, cx, y0, this.level.beltCapacity);
-    else if (id === 'mixing') {
+    if (hasSharedArt(id)) drawTipArt(this, g, (o) => inner.add(o), id, cx, y0, this.level.beltCapacity);
+    else if (id === 'slots') {
+      // The waiting slots, as on page 2 of How to play: two buckets parked, one slot still free (#177).
+      const y = y0 + 190;
+      [YELLOW, BLUE, null].forEach((col, i) => {
+        const sx = cx - 105 + i * 105;
+        g.lineStyle(3, THEME.ink, 0.3);
+        g.strokeRoundedRect(sx - 42, y - 42, 84, 84, THEME.radius.jar);
+        if (col === null) return;
+        g.fillStyle(PAINT[col]!, 1);
+        g.fillRoundedRect(sx - 32, y - 32, 64, 64, THEME.radius.jar);
+        g.lineStyle(3, THEME.ink, 1);
+        g.strokeRoundedRect(sx - 32, y - 32, 64, 64, THEME.radius.jar);
+        inner.add(label(this, sx, y, SYMBOL[col]!, THEME.type.md, '#ffffff'));
+      });
+    } else if (id === 'mixing') {
       // Visual equations: the whole tip in one glance.
       const rows: [number, number, number][] = [[RED, YELLOW, ORANGE], [YELLOW, BLUE, GREEN], [RED, BLUE, PURPLE]];
       rows.forEach(([a, b, c], i) => {
         const y = y0 + 140 + i * 62;
         [a, b, c].forEach((col, k) => sq(cx - 126 + k * 120, y, PAINT[col]!));
-        card.add(label(this, cx - 66, y, '+', THEME.type.md));
-        card.add(label(this, cx + 54, y, '=', THEME.type.md));
+        inner.add(label(this, cx - 66, y, '+', THEME.type.md));
+        inner.add(label(this, cx + 54, y, '=', THEME.type.md));
       });
     } else if (id === 'brown') {
       // Red + yellow + blue = brown, then a brown pixel with two of its three wedges painted: blue is missing.
       const y = y0 + 150;
       [RED, YELLOW, BLUE, BROWN].forEach((col, k) => sq(cx - 210 + k * 120 + (k === 3 ? 20 : 0), y, PAINT[col]!));
-      card.add(label(this, cx - 150, y, '+', THEME.type.md));
-      card.add(label(this, cx - 30, y, '+', THEME.type.md));
-      card.add(label(this, cx + 100, y, '=', THEME.type.md));
+      inner.add(label(this, cx - 150, y, '+', THEME.type.md));
+      inner.add(label(this, cx - 30, y, '+', THEME.type.md));
+      inner.add(label(this, cx + 100, y, '=', THEME.type.md));
       const y2 = y0 + 225;
       sq(cx - 80, y2, THEME.emptyPixel);
       sq(cx - 80, y2, PAINT[BROWN]!, 0.3);
       brownPixel(g, cx - 104, y2 - 24, 48, 48, RED | YELLOW);
-      card.add(label(this, cx, y2, `${SYMBOL[BLUE]}→`, THEME.type.sm, css(PAINT[BLUE]!)));
+      inner.add(label(this, cx, y2, `${SYMBOL[BLUE]}→`, THEME.type.sm, css(PAINT[BLUE]!)));
       sq(cx + 80, y2, PAINT[BROWN]!);
     } else if (id === 'stone') {
       // Belt → stone: the drop stops; the pixel behind is painted from the other side.
       const y = y0 + 200;
-      card.add(label(this, cx - 220, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
+      inner.add(label(this, cx - 220, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
       drawStone(g, cx - 164, y - 24, 48, 48);
       sq(cx - 80, y, THEME.emptyPixel);
       sq(cx - 80, y, PAINT[RED]!, 0.3);
-      card.add(label(this, cx, y, '←●', THEME.type.sm, css(PAINT[RED]!)));
-      card.add(label(this, cx + 80, y, '=', THEME.type.md));
+      inner.add(label(this, cx, y, '←●', THEME.type.sm, css(PAINT[RED]!)));
+      inner.add(label(this, cx + 80, y, '=', THEME.type.md));
       sq(cx + 160, y, PAINT[RED]!);
     } else if (id === 'lock') {
       // Key done → padlock opens → the pixel can be painted.
       const y = y0 + 200;
       sq(cx - 200, y, PAINT[YELLOW]!);
       keyIcon(g, cx - 200, y, 38);
-      card.add(label(this, cx - 120, y, '→', THEME.type.lg));
+      inner.add(label(this, cx - 120, y, '→', THEME.type.lg));
       sq(cx - 40, y, PAINT[RED]!, 0.3);
       lockIcon(g, cx - 40, y, 36);
-      card.add(label(this, cx + 40, y, '→', THEME.type.lg));
+      inner.add(label(this, cx + 40, y, '→', THEME.type.lg));
       sq(cx + 120, y, THEME.emptyPixel);
       sq(cx + 120, y, PAINT[RED]!, 0.3);
-      card.add(label(this, cx + 200, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
+      inner.add(label(this, cx + 200, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
     } else if (id === 'covered') {
       // A "?" bucket behind the front → at the front it shows its colour.
       const y = y0 + 200;
@@ -393,10 +417,10 @@ export class PlayScene extends Phaser.Scene {
         g.fillRoundedRect(bx - 32, y - 32, 64, 64, THEME.radius.jar);
         g.lineStyle(3, THEME.ink, 1);
         g.strokeRoundedRect(bx - 32, y - 32, 64, 64, THEME.radius.jar);
-        card.add(label(this, bx, y, mark, THEME.type.md, '#ffffff'));
+        inner.add(label(this, bx, y, mark, THEME.type.md, '#ffffff'));
       };
       bucket(cx - 110, THEME.hidden, '?');
-      card.add(label(this, cx, y, '→', THEME.type.lg));
+      inner.add(label(this, cx, y, '→', THEME.type.lg));
       bucket(cx + 110, PAINT[BLUE]!, SYMBOL[BLUE]!);
     } else if (id === 'blocked') {
       // The bucket just refused (#176): its shot → the first cell in its way (circled, with what opens it) → the pixel
@@ -410,13 +434,13 @@ export class PlayScene extends Phaser.Scene {
       g.fillRoundedRect(bx - 26, y - 26, 52, 52, THEME.radius.jar);
       g.lineStyle(3, THEME.ink, 1);
       g.strokeRoundedRect(bx - 26, y - 26, 52, 52, THEME.radius.jar);
-      card.add(label(this, bx, y, SYMBOL[ex.color]!, THEME.type.sm, '#ffffff'));
-      card.add(label(this, cx - 178, y, '→', THEME.type.md, css(PAINT[ex.color]!)));
+      inner.add(label(this, bx, y, SYMBOL[ex.color]!, THEME.type.sm, '#ffffff'));
+      inner.add(label(this, cx - 178, y, '→', THEME.type.md, css(PAINT[ex.color]!)));
       const f = ex.front;
       if (f.kind === 'stone') drawStone(g, fx - 24, y - 24, 48, 48);
       else if (f.kind === 'hidden') {
         sq(fx, y, THEME.hidden);
-        card.add(label(this, fx, y, '?', THEME.type.md, '#ffffff'));
+        inner.add(label(this, fx, y, '?', THEME.type.md, '#ffffff'));
       } else {
         sq(fx, y, THEME.emptyPixel);
         sq(fx, y, PAINT[f.target]!, 0.3);
@@ -432,20 +456,34 @@ export class PlayScene extends Phaser.Scene {
       }
       g.lineStyle(5, THEME.ink, 1);
       g.strokeCircle(fx, y, 38);
-      if (f.kind === 'pixel') this.unlockDots(g, f.unlock, fx, y - 38, 13, (dx, dy, s) => card.add(label(this, dx, dy, s, 14, THEME.inkCss)));
-      card.add(label(this, cx - 20, y, '✕', THEME.type.md, THEME.inkCss));
+      if (f.kind === 'pixel') this.unlockDots(g, f.unlock, fx, y - 38, 13, (dx, dy, s) => inner.add(label(this, dx, dy, s, 14, THEME.inkCss)));
+      inner.add(label(this, cx - 20, y, '✕', THEME.type.md, THEME.inkCss));
       sq(cx + 70, y, THEME.emptyPixel);
       sq(cx + 70, y, PAINT[ex.behind]!, 0.3);
     }
     const bodyY = id === 'mixing' ? y0 + 340 : id === 'leftover' ? y0 + 250 : y0 + 290;
-    card.add(label(this, VIEW.width / 2, bodyY, t(`tip.${id}.body` as const, { n: this.level.beltCapacity }), THEME.type.sm, THEME.subCss, false)
-      .setWordWrapWidth(w - 60).setOrigin(0.5, 0));
-    card.add(button(this, VIEW.width / 2, y0 + h - 70, 300, 80, t('tip.gotIt'), () => {
+    const text = label(this, VIEW.width / 2, bodyY, t(`tip.${id}.body` as const, { n: this.level.beltCapacity }), THEME.type.sm, THEME.subCss, false)
+      .setWordWrapWidth(w - 60).setOrigin(0.5, 0);
+    inner.add(text);
+    // Height fitted to the text: no empty band between the body and the button (P3 of #174).
+    const pad = THEME.space.md;
+    const h = Math.ceil(text.y + text.height) + pad + 80 + pad;
+    bg.fillStyle(THEME.bg, 1);
+    bg.fillRoundedRect(x0, y0, w, h, THEME.radius.panel);
+    const okY = h - pad - 40;
+    inner.add(button(this, VIEW.width / 2, okY, 300, 80, t('tip.gotIt'), () => {
       markTip(id);
       card.destroy();
       this.tip = null;
       this.publish();
     }, { name: 'tip-ok' }));
+    const belt = this.layout.belt;
+    // Docked under the belt; on short screens it rises only as far as it must to stay on screen.
+    const top = Math.max(THEME.space.xs, Math.min(belt.y + belt.h + THEME.space.xs, this.scale.height - h - THEME.space.xs));
+    inner.y = top;
+    this.tipOkY = top + okY;
+    this.tipBox = { y: top, h };
+    this.tipsShown.push(id);
     this.tip = { id, card };
     this.publish();
   }
@@ -461,7 +499,7 @@ export class PlayScene extends Phaser.Scene {
         for (const d of this.gs.departures) {
           if (d.slot === null) continue;
           const back = this.gs.slots[d.slot];
-          const tip = tipOnReturn(back?.ammo !== this.launchAmmo.get(d.shooterId), getProgress().seenTips);
+          const tip = tipOnReturn(back?.ammo !== this.launchAmmo.get(d.shooterId), getProgress().seenTips, this.tipsShown);
           if (tip && !this.guide) this.showTip(tip);
         }
         if (this.guide) this.updateGuide();
@@ -914,7 +952,15 @@ export class PlayScene extends Phaser.Scene {
     const summary = t('win.summary', { name: levelTitle(this.level.id), moves: this.moves });
     this.winText = stageDone ? `${summary}\n${stageDone}` : summary;
     c.add(label(this, VIEW.width / 2, oy + size + 32, summary, THEME.type.sm, THEME.subCss, false).setWordWrapWidth(520));
-    if (stageDone) c.add(label(this, VIEW.width / 2, oy + size + 96, stageDone, THEME.type.sm, THEME.inkCss, true).setWordWrapWidth(520));
+    const stageLabel = stageDone ? label(this, VIEW.width / 2, oy + size + 80, stageDone, THEME.type.sm, THEME.inkCss, true).setWordWrapWidth(560) : null;
+    if (stageLabel) c.add(stageLabel);
+    // #177 (P7): say where the new style lives and what the Album button is for,
+    // hung under the stage line wherever it ends (it wraps to two lines in Italian).
+    const albumHint = this.completedStage && stageSkin(this.completedStage) ? t('win.albumHint') : '';
+    if (albumHint && stageLabel) {
+      c.add(label(this, VIEW.width / 2, stageLabel.y + stageLabel.height / 2 + 4, albumHint, THEME.type.xs, THEME.subCss, false).setWordWrapWidth(560).setOrigin(0.5, 0));
+    }
+    this.winHint = albumHint;
     this.addUniverseProgress(c, top + 538);
     const isLast = this.level.id >= LEVELS.length;
     const party = this.completedUniverse;
@@ -992,6 +1038,7 @@ export class PlayScene extends Phaser.Scene {
       completedUniverse: this.completedUniverse,
       universeProgress: this.universeDone,
       winText: this.winText,
+      winHint: this.winHint,
       winButtons: { next: { x: VIEW.width / 2, y: (this.scale.height - 760) / 2 + 600 }, second: { x: VIEW.width / 2, y: (this.scale.height - 760) / 2 + 700 } },
       beltBusy: gs.belt.length + gs.pending.length > 0,
       belt: beltLoad(gs),
@@ -1028,7 +1075,10 @@ export class PlayScene extends Phaser.Scene {
       },
       tip: this.tip?.id ?? null,
       moves: this.moves,
-      tipButton: { x: VIEW.width / 2, y: (this.scale.height + TIP_H) / 2 - 70 },
+      tipButton: { x: VIEW.width / 2, y: this.tipOkY },
+      // The tip card's vertical extent and the belt it docks under (#177).
+      tipBox: this.tipBox,
+      beltRect: this.layout.belt,
       guide: this.guide,
       painted: this.level.targets.filter((t, i) => t && cellDone(this.level, gs, i)).length,
       // Pixels to paint, so playtest telemetry can say how many were missing (#68).
