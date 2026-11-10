@@ -42,17 +42,20 @@ export function button(
     .setOrigin(0.5);
   // Touch area is at least 88 logical units (44 px on a 360 px wide phone) even when the drawing is smaller.
   const zone = scene.add.zone(0, 0, Math.max(w, MIN_TOUCH), Math.max(h, MIN_TOUCH)).setInteractive({ useHandCursor: true });
-  const shownAt = scene.time.now;
+  // #178: the game loop's clock, not scene.time.now, which in the create() of a restarted scene still holds the
+  // time that scene last ran, so a button built there would count as armed on its first frame.
+  const now = () => scene.game.loop.time;
+  const shownAt = now();
   let pressed = false;
   zone.on('pointerdown', () => {
-    pressed = opts.armMs === undefined || panelArmed(scene.time.now, shownAt, opts.armMs);
+    pressed = opts.armMs === undefined || panelArmed(now(), shownAt, opts.armMs);
   });
   zone.on('pointerout', () => {
     pressed = false;
   });
   zone.on('pointerup', (_p: Phaser.Input.Pointer, _x: number, _y: number, e: Phaser.Types.Input.EventData) => {
     e.stopPropagation();
-    if (opts.armMs !== undefined && !(pressed && panelArmed(scene.time.now, shownAt, opts.armMs))) return;
+    if (opts.armMs !== undefined && !(pressed && panelArmed(now(), shownAt, opts.armMs))) return;
     onClick();
   });
   const container = scene.add.container(x, y, [g, text, zone]);
