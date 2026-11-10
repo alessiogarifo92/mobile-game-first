@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { VIEW, beltPoint, cellRect, computeLayout, contains } from '../src/core/layout';
+import { VIEW, beltPoint, cellRect, computeLayout, contains, placeTipCard } from '../src/core/layout';
 
 describe('layout', () => {
   const l = computeLayout(8, 6, 3, 2);
@@ -46,5 +46,31 @@ describe('layout', () => {
     const big = computeLayout(12, 12, 4, 4);
     expect(big.cell * 12).toBeLessThanOrEqual(600 - 2 * big.beltThickness);
     expect(big.columns[0]!.x).toBeGreaterThanOrEqual(0);
+  });
+});
+
+describe('placeTipCard (#177)', () => {
+  // 360×640 in logical pixels: belt bottom 750, screen 1280, 8px gap → 514 of room under the belt.
+  it('docks a card that fits just below the belt, unscaled', () => {
+    expect(placeTipCard(750, 1280, 514, 8)).toEqual({ top: 758, scale: 1 });
+    expect(placeTipCard(750, 1599, 570, 8)).toEqual({ top: 758, scale: 1 });
+  });
+
+  it('shrinks a slightly too tall card so it still sits below the belt', () => {
+    const p = placeTipCard(750, 1280, 570, 8);
+    expect(p.top).toBe(758);
+    expect(p.scale).toBeCloseTo(514 / 570);
+    expect(p.top + 570 * p.scale).toBeCloseTo(1272);
+  });
+
+  it('stops shrinking at minScale and rises only as far as it must', () => {
+    const p = placeTipCard(750, 1280, 800, 8, 0.85);
+    expect(p.scale).toBe(0.85);
+    expect(p.top).toBeCloseTo(1272 - 800 * 0.85);
+    expect(p.top).toBeLessThan(758);
+  });
+
+  it('never goes above the top of the screen', () => {
+    expect(placeTipCard(750, 1280, 2000, 8, 0.85)).toEqual({ top: 8, scale: 0.85 });
   });
 });

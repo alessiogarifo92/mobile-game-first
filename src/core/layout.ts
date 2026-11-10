@@ -156,3 +156,23 @@ export function slotAt(slots: readonly Rect[], p: Point, minSize: number): numbe
 export function contains(r: Rect, p: Point): boolean {
   return p.x >= r.x && p.x <= r.x + r.w && p.y >= r.y && p.y <= r.y + r.h;
 }
+
+/** Where a tip card goes and how much it shrinks (#177). */
+export interface TipPlacement {
+  top: number;
+  scale: number;
+}
+
+/**
+ * Docks a tip card of natural height `cardH` just below the belt (`beltBottom + gap`). When the space left under the
+ * belt is too short the card shrinks, down to `minScale`, so the belt and the slots it talks about stay in view; only
+ * when even the smallest card does not fit does it rise over the belt, never above the top of the screen.
+ */
+export function placeTipCard(beltBottom: number, screenH: number, cardH: number, gap: number, minScale = 0.8): TipPlacement {
+  const dock = beltBottom + gap;
+  const room = screenH - gap - dock;
+  if (cardH <= room) return { top: dock, scale: 1 };
+  const scale = Math.max(minScale, room / cardH);
+  const h = cardH * scale;
+  return { top: Math.max(gap, Math.min(dock, screenH - gap - h)), scale };
+}

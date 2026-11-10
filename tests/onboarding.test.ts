@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { COLUMN_SHOWN, guideAllows, guideStep, needsGuide, tipOnBlockedTap, tipOnFullBelt, tipOnLevelStart, tipOnReturn } from '../src/core/onboarding';
+import { COLUMN_SHOWN, guideAllows, guideStep, needsGuide, tipOnBlockedTap, tipOnFullBelt, tipAllowed, tipOnLevelStart, tipOnReturn } from '../src/core/onboarding';
 import { BLUE, RED, YELLOW, level } from './helpers';
 
 describe('onboarding', () => {
@@ -40,6 +40,25 @@ describe('onboarding', () => {
     expect(tipOnReturn(true, ['blocked', 'slots'])).toBe('leftover');
     expect(tipOnReturn(false, ['blocked', 'slots'])).toBeNull(); // landed nothing: it is a blocked lane, not a leftover
     expect(tipOnReturn(true, ['slots', 'leftover'])).toBeNull();
+  });
+
+  it('shows at most one teaching card per level, never holding back a corrective one (#177)', () => {
+    expect(tipAllowed('slots', [])).toBe(true);
+    expect(tipAllowed('leftover', ['slots'])).toBe(false);
+    expect(tipAllowed('slots', ['mixing'])).toBe(false);
+    expect(tipAllowed('slots', ['blocked'])).toBe(true); // a corrective card does not use up the level's one
+    expect(tipAllowed('slots', ['belt', 'blocked'])).toBe(true);
+    expect(tipAllowed('blocked', ['slots'])).toBe(true);
+    expect(tipAllowed('belt', ['mixing', 'slots'])).toBe(true);
+  });
+
+  it('keeps "why it came back" for a later level when the slots card already showed in this one (#177)', () => {
+    expect(tipOnReturn(true, [], [])).toBe('slots');
+    expect(tipOnReturn(true, ['slots'], ['slots'])).toBeNull(); // level 2: second return, same level
+    expect(tipOnReturn(true, ['slots'], [])).toBe('leftover'); // next level, first card there
+    expect(tipOnReturn(true, [], ['queue'])).toBeNull(); // a level-start card already showed: slots waits too
+    expect(tipOnReturn(false, [], ['queue'])).toBe('blocked'); // a bucket that landed nothing is always explained
+    expect(tipOnReturn(true, ['slots'], ['blocked'])).toBe('leftover');
   });
 
   it('explains a blocked lane when a waiting bucket is refused, once (#146)', () => {
