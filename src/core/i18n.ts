@@ -441,7 +441,7 @@ const it: Record<MessageKey, string> = {
   'tip.leftover.body': 'Un secchiello torna quando non restano pixel del suo colore che può raggiungere.\nIl numero "↩" dice quanta vernice tornerebbe se lo lanci adesso. Con "!" quella vernice prende l\'ultimo slot libero: attento all\'ingorgo.',
   'escape.column': 'Lancia prima un secchiello senza "↩"',
   'escape.slot': 'Rilancia prima quello in attesa senza "↩"',
-  'escape.extraSlot': 'Nessun lancio sicuro: in ingorgo, "+1 slot"',
+  'escape.extraSlot': 'Rischio ingorgo: se succede, usa "+1 slot"',
   'escape.order': 'Nessun lancio sicuro: cambia l\'ordine',
   'howto.title': 'Come si gioca',
   'howto.1.title': 'Lancia',

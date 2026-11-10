@@ -31,7 +31,7 @@ Finché un "!" è visibile, la riga sotto il titolo, dove sta già la guida del 
 momento:
 - "Lancia prima un secchiello senza ↩"
 - "Rilancia prima quello in attesa senza ↩"
-- "Nessun lancio sicuro: in ingorgo, +1 slot"
+- «Rischio ingorgo: se succede, usa "+1 slot"» (prima del playtest T19 era «Nessun lancio sicuro: in ingorgo, "+1 slot"», letto come un bottone da cercare subito)
 - "Nessun lancio sicuro: cambia l'ordine"
 
 Nel caso `empty`, un anello oro (`THEME.gold`, bordo `THEME.ink`) evidenzia anche il secchiello da lanciare. Quando
