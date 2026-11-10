@@ -3,7 +3,7 @@ import { newlyCompletedStage, stageSkin } from '../../core/album';
 import { primariesOf } from '../../core/colors';
 import { cellDone, colorShown } from '../../core/rules';
 import type { StoneEvent } from '../../core/sim';
-import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, slotAt, type Layout } from '../../core/layout';
+import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, placeTipCard, slotAt, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
 import { currentLevel } from '../../core/mapLayout';
 import { blockExample, blockerAlpha, blockerSignature, refuseSlotLaunch, unlockColors, type BlockExample } from '../../core/blocked';
@@ -366,10 +366,11 @@ export class PlayScene extends Phaser.Scene {
         inner.add(label(this, sx, y, SYMBOL[col]!, THEME.type.md, '#ffffff'));
       });
     } else if (id === 'mixing') {
-      // Visual equations: the whole tip in one glance.
+      // Visual equations: the whole tip in one glance. Rows packed at 56px (48px squares + 8) so the card fits under
+      // the belt even on a 360×640 phone (#177).
       const rows: [number, number, number][] = [[RED, YELLOW, ORANGE], [YELLOW, BLUE, GREEN], [RED, BLUE, PURPLE]];
       rows.forEach(([a, b, c], i) => {
-        const y = y0 + 140 + i * 62;
+        const y = y0 + 125 + i * 56;
         [a, b, c].forEach((col, k) => sq(cx - 126 + k * 120, y, PAINT[col]!));
         inner.add(label(this, cx - 66, y, '+', THEME.type.md));
         inner.add(label(this, cx + 54, y, '=', THEME.type.md));
@@ -461,7 +462,7 @@ export class PlayScene extends Phaser.Scene {
       sq(cx + 70, y, THEME.emptyPixel);
       sq(cx + 70, y, PAINT[ex.behind]!, 0.3);
     }
-    const bodyY = id === 'mixing' ? y0 + 340 : id === 'leftover' ? y0 + 250 : y0 + 290;
+    const bodyY = id === 'mixing' ? y0 + 280 : id === 'leftover' ? y0 + 250 : y0 + 290;
     const text = label(this, VIEW.width / 2, bodyY, t(`tip.${id}.body` as const, { n: this.level.beltCapacity }), THEME.type.sm, THEME.subCss, false)
       .setWordWrapWidth(w - 60).setOrigin(0.5, 0);
     inner.add(text);
@@ -478,11 +479,14 @@ export class PlayScene extends Phaser.Scene {
       this.publish();
     }, { name: 'tip-ok' }));
     const belt = this.layout.belt;
-    // Docked under the belt; on short screens it rises only as far as it must to stay on screen.
-    const top = Math.max(THEME.space.xs, Math.min(belt.y + belt.h + THEME.space.xs, this.scale.height - h - THEME.space.xs));
+    // Docked under the belt; on short screens the card shrinks a little first, and rises over the belt only as a last
+    // resort (#177). The scale is centred on the view, so the card stays centred horizontally.
+    const { top, scale } = placeTipCard(belt.y + belt.h, this.scale.height, h, THEME.space.xs);
+    inner.setScale(scale);
+    inner.x = (VIEW.width / 2) * (1 - scale);
     inner.y = top;
-    this.tipOkY = top + okY;
-    this.tipBox = { y: top, h };
+    this.tipOkY = top + okY * scale;
+    this.tipBox = { y: top, h: h * scale };
     this.tipsShown.push(id);
     this.tip = { id, card };
     this.publish();

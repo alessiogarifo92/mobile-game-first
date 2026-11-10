@@ -6,7 +6,7 @@ import type { Move } from '../src/core/solver';
 // and a line on the stage win that says what the Album holds (P7).
 const KEY = 'mix-and-splash/progress/v1';
 type Sim = { beltBusy: boolean; status: string; tip: string | null; overlay: string | null };
-const ALL_TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'brown', 'stone', 'queue', 'leftover'];
+const ALL_TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'lock', 'belt', 'brown', 'stone', 'covered', 'queue', 'leftover'];
 
 for (const size of [{ width: 360, height: 640 }, { width: 412, height: 915 }]) {
   test.describe(`${size.width}x${size.height}`, () => {
@@ -41,6 +41,24 @@ for (const size of [{ width: 360, height: 640 }, { width: 412, height: 915 }]) {
       const stored = await page.evaluate((k) => JSON.parse(localStorage.getItem(k)!).seenTips as string[], KEY);
       expect(stored).not.toContain('leftover');
     });
+
+    // The mixing card is the tallest at level start: with its title, three recipe rows and body it used to cover
+    // the belt on a 360x640 phone. It must dock below the belt in both languages.
+    for (const language of ['it', 'en']) {
+      test(`mixing card stays under the belt (${language})`, async ({ page }) => {
+        const save = { unlocked: 10, completed: [1, 2, 3], sound: false, language, seenTips: ALL_TIPS.filter((t) => t !== 'mixing') };
+        await page.addInitScript(([k, v]) => localStorage.setItem(k!, v!), [KEY, JSON.stringify(save)]);
+        await page.goto('/');
+        await waitScene(page, 'menu');
+        await openLevel(page, 4);
+        await waitSim(page, () => (window as unknown as { __mix: Sim }).__mix.tip === 'mixing');
+        const box = await mix<{ y: number; h: number }>(page, 'tipBox');
+        const belt = await mix<Rect>(page, 'beltRect');
+        const screenH = await mix<number>(page, 'screenHeight');
+        expect(box.y).toBeGreaterThanOrEqual(belt.y + belt.h);
+        expect(box.y + box.h).toBeLessThanOrEqual(screenH);
+      });
+    }
 
     test('stage win explains the Album', async ({ page }) => {
       test.setTimeout(300_000);
