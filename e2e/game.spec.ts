@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
 import levels from '../src/levels/levels.json' with { type: 'json' };
-import { HOWTO_PAGES } from '../src/core/howto';
 import { parseLevel, type LevelDef } from '../src/core/level';
 import { forecastLeftover } from '../src/core/leftover';
 import { createGame } from '../src/core/sim';
@@ -110,13 +109,14 @@ test('the language is chosen in Settings and remembered; How to play pages throu
   buttons = await mix<Record<string, { x: number; y: number }>>(page, 'settingsButtons');
   await tap(page, buttons.howto!.x, buttons.howto!.y);
   await waitScene(page, 'howto');
-  for (let i = 0; i < HOWTO_PAGES; i++) {
+  const total = await mix<number>(page, 'pages'); // base pages plus the unlocked rules (#183)
+  for (let i = 0; i < total; i++) {
     expect(await mix(page, 'page')).toBe(i);
     if (shots && i === 1) await page.screenshot({ path: `${shots}/09-come-si-gioca.png` });
     if (shots && i === 3) await page.screenshot({ path: `${shots}/09b-come-si-gioca-pietre.png` });
     const next = await mix<{ x: number; y: number }>(page, 'next');
     await tap(page, next.x, next.y);
-    await waitScene(page, i < HOWTO_PAGES - 1 ? 'howto' : 'menu');
+    await waitScene(page, i < total - 1 ? 'howto' : 'menu');
   }
 
   // Swipe back and forth between pages, and a fresh visit starts on page 1 again.

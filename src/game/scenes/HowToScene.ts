@@ -1,18 +1,26 @@
 import Phaser from 'phaser';
 import { BLUE, BROWN, ORANGE, RED, YELLOW } from '../../core/colors';
-import { HOWTO_PAGES, clampPage, pageAfterSwipe } from '../../core/howto';
+import { HOWTO_PAGES, clampPage, howtoPages, pageAfterSwipe } from '../../core/howto';
 import { VIEW } from '../../core/layout';
 import type { MessageKey } from '../../core/i18n';
 import { publishDebug } from '../debug';
-import { t } from '../store';
+import { getProgress, t } from '../store';
 import { PAINT, SYMBOL, THEME, css } from '../theme';
+import { TIP_ART_WIDTH, drawTipArt, hasSharedArt } from '../tipArt';
 import { brownPixel, button, drawStone, keyIcon, label, lockIcon, screenBackground } from '../ui';
 
-const PAGES = HOWTO_PAGES;
+/** Gap, in logical units, between the base dots and the "unlocked rule" dots. */
+const DOT_STEP = 32;
+const DOT_GAP = 24;
 
-/** "How to play": illustrated cards (one per HOWTO_PAGES), reachable from Settings. */
+/**
+ * "How to play": illustrated cards, reachable from Settings. The HOWTO_PAGES base pages come first; then one page per
+ * tip card the player has already met in a level and no base page covers (#183), drawn as that card and marked
+ * "unlocked rule", with gold dots after a divider.
+ */
 export class HowToScene extends Phaser.Scene {
   private pageNow = 0;
+  private count = HOWTO_PAGES;
 
   constructor() {
     super('howto');
@@ -25,13 +33,17 @@ export class HowToScene extends Phaser.Scene {
   /** Opens another page; out of range does nothing (first page has no "back", the last has no "next"). */
   private go(target: number): void {
     const current = this.pageNow;
-    if (target < 0 || target >= PAGES || target === current) return;
+    if (target < 0 || target >= this.count || target === current) return;
     this.scene.restart({ page: target });
   }
 
   create(data: { page?: number } = {}): void {
-    const page = clampPage(data.page ?? 0);
+    const pages = howtoPages(getProgress().seenTips);
+    const count = pages.length;
+    this.count = count;
+    const page = clampPage(data.page ?? 0, count);
     this.pageNow = page;
+    const current = pages[page]!;
     screenBackground(this, THEME.bg);
     label(this, VIEW.width / 2, 110, t('howto.title'), THEME.type.lg);
 
@@ -42,40 +54,93 @@ export class HowToScene extends Phaser.Scene {
     g.fillRoundedRect(60, 190, VIEW.width - 120, 560 + off / 2, THEME.radius.panel);
     const first = this.children.length;
     const art = this.add.graphics();
-    this.illustrate(art, page);
+    let title: string;
+    let body: string;
+    if (current.kind === 'base') {
+      this.illustrate(art, current.index);
+      title = t(`howto.${current.index + 1}.title` as MessageKey);
+      body = t(`howto.${current.index + 1}.body` as MessageKey);
+    } else {
+      const tip = current.tip;
+      if (hasSharedArt(tip)) {
+        // The very drawing of the in-game card, scaled up to fill this card around the usual illustration height.
+        const box = this.add.container(VIEW.width / 2, 420);
+        box.add(art);
+        drawTipArt(this, art, (o) => box.add(o), tip, 0, -183, 4);
+        box.setScale(Math.min(1.5, 540 / TIP_ART_WIDTH[tip]));
+      }
+      title = t(`tip.${tip}.title` as MessageKey);
+      // The card breaks its lines for a narrow box; here the text wraps on its own. The belt shows a typical 4.
+      body = t(`tip.${tip}.body` as MessageKey, { n: 4 }).replace(/\n/g, ' ');
+    }
     // The illustration sits in the middle of the (taller) card.
     for (const child of this.children.list.slice(first)) (child as Phaser.GameObjects.Text).y += off / 4;
+    if (current.kind === 'tip') this.unlockedBadge();
 
-    const n = page + 1;
-    label(this, VIEW.width / 2, 820 + off / 2, t(`howto.${n}.title` as MessageKey), THEME.type.lg);
-    label(this, VIEW.width / 2, 900 + off / 2, t(`howto.${n}.body` as MessageKey), THEME.type.sm, THEME.subCss, false)
+    label(this, VIEW.width / 2, 820 + off / 2, title, THEME.type.lg);
+    label(this, VIEW.width / 2, 900 + off / 2, body, THEME.type.sm, THEME.subCss, false)
       .setWordWrapWidth(VIEW.width - 120)
       .setOrigin(0.5, 0);
 
-    // Page dots (their own Graphics: `g` was shifted with the illustration).
+    // Page dots (their own Graphics: `g` was shifted with the illustration): neutral for the base pages, gold with an
+    // ink ring after a divider for the unlocked ones, the current one larger and ink.
+    const dotY = 1080 + off * 0.75;
+    const at = dotPositions(count);
     const dots = this.add.graphics();
-    for (let i = 0; i < PAGES; i++) {
-      dots.fillStyle(THEME.ink, i === page ? 1 : 0.2);
-      dots.fillCircle(VIEW.width / 2 + (i - (PAGES - 1) / 2) * 32, 1080 + off * 0.75, 9);
+    if (count > HOWTO_PAGES) {
+      const dx = (at[HOWTO_PAGES - 1]! + at[HOWTO_PAGES]!) / 2;
+      dots.fillStyle(THEME.ink, 0.45);
+      dots.fillRect(dx - 1, dotY - 12, 2, 24);
     }
-    const last = page === PAGES - 1;
+    for (let i = 0; i < count; i++) {
+      if (i === page) {
+        dots.fillStyle(THEME.ink, 1);
+        dots.fillCircle(at[i]!, dotY, 12);
+      } else if (i >= HOWTO_PAGES) {
+        dots.fillStyle(THEME.gold, 1);
+        dots.fillCircle(at[i]!, dotY, 9);
+        dots.lineStyle(3, THEME.ink, 1);
+        dots.strokeCircle(at[i]!, dotY, 9);
+      } else {
+        dots.fillStyle(THEME.ink, 0.2);
+        dots.fillCircle(at[i]!, dotY, 9);
+      }
+    }
+    const last = page === count - 1;
     button(this, VIEW.width / 2, 1170 + off, 360, 88, t(last ? 'howto.done' : 'howto.next'), () => {
       if (last) this.scene.start('menu');
       else this.scene.restart({ page: page + 1 });
     }, { name: 'howto-next' });
     // Swipe or arrow keys move between pages; the dots are tappable too.
     this.input.on('pointerup', (p: Phaser.Input.Pointer) => {
-      this.go(pageAfterSwipe(page, p.x - p.downX, p.y - p.downY));
+      this.go(pageAfterSwipe(page, p.x - p.downX, p.y - p.downY, count));
     });
     this.input.keyboard?.on('keydown-LEFT', () => this.go(page - 1));
     this.input.keyboard?.on('keydown-RIGHT', () => this.go(page + 1));
-    for (let i = 0; i < PAGES; i++) {
-      this.add.zone(VIEW.width / 2 + (i - (PAGES - 1) / 2) * 64, 1080 + off * 0.75, 64, 88).setInteractive({ useHandCursor: true }).on('pointerup', () => this.go(i));
+    // Tap areas wider than the dots (64 apart, as many as fit across the screen), each one opening its page.
+    const zone = Math.min(64, (VIEW.width - 120) / count);
+    for (let i = 0; i < count; i++) {
+      this.add.zone(VIEW.width / 2 + (i - (count - 1) / 2) * zone, dotY, zone, 88).setInteractive({ useHandCursor: true }).on('pointerup', () => this.go(i));
     }
     button(this, 60, 64, 84, 64, '◀', () => this.scene.start('menu', { settings: true }), {
       fill: THEME.belt, color: THEME.inkCss, name: 'home',
     });
-    publishDebug({ scene: 'howto', page, offsetY: 0, scrollY: this.cameras.main.scrollY, next: { x: VIEW.width / 2, y: 1170 + off } });
+    publishDebug({
+      scene: 'howto', page, pages: count, tip: current.kind === 'tip' ? current.tip : null,
+      offsetY: 0, scrollY: this.cameras.main.scrollY, next: { x: VIEW.width / 2, y: 1170 + off },
+    });
+  }
+
+  /** Gold "unlocked rule" pill in the top right corner of the card. */
+  private unlockedBadge(): void {
+    const text = label(this, 0, 0, t('howto.unlocked'), THEME.type.xs, THEME.inkCss);
+    const w = text.width + 32;
+    const right = VIEW.width - 60 - 20;
+    const y = 190 + 20 + 22;
+    const g = this.add.graphics();
+    g.fillStyle(THEME.gold, 1);
+    g.fillRoundedRect(right - w, y - 22, w, 44, 22);
+    text.setPosition(right - w / 2, y).setDepth(1);
   }
 
   /** `color` null: a covered bucket, "?" on the cover colour. */
@@ -177,4 +242,11 @@ export class HowToScene extends Phaser.Scene {
       this.jar(g, cx + 160, 420, null, 70);
     }
   }
+}
+
+/** x of each page dot: DOT_STEP apart, with an extra DOT_GAP before the first unlocked page, centred on the screen. */
+function dotPositions(count: number): number[] {
+  const raw = Array.from({ length: count }, (_, i) => i * DOT_STEP + (i >= HOWTO_PAGES ? DOT_GAP : 0));
+  const span = raw[count - 1]!;
+  return raw.map((x) => VIEW.width / 2 - span / 2 + x);
 }

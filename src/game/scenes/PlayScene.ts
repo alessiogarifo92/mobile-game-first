@@ -27,6 +27,7 @@ import { LEVELS, UNIVERSES, canOpen, getProgress, levelHint, levelTitle, markCom
 import { BLUE, BROWN, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
 import { PAINT, SYMBOL, THEME, css } from '../theme';
 import { drawSkin } from '../skins';
+import { drawTipArt, hasSharedArt } from '../tipArt';
 import { brownPixel, button, drawIce, drawStone, keyIcon, label, lockIcon, progressBar, screenBackground } from '../ui';
 
 const TICK_MS = 85;
@@ -338,9 +339,9 @@ export class PlayScene extends Phaser.Scene {
       g.fillStyle(fill, alpha);
       g.fillRoundedRect(gx - 24, gy - 24, 48, 48, THEME.radius.cell);
     };
-    const cracks = (gx: number, gy: number) => drawIce(g, gx - 24, gy - 24, 48, 48);
     const cx = VIEW.width / 2;
-    if (id === 'mixing') {
+    if (hasSharedArt(id)) drawTipArt(this, g, (o) => card.add(o), id, cx, y0, this.level.beltCapacity);
+    else if (id === 'mixing') {
       // Visual equations: the whole tip in one glance.
       const rows: [number, number, number][] = [[RED, YELLOW, ORANGE], [YELLOW, BLUE, GREEN], [RED, BLUE, PURPLE]];
       rows.forEach(([a, b, c], i) => {
@@ -349,17 +350,6 @@ export class PlayScene extends Phaser.Scene {
         card.add(label(this, cx - 66, y, '+', THEME.type.md));
         card.add(label(this, cx + 54, y, '=', THEME.type.md));
       });
-    } else if (id === 'ice') {
-      // Frozen → ice broken → painted.
-      const y = y0 + 200;
-      sq(cx - 160, y, THEME.emptyPixel);
-      sq(cx - 160, y, PAINT[RED]!, 0.3);
-      cracks(cx - 160, y);
-      sq(cx, y, THEME.emptyPixel);
-      sq(cx, y, PAINT[RED]!, 0.3);
-      sq(cx + 160, y, PAINT[RED]!);
-      card.add(label(this, cx - 80, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
-      card.add(label(this, cx + 80, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
     } else if (id === 'brown') {
       // Red + yellow + blue = brown, then a brown pixel with two of its three wedges painted: blue is missing.
       const y = y0 + 150;
@@ -373,15 +363,6 @@ export class PlayScene extends Phaser.Scene {
       brownPixel(g, cx - 104, y2 - 24, 48, 48, RED | YELLOW);
       card.add(label(this, cx, y2, `${SYMBOL[BLUE]}→`, THEME.type.sm, css(PAINT[BLUE]!)));
       sq(cx + 80, y2, PAINT[BROWN]!);
-    } else if (id === 'belt') {
-      // As many buckets as the belt holds, then one more that cannot board.
-      const n = Math.min(this.level.beltCapacity, 5);
-      const y = y0 + 200;
-      const colors = [RED, YELLOW, BLUE];
-      const left = cx - (n * 80) / 2;
-      for (let k = 0; k < n; k++) sq(left + k * 80, y, PAINT[colors[k % 3]!]!);
-      sq(left + n * 80, y, PAINT[colors[n % 3]!]!, 0.3);
-      card.add(label(this, left + n * 80, y, '✕', THEME.type.md, THEME.inkCss));
     } else if (id === 'stone') {
       // Belt → stone: the drop stops; the pixel behind is painted from the other side.
       const y = y0 + 200;
@@ -417,16 +398,6 @@ export class PlayScene extends Phaser.Scene {
       bucket(cx - 110, THEME.hidden, '?');
       card.add(label(this, cx, y, '→', THEME.type.lg));
       bucket(cx + 110, PAINT[BLUE]!, SYMBOL[BLUE]!);
-    } else if (id === 'hidden') {
-      // "?" next to a pixel: finish the neighbour, the colour shows.
-      const y = y0 + 200;
-      sq(cx - 200, y, PAINT[RED]!, 0.3);
-      sq(cx - 140, y, THEME.hidden);
-      card.add(label(this, cx - 140, y, '?', THEME.type.md, '#ffffff'));
-      card.add(label(this, cx - 30, y, '→', THEME.type.lg));
-      sq(cx + 80, y, PAINT[RED]!);
-      sq(cx + 140, y, THEME.emptyPixel);
-      sq(cx + 140, y, PAINT[BLUE]!, 0.3);
     } else if (id === 'blocked') {
       // The bucket just refused (#176): its shot → the first cell in its way (circled, with what opens it) → the pixel
       // it wanted behind. Without a case (never expected), a blue shot stopped by an orange pixel.
@@ -465,50 +436,6 @@ export class PlayScene extends Phaser.Scene {
       card.add(label(this, cx - 20, y, '✕', THEME.type.md, THEME.inkCss));
       sq(cx + 70, y, THEME.emptyPixel);
       sq(cx + 70, y, PAINT[ex.behind]!, 0.3);
-    } else if (id === 'queue') {
-      // A column shows three buckets and "+2": two more wait behind them, out of sight.
-      const jarAt = (bx: number, by: number, fill: number, alpha: number) => {
-        g.fillStyle(fill, alpha);
-        g.fillRoundedRect(bx - 22, by - 18, 44, 36, THEME.radius.jar / 2);
-        g.lineStyle(2, THEME.ink, alpha);
-        g.strokeRoundedRect(bx - 22, by - 18, 44, 36, THEME.radius.jar / 2);
-      };
-      const colX = cx - 110;
-      g.fillStyle(THEME.ink, 0.06);
-      g.fillRoundedRect(colX - 34, y0 + 104, 68, 140, THEME.radius.jar);
-      [RED, YELLOW, BLUE].forEach((col, k) => jarAt(colX, y0 + 128 + k * 44, PAINT[col]!, k === 0 ? 1 : 0.55));
-      card.add(label(this, colX, y0 + 262, '+2', THEME.type.sm, THEME.subCss));
-      card.add(label(this, cx, y0 + 190, '=', THEME.type.lg));
-      jarAt(cx + 90, y0 + 190, THEME.hidden, 0.35);
-      jarAt(cx + 150, y0 + 190, THEME.hidden, 0.35);
-      card.add(label(this, cx + 120, y0 + 236, '2', THEME.type.sm, THEME.subCss));
-    } else if (id === 'leftover') {
-      // A bucket of 4 finds only 3 pixels of its colour in reach: 1 shot of paint comes back ("↩1").
-      const y = y0 + 190;
-      const bucket = (bx: number, n: string) => {
-        g.fillStyle(PAINT[RED]!, 1);
-        g.fillRoundedRect(bx - 30, y - 30, 60, 60, THEME.radius.jar);
-        g.lineStyle(3, THEME.ink, 1);
-        g.strokeRoundedRect(bx - 30, y - 30, 60, 60, THEME.radius.jar);
-        card.add(label(this, bx, y, n, THEME.type.md, '#ffffff'));
-      };
-      // Then the same pill as a warning (#176): "!" when that paint would take the last free slot.
-      const pill = (px: number, text: string, risky: boolean) => {
-        const pw = risky ? 76 : 64;
-        g.fillStyle(risky ? THEME.ink : THEME.gold, 1);
-        g.fillRoundedRect(px - pw / 2, y - 66, pw, 32, 16);
-        g.lineStyle(3, risky ? THEME.white : THEME.ink, 1);
-        g.strokeRoundedRect(px - pw / 2, y - 66, pw, 32, 16);
-        card.add(label(this, px, y - 50, text, THEME.type.xs, risky ? '#FFFFFF' : THEME.inkCss));
-      };
-      bucket(cx - 240, '4');
-      card.add(label(this, cx - 180, y, '→', THEME.type.md));
-      [0, 1, 2].forEach((k) => sq(cx - 122 + k * 54, y, PAINT[RED]!));
-      card.add(label(this, cx - 6, y, '→', THEME.type.md));
-      bucket(cx + 64, '1');
-      pill(cx + 64, '↩1', false);
-      bucket(cx + 200, '1');
-      pill(cx + 200, '↩1!', true);
     }
     const bodyY = id === 'mixing' ? y0 + 340 : id === 'leftover' ? y0 + 250 : y0 + 290;
     card.add(label(this, VIEW.width / 2, bodyY, t(`tip.${id}.body` as const, { n: this.level.beltCapacity }), THEME.type.sm, THEME.subCss, false)
