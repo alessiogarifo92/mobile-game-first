@@ -14,11 +14,12 @@ type Escape = { kind: string; from?: string; index?: number; key: string } | nul
 const escape = (page: Page) => mix<Escape>(page, 'escape');
 
 for (const size of [{ width: 360, height: 640 }, { width: 412, height: 915 }]) {
+  test.describe(`on a ${size.width}x${size.height} phone`, () => {
+  test.use({ viewport: size });
   for (const language of ['it', 'en'] as const) {
     const tag = `${language}-${size.width}x${size.height}`;
     test(`a "!" comes with the way out of the jam (${tag})`, async ({ page }) => {
       test.setTimeout(120_000);
-      await page.setViewportSize(size);
       const save = { unlocked: LAST_LEVEL, completed: [], sound: false, language, seenTips: ALL_TIPS };
       await page.addInitScript(([key, v]) => localStorage.setItem(key, v), [KEY, JSON.stringify(save)] as const);
       await page.goto('/');
@@ -47,4 +48,5 @@ for (const size of [{ width: 360, height: 640 }, { width: 412, height: 915 }]) {
         .toContain(await mix<string>(page, 'subtitle'));
     });
   }
+  });
 }
