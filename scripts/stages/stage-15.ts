@@ -3,7 +3,8 @@ import type { StageSpec } from './types';
 /**
  * Stage 15 — Giungla, quinto stage dell'universo 2 "Natura" (#125, #100).
  * La pietra debutta nell'universo 1 (81 Stella, #157, dopo il #95): la papaia (141) la riprende senza punire, con due pietre
- * disegnate a mano tra la polpa, dove un colpo si ferma per forza. Dal 142 le pietre vanno nei buchi e sui bordi delle figure (`special`).
+ * messe dove fanno scudo (`stonePlacement: 'blocking'`, #147): fermano la vernice prima di un tratto della buccia, così si vede
+ * cosa fa una pietra. Dal 142 le pietre vanno nei buchi e sui bordi delle figure (`special`).
  * Nessun'altra meccanica nello stage (niente marrone: marrone + pietra è la combinazione nuova dello stage 17).
  * Nastro 2 e slot 2 dopo il debutto, come la fine dell'universo 1. Difficile: il pitone; boss: il tempio.
  * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places stones.
@@ -12,7 +13,7 @@ const stage: StageSpec = {
   stage: 15, key: 'jungle', color: 'G',
   complete: true,
   levels: [
-    { name: 'papaya', columns: 3, ammoChunk: 10, slots: 2, beltCapacity: 2, winRate: [0.8, 0.93], seed: 15000, image: [
+    { name: 'papaya', columns: 3, ammoChunk: 10, slots: 2, beltCapacity: 2, special: { stone: 2, stonePlacement: 'blocking' }, winRate: [0.8, 0.93], seed: 15000, image: [
       '..GGGG..',
       '.GOOOOG.',
       'GOOOOOOG',
@@ -20,14 +21,6 @@ const stage: StageSpec = {
       'GOOOOOOG',
       '.GOOOOG.',
       '..GGGG..',
-    ], overlay: [
-      '........',
-      '........',
-      '........',
-      '...ss...',
-      '........',
-      '........',
-      '........',
     ] },
     { name: 'toucan', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { stone: 3 }, winRate: [0.73, 0.79], seed: 15037, image: [
       '....BBB...',

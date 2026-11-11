@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { generateLevel, placeSpecial, splitAmmo } from '../src/core/generator';
-import { parseLevel } from '../src/core/level';
+import { generateLevel, placeSpecial, splitAmmo, stoneShield } from '../src/core/generator';
+import { parseImage, parseLevel, walledIn } from '../src/core/level';
 import { createRng, shuffle } from '../src/core/rng';
 import { solve } from '../src/core/solver';
 
@@ -114,5 +114,88 @@ describe('minShooters', () => {
     const opts = { id: 1, name: 't', image: ['RRRR', 'RRRR'], columns: 2, ammoChunk: 8, slots: 2, beltCapacity: 2, seed: 1 };
     expect(() => generateLevel({ ...opts, minShooters: 2 })).toThrow('only 1 shooters');
     expect(generateLevel({ ...opts, ammoChunk: 4, minShooters: 2 }).def.columns.flat()).toHaveLength(2);
+  });
+});
+
+describe('stoneShield (#147)', () => {
+  const shield = (image: string[], cell: number, stoneCells: number[] = []) => {
+    const { width, height, targets } = parseImage(image);
+    const stones = targets.map((_, i) => stoneCells.includes(i));
+    return stoneShield(width, height, targets, cell, stones);
+  };
+
+  it('counts the pixels behind the stone, twice when the stone is the first thing a lane meets', () => {
+    // '.RR': the row from the left meets the stone first and it hides both pixels; every other lane sees nothing behind.
+    expect(shield(['.RR'], 0)).toBe(4);
+    // 'R.R': on both rows a pixel stands in front, so each lane counts its one pixel behind once.
+    expect(shield(['R.R'], 1)).toBe(2);
+  });
+
+  it('skips a lane already cut by a stone in front and stops counting at a stone behind', () => {
+    expect(shield(['..R'], 1)).toBe(2);
+    expect(shield(['..R'], 1, [0])).toBe(0);
+    expect(shield(['.R.R'], 0)).toBe(4);
+    expect(shield(['.R.R'], 0, [2])).toBe(2);
+  });
+
+  it('scores 0 for a cell that shields nothing, and works without a stone list', () => {
+    expect(shield(['...', '.R.', '...'], 0)).toBe(0);
+    const { width, height, targets } = parseImage(['.RR']);
+    expect(stoneShield(width, height, targets, 0)).toBe(4);
+  });
+
+  it('throws on a cell off the board', () => {
+    const { width, height, targets } = parseImage(['.RR']);
+    expect(() => stoneShield(width, height, targets, -1)).toThrow('off the board');
+    expect(() => stoneShield(width, height, targets, 3)).toThrow('off the board');
+  });
+});
+
+describe('placeSpecial with blocking stones (#147)', () => {
+  const stonesOf = (overlay: string[]) => [...overlay.join('')].map((c) => c === 's');
+
+  it('puts the first stone on the cell that shields most', () => {
+    const image = ['R..R', '.RR.', 'R..R'];
+    const { width, height, targets } = parseImage(image);
+    for (let seed = 0; seed < 10; seed++) {
+      const overlay = placeSpecial(image, { stone: 1, stonePlacement: 'blocking' }, createRng(seed));
+      const cell = stonesOf(overlay).indexOf(true);
+      const best = Math.max(...targets.map((t, c) => (t === 0 ? stoneShield(width, height, targets, c) : -1)));
+      expect(stoneShield(width, height, targets, cell)).toBe(best);
+    }
+  });
+
+  it('never walls a pixel in, and throws when only walling cells are left', () => {
+    const image = ['...', '.R.', '...'];
+    const { width, height, targets } = parseImage(image);
+    const overlay = placeSpecial(image, { stone: 3, stonePlacement: 'blocking' }, createRng(1));
+    expect(stonesOf(overlay).filter(Boolean)).toHaveLength(3);
+    expect(walledIn(width, height, targets, stonesOf(overlay))).toBe(-1);
+    expect(() => placeSpecial(image, { stone: 4, stonePlacement: 'blocking' }, createRng(1))).toThrow('not enough empty cells');
+  });
+
+  it('is deterministic per seed', () => {
+    const image = ['R..R', '.RR.', 'R..R'];
+    const special = { stone: 3, stonePlacement: 'blocking' as const };
+    expect(placeSpecial(image, special, createRng(4))).toEqual(placeSpecial(image, special, createRng(4)));
+  });
+});
+
+describe('generateLevel stoneBite (#147)', () => {
+  const opts = { id: 1, name: 't', image: ['.RR.', 'RYYR', '.BB.'], columns: 2, ammoChunk: 2, slots: 3, beltCapacity: 3, seed: 5, special: { stone: 2, stonePlacement: 'blocking' as const } };
+
+  it('rejects a share outside [0, 1]', () => {
+    for (const stoneBite of [-0.1, 1.5, Number.NaN]) {
+      expect(() => generateLevel({ ...opts, stoneBite })).toThrow('stoneBite must be a share between 0 and 1');
+    }
+  });
+
+  it('rejects deals whose stones do not make the level harder enough, and says so', () => {
+    expect(() => generateLevel({ ...opts, attempts: 5, stoneBite: 1 })).toThrow(/no solvable deal.*in band but with stones that do not bite/);
+  });
+
+  it('accepts a deal when the stones bite at least the required share', () => {
+    const { def } = generateLevel({ ...opts, stoneBite: 0 });
+    expect(def.overlay!.join('')).toContain('s');
   });
 });

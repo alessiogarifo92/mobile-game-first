@@ -64,7 +64,7 @@ const stage: StageSpec = {
       '.O..........',
       'YGYGYGYGYGYG',
     ] },
-    { name: 'lavarock', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { ice: 4, hidden: 3, stone: 4, brown: 2 }, winRate: [0.63, 0.69], seed: 20148, image: [
+    { name: 'lavarock', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { ice: 4, hidden: 3, stone: 4, brown: 2, stonePlacement: 'blocking' }, stoneBite: 0.03, winRate: [0.63, 0.69], seed: 20148, image: [
       '...PPPPP....',
       '..PPOPPKP...',
       '.PPKOOPPPP..',
