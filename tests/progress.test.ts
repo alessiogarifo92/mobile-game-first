@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { STORAGE_KEY, completeLevel, defaultProgress, loadProgress, markTipSeen, resetProgress, saveProgress, type KeyValueStorage } from '../src/core/progress';
+import { HINT_AFTER_DEFEATS, MAX_DEFEATS, STORAGE_KEY, completeLevel, defaultProgress, defeatsOn, hintOffered, loadProgress, markTipSeen, recordDefeat, resetProgress, sanitize, saveProgress, type KeyValueStorage } from '../src/core/progress';
 
 function memory(initial?: string): KeyValueStorage & { data: Map<string, string> } {
   const data = new Map<string, string>();
@@ -20,7 +20,7 @@ describe('progress', () => {
 
   it('round-trips through storage', () => {
     const s = memory();
-    const p = { unlocked: 3, completed: [1, 2], sound: false, language: 'it' as const, seenTips: ['guide'], skin: 'classic' as const };
+    const p = { unlocked: 3, completed: [1, 2], sound: false, language: 'it' as const, seenTips: ['guide'], skin: 'classic' as const, defeats: { '4': 2 } };
     expect(saveProgress(s, p)).toBe(true);
     expect(loadProgress(s)).toEqual(p);
   });
@@ -164,5 +164,75 @@ describe('progress', () => {
   it('reset erases levels, tips and skin but keeps language and sound', () => {
     const played = { ...defaultProgress(), unlocked: 40, completed: [1, 2, 3], seenTips: ['guide'], skin: 'dots' as const, language: 'it' as const, sound: false };
     expect(resetProgress(played)).toEqual({ ...defaultProgress(), language: 'it', sound: false });
+  });
+});
+
+describe('defeat streak (#93)', () => {
+  const lose = (n: number, id = 4) => {
+    let p = defaultProgress();
+    for (let i = 0; i < n; i++) p = recordDefeat(p, id);
+    return p;
+  };
+
+  it('counts defeats per level and offers the hint from the third one', () => {
+    expect(HINT_AFTER_DEFEATS).toBe(3);
+    expect(defeatsOn(defaultProgress(), 4)).toBe(0);
+    expect(hintOffered(lose(2), 4)).toBe(false);
+    expect(hintOffered(lose(3), 4)).toBe(true);
+    expect(hintOffered(lose(5), 4)).toBe(true);
+    // Another level keeps its own streak.
+    expect(defeatsOn(lose(3), 5)).toBe(0);
+    expect(hintOffered(lose(3), 5)).toBe(false);
+  });
+
+  it('does not mutate the progress it is given', () => {
+    const p = defaultProgress();
+    recordDefeat(p, 4);
+    expect(p.defeats).toEqual({});
+  });
+
+  it('caps a streak at MAX_DEFEATS', () => {
+    expect(defeatsOn(lose(MAX_DEFEATS + 5), 4)).toBe(MAX_DEFEATS);
+  });
+
+  it('resets the streak of the won level only', () => {
+    const p = recordDefeat(lose(3, 4), 6);
+    const won = completeLevel(p, 4, 10);
+    expect(defeatsOn(won, 4)).toBe(0);
+    expect(hintOffered(won, 4)).toBe(false);
+    expect(defeatsOn(won, 6)).toBe(1);
+    expect(p.defeats).toEqual({ '4': 3, '6': 1 });
+  });
+
+  it('survives a save and a load', () => {
+    const s = memory();
+    saveProgress(s, lose(3));
+    expect(hintOffered(loadProgress(s), 4)).toBe(true);
+  });
+
+  it('is erased by a progress reset', () => {
+    expect(resetProgress(lose(3)).defeats).toEqual({});
+  });
+
+  it('keeps only sane entries from a stored save', () => {
+    const levels = Array.from({ length: 10 }, (_, i) => ({ id: i + 1, stage: 1 }));
+    const raw = {
+      completed: [1, 2],
+      unlocked: 3,
+      defeats: { '3': 2, '2': 5, '0': 1, '-1': 1, '04': 1, x: 1, '11': 1, '5': 1.5, '6': 0, '7': '3', '8': 500 },
+    };
+    // A won level, bad ids, out-of-range ids and bad counts are dropped; a huge count is capped.
+    expect(sanitize(raw, levels).defeats).toEqual({ '3': 2, '8': MAX_DEFEATS });
+    // Without the level list only the shape is checked.
+    expect(sanitize({ defeats: { '11': 2 } }).defeats).toEqual({ '11': 2 });
+  });
+
+  it.each([null, 'x', 3, [1, 2]])('ignores a defeats field that is not an object: %s', (defeats) => {
+    expect(sanitize({ defeats }).defeats).toEqual({});
+  });
+
+  it('bounds how many level streaks a forged save may hold', () => {
+    const defeats = Object.fromEntries(Array.from({ length: 1500 }, (_, i) => [String(i + 1), 1]));
+    expect(Object.keys(sanitize({ defeats }).defeats)).toHaveLength(1000);
   });
 });
