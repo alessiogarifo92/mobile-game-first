@@ -8,7 +8,16 @@ export type CardTip =
 
 /** Buckets a column shows; the rest wait behind, counted by the "+N" under it. */
 export const COLUMN_SHOWN = 3;
-export type TipId = 'guide' | CardTip;
+export type TipId = 'guide' | 'map' | CardTip;
+
+/**
+ * The map points at the open level until the player has entered a level once (#190).
+ * 'map' is marked when a level is opened from the map; 'guide' or any completion means a save that
+ * already played (older saves have no 'map' entry), so they never see the hint.
+ */
+export function needsMapHint(completed: readonly number[], seen: readonly string[]): boolean {
+  return completed.length === 0 && !seen.includes('map') && !seen.includes('guide');
+}
 
 /** Level 1 is played as a guided tutorial until the player has seen it once. */
 export function needsGuide(level: Level, seen: readonly string[]): boolean {

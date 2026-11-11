@@ -1,10 +1,40 @@
 import { describe, expect, it } from 'vitest';
-import { COLUMN_SHOWN, guideAllows, guideStep, needsGuide, tipOnBlockedTap, tipOnFullBelt, tipAllowed, tipOnLevelStart, tipOnReturn, tipsPresent } from '../src/core/onboarding';
+import { COLUMN_SHOWN, guideAllows, guideStep, needsGuide, needsMapHint, tipOnBlockedTap, tipOnFullBelt, tipAllowed, tipOnLevelStart, tipOnReturn, tipsPresent } from '../src/core/onboarding';
+import { defaultProgress, markTipSeen, sanitize } from '../src/core/progress';
 import { BLUE, RED, YELLOW, level } from './helpers';
 
 describe('onboarding', () => {
   const first = level(['RR'], [[[RED, 2]]], { id: 1 });
   const mixed = level(['O'], [[[RED, 1]], [[YELLOW, 1]]], { id: 4 });
+
+  describe('map hint (#190)', () => {
+    it('shows on first launch', () => {
+      const p = defaultProgress();
+      expect(needsMapHint(p.completed, p.seenTips)).toBe(true);
+    });
+
+    it('is gone once a level has been entered from the map', () => {
+      const p = markTipSeen(defaultProgress(), 'map');
+      expect(needsMapHint(p.completed, p.seenTips)).toBe(false);
+    });
+
+    it('survives a save round-trip once marked', () => {
+      const p = sanitize(JSON.parse(JSON.stringify(markTipSeen(defaultProgress(), 'map'))));
+      expect(needsMapHint(p.completed, p.seenTips)).toBe(false);
+    });
+
+    it('shows for an old save without seenTips that never played', () => {
+      const p = sanitize({ unlocked: 1, completed: [] });
+      expect(p.seenTips).toEqual([]);
+      expect(needsMapHint(p.completed, p.seenTips)).toBe(true);
+    });
+
+    it('stays hidden for an old save that already played', () => {
+      const p = sanitize({ unlocked: 3, completed: [1, 2] });
+      expect(needsMapHint(p.completed, p.seenTips)).toBe(false);
+      expect(needsMapHint([], ['guide'])).toBe(false); // entered level 1 but never finished it
+    });
+  });
 
   it('guides level 1 only until it has been seen', () => {
     expect(needsGuide(first, [])).toBe(true);
