@@ -11,7 +11,7 @@ import { mapUniverse } from '../../core/universeMenu';
 import { universeLevels, universeOfStage } from '../../core/universes';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
-import { prefersReducedMotion } from '../motion';
+import { REDUCED_MOTION_QUERY, prefersReducedMotion } from '../../core/motion';
 import { LEVELS, STAGES, UNIVERSES, canOpen, getProgress, levelTitle, markTip, resetTips, setLanguage, setSound, stageTitle, t, universeTitle } from '../store';
 import { PAINT, THEME } from '../theme';
 import { button, label, progressBar } from '../ui';
@@ -153,7 +153,7 @@ export class MenuScene extends Phaser.Scene {
         .setAlpha(open ? 1 : 0.35));
       if (isCurrent) {
         this.lazy(n.y, () => label(this, n.x + (n.x < VIEW.width / 2 ? 140 : -140), n.y, levelTitle(n.id), THEME.type.sm, THEME.inkCss));
-        if (!prefersReducedMotion()) this.tweens.add({ targets: target, alpha: 0.75, duration: 700, yoyo: true, repeat: -1 });
+        if (!this.reducedMotion()) this.tweens.add({ targets: target, alpha: 0.75, duration: 700, yoyo: true, repeat: -1 });
       }
     }
   }
@@ -165,7 +165,7 @@ export class MenuScene extends Phaser.Scene {
   private drawHint(levelId: number): void {
     const n = this.layout.nodes.find((node) => node.id === levelId);
     if (!n) return;
-    const animated = !prefersReducedMotion();
+    const animated = !this.reducedMotion();
     const tip = n.y - n.r - THEME.space.md; // arrow tip, just above the node's ring
     const arrow = this.add.graphics();
     arrow.fillStyle(THEME.ink, 1);
@@ -184,6 +184,11 @@ export class MenuScene extends Phaser.Scene {
     text.setPosition(cx, cy).setDepth(1);
     if (animated) this.tweens.add({ targets: [arrow, pill, text], y: '+=12', duration: 600, ease: 'Sine.inOut', yoyo: true, repeat: -1 });
     this.hint = { levelId, x: n.x, y: tip, animated };
+  }
+
+  /** The system asks for less motion: the map's pulses and the first-launch pointer then stay still. */
+  private reducedMotion(): boolean {
+    return prefersReducedMotion(typeof window !== 'undefined' ? window.matchMedia?.(REDUCED_MOTION_QUERY) : null);
   }
 
   /** Creates labels that came into view and hides the ones that left it. */
