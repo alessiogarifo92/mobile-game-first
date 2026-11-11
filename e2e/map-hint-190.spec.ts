@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { mix, openLevel, shots, waitScene } from './helpers';
+import { mix, openLevel, shots, waitMapSettled, waitScene } from './helpers';
 
 type Hint = { levelId: number; x: number; y: number; animated: boolean } | null;
 
@@ -50,4 +50,21 @@ test('with the pointer on screen, scrolling up and tapping another open level (1
   await openLevel(page, 10);
   expect(await mix<number>(page, 'levelId')).toBe(10);
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('mix-and-splash/progress/v1')!).seenTips)).toContain('map');
+});
+
+test('a fast swipe glides on; the map reports it until it stops, so a tap after it lands on the node', async ({ page }) => {
+  await page.goto('/');
+  await waitScene(page, 'menu');
+  const box = (await page.locator('canvas').boundingBox())!;
+  const x = box.x + 20, y0 = box.y + box.height * 0.4;
+  await page.mouse.move(x, y0);
+  await page.mouse.down();
+  for (let s = 1; s <= 4; s++) await page.mouse.move(x, y0 + 40 * s);
+  await page.mouse.up();
+  expect(await mix<boolean>(page, 'scrolling')).toBe(true);
+  const before = await mix<number>(page, 'scrollY');
+  await waitMapSettled(page);
+  expect(await mix<boolean>(page, 'scrolling')).toBe(false);
+  expect(await mix<number>(page, 'scrollY')).not.toBe(before); // republished once the glide ended
+  await openLevel(page, 1);
 });

@@ -389,6 +389,8 @@ export class MenuScene extends Phaser.Scene {
       universe: this.universe,
       universeButton: { x: VIEW.width / 2, y: this.scroll + UNIVERSE_BAR.y },
       scrollY: this.scroll,
+      // True while the map still glides after a drag: scrollY is only republished when it stops.
+      scrolling: this.velocity !== 0,
       viewHeight: this.viewHeight,
       barHeight: MAP.barHeight,
       settingsOpen: !!this.settings,

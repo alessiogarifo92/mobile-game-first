@@ -38,11 +38,20 @@ export async function waitScene(page: Page, scene: string) {
   await page.waitForFunction((s) => (window as unknown as { __mix?: { scene: string } }).__mix?.scene === s, scene);
 }
 
+/**
+ * Waits until the map has stopped gliding after a drag. While it glides, the published scrollY is stale, so a tap
+ * computed from it lands beside the node (#190: level 10 missed at 360x640 on a slower container).
+ */
+export async function waitMapSettled(page: Page) {
+  await page.waitForFunction(() => !(window as unknown as { __mix?: { scrolling?: boolean } }).__mix?.scrolling);
+}
+
 /** Scrolls the map with real drags until the level's node is on screen, then taps it (it may be locked). */
 export async function tapLevel(page: Page, id: number) {
   const box = (await page.locator('canvas').boundingBox())!;
   const k = box.width / 720;
   for (let i = 0; i < 60; i++) {
+    await waitMapSettled(page);
     const node = (await mix<{ id: number; x: number; y: number }[]>(page, 'nodes')).find((n) => n.id === id)!;
     const [scroll, viewH, bar] = await Promise.all([mix<number>(page, 'scrollY'), mix<number>(page, 'viewHeight'), mix<number>(page, 'barHeight')]);
     const screenY = node.y - scroll;
