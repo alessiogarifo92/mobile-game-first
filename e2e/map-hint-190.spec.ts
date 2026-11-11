@@ -40,3 +40,14 @@ test('a save that already played never sees the pointer', async ({ page }) => {
   await waitScene(page, 'menu');
   expect(await mix<Hint>(page, 'mapHint')).toBeNull();
 });
+
+test('with the pointer on screen, scrolling up and tapping another open level (10) still opens it', async ({ page }) => {
+  // The case of e2e/feedback-176 but with the pointer drawn: every level open, nothing completed, no tip seen yet.
+  await page.addInitScript(() => { if (!sessionStorage.getItem('seeded')) { sessionStorage.setItem('seeded', '1'); localStorage.setItem('mix-and-splash/progress/v1', JSON.stringify({ unlocked: 20, completed: [], sound: false, language: 'it', seenTips: [] })); } });
+  await page.goto('/');
+  await waitScene(page, 'menu');
+  expect(await mix<Hint>(page, 'mapHint')).toMatchObject({ levelId: 1 });
+  await openLevel(page, 10);
+  expect(await mix<number>(page, 'levelId')).toBe(10);
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('mix-and-splash/progress/v1')!).seenTips)).toContain('map');
+});
