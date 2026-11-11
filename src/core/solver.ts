@@ -2,7 +2,7 @@ import type { Primary } from './colors';
 import { buildLanes, type Level } from './level';
 import { createRng } from './rng';
 import { applyHit, boardDone, cloneBoard, createBoard, findTarget, type Board } from './rules';
-import { beltFull, createGame, launchFromColumn, launchFromSlot, step } from './sim';
+import { beltFull, createGame, launchFromColumn, launchFromSlot, step, type GameState } from './sim';
 
 /** A move in sequential play: launch a column's front shooter or a slot shooter. */
 export type Move = { from: 'column'; index: number } | { from: 'slot'; index: number };
@@ -101,16 +101,12 @@ const startNode = (level: Level): Node => ({
   slots: Array.from({ length: level.slots }, () => null),
 });
 
-/**
- * Depth-first search over sequential play (one shooter on the belt at a time). Any level solvable
- * this way is solvable in the real game, because a player can always wait for the belt to empty.
- */
-export function solve(level: Level, nodeBudget = 200_000): SolveResult {
+/** Depth-first search from `start`, trying the moves that paint the most pixels first. */
+function search(level: Level, start: Node, nodeBudget: number): SolveResult {
   const lanes = buildLanes(level.width, level.height);
   const seen = new Set<string>();
   let nodes = 0;
   let exhausted = false;
-
 
   const dfs = (node: Node, path: Move[]): Move[] | null => {
     if (boardDone(level, node.board)) return path;
@@ -132,8 +128,35 @@ export function solve(level: Level, nodeBudget = 200_000): SolveResult {
     return null;
   };
 
-  const moves = dfs(startNode(level), []);
+  const moves = dfs(start, []);
   return { solvable: moves !== null, exhaustive: !exhausted, moves: moves ?? [], nodes };
+}
+
+/**
+ * Depth-first search over sequential play (one shooter on the belt at a time). Any level solvable
+ * this way is solvable in the real game, because a player can always wait for the belt to empty.
+ */
+export function solve(level: Level, nodeBudget = 200_000): SolveResult {
+  return search(level, startNode(level), nodeBudget);
+}
+
+/**
+ * The same search from a game in progress (#93): the board as it is now, the shooters still in each column and
+ * the ones parked in the slots, "+1 slot" included when it was used. It only answers with the belt empty and no
+ * shooter about to return, because sequential play has no move for a shooter that is still riding; a finished game
+ * has no move either. `moves[0]` is the hint: playing it leaves a game that can still be won.
+ */
+export function solveFrom(state: GameState, nodeBudget = 200_000): SolveResult {
+  if (state.status !== 'playing' || state.belt.length > 0 || state.pending.length > 0) {
+    return { solvable: false, exhaustive: true, moves: [], nodes: 0 };
+  }
+  const level = state.level;
+  const start: Node = {
+    board: cloneBoard(state),
+    heads: level.columns.map((column, c) => column.length - state.queues[c]!.length),
+    slots: state.slots.map((s) => (s ? { color: s.color, ammo: s.ammo } : null)),
+  };
+  return search(level, start, nodeBudget);
 }
 
 /** Upper bound on ticks for one random playout: guards against relaunching blocked shooters forever. */
