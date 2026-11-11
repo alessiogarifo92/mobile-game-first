@@ -6,11 +6,13 @@ import {
   HEADER_MIN_SIZE, HEADER_TEXT_GAP, MAP, clampScroll, computeMapLayout, currentLevel, fitHeaderTitle, inertia, keyScrollDelta, mapTapTarget, scrollToLevel, type MapLayout,
 } from '../../core/mapLayout';
 import { moreLevelsComing, stageInfo } from '../../core/stages';
+import { needsMapHint } from '../../core/onboarding';
 import { mapUniverse } from '../../core/universeMenu';
 import { universeLevels, universeOfStage } from '../../core/universes';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
-import { LEVELS, STAGES, UNIVERSES, canOpen, getProgress, levelTitle, resetTips, setLanguage, setSound, stageTitle, t, universeTitle } from '../store';
+import { prefersReducedMotion } from '../motion';
+import { LEVELS, STAGES, UNIVERSES, canOpen, getProgress, levelTitle, markTip, resetTips, setLanguage, setSound, stageTitle, t, universeTitle } from '../store';
 import { PAINT, THEME } from '../theme';
 import { button, label, progressBar } from '../ui';
 
@@ -38,6 +40,8 @@ export class MenuScene extends Phaser.Scene {
   /** Map labels created on first view and hidden when off screen: keeps draw calls to what is visible. */
   private cullable: { y: number; make: () => Phaser.GameObjects.Text; text?: Phaser.GameObjects.Text }[] = [];
   private settings: Phaser.GameObjects.Container | null = null;
+  /** First-launch pointer at the open level (#190); null once a level was entered. */
+  private hint: { levelId: number; x: number; y: number; animated: boolean } | null = null;
   private settingsButtons: Record<string, { x: number; y: number }> = {};
   /** The universe on the map (#91): its levels only, at most 100 nodes. */
   private universe = 1;
@@ -77,7 +81,9 @@ export class MenuScene extends Phaser.Scene {
     this.cullable = [];
     this.drawPath();
     this.drawHeaders(progress.completed);
+    this.hint = null;
     this.drawNodes(progress.completed, progress.unlocked, current);
+    if (needsMapHint(progress.completed, progress.seenTips)) this.drawHint(current);
     if (this.comingSoon) {
       const top = this.layout.nodes.at(-1);
       if (top) label(this, VIEW.width / 2, top.y - 90, t('map.comingSoon'), THEME.type.sm, THEME.subCss, false);
@@ -147,9 +153,37 @@ export class MenuScene extends Phaser.Scene {
         .setAlpha(open ? 1 : 0.35));
       if (isCurrent) {
         this.lazy(n.y, () => label(this, n.x + (n.x < VIEW.width / 2 ? 140 : -140), n.y, levelTitle(n.id), THEME.type.sm, THEME.inkCss));
-        this.tweens.add({ targets: target, alpha: 0.75, duration: 700, yoyo: true, repeat: -1 });
+        if (!prefersReducedMotion()) this.tweens.add({ targets: target, alpha: 0.75, duration: 700, yoyo: true, repeat: -1 });
       }
     }
+  }
+
+  /**
+   * First launch only (#190): an ink arrow over the open level and a paper tag saying what to do.
+   * It bobs toward the node; with reduced motion it stays still. Gone once a level is opened.
+   */
+  private drawHint(levelId: number): void {
+    const n = this.layout.nodes.find((node) => node.id === levelId);
+    if (!n) return;
+    const animated = !prefersReducedMotion();
+    const tip = n.y - n.r - THEME.space.md; // arrow tip, just above the node's ring
+    const arrow = this.add.graphics();
+    arrow.fillStyle(THEME.ink, 1);
+    arrow.fillTriangle(n.x - 22, tip - 30, n.x + 22, tip - 30, n.x, tip);
+    arrow.fillRoundedRect(n.x - 7, tip - 62, 14, 36, 7);
+    const text = label(this, 0, 0, t('map.startHere'), THEME.type.sm, THEME.inkCss);
+    const w = text.width + THEME.space.lg * 2;
+    const h = THEME.type.sm + THEME.space.md;
+    const cy = tip - 62 - THEME.space.xs - h / 2;
+    const cx = Phaser.Math.Clamp(n.x, w / 2 + THEME.space.sm, VIEW.width - w / 2 - THEME.space.sm);
+    const pill = this.add.graphics();
+    pill.fillStyle(THEME.paper, 1);
+    pill.fillRoundedRect(cx - w / 2, cy - h / 2, w, h, h / 2);
+    pill.lineStyle(4, THEME.ink, 1);
+    pill.strokeRoundedRect(cx - w / 2, cy - h / 2, w, h, h / 2);
+    text.setPosition(cx, cy).setDepth(1);
+    if (animated) this.tweens.add({ targets: [arrow, pill, text], y: '+=12', duration: 600, ease: 'Sine.inOut', yoyo: true, repeat: -1 });
+    this.hint = { levelId, x: n.x, y: tip, animated };
   }
 
   /** Creates labels that came into view and hides the ones that left it. */
@@ -170,6 +204,7 @@ export class MenuScene extends Phaser.Scene {
     const target = mapTapTarget(this.layout, getProgress().unlocked, x, worldY);
     if (target?.kind === 'level' && canOpen(target.id)) {
       sfx.unlock();
+      if (this.hint) markTip('map');
       this.scene.start('play', { levelId: target.id });
     } else if (target?.kind === 'stage') {
       this.scene.start('album', { stage: target.stage });
@@ -355,6 +390,7 @@ export class MenuScene extends Phaser.Scene {
       settingsButtons: this.settings ? this.settingsButtons : {},
       language: getProgress().language,
       settingsButton: { x: VIEW.width - 70, y: this.scroll + 50 },
+      mapHint: this.hint,
     });
   }
 }
