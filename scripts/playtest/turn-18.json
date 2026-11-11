@@ -1,0 +1,9 @@
+{
+  "turn": 18,
+  "tag": "playtest-182-uscita-ingorgo",
+  "variant": "normale",
+  "agents": [
+    { "agentId": "A09", "profileId": "P09", "viewport": "360x640", "language": "it", "packs": ["U1-ONB", "S09"], "maxAttempts": 2 },
+    { "agentId": "A16", "profileId": "P16", "viewport": "360x640", "language": "it", "packs": ["U1-ONB", "S09"], "maxAttempts": 5 }
+  ]
+}

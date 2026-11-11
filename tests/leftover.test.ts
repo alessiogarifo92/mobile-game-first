@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { BLUE, RED, YELLOW, level } from './helpers';
-import { forecastLeftover, leftoverHint } from '../src/core/leftover';
+import { escapeKey, forecastLeftover, jamEscape, leftoverHint } from '../src/core/leftover';
 import { createGame, launchFromColumn, step, type GameState } from '../src/core/sim';
 import type { Primary } from '../src/core/colors';
 import levels83 from '../src/levels/levels.json';
 import { parseLevel, type LevelDef } from '../src/core/level';
+import { translate } from '../src/core/i18n';
 
 /** Real outcome: launches column 0 alone and rides one lap; returns the ammo it comes back with (0 if emptied). */
 function realLeftover(g: GameState): number {
@@ -126,5 +127,58 @@ describe('"↩10" on a bucket never launched, level 83 (#176, P4)', () => {
     const f = forecastLeftover(g, BLUE, bucket.ammo);
     expect(f).toMatchObject({ hits: 2, leftover: 10, returns: true });
     expect(leftoverHint(f)?.label).toBe('↩10');
+  });
+});
+
+describe('jamEscape (#182)', () => {
+  const slot = (id: number, color: Primary, ammo: number) => ({ id, color, ammo, pos: 0, traveled: 0 });
+  /** Two slots; the red bucket at the top of column 0 has more shots than red pixels, so it would come back. */
+  function risky() {
+    const g = rig(createGame(level(['RRB'], [[[RED, 2]], [[BLUE, 1]]], { slots: 2 })), 5);
+    g.slots[0] = slot(90, YELLOW, 2); // yellow: nothing accepts it, it would come back whole
+    return g;
+  }
+
+  it('is null when no "!" shows: free slots, or nothing comes back', () => {
+    expect(jamEscape(createGame(level(['RR'], [[[RED, 2]]])))).toBeNull();
+    const calm = rig(createGame(level(['RR'], [[[RED, 2]]], { slots: 3 })), 5);
+    expect(jamEscape(calm)).toBeNull(); // it comes back, but two slots stay free
+  });
+
+  it('points to a bucket that would not come back, a waiting one first since it also frees its slot', () => {
+    const g = risky();
+    expect(jamEscape(g)).toEqual({ kind: 'empty', from: 'column', index: 1 }); // blue spends its one shot
+    g.slots[0] = slot(91, BLUE, 1);
+    expect(jamEscape(g)).toEqual({ kind: 'empty', from: 'slot', index: 0 });
+  });
+
+  it('with no safe bucket, offers +1 slot, then only another order once +1 slot is used', () => {
+    const g = risky();
+    g.queues[1] = [];
+    expect(jamEscape(g)).toEqual({ kind: 'extraSlot' });
+    g.extraSlotUsed = true;
+    expect(jamEscape(g)).toEqual({ kind: 'order' });
+  });
+
+  it('maps each way out to its line, in both languages', () => {
+    expect(escapeKey({ kind: 'empty', from: 'slot', index: 0 })).toBe('escape.slot');
+    expect(escapeKey({ kind: 'empty', from: 'column', index: 2 })).toBe('escape.column');
+    expect(escapeKey({ kind: 'extraSlot' })).toBe('escape.extraSlot');
+    expect(escapeKey({ kind: 'order' })).toBe('escape.order');
+    for (const lang of ['it', 'en'] as const) {
+      for (const key of ['escape.slot', 'escape.column', 'escape.extraSlot', 'escape.order'] as const) {
+        expect(translate(lang, key)).not.toBe(key);
+        expect(translate(lang, key).length).toBeLessThanOrEqual(44); // one line on the subtitle, above the board
+      }
+    }
+  });
+
+  it('says nothing once the level is over, and never mutates the state', () => {
+    const g = risky();
+    const before = JSON.stringify(g);
+    jamEscape(g);
+    expect(JSON.stringify(g)).toBe(before);
+    g.status = 'jammed';
+    expect(jamEscape(g)).toBeNull();
   });
 });

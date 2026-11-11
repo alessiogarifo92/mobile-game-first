@@ -1,0 +1,476 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "T18-A16",
+  "agent": {
+    "agentId": "A16",
+    "profileId": "P16"
+  },
+  "turn": 18,
+  "build": {
+    "commit": "101196309e4d",
+    "version": "0.5.0",
+    "tag": "playtest-182-uscita-ingorgo",
+    "variant": "normale"
+  },
+  "device": {
+    "viewport": "360x640",
+    "language": "it"
+  },
+  "startSave": {
+    "unlocked": 1,
+    "completedThrough": 0,
+    "seenTips": []
+  },
+  "plan": {
+    "packs": [
+      "U1-ONB",
+      "S09"
+    ],
+    "levelIds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90
+    ]
+  },
+  "startedAt": "2026-11-10T19:28:17.098Z",
+  "endedAt": "2026-11-10T19:35:26.434Z",
+  "endReason": "errore-harness",
+  "levels": [
+    {
+      "levelId": 1,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 20550,
+          "timeToFirstTapMs": 4379,
+          "ticks": 243,
+          "taps": 4,
+          "offTargetTaps": 0,
+          "launches": 4,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 0,
+          "slotCount": 4,
+          "maxBeltUsed": 1,
+          "beltCapacity": 5,
+          "painted": 40,
+          "targets": 40,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "guide"
+          ],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0010.png",
+            "0011.png",
+            "0012.png",
+            "0013.png",
+            "0014.png",
+            "0015.png",
+            "0016.png",
+            "0017.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 5,
+        "perceivedDifficulty": 1,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "",
+        "wouldContinue": true,
+        "freeText": "Il tutorial mi ha guidata bene con la manina sulla colonna e le frasi sotto il titolo. Ho capito che i secchielli colorano i quadretti del disegno. All'inizio mi ha confuso cercare il livello: toccando lo stage si apre un album con '?' e ho dovuto tornare indietro piu volte prima di capire che bisogna toccare il cerchio 1 sulla mappa. Nessuna scheda di suggerimento, nessun ingorgo."
+      }
+    },
+    {
+      "levelId": 2,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 57496,
+          "timeToFirstTapMs": 5692,
+          "ticks": 624,
+          "taps": 9,
+          "offTargetTaps": 0,
+          "launches": 8,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 4,
+          "maxBeltUsed": 1,
+          "beltCapacity": 5,
+          "painted": 64,
+          "targets": 64,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "slots"
+          ],
+          "tipDismissMs": 4560,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0019.png",
+            "0020.png",
+            "0021.png",
+            "0022.png",
+            "0023.png",
+            "0024.png",
+            "0025.png",
+            "0026.png",
+            "0027.png",
+            "0028.png",
+            "0029.png",
+            "0030.png",
+            "0031.png",
+            "0032.png",
+            "0033.png",
+            "0034.png",
+            "0035.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "All'inizio non capivo perche il giallo si fermava sulle caselle blu: la riga 'La vernice si ferma sul primo pixel non finito' l'ho capita solo dopo averlo visto succedere.",
+        "wouldContinue": true,
+        "freeText": "Scheda 'Slot d'attesa' comparsa quando un secchiello giallo e avanzato: ho capito che i secchielli con vernice rimasta aspettano negli slot e si rilanciano toccandoli, e che con gli slot pieni c'e ingorgo. Testo chiaro, disegno dei tre slot utile. Ho vinto in 8 mosse al primo tentativo, soddisfacente vedere il sole."
+      }
+    },
+    {
+      "levelId": 3,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 58663,
+          "timeToFirstTapMs": 7218,
+          "ticks": 641,
+          "taps": 9,
+          "offTargetTaps": 0,
+          "launches": 8,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 3,
+          "slotCount": 4,
+          "maxBeltUsed": 1,
+          "beltCapacity": 5,
+          "painted": 42,
+          "targets": 42,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "leftover"
+          ],
+          "tipDismissMs": 4377,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0038.png",
+            "0039.png",
+            "0040.png",
+            "0041.png",
+            "0042.png",
+            "0043.png",
+            "0044.png",
+            "0045.png",
+            "0046.png",
+            "0047.png",
+            "0048.png",
+            "0049.png",
+            "0050.png",
+            "0051.png",
+            "0052.png",
+            "0053.png",
+            "0054.png",
+            "0055.png",
+            "0056.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "mechanic": {
+          "id": "slots",
+          "understood": 4,
+          "fairness": 5,
+          "rememberedColors": null
+        },
+        "notUnderstood": "",
+        "wouldContinue": true,
+        "freeText": "Scheda 'Perche e tornato': il disegno con 4 -> tre quadretti -> 1 mi ha fatto capire che un secchiello torna se non restano pixel del suo colore raggiungibili, e che il numero con la freccia dice quanto tornerebbe. Il '!' per l'ultimo slot libero mi ha messa in guardia sull'ingorgo, utile per me che sono prudente. Ho finito il fungo in 8 mosse senza ingorghi; ho dovuto pensare all'ordine dei colori perche il giallo bloccava il rosso."
+      }
+    },
+    {
+      "levelId": 4,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 47013,
+          "timeToFirstTapMs": 6725,
+          "ticks": 478,
+          "taps": 8,
+          "offTargetTaps": 0,
+          "launches": 7,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 3,
+          "maxBeltUsed": 1,
+          "beltCapacity": 5,
+          "painted": 41,
+          "targets": 41,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "mixing"
+          ],
+          "tipDismissMs": 6339,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0058.png",
+            "0059.png",
+            "0060.png",
+            "0061.png",
+            "0062.png",
+            "0063.png",
+            "0064.png",
+            "0065.png",
+            "0066.png",
+            "0067.png",
+            "0068.png",
+            "0069.png",
+            "0070.png",
+            "0071.png",
+            "0072.png",
+            "0073.png",
+            "0074.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 5,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "mechanic": {
+          "id": "mixing",
+          "understood": 5,
+          "fairness": 5,
+          "rememberedColors": null
+        },
+        "notUnderstood": "",
+        "wouldContinue": true,
+        "freeText": "Scheda 'Mescola sulla tela' chiarissima: tre righe colore + colore = colore e il testo 'Hai solo rosso, giallo e blu. Colpisci un pixel con due colori per mescolarli'. Ho visto i pixel mezzi rossi con il puntino giallo che aspettano il secondo colore: molto leggibile. Fiamma finita in 7 mosse, nessun ingorgo, un po' di rosso e giallo avanzato in slot ma poi riusato."
+      }
+    },
+    {
+      "levelId": 5,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 73929,
+          "timeToFirstTapMs": 5068,
+          "ticks": 813,
+          "taps": 12,
+          "offTargetTaps": 0,
+          "launches": 11,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 1,
+          "slotCount": 3,
+          "maxBeltUsed": 1,
+          "beltCapacity": 5,
+          "painted": 52,
+          "targets": 52,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "queue"
+          ],
+          "tipDismissMs": 4799,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0076.png",
+            "0077.png",
+            "0078.png",
+            "0079.png",
+            "0080.png",
+            "0081.png",
+            "0082.png",
+            "0083.png",
+            "0084.png",
+            "0085.png",
+            "0086.png",
+            "0087.png",
+            "0088.png",
+            "0089.png",
+            "0090.png",
+            "0091.png",
+            "0092.png",
+            "0093.png",
+            "0094.png",
+            "0095.png",
+            "0096.png",
+            "0097.png",
+            "0098.png",
+            "0099.png",
+            "0100.png",
+            "0101.png",
+            "0102.png",
+            "0103.png",
+            "0104.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "",
+        "wouldContinue": true,
+        "freeText": "Scheda 'Altri secchielli in coda': il disegno con tre secchielli e '+2' mi ha fatto capire che sotto ogni colonna ce ne sono altri oltre ai 3 visibili. Utile, anche se il disegno '= due quadratini' era un po' astratto; ho capito soprattutto dal numero. Quadrifoglio in 11 mosse, verde = giallo + blu chiaro. Nessun ingorgo. Nota: i miei toccamenti di colonna n=2 quando ne restava una sola non hanno fatto nulla: la numerazione si sposta, errore mio."
+      }
+    },
+    {
+      "levelId": 6,
+      "result": "abbandonato",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "uscita",
+          "durationMs": 15932,
+          "timeToFirstTapMs": 6500,
+          "ticks": 186,
+          "taps": 3,
+          "offTargetTaps": 0,
+          "launches": 3,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 0,
+          "slotCount": 3,
+          "maxBeltUsed": 1,
+          "beltCapacity": 5,
+          "painted": 27,
+          "targets": 30,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0106.png",
+            "0107.png",
+            "0108.png",
+            "0109.png",
+            "0110.png",
+            "0111.png",
+            "0112.png",
+            "0113.png"
+          ]
+        }
+      ]
+    }
+  ],
+  "session": {
+    "telemetry": {
+      "durationMs": 429336,
+      "actions": 58,
+      "screens": {
+        "menu": 2,
+        "album": 1,
+        "play": 6
+      },
+      "languageChanges": 0,
+      "uncaughtErrors": [],
+      "stuckScreens": []
+    }
+  },
+  "bugs": []
+}

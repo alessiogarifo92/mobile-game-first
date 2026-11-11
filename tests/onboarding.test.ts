@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { COLUMN_SHOWN, guideAllows, guideStep, needsGuide, tipOnBlockedTap, tipOnFullBelt, tipAllowed, tipOnLevelStart, tipOnReturn } from '../src/core/onboarding';
+import { COLUMN_SHOWN, guideAllows, guideStep, needsGuide, tipOnBlockedTap, tipOnFullBelt, tipAllowed, tipOnLevelStart, tipOnReturn, tipsPresent } from '../src/core/onboarding';
 import { BLUE, RED, YELLOW, level } from './helpers';
 
 describe('onboarding', () => {
@@ -26,6 +26,13 @@ describe('onboarding', () => {
     expect(tipOnLevelStart(iced, ['mixing'])).toBe('ice');
     expect(tipOnLevelStart(iced, ['mixing', 'ice'])).toBeNull();
     expect(tipOnLevelStart(hidden, [])).toBe('hidden');
+  });
+
+  it('lists every level-start mechanic on the board, in the order the tips show (#182)', () => {
+    const iced = level(['RO'], [[[RED, 3]], [[YELLOW, 1]]], { id: 31, overlay: ['i.'] });
+    expect(tipsPresent(iced)).toEqual(['mixing', 'ice']);
+    expect(tipsPresent(level(['R'], [[[RED, 1]]]))).toEqual([]);
+    expect(tipsPresent(level(['RB'], [[[RED, 1]], [[BLUE, 1]]], { overlay: ['.h'] }))).toEqual(['hidden']);
   });
 
   it('explains blocked lanes before slots when a bucket could not shoot', () => {

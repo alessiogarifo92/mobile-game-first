@@ -5,7 +5,7 @@
  */
 import { sanitize, type LevelRef, type Progress } from '../../src/core/progress';
 import type { Level } from '../../src/core/level';
-import { tipOnLevelStart } from '../../src/core/onboarding';
+import { tipOnLevelStart, tipsPresent } from '../../src/core/onboarding';
 import { isLanguage } from '../../src/core/i18n';
 import { canOpenLevel } from '../../src/core/universes';
 
@@ -25,8 +25,12 @@ export class SaveError extends Error {}
 /**
  * Tips a player who cleared every level before `start` in order has seen: the tips met in play, plus one level-start
  * tip per level, as the game shows them. A mechanic debuting at `start` or later still gets its tip.
+ *
+ * `fresh` lists the levels the session will play (#182): a level-start tip whose mechanic is on one of them is left
+ * unseen even if a real player met it earlier, so the agent, who has no memory of earlier levels, sees its card and
+ * its drawing instead of a mechanic it was never shown (ice at 81, debuting at 66).
  */
-export function tipsMetBefore(levels: readonly Level[], start: number): string[] {
+export function tipsMetBefore(levels: readonly Level[], start: number, fresh: readonly number[] = []): string[] {
   if (start <= 1) return [];
   const seen = [...PLAY_TIPS];
   for (const level of levels) {
@@ -34,7 +38,8 @@ export function tipsMetBefore(levels: readonly Level[], start: number): string[]
     const tip = tipOnLevelStart(level, seen);
     if (tip) seen.push(tip);
   }
-  return seen;
+  const ahead = new Set<string>(levels.filter((l) => fresh.includes(l.id)).flatMap(tipsPresent));
+  return seen.filter((tip) => !ahead.has(tip));
 }
 
 /** Level ids of a pack: `U1-ONB` (1–10), `U1-FINE` (95–100) or `Snn` (the levels of stage nn). */
@@ -65,12 +70,15 @@ export function saveStarts(plan: readonly number[]): number[] {
   return plan.filter((id, i) => i === 0 || plan[i - 1] !== id - 1);
 }
 
-/** The save to start level `start` from, in the game's format (what goes into localStorage). */
-export function saveFor(levels: readonly Level[], start: number, language: string, sound = false): Progress {
+/**
+ * The save to start level `start` from, in the game's format (what goes into localStorage). `fresh`: the levels the
+ * session will play, whose mechanics keep their card (see `tipsMetBefore`).
+ */
+export function saveFor(levels: readonly Level[], start: number, language: string, sound = false, fresh: readonly number[] = []): Progress {
   if (!isLanguage(language)) throw new SaveError(`unknown language "${language}"`);
   if (!levels.some((l) => l.id === start)) throw new SaveError(`the game has no level ${start}`);
   const completed = levels.filter((l) => l.id < start).map((l) => l.id);
-  const save = sanitize({ unlocked: start, completed, sound, language, seenTips: tipsMetBefore(levels, start) }, levels);
+  const save = sanitize({ unlocked: start, completed, sound, language, seenTips: tipsMetBefore(levels, start, fresh) }, levels);
   // sanitize drops what a real save could not hold, and the core decides what may be opened.
   if (save.unlocked !== start || !canOpenLevel(levels, save, start)) throw new SaveError(`level ${start} is not reachable from a valid save`);
   return save;

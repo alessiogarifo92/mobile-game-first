@@ -9,7 +9,7 @@ import { currentLevel } from '../../core/mapLayout';
 import { blockExample, blockerAlpha, blockerSignature, refuseSlotLaunch, unlockColors, type BlockExample } from '../../core/blocked';
 import type { Primary } from '../../core/colors';
 import { missingDots } from '../../core/brownPixel';
-import { forecastLeftover, freeSlots, leftoverHint, type LeftoverForecast } from '../../core/leftover';
+import { escapeKey, forecastLeftover, freeSlots, jamEscape, leftoverHint, type JamEscape, type LeftoverForecast } from '../../core/leftover';
 import { PANEL_ARM_MS, PANEL_FADE_MS, jamHintKey } from '../../core/panelInput';
 import { newlyCompletedUniverse } from '../../core/universeMenu';
 import { universeLevels, universeOf } from '../../core/universes';
@@ -55,6 +55,9 @@ export class PlayScene extends Phaser.Scene {
   private forecasts = new Map<string, LeftoverForecast>();
   /** Labels drawn on the buckets this frame (debug hook for e2e). */
   private hintLabels: string[] = [];
+  /** The way out of the jam a "!" warns about (#182), cached per belt tick; and what the subtitle showed before it. */
+  private escape: { key: string; e: JamEscape | null } | null = null;
+  private subtitleBefore: { text: string; size: number; color: string } | null = null;
   private texts: Phaser.GameObjects.Text[] = [];
   private textIndex = 0;
   /** Pixels changed since the last redraw: several hits in one frame cost a single redraw. */
@@ -131,6 +134,8 @@ export class PlayScene extends Phaser.Scene {
     this.winText = '';
     this.winHint = '';
     this.guide = null;
+    this.escape = null;
+    this.subtitleBefore = null;
     this.guideLayer = null;
     this.tip = null;
     this.tipOkY = 0;
@@ -698,7 +703,10 @@ export class PlayScene extends Phaser.Scene {
   private drawLeftoverHints(): void {
     const { layout, gs } = this;
     this.hintLabels = [];
-    if (gs.status !== 'playing') return;
+    if (gs.status !== 'playing') {
+      this.drawEscape('');
+      return;
+    }
     const g = this.dynamic;
     const buckets: { s: Shooter; x: number; y: number; size: number; slot: boolean }[] = [];
     gs.queues.forEach((q, c) => {
@@ -734,6 +742,49 @@ export class PlayScene extends Phaser.Scene {
       g.strokeRoundedRect(cx - w / 2, cy - h / 2, w, h, h / 2);
       this.text(cx, cy, hint.label, THEME.type.xs, risky ? '#FFFFFF' : THEME.inkCss);
     }
+    this.drawEscape(buckets.map((b) => b.s.id).join(','));
+  }
+
+  /** The way out the core suggests while a "!" shows, or null (the guide of level 1 keeps the subtitle line). */
+  private currentEscape(ids: string): JamEscape | null {
+    const { gs } = this;
+    if (this.guide !== null || gs.status !== 'playing') return null;
+    const key = `${gs.tick}:${gs.extraSlotUsed}:${ids}`;
+    if (this.escape?.key !== key) this.escape = { key, e: jamEscape(gs) };
+    return this.escape.e;
+  }
+
+  /**
+   * #182: while a "!" shows, the subtitle line under the title says how to get out of the jam it warns about, and a
+   * gold ring marks the bucket to launch first when one would not come back. The subtitle gets its text back after.
+   */
+  private drawEscape(ids: string): void {
+    const e = this.gs.status === 'playing' ? this.currentEscape(ids) : null;
+    if (e) {
+      if (!this.subtitleBefore) {
+        const s = this.subtitle;
+        this.subtitleBefore = { text: s.text, size: Number.parseInt(String(s.style.fontSize), 10), color: String(s.style.color) };
+      }
+      const line = t(escapeKey(e));
+      if (this.subtitle.text !== line) this.subtitle.setText(line).setColor(THEME.inkCss).setFontSize(THEME.type.xs);
+    } else if (this.subtitleBefore) {
+      const b = this.subtitleBefore;
+      this.subtitle.setText(b.text).setColor(b.color).setFontSize(b.size);
+      this.subtitleBefore = null;
+    }
+    if (e?.kind !== 'empty') return;
+    const { layout } = this;
+    const r = e.from === 'slot' ? layout.slots[e.index] : layout.columns[e.index];
+    if (!r) return;
+    const size = e.from === 'slot' ? r.w : layout.jar;
+    const x = r.x + r.w / 2;
+    const y = e.from === 'slot' ? r.y + r.h / 2 : r.y + layout.jar / 2 + 6;
+    const pad = 10;
+    const g = this.dynamic;
+    g.lineStyle(8, THEME.gold, 1);
+    g.strokeRoundedRect(x - size / 2 - pad, y - size / 2 - pad, size + 2 * pad, size + 2 * pad, THEME.radius.jar + pad / 2);
+    g.lineStyle(2, THEME.ink, 1);
+    g.strokeRoundedRect(x - size / 2 - pad - 4, y - size / 2 - pad - 4, size + 2 * pad + 8, size + 2 * pad + 8, THEME.radius.jar + pad);
   }
 
   /** The blocker circles, when they belong to this game and none of their pixels has changed since; else none. */
@@ -1068,6 +1119,8 @@ export class PlayScene extends Phaser.Scene {
       slotsUsed: gs.slots.filter(Boolean).length,
       // Leftover pills currently drawn on the buckets (#145).
       leftoverHints: [...this.hintLabels],
+      // The way out shown under the title while a "!" shows (#182), or null.
+      escape: this.escape?.e && this.subtitleBefore ? { ...this.escape.e, key: escapeKey(this.escape.e) } : null,
       // Solved on demand (only the guide and tests read it), not at every level start.
       get solution() {
         return solutionOf();

@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "T19-A16",
+  "agent": {
+    "agentId": "A16",
+    "profileId": "P16"
+  },
+  "turn": 19,
+  "build": {
+    "commit": "fa65b8f1ae3c",
+    "version": "0.5.0",
+    "tag": "playtest-182-uscita-ingorgo-s09",
+    "variant": "normale"
+  },
+  "device": {
+    "viewport": "360x640",
+    "language": "it"
+  },
+  "startSave": {
+    "unlocked": 81,
+    "completedThrough": 80,
+    "seenTips": [
+      "guide",
+      "slots",
+      "belt"
+    ]
+  },
+  "plan": {
+    "packs": [
+      "S09"
+    ],
+    "levelIds": [
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90
+    ]
+  },
+  "startedAt": "2026-11-10T22:10:37.016Z",
+  "endedAt": "2026-11-10T22:15:04.889Z",
+  "endReason": "soglia-abbandono",
+  "levels": [
+    {
+      "levelId": 81,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 46279,
+          "timeToFirstTapMs": 6404,
+          "ticks": 473,
+          "taps": 9,
+          "offTargetTaps": 0,
+          "launches": 8,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 0,
+          "slotCount": 3,
+          "maxBeltUsed": 1,
+          "beltCapacity": 2,
+          "painted": 61,
+          "targets": 61,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 19,
+          "reveals": 0,
+          "tipsShown": [
+            "ice"
+          ],
+          "tipDismissMs": 5952,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0002.png",
+            "0003.png",
+            "0004.png",
+            "0005.png",
+            "0006.png",
+            "0007.png",
+            "0008.png",
+            "0009.png",
+            "0010.png",
+            "0011.png",
+            "0012.png",
+            "0013.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 1,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "mechanic": {
+          "id": "ice",
+          "understood": 4,
+          "fairness": 5,
+          "rememberedColors": null
+        },
+        "notUnderstood": "I pixel con il punto interrogativo e quelli con i dadi non li ho capiti, ma si sono colorati da soli.",
+        "wouldContinue": true,
+        "freeText": "Scheda 'Pixel ghiacciati': ho capito che servono due colpi dello stesso colore, uno rompe il ghiaccio e uno dipinge. Livello facilissimo, tutto giallo, ho vinto in 8 mosse al primo colpo."
+      }
+    },
+    {
+      "levelId": 82,
+      "result": "abbandonato",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "uscita",
+          "durationMs": 185683,
+          "timeToFirstTapMs": 7336,
+          "ticks": 1261,
+          "taps": 23,
+          "offTargetTaps": 8,
+          "launches": 13,
+          "refusals": 0,
+          "blockedTaps": 1,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 1,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 92,
+          "targets": 120,
+          "remaining": {
+            "ice": 1,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "mixing",
+            "blocked"
+          ],
+          "tipDismissMs": 78458,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0015.png",
+            "0016.png",
+            "0017.png",
+            "0018.png",
+            "0019.png",
+            "0020.png",
+            "0021.png",
+            "0022.png",
+            "0023.png",
+            "0024.png",
+            "0025.png",
+            "0026.png",
+            "0027.png",
+            "0028.png",
+            "0029.png",
+            "0030.png",
+            "0031.png",
+            "0032.png",
+            "0033.png",
+            "0034.png",
+            "0035.png",
+            "0036.png",
+            "0037.png",
+            "0038.png",
+            "0039.png",
+            "0040.png",
+            "0041.png",
+            "0042.png",
+            "0043.png",
+            "0044.png",
+            "0045.png",
+            "0046.png",
+            "0047.png",
+            "0048.png",
+            "0049.png",
+            "0050.png",
+            "0051.png",
+            "0052.png",
+            "0053.png",
+            "0054.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 4,
+        "mood": "frustrato",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 3,
+        "mechanic": {
+          "id": "lock",
+          "understood": 2,
+          "fairness": 2,
+          "rememberedColors": null
+        },
+        "notUnderstood": "Non capivo perche alcuni pixel con pallino rosso non si colorassero; la scheda sulla corsia bloccata e arrivata tardi e poi il gioco si e bloccato.",
+        "wouldContinue": false,
+        "freeText": "Scheda 'Mescola sulla tela': capito che rosso+giallo=arancio, ecc. Il suggerimento sotto il titolo ('Rilancia prima quello in attesa senza freccia', 'Lancia prima un secchiello senza freccia', poi 'Nessun lancio sicuro: in ingorgo +1 slot') mi ha aiutato e il secchiello evidenziato si vedeva. Non uso +1 slot. Scheda 'Corsia bloccata': ho capito che il pallino sul cerchio e il colore che apre, ma il secchiello rosso non l'ho mai potuto lanciare perche lo schermo si e congelato su quella scheda."
+      }
+    }
+  ],
+  "session": {
+    "telemetry": {
+      "durationMs": 267873,
+      "actions": 34,
+      "screens": {
+        "menu": 1,
+        "play": 2
+      },
+      "languageChanges": 0,
+      "uncaughtErrors": [],
+      "stuckScreens": []
+    },
+    "feedback": {
+      "fun": 2,
+      "wouldReturn": 2,
+      "stoppedBecause": "Il gioco si e congelato sulla scheda 'Corsia bloccata' al livello 82 e non rispondeva piu a nessun tocco.",
+      "bestMoment": "Livello 81: stella finita in 8 mosse, scheda dei pixel ghiacciati chiara.",
+      "worstMoment": "Livello 82: schermo bloccato sulla scheda, senza modo di proseguire.",
+      "freeText": "Ho giocato solo 81 e 82. I suggerimenti sotto il titolo e il secchiello evidenziato mi hanno guidato bene. Non uso mai +1 slot."
+    }
+  },
+  "bugs": [
+    {
+      "title": "Schermo bloccato sulla scheda 'Corsia bloccata' al livello 82: nessun tocco, menu o restart risponde",
+      "severity": "alta",
+      "category": "blocco",
+      "levelId": 82,
+      "steps": [
+        "Livello 82, lanciare vari secchielli finche resta solo il giallo in attesa con ritorni",
+        "Lanciare il secchiello in attesa piu volte con tocco su slot 1",
+        "Compare la scheda 'Corsia bloccata'",
+        "Toccare 'Ho capito', poi tap altrove, menu, restart"
+      ],
+      "expected": "La scheda si chiude e posso continuare, tornare alla mappa o riavviare",
+      "actual": "Lo screenshot resta identico (stessa immagine byte per byte) dopo ogni tocco, menu e restart: gioco congelato",
+      "screenshots": [
+        "/home/user/v188/playtest-runs/T19/T19-A16/0054.png"
+      ],
+      "reproduced": false,
+      "id": "T19-A16-B01"
+    }
+  ]
+}
