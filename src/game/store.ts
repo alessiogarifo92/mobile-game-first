@@ -2,7 +2,7 @@ import { unlockedSkins, type Skin } from '../core/album';
 import { DEFAULT_LANGUAGE, levelName, stageName, translate, universeName, type Language, type MessageKey, type Params } from '../core/i18n';
 import { parseLevel, type Level, type LevelDef } from '../core/level';
 import {
-  completeLevel, loadProgress, markTipSeen, resetProgress as resetProgressData, saveProgress, type KeyValueStorage, type Progress,
+  completeLevel, hintOffered, loadProgress, recordDefeat as recordDefeatData, markTipSeen, resetProgress as resetProgressData, saveProgress, type KeyValueStorage, type Progress,
 } from '../core/progress';
 import type { StageInfo } from '../core/stages';
 import { canOpenLevel, type UniverseInfo } from '../core/universes';
@@ -47,6 +47,17 @@ export function canOpen(levelId: number): boolean {
 export function markCompleted(levelId: number): void {
   if (!canOpen(levelId)) return;
   update(completeLevel(progress, levelId, LEVELS.length));
+}
+
+/** Counts a defeat on `levelId` (#93); a win clears the streak through `markCompleted`. */
+export function recordDefeat(levelId: number): void {
+  if (!canOpen(levelId)) return;
+  update(recordDefeatData(progress, levelId));
+}
+
+/** Whether `levelId` offers the free hint: three defeats in a row since its last win. */
+export function hintAvailable(levelId: number): boolean {
+  return hintOffered(progress, levelId);
 }
 
 export function setSound(on: boolean): void {

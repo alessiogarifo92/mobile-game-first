@@ -20,10 +20,15 @@ import {
 import {
   COLUMN_SHOWN, guideAllows, guideStep, needsGuide, tipOnBlockedTap, tipOnFullBelt, tipOnLevelStart, tipOnReturn, type CardTip, type GuideStep,
 } from '../../core/onboarding';
-import { solve } from '../../core/solver';
+import { solve, solveFrom, type Move } from '../../core/solver';
+import { missingCells, nearMiss } from '../../core/defeat';
+import { defeatsOn } from '../../core/progress';
+import { REDUCED_MOTION_QUERY, prefersReducedMotion } from '../../core/motion';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
-import { LEVELS, UNIVERSES, canOpen, getProgress, levelHint, levelTitle, markCompleted, markTip, setSound, t, tipSeen } from '../store';
+import {
+  LEVELS, UNIVERSES, canOpen, getProgress, hintAvailable, levelHint, levelTitle, markCompleted, markTip, recordDefeat, setSound, t, tipSeen,
+} from '../store';
 import { BLUE, BROWN, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
 import { PAINT, SYMBOL, THEME, css } from '../theme';
 import { drawSkin } from '../skins';
@@ -43,6 +48,8 @@ const PIP_GAP = 6;
 const MAX_PIPS = 6;
 /** Covered bucket reaching the front of its column: it turns over (squash, swap face, unsquash) in this time. */
 const REVEAL_MS = 420;
+/** Side of the jam panel's picture of what was left (#93). */
+const JAM_CANVAS = 150;
 const GUIDE_TEXT = { tap: 'guide.tap', watch: 'guide.watch', next: 'guide.next', free: 'guide.free' } as const;
 
 export class PlayScene extends Phaser.Scene {
@@ -108,12 +115,20 @@ export class PlayScene extends Phaser.Scene {
   private blockedTaps = 0;
   /** Shots stopped by a stone so far (for tests). */
   private stoneSplashes = 0;
+  /** #93: this attempt was opened from the jam panel's "Hint" button, which marks the first move of a solution. */
+  private hint = false;
+  private hintMove: Move | null = null;
+  private hintLayer: Phaser.GameObjects.Container | null = null;
+  /** #93: one attempt counts as one defeat, also when "+1 slot" lets it jam a second time. */
+  private defeatRecorded = false;
+  /** #93: cells still missing when the level jammed, shown on the jam panel. */
+  private missingList: number[] = [];
 
   constructor() {
     super('play');
   }
 
-  init(data: { levelId?: number }): void {
+  init(data: { levelId?: number; hint?: boolean }): void {
     // A level the core refuses (locked, or in a closed universe) opens the player's current level instead.
     const requested = data.levelId ?? 1;
     const { unlocked, completed } = getProgress();
@@ -150,6 +165,11 @@ export class PlayScene extends Phaser.Scene {
     this.blockers = null;
     this.blockedTaps = 0;
     this.stoneSplashes = 0;
+    this.hint = data.hint === true;
+    this.hintMove = null;
+    this.hintLayer = null;
+    this.defeatRecorded = false;
+    this.missingList = [];
   }
 
   create(): void {
@@ -204,10 +224,36 @@ export class PlayScene extends Phaser.Scene {
     const seen = getProgress().seenTips;
     if (needsGuide(this.level, seen)) this.updateGuide();
     else {
+      if (this.hint) this.showHint();
       const tip = tipOnLevelStart(this.level, seen);
       if (tip) this.time.delayedCall(350, () => this.showTip(tip));
     }
     this.publish();
+  }
+
+  /**
+   * #93: the attempt opened from the jam panel's "Hint" button. The belt is empty, so the solver can answer from the
+   * starting state: a white frame and the tutorial hand mark the bucket of its first move (shape and motion, not colour).
+   * Playing it leaves a game that can still be won. One hint per attempt: it goes away at the first launch.
+   */
+  private showHint(): void {
+    const move = solveFrom(this.gs).moves[0];
+    if (!move) return;
+    this.hintMove = move;
+    const target = move.from === 'column' ? this.layout.columns[move.index]! : this.layout.slots[move.index]!;
+    const pad = 10;
+    const boxH = move.from === 'column' ? 3 * this.layout.columnStep + 30 : target.h + 2 * pad;
+    const g = this.add.graphics();
+    g.lineStyle(6, THEME.white, 1);
+    g.strokeRoundedRect(target.x - pad, target.y - pad, target.w + 2 * pad, boxH, THEME.radius.jar);
+    g.lineStyle(2, THEME.ink, 1);
+    g.strokeRoundedRect(target.x - pad - 4, target.y - pad - 4, target.w + 2 * pad + 8, boxH + 8, THEME.radius.jar);
+    const below = target.y - pad + boxH;
+    const hand = label(this, target.x + target.w / 2, Math.min(below + 60, this.scale.height - 90), '👆', 72);
+    const reduced = prefersReducedMotion(typeof window !== 'undefined' ? window.matchMedia?.(REDUCED_MOTION_QUERY) : null);
+    if (!reduced) this.tweens.add({ targets: hand, y: hand.y + 24, duration: 450, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    this.hintLayer = this.add.container(0, 0, [g, hand]).setDepth(8);
+    this.subtitle.setText(t('hint.ready')).setColor(THEME.inkCss).setFontStyle('bold').setFontSize(THEME.type.xs);
   }
 
   /** A resize may rebuild the level only before the first move and with no panel open. */
@@ -215,8 +261,9 @@ export class PlayScene extends Phaser.Scene {
     return this.moves === 0 && !this.overlay;
   }
 
-  relayoutData(): { levelId: number } {
-    return { levelId: this.level.id };
+  relayoutData(): { levelId: number; hint: boolean } {
+    // A resize before the first move keeps the hint: the attempt has not started yet.
+    return { levelId: this.level.id, hint: this.hint };
   }
 
   private restart(): void {
@@ -251,6 +298,10 @@ export class PlayScene extends Phaser.Scene {
     this.launchAmmo.set(wanted.id, wanted.ammo);
     this.moves += 1;
     sfx.launch();
+    if (this.hintLayer) {
+      this.hintLayer.destroy();
+      this.hintLayer = null;
+    }
     if (this.guide) this.updateGuide();
     this.publish();
   }
@@ -961,6 +1012,12 @@ export class PlayScene extends Phaser.Scene {
       this.showWin();
     } else {
       sfx.jam();
+      // #93: what was left, and one defeat counted per attempt (taking "+1 slot" and jamming again is the same attempt).
+      this.missingList = missingCells(this.level, this.gs);
+      if (!this.defeatRecorded) {
+        recordDefeat(this.level.id);
+        this.defeatRecorded = true;
+      }
       this.showJam();
     }
   }
@@ -1040,14 +1097,36 @@ export class PlayScene extends Phaser.Scene {
     this.universeDone = { done, total: ids.length, plusOne: this.firstWin };
   }
 
+  /**
+   * Where the jam panel puts each line and button (#93), shared with publish so tests tap what is drawn. Offsets are
+   * from the panel's top; the hint button shows only after three defeats in a row, and "+1 slot" only once per attempt.
+   */
+  private jamLayout(): { height: number; top: number; near: number | null; canvas: number; note: number; continue: number | null; hint: number | null; retry: number } {
+    const near = nearMiss(this.missingList.length) ? 238 : null;
+    const canvas = near === null ? 252 : 278;
+    const note = canvas + JAM_CANVAS + 34;
+    let y = note + 82;
+    const cont = this.gs.extraSlotUsed ? null : y;
+    if (cont !== null) y += 100;
+    const hint = hintAvailable(this.level.id) ? y : null;
+    if (hint !== null) y += 96;
+    const height = y + 70;
+    return { height, top: (this.scale.height - height) / 2, near, canvas, note, continue: cont, hint, retry: y };
+  }
+
   private showJam(): void {
-    const c = this.panel(t('jam.title'), 480);
-    const top = (this.scale.height - 480) / 2;
-    c.add(label(this, VIEW.width / 2, top + 130, t('jam.body'), THEME.type.sm, THEME.subCss, false));
+    const L = this.jamLayout();
+    const c = this.panel(t('jam.title'), L.height);
+    const top = L.top;
+    const n = this.missingList.length;
+    c.add(label(this, VIEW.width / 2, top + 146, t('jam.body'), THEME.type.sm, THEME.subCss, false));
+    c.add(label(this, VIEW.width / 2, top + 196, n === 1 ? t('jam.missingOne') : t('jam.missing', { n }), THEME.type.sm, THEME.inkCss, true));
+    if (L.near !== null) c.add(label(this, VIEW.width / 2, top + L.near, t('jam.nearMiss'), THEME.type.md, THEME.inkCss, true));
+    c.add(this.missingCanvas(top + L.canvas));
     // #151: say why the panel offers "+1 slot" (once per attempt) or only "Retry".
-    c.add(label(this, VIEW.width / 2, top + (this.gs.extraSlotUsed ? 205 : 210), t(jamHintKey(this.gs.extraSlotUsed)), THEME.type.xs, THEME.inkCss, false));
-    if (!this.gs.extraSlotUsed) {
-      c.add(button(this, VIEW.width / 2, top + 280, 420, 88, t('jam.continue'), () => {
+    c.add(label(this, VIEW.width / 2, top + L.note, t(jamHintKey(this.gs.extraSlotUsed)), THEME.type.xs, THEME.inkCss, false));
+    if (L.continue !== null) {
+      c.add(button(this, VIEW.width / 2, top + L.continue, 420, 88, t('jam.continue'), () => {
         continueWithExtraSlot(this.gs);
         this.layout = computeLayout(this.level.width, this.level.height, this.gs.slots.length, this.level.columns.length, this.scale.height);
         this.drawSlotFrames();
@@ -1057,13 +1136,52 @@ export class PlayScene extends Phaser.Scene {
         this.publish();
       }, { name: 'continue', armMs: PANEL_ARM_MS }));
     }
-    c.add(button(this, VIEW.width / 2, top + (this.gs.extraSlotUsed ? 300 : 385), 300, 80, t('jam.retry'), () => this.restart(), {
+    // #93: a free hint, separate from the "+1 slot" ad: a new attempt on the same level, with its first move marked.
+    if (L.hint !== null) {
+      c.add(button(this, VIEW.width / 2, top + L.hint, 360, 80, `👆 ${t('jam.hint')}`, () => this.scene.restart({ levelId: this.level.id, hint: true }), {
+        fill: THEME.paper,
+        color: THEME.inkCss,
+        name: 'hint',
+        armMs: PANEL_ARM_MS,
+      }));
+    }
+    c.add(button(this, VIEW.width / 2, top + L.retry, 300, 80, t('jam.retry'), () => this.restart(), {
       fill: this.gs.extraSlotUsed ? THEME.ink : THEME.belt,
       color: this.gs.extraSlotUsed ? '#ffffff' : THEME.inkCss,
       name: 'retry-panel',
       armMs: PANEL_ARM_MS,
     }));
     this.publish();
+  }
+
+  /**
+   * The picture as it stood at the jam (#93): finished pixels in their colour, missing ones as an empty square with an
+   * outline and a cross, so the shape tells them apart and not only the colour.
+   */
+  private missingCanvas(oy: number): Phaser.GameObjects.Graphics {
+    const { width: w, height: h } = this.level;
+    const cell = Math.floor(JAM_CANVAS / Math.max(w, h));
+    const ox = VIEW.width / 2 - (cell * w) / 2;
+    const missing = new Set(this.missingList);
+    const g = this.add.graphics();
+    this.level.targets.forEach((target, i) => {
+      if (!target) return;
+      const x = ox + (i % w) * cell;
+      const y = oy + Math.floor(i / w) * cell;
+      if (!missing.has(i)) {
+        g.fillStyle(PAINT[target]!, 1);
+        g.fillRect(x, y, cell - 1, cell - 1);
+        return;
+      }
+      g.fillStyle(THEME.paper, 1);
+      g.fillRect(x, y, cell - 1, cell - 1);
+      g.lineStyle(2, THEME.ink, 1);
+      g.strokeRect(x + 1, y + 1, cell - 3, cell - 3);
+      const m = Math.max(3, Math.floor(cell / 4));
+      g.lineBetween(x + m, y + m, x + cell - 1 - m, y + cell - 1 - m);
+      g.lineBetween(x + cell - 1 - m, y + m, x + m, y + cell - 1 - m);
+    });
+    return g;
   }
 
   private solutionMoves(): ReturnType<typeof solve>['moves'] {
@@ -1073,6 +1191,7 @@ export class PlayScene extends Phaser.Scene {
   private publish(): void {
     const gs = this.gs;
     const solutionOf = () => this.solutionMoves();
+    const jam = this.overlay && gs.status !== 'won' ? this.jamLayout() : null;
     publishDebug({
       scene: 'play',
       offsetY: 0,
@@ -1118,10 +1237,18 @@ export class PlayScene extends Phaser.Scene {
       tick: gs.tick,
       subtitle: this.subtitle.text,
       guideText: this.guide ? t(GUIDE_TEXT[this.guide]) : null,
-      jamButtons: {
-        continue: gs.extraSlotUsed ? null : { x: VIEW.width / 2, y: (this.scale.height - 480) / 2 + 280 },
-        retry: { x: VIEW.width / 2, y: (this.scale.height - 480) / 2 + (gs.extraSlotUsed ? 300 : 385) },
+      jamButtons: jam && {
+        continue: jam.continue === null ? null : { x: VIEW.width / 2, y: jam.top + jam.continue },
+        hint: jam.hint === null ? null : { x: VIEW.width / 2, y: jam.top + jam.hint },
+        retry: { x: VIEW.width / 2, y: jam.top + jam.retry },
       },
+      // #93: pixels left at the jam, the near-miss line, the defeat streak and the hinted first move.
+      missingCount: this.missingList.length,
+      missingList: this.missingList.slice(),
+      nearMiss: jam?.near != null,
+      defeats: defeatsOn(getProgress(), this.level.id),
+      hintMove: this.hintMove,
+      hintShown: this.hintLayer !== null,
       tip: this.tip?.id ?? null,
       moves: this.moves,
       tipButton: { x: VIEW.width / 2, y: this.tipOkY },

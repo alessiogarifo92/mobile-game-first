@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { buildLanes, parseLevel, type LevelDef } from '../src/core/level';
-import { createGame, launchFromColumn, launchFromSlot, step } from '../src/core/sim';
+import { continueWithExtraSlot, createGame, launchFromColumn, launchFromSlot, step, type GameState } from '../src/core/sim';
 import { createBoard } from '../src/core/rules';
 import { createRng } from '../src/core/rng';
-import { carefulWinRate, levelCarefulWinRate, levelWinRate, playoutTickLimit, randomWinRate, runLoop, solve, type Move } from '../src/core/solver';
+import { carefulWinRate, levelCarefulWinRate, levelWinRate, playoutTickLimit, randomWinRate, runLoop, solve, solveFrom, type Move } from '../src/core/solver';
 import levels from '../src/levels/levels.json';
 import { BLUE, RED, YELLOW, level } from './helpers';
 
@@ -159,5 +159,83 @@ describe('solver slot positions', () => {
     expect(result.solvable).toBe(true);
     expect(result.moves.some((m) => m.from === 'slot')).toBe(true);
     expect(replay(l, result.moves).status).toBe('won');
+  });
+});
+
+describe('solveFrom (#93 hint)', () => {
+  const play = (g: GameState, m: Move) => {
+    const ok = m.from === 'column' ? launchFromColumn(g, m.index) : launchFromSlot(g, m.index);
+    expect(ok).toBe(true);
+    do step(g); while ((g.belt.length || g.pending.length) && g.status === 'playing');
+  };
+
+  it('from the start matches solve', () => {
+    const l = level(['PPO', 'GRB', 'YOG'], [[[BLUE, 2], [RED, 3]], [[YELLOW, 5], [RED, 2]], [[BLUE, 3]]], { slots: 2 });
+    const r = solveFrom(createGame(l));
+    expect(r.solvable).toBe(true);
+    expect(r.moves).toEqual(solve(l).moves);
+  });
+
+  it('following the first suggested move always leaves a solvable state until the win', () => {
+    const l = level(['PPO', 'GRB', 'YOG'], [[[BLUE, 2], [RED, 3]], [[YELLOW, 5], [RED, 2]], [[BLUE, 3]]], { slots: 2 });
+    const g = createGame(l);
+    for (let guard = 0; guard < 20 && g.status === 'playing'; guard++) {
+      const r = solveFrom(g);
+      expect(r.solvable).toBe(true);
+      play(g, r.moves[0]!);
+    }
+    expect(g.status).toBe('won');
+  });
+
+  it('plans from a mid-game state with a bucket parked in a slot', () => {
+    // Red first is blocked by yellow on top (column 0 hits the top row first): it parks in a slot.
+    const l = level(['YY', 'RR'], [[[RED, 2]], [[YELLOW, 2]]], { slots: 2 });
+    const g = createGame(l);
+    play(g, { from: 'column', index: 0 });
+    const r = solveFrom(g);
+    expect(r.solvable).toBe(true);
+    for (const m of r.moves) play(g, m);
+    expect(g.status).toBe('won');
+  });
+
+  it('works on shipped levels', () => {
+    for (const id of [1, 5, 12]) {
+      const l = parseLevel(shipped(id));
+      const g = createGame(l);
+      const first = solveFrom(g);
+      expect(first.solvable).toBe(true);
+      play(g, first.moves[0]!);
+      if (g.status === 'playing') expect(solveFrom(g).solvable).toBe(true);
+    }
+  });
+
+  it('gives no move while paint is moving or the game is over', () => {
+    const l = level(['RB'], [[[RED, 1]], [[BLUE, 1]]]);
+    const busy = createGame(l);
+    launchFromColumn(busy, 0);
+    expect(busy.belt.length + busy.pending.length).toBeGreaterThan(0);
+    expect(solveFrom(busy)).toEqual({ solvable: false, exhaustive: true, moves: [], nodes: 0 });
+    const won = createGame(l);
+    play(won, { from: 'column', index: 0 });
+    play(won, { from: 'column', index: 1 });
+    expect(won.status).toBe('won');
+    expect(solveFrom(won).moves).toEqual([]);
+  });
+
+  it('counts the extra slot once it is granted', () => {
+    // Red is walled in and parks in the only slot; blue then needs a second lap and has nowhere to wait.
+    const image = ['BBBBB', 'BRBRB', 'BBBBB'];
+    const l = level(image, [[[RED, 2], [BLUE, 13]]], { slots: 1, beltCapacity: 1 });
+    const g = createGame(l);
+    play(g, { from: 'column', index: 0 });
+    play(g, { from: 'column', index: 0 });
+    expect(g.status).toBe('jammed');
+    expect(solveFrom(g).moves).toEqual([]);
+    expect(continueWithExtraSlot(g)).toBe(true);
+    expect(g.slots).toHaveLength(2);
+    const r = solveFrom(g);
+    expect(r.solvable).toBe(true);
+    for (const m of r.moves) play(g, m);
+    expect(g.status).toBe('won');
   });
 });

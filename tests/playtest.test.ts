@@ -321,7 +321,7 @@ describe('saves and plans', () => {
   });
 
   it('a save from level 1 keeps the onboarding', () => {
-    expect(saveFor(levels, 1, 'it')).toEqual({ unlocked: 1, completed: [], sound: false, language: 'it', seenTips: [], skin: 'classic' });
+    expect(saveFor(levels, 1, 'it')).toEqual({ unlocked: 1, completed: [], sound: false, language: 'it', seenTips: [], skin: 'classic', defeats: {} });
   });
 
   it('a later save has seen the tips of the levels before it, and none of those still to come', () => {
