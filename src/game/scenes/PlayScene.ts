@@ -33,7 +33,7 @@ import { BLUE, BROWN, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colo
 import { PAINT, SYMBOL, THEME, css } from '../theme';
 import { drawSkin } from '../skins';
 import { drawTipArt, hasSharedArt } from '../tipArt';
-import { brownPixel, button, drawIce, drawStone, keyIcon, label, lockIcon, progressBar, screenBackground } from '../ui';
+import { brownPixel, button, drawIce, drawStone, iceCounter, keyIcon, label, lockIcon, progressBar, screenBackground } from '../ui';
 
 const TICK_MS = 85;
 const BELT_JAR = 54;
@@ -88,6 +88,7 @@ export class PlayScene extends Phaser.Scene {
   /** Ammo each shooter had when it was launched, to tell whether its loop hit anything. */
   private launchAmmo = new Map<number, number>();
   private hiddenMarks = new Map<number, Phaser.GameObjects.Text>();
+  private iceMarks = new Map<number, Phaser.GameObjects.Text>();
   /** Covered buckets that reached the front of their column, with the time their reveal started. */
   private reveals = new Map<number, number>();
   /** Stage completed by this win (album reward), if any. */
@@ -498,7 +499,11 @@ export class PlayScene extends Phaser.Scene {
             g.fillStyle(PAINT[f.paint]!, 1);
             g.fillTriangle(fx - 24, y - 24, fx + 24, y - 24, fx - 24, y + 24);
           }
-          if (f.ice) drawIce(g, fx - 24, y - 24, 48, 48);
+          if (f.ice) {
+            drawIce(g, fx - 24, y - 24, 48, 48);
+            const mark = iceCounter(this, fx - 24, y - 24, 48, 48);
+            if (mark) inner.add(mark);
+          }
         }
       }
       g.lineStyle(5, THEME.ink, 1);
@@ -621,13 +626,23 @@ export class PlayScene extends Phaser.Scene {
         // Key: what opens the padlocks, until it is done.
         keyIcon(g, x + w / 2, y + h / 2, w * 0.78);
       }
-      // Ice: frosted cover with a dark rim and cracks (#176).
-      if (this.gs.ice[i]! > 0) drawIce(g, x, y, w, h);
+      // Ice (#150): a block of ice with the hits of its colour that still break it.
+      if (this.gs.ice[i]! > 0) {
+        drawIce(g, x, y, w, h, this.gs.ice[i]!);
+        if (!this.iceMarks.has(i)) {
+          const mark = iceCounter(this, x, y, w, h, this.gs.ice[i]!);
+          if (mark) this.iceMarks.set(i, mark.setDepth(3));
+        }
+      } else {
+        this.iceMarks.get(i)?.destroy();
+        this.iceMarks.delete(i);
+      }
     });
   }
 
   private createHiddenMarks(): void {
     this.hiddenMarks = new Map();
+    this.iceMarks = new Map();
     this.gs.hidden.forEach((hidden, i) => {
       if (!hidden) return;
       const r = cellRect(this.layout, this.level.width, i);
@@ -1260,6 +1275,8 @@ export class PlayScene extends Phaser.Scene {
       // Pixels to paint, so playtest telemetry can say how many were missing (#68).
       targets: this.level.targets.filter(Boolean).length,
       ice: gs.ice.reduce((a, b) => a + b, 0),
+      // The numbers drawn on frozen pixels (#150), cell → text, so e2e can check they follow the ice.
+      iceCounters: Object.fromEntries([...this.iceMarks].map(([cell, t]) => [cell, t.text])),
       hidden: gs.hidden.filter(Boolean).length,
       stones: this.level.stone.filter(Boolean).length,
       stoneSplashes: this.stoneSplashes,
