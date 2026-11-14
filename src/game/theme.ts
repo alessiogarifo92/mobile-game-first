@@ -17,7 +17,7 @@ export const THEME = {
   ice: 0xcfe8f7,
   /** Ice rim and cracks (#176): white cracks on the pale cover read at 1.26:1; this blue reaches 4.2:1 on it. */
   iceDark: 0x356f9c,
-  /** The same blue for the number on the ice counter (#150): 5.5:1 on its white disc. */
+  /** The same blue for the number on the ice counter (#150): 5.4:1 on its white disc. */
   iceDarkCss: '#356F9C',
   /** Stone block (#95): cool grey, apart from the warm hidden cover; bevel and speckles carry it without colour. */
   stone: 0xa3a6ad,

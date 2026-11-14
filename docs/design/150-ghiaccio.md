@@ -29,4 +29,4 @@ Smusso 3D: un bordo chiaro in alto e a sinistra, uno scuro `iceDark` in basso e 
 ## Implementazione
 - `src/core/ice.ts` (puro, testato in `tests/ice.test.ts`): `iceHits`, `iceGlints` (geometria dei riflessi), `iceBadge` (posizione e raggio del contatore, minimo 7, dentro il pixel con il suo bordo).
 - `src/game/ui.ts`: `drawIce` disegna brina, bordo, riflessi e disco; `iceCounter` crea il numero. Si usano sul tabellone, sulla scheda del ghiaccio e sulla scheda della corsia bloccata.
-- Token: `THEME.iceDarkCss` per il numero, con contrasto 5,5:1 sul disco bianco.
+- Token: `THEME.iceDarkCss` per il numero, con contrasto 5,4:1 sul disco bianco.
