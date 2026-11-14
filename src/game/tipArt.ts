@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { BLUE, RED, YELLOW } from '../core/colors';
 import type { CardTip } from '../core/onboarding';
 import { PAINT, THEME, css } from './theme';
-import { drawIce, drawStone, label } from './ui';
+import { drawIce, drawStone, iceCounter, label } from './ui';
 
 /** Tips whose illustration is shared by the in-game card and How to play (#183): the rules How to play has no base page for. */
 export type SharedTipArt = 'ice' | 'belt' | 'hidden' | 'queue' | 'leftover' | 'stone';
@@ -32,11 +32,13 @@ export function drawTipArt(
     g.fillRoundedRect(gx - 24, gy - 24, 48, 48, THEME.radius.cell);
   };
   if (id === 'ice') {
-    // Frozen → ice broken → painted.
+    // Frozen (its counter: one hit breaks it) → ice broken → painted.
     const y = y0 + 200;
     sq(cx - 160, y, THEME.emptyPixel);
     sq(cx - 160, y, PAINT[RED]!, 0.3);
     drawIce(g, cx - 160 - 24, y - 24, 48, 48);
+    const counter = iceCounter(scene, cx - 160 - 24, y - 24, 48, 48);
+    if (counter) add(counter);
     sq(cx, y, THEME.emptyPixel);
     sq(cx, y, PAINT[RED]!, 0.3);
     sq(cx + 160, y, PAINT[RED]!);

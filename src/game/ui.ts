@@ -3,6 +3,7 @@ import { VIEW } from '../core/layout';
 import { panelArmed } from '../core/panelInput';
 import type { Level } from '../core/level';
 import { brownWedges } from '../core/brownPixel';
+import { iceBadge, iceGlints } from '../core/ice';
 import { PRIMARIES } from '../core/colors';
 import { MURAL_SIDE, TILE_CELLS, tileCells } from '../core/mural';
 import { MURAL_PAINT, PAINT, THEME } from './theme';
@@ -153,16 +154,31 @@ export function drawStone(g: Phaser.GameObjects.Graphics, x: number, y: number, 
 /** Opacity of the ice cover over the pixel: the colour it still needs shows through. */
 export const ICE_ALPHA = 0.6;
 
-/** A frozen pixel's cover (#176): pale frost, an `iceDark` rim and three cracks, the same on the board and the tip. */
-export function drawIce(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number): void {
+/**
+ * A frozen pixel's cover (#150): pale frost, an `iceDark` rim and two white glints, so it reads as a pane of ice, plus
+ * the white disc of the counter of hits that still break it (`layers`); its number is a text, see `iceCounter`. The
+ * same on the board, the tips and the blocked-lane card.
+ */
+export function drawIce(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number, layers = 1): void {
   g.fillStyle(THEME.ice, ICE_ALPHA);
   g.fillRoundedRect(x, y, w, h, THEME.radius.cell);
   const line = Math.max(2, Math.round(w * 0.06));
   g.lineStyle(line, THEME.iceDark, 1);
   g.strokeRoundedRect(x + line / 2, y + line / 2, w - line, h - line, THEME.radius.cell);
-  g.lineBetween(x + w * 0.2, y + h * 0.25, x + w * 0.5, y + h * 0.5);
-  g.lineBetween(x + w * 0.5, y + h * 0.5, x + w * 0.45, y + h * 0.85);
-  g.lineBetween(x + w * 0.5, y + h * 0.5, x + w * 0.85, y + h * 0.4);
+  g.fillStyle(THEME.white, 0.95);
+  for (const glint of iceGlints(x, y, w, h)) g.fillPoints(glint.map(([px, py]) => new Phaser.Math.Vector2(px, py)), true);
+  const badge = iceBadge(layers, x, y, w, h);
+  if (!badge) return;
+  g.fillStyle(THEME.white, 1);
+  g.fillCircle(badge.x, badge.y, badge.r);
+  g.lineStyle(Math.max(1.5, badge.r * 0.18), THEME.iceDark, 1);
+  g.strokeCircle(badge.x, badge.y, badge.r);
+}
+
+/** The number on a frozen pixel's counter (#150), drawn over `drawIce`'s disc; null when the pixel is not frozen. */
+export function iceCounter(scene: Phaser.Scene, x: number, y: number, w: number, h: number, layers = 1): Phaser.GameObjects.Text | null {
+  const badge = iceBadge(layers, x, y, w, h);
+  return badge ? label(scene, badge.x, badge.y, badge.text, Math.max(badge.r * 1.4, 14), THEME.iceDarkCss) : null;
 }
 
 /**
