@@ -1,4 +1,4 @@
-import { seenChangeKinds, type ChangeKind } from './difficulty';
+import { seenChangeKinds, type ChangeKind } from './levelChanges';
 import type { CardTip } from './onboarding';
 
 /** Pages of "How to play": navigation by swipe, keys or dots. Pure so the rules are unit-tested. */

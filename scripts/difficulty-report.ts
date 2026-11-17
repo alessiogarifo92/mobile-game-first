@@ -16,7 +16,7 @@ import { universeOfStage } from '../src/core/universes';
 import { BROWN } from '../src/core/colors';
 import { formatSpan, novelties, noveltyGaps, summarizeStages } from '../src/core/curveReport';
 import { assignIds } from '../src/core/stages';
-import { changeReport } from '../src/core/difficulty';
+import { changeReport } from '../src/core/levelChanges';
 import { STAGE_SPECS } from './stages';
 
 const rows = (levelsJson as LevelDef[]).map((def) => {

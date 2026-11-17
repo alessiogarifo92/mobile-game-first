@@ -4,7 +4,7 @@
  *   npx tsx scripts/difficulty-changes.ts
  */
 import levelsJson from '../src/levels/levels.json' with { type: 'json' };
-import { changeReport } from '../src/core/difficulty';
+import { changeReport } from '../src/core/levelChanges';
 import type { LevelDef } from '../src/core/level';
 
 console.log(changeReport(levelsJson as LevelDef[]).join('\n'));

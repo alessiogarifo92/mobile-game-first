@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   CHANGE_KINDS, CHANGE_RULES, bannerFor, changeReport, changeKey, changesBetween, levelChanges, levelParams, referenceLevel, seenChangeKinds, unseenChanges,
-} from '../src/core/difficulty';
+} from '../src/core/levelChanges';
 import type { LevelDef } from '../src/core/level';
 import { DICTIONARIES, LANGUAGES } from '../src/core/i18n';
 import levels from '../src/levels/levels.json';

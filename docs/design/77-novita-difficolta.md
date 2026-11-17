@@ -31,5 +31,5 @@ La scheda delle meccaniche: ombra sopra tutto e riquadro con titolo, icona, fatt
 ## Regole di cosa si annuncia
 - Un solo messaggio per livello: nastro e slot che calano insieme sono una riga sola; poi il boss; poi un'altra novità (le altre aspettano un livello che le cambia di nuovo).
 - Mostrato una volta per novità e salvato tra i suggerimenti (`chg.<tipo>`; per nastro e slot il numero a cui scendono: `chg.belt.2`), quindi un salvataggio vecchio non perde nulla e non serve migrazione.
-- Soglie nella sola tabella `CHANGE_RULES` (`src/core/difficulty.ts`); confronto col livello precedente, e all'inizio di uno stage col livello d'apertura dello stage precedente (il boss che lo precede è un estremo per costruzione).
+- Soglie nella sola tabella `CHANGE_RULES` (`src/core/levelChanges.ts`); confronto col livello precedente, e all'inizio di uno stage col livello d'apertura dello stage precedente (il boss che lo precede è un estremo per costruzione).
 - Richiamabili in "Come si gioca": una pagina "Quando si fa più duro" elenca le novità incontrate.

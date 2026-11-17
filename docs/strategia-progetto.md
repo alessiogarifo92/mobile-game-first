@@ -50,7 +50,7 @@ Capienza del nastro e slot d'attesa sono **tutte e due leve di difficoltà** e v
 Ogni stage inizia con 1–3 livelli "di respiro" e il boss è il livello più duro (eccezione: stage 5, vedi report). La capienza non torna mai a crescere dopo lo stage 8 (test in `tests/levels.test.ts`).
 
 ### Cosa comporta ogni passo di difficoltà, e come lo si dice (#77)
-Un livello che fa un passo avanti rispetto al precedente lo dice **una volta**, con una striscia sotto il titolo (icona, il fatto, cosa comporta; si chiude con un tocco o al primo lancio) e poi nella pagina "Quando si fa più duro" di "Come si gioca". Il calcolo è puro (`src/core/difficulty.ts`, soglie in `CHANGE_RULES`, unit test `tests/difficulty.test.ts`); i testi sono `change.*` in `src/core/i18n.ts` (IT/EN). Direzione di design: `docs/design/77-novita-difficolta.md`.
+Un livello che fa un passo avanti rispetto al precedente lo dice **una volta**, con una striscia sotto il titolo (icona, il fatto, cosa comporta; si chiude con un tocco o al primo lancio) e poi nella pagina "Quando si fa più duro" di "Come si gioca". Il calcolo è puro (`src/core/levelChanges.ts`, soglie in `CHANGE_RULES`, unit test `tests/levelChanges.test.ts`); i testi sono `change.*` in `src/core/i18n.ts` (IT/EN). Direzione di design: `docs/design/77-novita-difficolta.md`.
 
 | Cambio | Soglia (`CHANGE_RULES`) | Cosa comporta per chi gioca | Come si dice |
 |---|---|---|---|

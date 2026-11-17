@@ -1,5 +1,5 @@
 import type Phaser from 'phaser';
-import type { ChangeKind } from '../core/difficulty';
+import type { ChangeKind } from '../core/levelChanges';
 import { BLUE, RED, YELLOW } from '../core/colors';
 import { PAINT, THEME } from './theme';
 

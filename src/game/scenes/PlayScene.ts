@@ -23,7 +23,7 @@ import {
 } from '../../core/onboarding';
 import { solve, solveFrom, type Move } from '../../core/solver';
 import { missingCells, nearMiss } from '../../core/defeat';
-import { bannerFor, changeKey, levelChanges, unseenChanges, type DifficultyChange } from '../../core/difficulty';
+import { bannerFor, changeKey, levelChanges, unseenChanges, type DifficultyChange } from '../../core/levelChanges';
 import { defeatsOn } from '../../core/progress';
 import { REDUCED_MOTION_QUERY, prefersReducedMotion } from '../../core/motion';
 import { pixelRevealFrame, runningReveals } from '../../core/reveal';
@@ -263,7 +263,7 @@ export class PlayScene extends Phaser.Scene {
   /**
    * #77: what this level makes harder than the one before, told once. A strip in the subtitle line (icon, the fact,
    * what it means), closed by a tap on it or by the first launch; it covers nothing the player touches. Marked as seen
-   * when it opens, so it shows once whatever the player does next. The pure rules are in core/difficulty.
+   * when it opens, so it shows once whatever the player does next. The pure rules are in core/levelChanges.
    */
   private showChangeBanner(): void {
     const shown = bannerFor(unseenChanges(levelChanges(LEVELS, this.level.id), getProgress().seenTips));
