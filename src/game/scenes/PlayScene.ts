@@ -24,6 +24,7 @@ import { solve, solveFrom, type Move } from '../../core/solver';
 import { missingCells, nearMiss } from '../../core/defeat';
 import { defeatsOn } from '../../core/progress';
 import { REDUCED_MOTION_QUERY, prefersReducedMotion } from '../../core/motion';
+import { pixelRevealFrame, runningReveals } from '../../core/reveal';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
 import {
@@ -91,6 +92,14 @@ export class PlayScene extends Phaser.Scene {
   private iceMarks = new Map<number, Phaser.GameObjects.Text>();
   /** Covered buckets that reached the front of their column, with the time their reveal started. */
   private reveals = new Map<number, number>();
+  /** Hidden pixels turning over (#152): cell → time their reveal started. */
+  private pixelReveals = new Map<number, number>();
+  /** Hidden pixels uncovered by a shot still in flight: they stay covered until the drop lands. */
+  private revealPending = new Set<number>();
+  /** How many hidden pixels have turned over in this level, for e2e. */
+  private pixelRevealCount = 0;
+  private revealFx!: Phaser.GameObjects.Graphics;
+  private reducedMotion = false;
   /** Stage completed by this win (album reward), if any. */
   private completedStage: number | null = null;
   /** The universe this win completes for the first time: the win panel leads to its party. */
@@ -159,6 +168,9 @@ export class PlayScene extends Phaser.Scene {
     this.tipsShown = [];
     this.launchAmmo = new Map();
     this.reveals = new Map();
+    this.pixelReveals = new Map();
+    this.revealPending = new Set();
+    this.pixelRevealCount = 0;
     this.pixelsDirty = false;
     this.refused = null;
     this.refusals = 0;
@@ -218,6 +230,9 @@ export class PlayScene extends Phaser.Scene {
 
     this.pixels = this.add.graphics();
     this.dynamic = this.add.graphics();
+    // Over the pixels, under the "?" marks (depth 3) and the splashes (depth 4).
+    this.revealFx = this.add.graphics().setDepth(2);
+    this.reducedMotion = prefersReducedMotion(typeof window !== 'undefined' ? window.matchMedia?.(REDUCED_MOTION_QUERY) : null);
     this.createHiddenMarks();
     this.drawPixels();
 
@@ -251,8 +266,7 @@ export class PlayScene extends Phaser.Scene {
     g.strokeRoundedRect(target.x - pad - 4, target.y - pad - 4, target.w + 2 * pad + 8, boxH + 8, THEME.radius.jar);
     const below = target.y - pad + boxH;
     const hand = label(this, target.x + target.w / 2, Math.min(below + 60, this.scale.height - 90), '👆', 72);
-    const reduced = prefersReducedMotion(typeof window !== 'undefined' ? window.matchMedia?.(REDUCED_MOTION_QUERY) : null);
-    if (!reduced) this.tweens.add({ targets: hand, y: hand.y + 24, duration: 450, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    if (!this.reducedMotion) this.tweens.add({ targets: hand, y: hand.y + 24, duration: 450, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     this.hintLayer = this.add.container(0, 0, [g, hand]).setDepth(8);
     this.subtitle.setText(t('hint.ready')).setColor(THEME.inkCss).setFontStyle('bold').setFontSize(THEME.type.xs);
   }
@@ -566,6 +580,7 @@ export class PlayScene extends Phaser.Scene {
       this.pixelsDirty = false;
       this.drawPixels();
     }
+    this.drawPixelReveals();
     this.drawDynamic(this.gs.status === 'playing' ? this.acc / TICK_MS : 0);
   }
 
@@ -586,14 +601,17 @@ export class PlayScene extends Phaser.Scene {
       const r = cellRect(this.layout, this.level.width, i);
       const x = r.x + inset, y = r.y + inset, w = r.w - 2 * inset, h = r.h - 2 * inset;
       const paint = this.gs.paint[i]!;
-      if (this.gs.hidden[i]) {
+      if (this.gs.hidden[i] || this.revealPending.has(i)) {
         // Hidden: no hint of the colour, just a "?" (text drawn once in createHiddenMarks).
         g.fillStyle(THEME.hidden, 1);
         g.fillRoundedRect(x, y, w, h, THEME.radius.cell);
         return;
       }
-      this.hiddenMarks.get(i)?.destroy();
-      this.hiddenMarks.delete(i);
+      // A pixel turning over keeps its "?" until the cover is gone (drawPixelReveals).
+      if (!this.pixelReveals.has(i)) {
+        this.hiddenMarks.get(i)?.destroy();
+        this.hiddenMarks.delete(i);
+      }
       if (cellDone(this.level, this.gs, i)) {
         g.fillStyle(PAINT[target]!, 1);
         g.fillRoundedRect(x, y, w, h, THEME.radius.cell);
@@ -638,6 +656,56 @@ export class PlayScene extends Phaser.Scene {
         this.iceMarks.delete(i);
       }
     });
+  }
+
+  private startPixelReveal(cell: number): void {
+    this.revealPending.delete(cell);
+    this.pixelReveals.set(cell, this.time.now);
+    this.pixelRevealCount += 1;
+    sfx.reveal();
+  }
+
+  /**
+   * Hidden pixels turning over (#152, docs/design/152-rivelazione.md): the cover squashes away with its "?", the face
+   * opens full of the revealed colour with an ink rim, then fades into the pixel to paint drawn underneath. With reduced
+   * motion the colour and the rim hold still, then go. Frames come from core/reveal.
+   */
+  private drawPixelReveals(): void {
+    if (this.pixelReveals.size === 0) return;
+    const g = this.revealFx;
+    g.clear();
+    const inset = this.layout.cell > 30 ? 2 : 1;
+    for (const [cell, start] of this.pixelReveals) {
+      const f = pixelRevealFrame(this.time.now - start, this.reducedMotion);
+      const mark = this.hiddenMarks.get(cell);
+      if (f.cover <= 0 && mark) {
+        mark.destroy();
+        this.hiddenMarks.delete(cell);
+      }
+      if (f.done) {
+        this.pixelReveals.delete(cell);
+        continue;
+      }
+      const r = cellRect(this.layout, this.level.width, cell);
+      const x = r.x + inset, y = r.y + inset, w = r.w - 2 * inset, h = r.h - 2 * inset;
+      const cx = x + w / 2;
+      if (f.cover > 0) {
+        const cw = Math.max(w * f.cover, 1);
+        g.fillStyle(THEME.hidden, 1);
+        g.fillRoundedRect(cx - cw / 2, y, cw, h, Math.min(THEME.radius.cell, cw / 2));
+        mark?.setScale(f.cover, 1);
+      }
+      if (f.face > 0 && f.fill > 0) {
+        const fw = Math.max(w * f.face, 1);
+        g.fillStyle(PAINT[this.level.targets[cell]!]!, f.fill);
+        g.fillRoundedRect(cx - fw / 2, y, fw, h, Math.min(THEME.radius.cell, fw / 2));
+      }
+      if (f.ring > 0) {
+        g.lineStyle(3, THEME.ink, f.ring);
+        g.strokeRoundedRect(x - 2, y - 2, w + 4, h + 4, THEME.radius.cell);
+      }
+    }
+    if (this.pixelReveals.size === 0) g.clear();
   }
 
   private createHiddenMarks(): void {
@@ -922,6 +990,8 @@ export class PlayScene extends Phaser.Scene {
   }
 
   private splash(e: HitEvent): void {
+    // The pixels this hit uncovers stay covered until its drop lands, then turn over (#152).
+    for (const cell of e.revealed) this.revealPending.add(cell);
     const from = beltPoint(this.layout, e.lane);
     const r = cellRect(this.layout, this.level.width, e.cell);
     const to = { x: r.x + r.w / 2, y: r.y + r.h / 2 };
@@ -972,11 +1042,7 @@ export class PlayScene extends Phaser.Scene {
           lockIcon(lock, 0, 0, rr.h * 0.72);
           this.tweens.add({ targets: lock, y: lock.y - rr.h * 0.8, angle: 18, alpha: 0, scale: 1.3, duration: 420, ease: 'Back.easeIn', onComplete: () => lock.destroy() });
         }
-        for (const cell of e.revealed) {
-          const rr = cellRect(this.layout, this.level.width, cell);
-          const pop = this.add.circle(rr.x + rr.w / 2, rr.y + rr.h / 2, rr.w / 2, THEME.white, 0.8).setDepth(4);
-          this.tweens.add({ targets: pop, scale: 1.6, alpha: 0, duration: 300, onComplete: () => pop.destroy() });
-        }
+        for (const cell of e.revealed) this.startPixelReveal(cell);
         if (e.completed && primariesOf(e.paint).length === 2) {
           const ring = this.add.circle(to.x, to.y, r.w / 2, blotColor, 0).setStrokeStyle(4, blotColor).setDepth(4);
           this.tweens.add({ targets: ring, scale: 1.8, alpha: 0, duration: 320, onComplete: () => ring.destroy() });
@@ -1203,6 +1269,14 @@ export class PlayScene extends Phaser.Scene {
     return (this.solution ??= solve(this.level).moves);
   }
 
+  private pixelRevealDebug(): { started: number; running: number[]; reduced: boolean; frame: ReturnType<typeof pixelRevealFrame> | null } {
+    const now = this.time.now;
+    const running = runningReveals(this.pixelReveals, now, this.reducedMotion);
+    const first = running[0];
+    const frame = first === undefined ? null : pixelRevealFrame(now - this.pixelReveals.get(first)!, this.reducedMotion);
+    return { started: this.pixelRevealCount, running, reduced: this.reducedMotion, frame };
+  }
+
   private publish(): void {
     const gs = this.gs;
     const solutionOf = () => this.solutionMoves();
@@ -1285,6 +1359,8 @@ export class PlayScene extends Phaser.Scene {
       queueColors: gs.queues.map((q) => q.slice(0, 3).map((s, k) => (colorShown(s, k) ? s.color : null))),
       covered: gs.queues.reduce((n, q) => n + q.filter((s, k) => !colorShown(s, k)).length, 0),
       reveals: this.reveals.size,
+      // Hidden pixels turning over (#152): how many started, which are running, and the frame of the first one.
+      pixelReveal: this.pixelRevealDebug(),
     });
   }
 

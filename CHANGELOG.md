@@ -2,6 +2,12 @@
 
 ## Non rilasciato
 
+### Pixel "?": la rivelazione si vede (#152)
+
+- **La copertura si gira come una carta** (direzione A "Tessera girata", `docs/design/152-rivelazione.md`): il "?" si stringe e sparisce, la faccia si apre piena del colore scoperto con un bordo d'inchiostro, poi sfuma nel pixel da dipingere (700 ms, con il suono della rivelazione). Prima il pixel diventava di colpo un pixel vuoto e un lampo bianco di 300 ms si perdeva nello schizzo del colpo (playtest agent, F8: "non l'ho mai visto diventare un colore"). Il pixel resta coperto finché la goccia non arriva sul vicino.
+- **Movimento ridotto**: niente rotazione; colore pieno e bordo restano fermi per 1,2 s, poi un taglio netto.
+- Test: unit sui fotogrammi (`src/core/reveal.ts`); e2e `e2e/reveal-152.spec.ts` sul livello 51, con e senza `prefers-reduced-motion`.
+
 ### Universo 1: la pietra debutta nei livelli 81–100 (#157, epic #87)
 
 - **Novità nella finestra 81–100**, l'unica del gioco che ne era priva: la **pietra** (già nel gioco dal 141) debutta al livello 81, la stella, con due pietre disegnate a mano tra i pixel di una riga (un colpo si ferma per forza); il suggerimento compare una volta. La riprendono 85 (ufo) e 88 (alieno) con pietre messe dal generatore. Ghiaccio e nascosti restano come prima: il 81 è la combinazione nuova ghiaccio + nascosti + pietra.
