@@ -6,17 +6,17 @@ Questo report chiude le sei domande di #71. Non cambia codice né altri ticket: 
 
 ## Decisioni prese (17 novembre 2026)
 
-L'utente ha delegato la scelta ("scegli te cosa è meglio fare"). Decisioni registrate, tutte reversibili con una riga nella tabella delle soglie o nel ticket UI:
+Decisioni **dell'utente**, prese con il manager su #71 (commento del 17 novembre 2026). Reversibili con una riga nella tabella delle soglie o nel ticket UI:
 
 1. **Mostrare la difficoltà: opzione B.** Solo badge "Difficile" e "Boss"; nessun "Facile"/"Normale".
 2. **Soglie: 85 / 65** (set A, §3.2).
-3. **Stage: nessuna etichetta in UI**; al massimo il conteggio "n livelli difficili". Il valore numerico (media) resta interno.
+3. **Stage: niente etichetta e niente conteggio "n livelli difficili" nella UI.** La media dello stage resta solo un valore interno (pipeline e report).
 
 ## 1. Sintesi
 
 | Domanda | Raccomandazione |
 |---|---|
-| 1. Cosa si etichetta | **Ogni livello**: 3 fasce **Facile / Normale / Difficile**. **Boss non è una fascia ma un indicatore di posizione** (il boss resta Facile/Normale/Difficile dentro, e si vede "Boss"). **Ogni stage**: un valore numerico (media) e, derivata, la stessa fascia; la UI dello stage è una scelta dell'utente (§7). |
+| 1. Cosa si etichetta | **Ogni livello**: 3 fasce **Facile / Normale / Difficile**. **Boss non è una fascia ma un indicatore di posizione** (il boss resta Facile/Normale/Difficile dentro, e si vede "Boss"). **Ogni stage**: un valore numerico (media) e, derivata, la stessa fascia; nella UI lo stage non mostra nulla (decisione dell'utente, §7). |
 | 2. Da dove viene | **Ibrido, già deciso da #75/#71**: etichetta = funzione di `levelWinRate` (nessuna seconda formula). Override solo dichiarato nella spec, con motivo, per le eccezioni. |
 | 3. Soglie assolute | **Facile ≥ 85% · Normale 65–85% · Difficile < 65%** di vittorie casuali. Sotto-fascia interna "molto facile" ≥ 95% (già `CURVE.veryEasy`). Le soglie **non si spostano** quando arrivano livelli nuovi: se serviranno livelli più duri si **aggiunge una fascia in fondo** (es. "Estremo" < 30%), non si sposta nulla. |
 | 4. Stage | **Media** di `levelWinRate` di tutti i 10 livelli (boss compreso) = unico valore numerico, lo stesso che usa `CURVE`. Stage incompleto: **nessun valore** (come #88). Livelli aggiunti dopo: il valore dello stage si ricalcola e il cambio è visibile nel diff (§5). |
@@ -106,8 +106,8 @@ Ibrido: **derivato**, con override opzionale `curve.difficulty` nella spec, amme
 Raccomando la **media di tutti i livelli** come valore numerico dello stage, perché è già ciò che usano le regole di curva di #88 (`stageMean`) e non dipende dalle posizioni 1..10. Con le soglie A le fasce degli stage sono: **Facile** 1–4; **Normale** 5–8, 10–18, 21–22; **Difficile** 9, 19, 20 (e il 9 contro il 10 si decide per 0,8 punti).
 
 Due conseguenze oneste:
-- Con soglie assolute **15 stage su 22 sono "Normale"**: l'etichetta di stage ha poca risoluzione, perché la curva del gioco vive tra 60% e 80%. Il valore numerico è più informativo dell'etichetta; per questo la UI dello stage è una scelta dell'utente (§7).
-- Il numero di livelli "Difficile" dello stage (0–7 su 10) discrimina meglio dell'etichetta: stage 5: 0; stage 9: 7; stage 20: 6. È una scelta di presentazione, non di modello.
+- Con soglie assolute **15 stage su 22 sono "Normale"**: l'etichetta di stage ha poca risoluzione, perché la curva del gioco vive tra 60% e 80%. Il valore numerico è più informativo dell'etichetta; per questo l'utente ha deciso che la UI non mostra l'etichetta di stage (§7).
+- Il numero di livelli "Difficile" dello stage (0–7 su 10) discriminerebbe meglio dell'etichetta (stage 5: 0; stage 9: 7; stage 20: 6), ma l'utente ha scelto di non mostrarlo: resta un dato interno.
 
 **Stage incompleto (`complete: false`)**: nessun valore e nessuna etichetta (le regole di #88 già saltano gli stage incompleti). Le etichette dei suoi livelli esistono e si possono mostrare.
 **Livelli aggiunti dopo**: i livelli già etichettati non cambiano. Se lo stage è già completo e cambia il suo insieme di livelli, il valore dello stage si ricalcola e la differenza compare nel diff (§3.3.3).
@@ -142,7 +142,7 @@ Ricerca esterna (secondaria, non ho potuto verificare le schermate): Royal Match
 | Opzione | Cosa si vede | Pro | Contro |
 |---|---|---|---|
 | **A. Solo interno** | niente in UI; pipeline, report, ordinamento e tuning | zero rischio di scoraggiare; nessuna UI da fare; #73 si chiude come non pianificato | nessun beneficio al giocatore; il boss resta l'unico segnale |
-| **B. Solo i segnali alti (raccomandata)** | badge "Difficile" e "Boss" su nodi livello e pre-livello; nessun "Facile"/"Normale"; nessuna etichetta sullo stage (o solo "n livelli difficili") | come Royal Match/Candy Crush; la fascia "Difficile" è la più affidabile nei playtest (nessuna anomalia inversa); chi perde un Difficile ha già l'avviso ("è ok sbagliare"); pochi nodi marcati, poco carico sullo scroll | "Normale" a volte sembra difficile (le 5 anomalie): l'assenza di badge può far sentire "sbagliato" chi perde; un'etichetta in meno su cui si può discutere |
+| **B. Solo i segnali alti (raccomandata)** | badge "Difficile" e "Boss" su nodi livello e pre-livello; nessun "Facile"/"Normale"; nessuna etichetta sullo stage (decisione dell'utente: nessuna etichetta né conteggio sullo stage) | come Royal Match/Candy Crush; la fascia "Difficile" è la più affidabile nei playtest (nessuna anomalia inversa); chi perde un Difficile ha già l'avviso ("è ok sbagliare"); pochi nodi marcati, poco carico sullo scroll | "Normale" a volte sembra difficile (le 5 anomalie): l'assenza di badge può far sentire "sbagliato" chi perde; un'etichetta in meno su cui si può discutere |
 | **C. Etichetta piena** | Facile / Normale / Difficile su ogni livello e ogni stage; Boss | massima informazione; coerente con "scelta di cosa giocare" | rischio più alto di "Facile" che scoraggia chi perde; l'etichetta di stage è quasi sempre "Normale" (15/22); più testi IT/EN, più spazio su schermi piccoli (#50) |
 
 Raccomando **B**: coincide con la decisione già presa in #87 ("Difficile/Boss"), protegge dalle fasce meno affidabili, costa poco in UI. Il modello interno non cambia tra A, B e C: in tutti e tre le fasce esistono in `core` e nei report.
@@ -185,7 +185,7 @@ Nota: i miei esperimenti usano 1000 partite per ridurre il rumore; i valori in `
 
 ### #73 — UI (condizionata alla scelta dell'utente in §7)
 - **Se A**: chiudere come non pianificato.
-- **Se B (raccomandata)**: "Da fare" ridotto a badge **Difficile** e **Boss** sui nodi livello e nel pre-livello (nessun testo per Facile/Normale); stage header: niente etichetta, al massimo "n difficili"; testi IT/EN solo per Difficile e Boss; informazione non solo colore (forma + testo); niente draw call extra per nodo.
+- **Se B (raccomandata)**: "Da fare" ridotto a badge **Difficile** e **Boss** sui nodi livello e nel pre-livello (nessun testo per Facile/Normale); stage header: niente etichetta e niente conteggio (decisione dell'utente); testi IT/EN solo per Difficile e Boss; informazione non solo colore (forma + testo); niente draw call extra per nodo.
 - **Se C**: come oggi, più avviso che l'etichetta di stage ha poca risoluzione (15/22 Normale) e va mostrata insieme al numero di livelli Difficili.
 - In tutti i casi: il testo del badge non attribuisce colpa ("Difficile" descrive il livello, non il giocatore); nel pannello d'ingorgo non ripetere l'etichetta.
 
