@@ -2,6 +2,13 @@
 
 ## Non rilasciato
 
+### Fine stage: il nuovo stile si vede e si usa subito (#153)
+
+- **Il pannello vittoria di fine stage mostra lo stile sbloccato** su tre barattoli (rosso, giallo, blu) in una scheda col bordo oro, con **Usalo subito** che lo mette sui secchielli (il bottone diventa "✓ In uso"); il bottone Album e il rimando "Tocca Album per vedere tutti gli stili" restano. Prima il pannello annunciava lo stile senza mostrarlo né applicarlo (playtest agent, F9: "non ho visto nessun cambio"). Direzione A di `docs/design/153-ricompensa-stage.md`, scelta su tre.
+- Il pannello si allunga (760 → 940) solo quando c'è un premio, e il quadro si rimpicciolisce; sta nello schermo a 360×640 e 412×915 in IT e EN.
+- Uno stile si applica solo se è stato guadagnato (`useSkin`, usato anche dall'album).
+- Test: unit su `stageReward`, `useSkin` e il layout del pannello (`src/core/winPanel.ts`); e2e `e2e/reward-153.spec.ts`: anteprima, "Usalo subito" applica lo stile (salvato e visibile al livello 11), il bottone Album porta alla pagina dello stage, nessuna scheda su un livello che non chiude uno stage.
+
 ### Pixel "?": la rivelazione si vede (#152)
 
 - **La copertura si gira come una carta** (direzione A "Tessera girata", `docs/design/152-rivelazione.md`): il "?" si stringe e sparisce, la faccia si apre piena del colore scoperto con un bordo d'inchiostro, poi sfuma nel pixel da dipingere (700 ms, con il suono della rivelazione). Prima il pixel diventava di colpo un pixel vuoto e un lampo bianco di 300 ms si perdeva nello schizzo del colpo (playtest agent, F8: "non l'ho mai visto diventare un colore"). Il pixel resta coperto finché la goccia non arriva sul vicino.

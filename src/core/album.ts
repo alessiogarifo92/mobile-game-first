@@ -86,3 +86,15 @@ export function newlyCompletedStage(
   const p = stageProgress(levels, after).find((s) => s.stage === level.stage);
   return p?.complete ? level.stage : null;
 }
+
+/** What the win panel offers when a stage is finished (#153): the style it unlocked, and whether it is already in use. */
+export interface StageReward {
+  skin: Skin;
+  inUse: boolean;
+}
+
+/** The reward of `completedStage` (null when no stage was just finished, or the stage has no style left to give). */
+export function stageReward(completedStage: number | null, activeSkin: Skin): StageReward | null {
+  const skin = completedStage ? stageSkin(completedStage) : null;
+  return skin ? { skin, inUse: skin === activeSkin } : null;
+}

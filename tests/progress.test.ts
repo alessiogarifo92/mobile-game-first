@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { HINT_AFTER_DEFEATS, MAX_DEFEATS, STORAGE_KEY, completeLevel, defaultProgress, defeatsOn, hintOffered, loadProgress, markTipSeen, recordDefeat, resetProgress, sanitize, saveProgress, type KeyValueStorage } from '../src/core/progress';
+import { HINT_AFTER_DEFEATS, MAX_DEFEATS, STORAGE_KEY, completeLevel, defaultProgress, defeatsOn, hintOffered, loadProgress, markTipSeen, recordDefeat, resetProgress, sanitize, saveProgress, useSkin, type KeyValueStorage } from '../src/core/progress';
 
 function memory(initial?: string): KeyValueStorage & { data: Map<string, string> } {
   const data = new Map<string, string>();
@@ -234,5 +234,33 @@ describe('defeat streak (#93)', () => {
   it('bounds how many level streaks a forged save may hold', () => {
     const defeats = Object.fromEntries(Array.from({ length: 1500 }, (_, i) => [String(i + 1), 1]));
     expect(Object.keys(sanitize({ defeats }).defeats)).toHaveLength(1000);
+  });
+});
+
+describe('useSkin (#153)', () => {
+  const levels = Array.from({ length: 20 }, (_, i) => ({ id: i + 1, stage: Math.floor(i / 10) + 1 }));
+  const stageOne = { ...defaultProgress(), completed: Array.from({ length: 10 }, (_, i) => i + 1), unlocked: 11 };
+
+  it('puts an earned style on the buckets', () => {
+    expect(useSkin(stageOne, 'dots', levels).skin).toBe('dots');
+  });
+
+  it('can always go back to classic', () => {
+    expect(useSkin({ ...stageOne, skin: 'dots' }, 'classic', levels).skin).toBe('classic');
+  });
+
+  it('refuses a style not yet earned and keeps the same object', () => {
+    expect(useSkin(stageOne, 'stripes', levels)).toBe(stageOne);
+    expect(useSkin(defaultProgress(), 'gold', levels).skin).toBe('classic');
+  });
+
+  it('returns the same object when the style is already in use', () => {
+    const p = { ...stageOne, skin: 'dots' as const };
+    expect(useSkin(p, 'dots', levels)).toBe(p);
+  });
+
+  it('keeps everything else in the save', () => {
+    const p = { ...stageOne, seenTips: ['guide'], defeats: { '12': 2 } };
+    expect(useSkin(p, 'dots', levels)).toEqual({ ...p, skin: 'dots' });
   });
 });

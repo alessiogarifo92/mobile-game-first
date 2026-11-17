@@ -107,6 +107,15 @@ export function resetProgress(progress: Progress): Progress {
   return { ...defaultProgress(), language: progress.language, sound: progress.sound };
 }
 
+/**
+ * Puts `skin` on the buckets (#153: "use it now" on the win panel, "use it" in the album). A style not yet earned is
+ * refused and the progress comes back unchanged, so no button can grant one.
+ */
+export function useSkin(progress: Progress, skin: Skin, levels: readonly LevelRef[]): Progress {
+  if (progress.skin === skin || !unlockedSkins(levels, progress.completed).includes(skin)) return progress;
+  return { ...progress, skin };
+}
+
 export function markTipSeen(progress: Progress, tip: string): Progress {
   return progress.seenTips.includes(tip) ? progress : { ...progress, seenTips: [...progress.seenTips, tip] };
 }

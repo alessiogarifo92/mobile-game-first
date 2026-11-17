@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
-import { newlyCompletedStage, stageSkin } from '../../core/album';
+import { newlyCompletedStage, stageReward, stageSkin, type Skin } from '../../core/album';
+import { winPanelLayout, winPanelTop, type WinPanelLayout } from '../../core/winPanel';
 import { primariesOf } from '../../core/colors';
 import { cellDone, colorShown } from '../../core/rules';
 import type { StoneEvent } from '../../core/sim';
@@ -28,7 +29,7 @@ import { pixelRevealFrame, runningReveals } from '../../core/reveal';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
 import {
-  LEVELS, UNIVERSES, canOpen, getProgress, hintAvailable, levelHint, levelTitle, markCompleted, markTip, recordDefeat, setSound, t, tipSeen,
+  LEVELS, UNIVERSES, canOpen, getProgress, hintAvailable, levelHint, levelTitle, markCompleted, markTip, recordDefeat, setSkin, setSound, t, tipSeen,
 } from '../store';
 import { BLUE, BROWN, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
 import { PAINT, SYMBOL, THEME, css } from '../theme';
@@ -52,6 +53,8 @@ const REVEAL_MS = 420;
 /** Side of the jam panel's picture of what was left (#93). */
 const JAM_CANVAS = 150;
 const GUIDE_TEXT = { tap: 'guide.tap', watch: 'guide.watch', next: 'guide.next', free: 'guide.free' } as const;
+
+type WinPoint = { x: number; y: number };
 
 export class PlayScene extends Phaser.Scene {
   private level!: Level;
@@ -109,6 +112,7 @@ export class PlayScene extends Phaser.Scene {
   private universeDone: { done: number; total: number; plusOne: boolean } | null = null;
   private winText = '';
   private winHint = '';
+  private rewardButton: Phaser.GameObjects.Container | null = null;
   private beltText!: Phaser.GameObjects.Text;
   /** Last launch refused because the belt was full: the tapped column or slot shakes for a moment. */
   private refused: { column: number; slot: number; at: number; belt: boolean } | null = null;
@@ -158,6 +162,7 @@ export class PlayScene extends Phaser.Scene {
     this.universeDone = null;
     this.winText = '';
     this.winHint = '';
+    this.rewardButton = null;
     this.guide = null;
     this.escape = null;
     this.subtitleBefore = null;
@@ -1115,13 +1120,19 @@ export class PlayScene extends Phaser.Scene {
     return this.overlay;
   }
 
+  /** The win panel's layout: the larger one when a just-finished stage gives a bucket style (#153). */
+  private winLayout(): WinPanelLayout {
+    return winPanelLayout(stageReward(this.completedStage, getProgress().skin) !== null);
+  }
+
   private showWin(): void {
-    const c = this.panel(t('win.title'), 760);
-    const top = (this.scale.height - 760) / 2;
-    const size = 240;
+    const L = this.winLayout();
+    const c = this.panel(t('win.title'), L.height);
+    const top = winPanelTop(L, this.scale.height);
+    const size = L.pictureSize;
     const cell = Math.floor(size / Math.max(this.level.width, this.level.height));
     const ox = VIEW.width / 2 - (cell * this.level.width) / 2;
-    const oy = top + 140;
+    const oy = top + L.picture;
     const g = this.add.graphics();
     this.level.targets.forEach((t, i) => {
       if (!t) return;
@@ -1134,33 +1145,76 @@ export class PlayScene extends Phaser.Scene {
     // The stage message adds to the name and moves, it does not replace them (#155).
     const summary = t('win.summary', { name: levelTitle(this.level.id), moves: this.moves });
     this.winText = stageDone ? `${summary}\n${stageDone}` : summary;
-    c.add(label(this, VIEW.width / 2, oy + size + 32, summary, THEME.type.sm, THEME.subCss, false).setWordWrapWidth(520));
-    const stageLabel = stageDone ? label(this, VIEW.width / 2, oy + size + 80, stageDone, THEME.type.sm, THEME.inkCss, true).setWordWrapWidth(560) : null;
+    c.add(label(this, VIEW.width / 2, top + L.summary, summary, THEME.type.sm, THEME.subCss, false).setWordWrapWidth(520));
+    const stageLabel = stageDone ? label(this, VIEW.width / 2, top + L.stage, stageDone, THEME.type.sm, THEME.inkCss, true).setWordWrapWidth(560) : null;
     if (stageLabel) c.add(stageLabel);
+    // #153: the new style on three jars, with a button that puts it on the buckets right away.
+    const reward = stageReward(this.completedStage, getProgress().skin);
+    if (reward && L.card) this.addRewardCard(c, reward.skin, top, L.card);
     // #177 (P7): say where the new style lives and what the Album button is for,
-    // hung under the stage line wherever it ends (it wraps to two lines in Italian).
+    // hung under the stage line wherever it ends (it wraps to two lines in Italian), or under the reward card (#153).
     const albumHint = this.completedStage && stageSkin(this.completedStage) ? t('win.albumHint') : '';
     if (albumHint && stageLabel) {
-      c.add(label(this, VIEW.width / 2, stageLabel.y + stageLabel.height / 2 + 4, albumHint, THEME.type.xs, THEME.subCss, false).setWordWrapWidth(560).setOrigin(0.5, 0));
+      const hintY = L.hint === null ? stageLabel.y + stageLabel.height / 2 + 4 : top + L.hint;
+      c.add(label(this, VIEW.width / 2, hintY, albumHint, THEME.type.xs, THEME.subCss, false).setWordWrapWidth(560).setOrigin(0.5, 0));
     }
     this.winHint = albumHint;
-    this.addUniverseProgress(c, top + 538);
+    this.addUniverseProgress(c, top + L.progress);
     const isLast = this.level.id >= LEVELS.length;
     const party = this.completedUniverse;
     const nextLabel = party ? t('universes.celebrate') : t(isLast ? 'win.map' : 'win.next');
-    c.add(button(this, VIEW.width / 2, top + 600, party ? 460 : 360, 88, nextLabel, () => {
+    c.add(button(this, VIEW.width / 2, top + L.next, party ? 460 : 360, 88, nextLabel, () => {
       if (party) this.scene.start('universeEnd', { universe: party });
       else if (isLast) this.scene.start('menu');
       else this.scene.start('play', { levelId: this.level.id + 1 });
     }, { name: 'next', armMs: PANEL_ARM_MS }));
     const stage = this.completedStage;
-    c.add(button(this, VIEW.width / 2, top + 700, 260, 64, t(stage ? 'win.album' : 'win.map'), () => {
+    c.add(button(this, VIEW.width / 2, top + L.second, 260, 64, t(stage ? 'win.album' : 'win.map'), () => {
       if (stage) this.scene.start('album', { stage });
       else this.scene.start('menu');
     }, { fill: THEME.belt, color: THEME.inkCss, size: THEME.type.sm, name: stage ? 'album' : 'map', armMs: PANEL_ARM_MS }));
     c.setAlpha(0);
     this.tweens.add({ targets: c, alpha: 1, duration: PANEL_FADE_MS, ease: 'Quad.easeOut' });
     this.publish();
+  }
+
+  /**
+   * #153 (finding F9): the style the stage just gave, drawn on a red, a yellow and a blue jar as in the album, and a
+   * "use it now" button that puts it on the buckets; once used, the button reads "in use" and does nothing more.
+   */
+  private addRewardCard(c: Phaser.GameObjects.Container, skin: Skin, top: number, card: NonNullable<WinPanelLayout['card']>): void {
+    const bg = this.add.graphics();
+    bg.fillStyle(THEME.paper, 1);
+    bg.fillRoundedRect(100, top + card.top, VIEW.width - 200, card.height, THEME.radius.panel);
+    bg.lineStyle(3, THEME.gold, 1);
+    bg.strokeRoundedRect(100, top + card.top, VIEW.width - 200, card.height, THEME.radius.panel);
+    c.add(bg);
+    const jars = this.add.graphics();
+    const s = card.jarSize;
+    [PAINT[RED]!, PAINT[YELLOW]!, PAINT[BLUE]!].forEach((color, k) => {
+      const x = VIEW.width / 2 - 110 + k * 110;
+      const y = top + card.jars;
+      jars.fillStyle(color, 1);
+      jars.fillRoundedRect(x - s / 2, y - s / 2, s, s, THEME.radius.jar);
+      drawSkin(jars, skin, x, y, s);
+      jars.lineStyle(3, THEME.ink, 1);
+      jars.strokeRoundedRect(x - s / 2, y - s / 2, s, s, THEME.radius.jar);
+    });
+    c.add(jars);
+    const y = top + card.use;
+    const draw = (): void => {
+      this.rewardButton?.destroy();
+      const inUse = getProgress().skin === skin;
+      this.rewardButton = inUse
+        ? button(this, VIEW.width / 2, y, 300, 76, `✓ ${t('album.inUse')}`, () => {}, { fill: THEME.belt, color: THEME.inkCss, size: THEME.type.sm, name: 'skin-in-use' })
+        : button(this, VIEW.width / 2, y, 300, 76, t('win.useSkin'), () => {
+            if (setSkin(skin)) sfx.unlock();
+            draw();
+            this.publish();
+          }, { size: THEME.type.sm, name: 'skin-use', armMs: PANEL_ARM_MS });
+      c.add(this.rewardButton);
+    };
+    draw();
   }
 
   /** The universe's x/100 under the summary, with "+1" on a first win (goal gradient, #91). */
@@ -1277,6 +1331,15 @@ export class PlayScene extends Phaser.Scene {
     return { started: this.pixelRevealCount, running, reduced: this.reducedMotion, frame };
   }
 
+  /** Where the win panel's buttons are; `use` only while the reward card offers "use it now". */
+  private winButtons(): { next: WinPoint; second: WinPoint; use: WinPoint | null } {
+    const L = this.winLayout();
+    const top = winPanelTop(L, this.scale.height);
+    const x = VIEW.width / 2;
+    const offer = this.overlay && this.gs.status === 'won' && L.card && this.rewardButton?.name === 'skin-use';
+    return { next: { x, y: top + L.next }, second: { x, y: top + L.second }, use: offer ? { x, y: top + L.card!.use } : null };
+  }
+
   private publish(): void {
     const gs = this.gs;
     const solutionOf = () => this.solutionMoves();
@@ -1294,7 +1357,10 @@ export class PlayScene extends Phaser.Scene {
       universeProgress: this.universeDone,
       winText: this.winText,
       winHint: this.winHint,
-      winButtons: { next: { x: VIEW.width / 2, y: (this.scale.height - 760) / 2 + 600 }, second: { x: VIEW.width / 2, y: (this.scale.height - 760) / 2 + 700 } },
+      winButtons: this.winButtons(),
+      // #153: the style the finished stage gave, and whether it is on the buckets now.
+      reward: this.completedStage === null ? null : stageReward(this.completedStage, getProgress().skin),
+      skin: getProgress().skin,
       beltBusy: gs.belt.length + gs.pending.length > 0,
       belt: beltLoad(gs),
       refusals: this.refusals,

@@ -2,7 +2,7 @@ import { unlockedSkins, type Skin } from '../core/album';
 import { DEFAULT_LANGUAGE, levelName, stageName, translate, universeName, type Language, type MessageKey, type Params } from '../core/i18n';
 import { parseLevel, type Level, type LevelDef } from '../core/level';
 import {
-  completeLevel, hintOffered, loadProgress, recordDefeat as recordDefeatData, markTipSeen, resetProgress as resetProgressData, saveProgress, type KeyValueStorage, type Progress,
+  completeLevel, hintOffered, loadProgress, useSkin, recordDefeat as recordDefeatData, markTipSeen, resetProgress as resetProgressData, saveProgress, type KeyValueStorage, type Progress,
 } from '../core/progress';
 import type { StageInfo } from '../core/stages';
 import { canOpenLevel, type UniverseInfo } from '../core/universes';
@@ -77,8 +77,11 @@ export function markTip(tip: string): void {
   update(markTipSeen(progress, tip));
 }
 
-export function setSkin(skin: Skin): void {
-  update({ ...progress, skin });
+/** Puts an earned style on the buckets; returns whether `skin` is now the one in use. */
+export function setSkin(skin: Skin): boolean {
+  const next = useSkin(progress, skin, LEVELS);
+  if (next !== progress) update(next);
+  return progress.skin === skin;
 }
 
 export function skinsUnlocked(): Skin[] {
