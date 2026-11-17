@@ -16,6 +16,7 @@ import { universeOfStage } from '../src/core/universes';
 import { BROWN } from '../src/core/colors';
 import { formatSpan, novelties, noveltyGaps, summarizeStages } from '../src/core/curveReport';
 import { assignIds } from '../src/core/stages';
+import { changeReport } from '../src/core/difficulty';
 import { STAGE_SPECS } from './stages';
 
 const rows = (levelsJson as LevelDef[]).map((def) => {
@@ -90,6 +91,8 @@ for (const s of summarizeStages(curve)) {
   console.log(`| ${s.stage} | ${pct(s.mean)} | ${s.veryEasy} | ${s.hardest.id} ${nameOf(s.hardest.id)} ${pct(s.hardest.winRate)} | ${boss} | ${formatSpan(s.belt)} | ${formatSpan(s.slots)} | ${pct(s.meanSecondary)} | ${s.lowSecondary} | ${mech} |`);
 }
 const lastId = Math.max(...rows.map((r) => r.id));
+// #77: what each level makes harder than the one before; ▶ = where the game tells the player.
+console.log(`\ndifficulty changes per level (▶ = announced in game):\n${changeReport(levelsJson as LevelDef[]).join('\n')}`);
 console.log(`\nnovelties: ${novelties(curve).map((n) => `${n.id} ${n.name}`).join(' · ')}`);
 // Levels 1–20 teach the base game (mixing); the first mechanic arrives at 31, so windows start at 21.
 const gaps = noveltyGaps(curve, 21, lastId);

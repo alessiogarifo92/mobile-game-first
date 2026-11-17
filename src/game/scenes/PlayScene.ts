@@ -23,6 +23,7 @@ import {
 } from '../../core/onboarding';
 import { solve, solveFrom, type Move } from '../../core/solver';
 import { missingCells, nearMiss } from '../../core/defeat';
+import { bannerFor, changeKey, levelChanges, unseenChanges, type DifficultyChange } from '../../core/difficulty';
 import { defeatsOn } from '../../core/progress';
 import { REDUCED_MOTION_QUERY, prefersReducedMotion } from '../../core/motion';
 import { pixelRevealFrame, runningReveals } from '../../core/reveal';
@@ -33,6 +34,7 @@ import {
 } from '../store';
 import { BLUE, BROWN, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
 import { PAINT, SYMBOL, THEME, css } from '../theme';
+import { drawChangeIcon } from '../changeIcon';
 import { drawSkin } from '../skins';
 import { drawTipArt, hasSharedArt } from '../tipArt';
 import { brownPixel, button, drawIce, drawStone, iceCounter, keyIcon, label, lockIcon, progressBar, screenBackground } from '../ui';
@@ -52,6 +54,8 @@ const MAX_PIPS = 6;
 const REVEAL_MS = 420;
 /** Side of the jam panel's picture of what was left (#93). */
 const JAM_CANVAS = 150;
+/** Top of the difficulty-change banner (#77): just under the level title, in the subtitle line. */
+const BANNER_TOP = 88;
 const GUIDE_TEXT = { tap: 'guide.tap', watch: 'guide.watch', next: 'guide.next', free: 'guide.free' } as const;
 
 type WinPoint = { x: number; y: number };
@@ -87,6 +91,8 @@ export class PlayScene extends Phaser.Scene {
   /** Y of the open card's OK button, published for the e2e helpers. */
   private tipOkY = 0;
   private tipBox = { y: 0, h: 0 };
+  /** The difficulty-change banner (#77), while it is open: what it says and the box it fills. */
+  private banner: { container: Phaser.GameObjects.Container; changes: DifficultyChange[]; fact: string; why: string; y: number; h: number } | null = null;
   /** Cards shown in this level: at most one teaching card per level (#177, rule in core/onboarding). */
   private tipsShown: CardTip[] = [];
   /** Ammo each shooter had when it was launched, to tell whether its loop hit anything. */
@@ -168,6 +174,7 @@ export class PlayScene extends Phaser.Scene {
     this.subtitleBefore = null;
     this.guideLayer = null;
     this.tip = null;
+    this.banner = null;
     this.tipOkY = 0;
     this.tipBox = { y: 0, h: 0 };
     this.tipsShown = [];
@@ -248,7 +255,46 @@ export class PlayScene extends Phaser.Scene {
       if (this.hint) this.showHint();
       const tip = tipOnLevelStart(this.level, seen);
       if (tip) this.time.delayedCall(350, () => this.showTip(tip));
+      this.showChangeBanner();
     }
+    this.publish();
+  }
+
+  /**
+   * #77: what this level makes harder than the one before, told once. A strip in the subtitle line (icon, the fact,
+   * what it means), closed by a tap on it or by the first launch; it covers nothing the player touches. Marked as seen
+   * when it opens, so it shows once whatever the player does next. The pure rules are in core/difficulty.
+   */
+  private showChangeBanner(): void {
+    const shown = bannerFor(unseenChanges(levelChanges(LEVELS, this.level.id), getProgress().seenTips));
+    if (shown.length === 0) return;
+    for (const c of shown) markTip(changeKey(c));
+    const first = shown[0]!;
+    const fact = shown.map((c) => (c.kind === 'belt' || c.kind === 'slots' || c.kind === 'columns' ? t(`change.${c.kind}.fact` as const, { n: c.to }) : t(`change.${c.kind}.label` as const))).join(' · ');
+    const why = shown.length > 1 ? t('change.limits.why') : t(`change.${first.kind}.why` as const);
+    const pad = THEME.space.xs;
+    const x = THEME.space.md;
+    const w = VIEW.width - 2 * x;
+    const iconW = 84;
+    const textW = w - iconW - 56;
+    const factText = label(this, x + iconW, BANNER_TOP + pad, fact, THEME.type.xs).setOrigin(0, 0).setWordWrapWidth(textW);
+    const whyText = label(this, x + iconW, BANNER_TOP + pad + factText.height, why, THEME.type.xs, THEME.subCss, false).setOrigin(0, 0).setWordWrapWidth(textW);
+    const h = Math.ceil(factText.height + whyText.height) + 2 * pad;
+    const g = this.add.graphics();
+    g.fillStyle(THEME.paper, 1).fillRoundedRect(x, BANNER_TOP, w, h, THEME.radius.panel);
+    g.lineStyle(3, THEME.ink, 1).strokeRoundedRect(x, BANNER_TOP, w, h, THEME.radius.panel);
+    drawChangeIcon(g, first.kind, x + iconW / 2, BANNER_TOP + h / 2, 40);
+    const close = label(this, x + w - 30, BANNER_TOP + h / 2, '✕', THEME.type.sm);
+    const zone = this.add.zone(x, BANNER_TOP, w, h).setOrigin(0).setInteractive({ useHandCursor: true });
+    const container = this.add.container(0, 0, [g, factText, whyText, close, zone]).setDepth(6);
+    zone.on('pointerdown', () => this.hideChangeBanner());
+    this.banner = { container, changes: shown, fact, why, y: BANNER_TOP, h };
+  }
+
+  private hideChangeBanner(): void {
+    if (!this.banner) return;
+    this.banner.container.destroy();
+    this.banner = null;
     this.publish();
   }
 
@@ -317,6 +363,7 @@ export class PlayScene extends Phaser.Scene {
     if (column >= 0 ? !launchFromColumn(this.gs, column) : !launchFromSlot(this.gs, slot)) return;
     this.launchAmmo.set(wanted.id, wanted.ammo);
     this.moves += 1;
+    this.hideChangeBanner();
     sfx.launch();
     if (this.hintLayer) {
       this.hintLayer.destroy();
@@ -1363,6 +1410,8 @@ export class PlayScene extends Phaser.Scene {
       skin: getProgress().skin,
       beltBusy: gs.belt.length + gs.pending.length > 0,
       belt: beltLoad(gs),
+      // #77: the difficulty-change banner while it is open (what it says, the kinds it covers, its box), else null.
+      banner: this.banner && { fact: this.banner.fact, why: this.banner.why, kinds: this.banner.changes.map((c) => c.kind), y: this.banner.y, h: this.banner.h },
       refusals: this.refusals,
       // Waiting buckets refused because they could not land a shot, and the pixels circled for the last one (#146).
       blockedTaps: this.blockedTaps,

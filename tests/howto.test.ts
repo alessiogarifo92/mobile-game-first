@@ -82,3 +82,18 @@ describe('how to play: unlocked rules (#183)', () => {
     expect(pageAfterSwipe(HOWTO_PAGES - 1, -200, 0)).toBe(HOWTO_PAGES - 1);
   });
 });
+
+describe('how to play: difficulty changes (#77)', () => {
+  it('with none seen there is no page for them', () => {
+    expect(howtoPages(['ice', 'guide'])).not.toContainEqual(expect.objectContaining({ kind: 'changes' }));
+  });
+
+  it('adds one last page listing the kinds seen, in the fixed order, after the unlocked rules', () => {
+    const pages = howtoPages(['chg.chunk', 'chg.belt.2', 'chg.belt.3', 'ice']);
+    expect(pages.slice(HOWTO_PAGES)).toEqual([{ kind: 'tip', tip: 'ice' }, { kind: 'changes', changes: ['belt', 'chunk'] }]);
+  });
+
+  it('a save from before the feature (no chg ids) is unchanged', () => {
+    expect(howtoPages(['guide', 'mixing', 'ice'])).toEqual([...howtoPages([]), { kind: 'tip', tip: 'ice' }]);
+  });
+});

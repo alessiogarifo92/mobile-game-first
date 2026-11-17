@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Spiegare in gioco cosa comporta ogni aumento di difficoltà (#77)
+
+- **Una striscia sotto il titolo dice cosa è cambiato e cosa comporta** quando un livello fa un passo avanti: nastro con meno capienza ("Nastro: max 3 secchielli"), meno slot, tela più grande, più colonne, secchielli più piccoli, boss. Icona (forma, non colore), il fatto in grassetto e una riga su cosa comporta; non copre il nastro, gli slot né le colonne (a 360×640 sta sopra il nastro) e si chiude con un tocco o al primo lancio. Direzione A di `docs/design/77-novita-difficolta.md`, scelta su tre.
+- **Una volta sola per novità**, salvata tra i suggerimenti (`chg.<tipo>`; nastro e slot per valore a cui scendono): i salvataggi vecchi funzionano senza migrazione. Nastro e slot che calano insieme sono **una sola** striscia; al massimo una per livello. Con tutto il gioco sono 9 strisce.
+- **Già coperto prima, non toccato**: ghiaccio, nascosti, pietra, marrone, lucchetto, coperti, slot al ritorno, nastro pieno e "+N" hanno già la loro scheda (#177) e la pagina in "Come si gioca" (#183). Nuova pagina "Quando si fa più duro" che elenca le novità incontrate.
+- Calcolo puro in `src/core/difficulty.ts` (soglie in `CHANGE_RULES`, testi `change.*` in IT/EN, nessun numero nel codice di gioco); `npm run changes:levels` e `scripts/difficulty-report.ts` elencano i cambi di ogni livello. Cosa comporta ogni cambio: `docs/strategia-progetto.md`.
+- Test: unit (`tests/difficulty.test.ts`: nessun cambio, uno, più cambi, primo livello, inizio stage, id salvati, testi; `tests/howto.test.ts`); e2e `e2e/novita-77.spec.ts` a 360×640 e 412×915: la striscia compare al livello giusto, una volta, non copre la partita (`checkOnScreen`), si chiude con un tocco e al primo lancio.
+
 ### Stage 22 "Porto": livelli 211–220, lucchetto e chiave con il marrone (#200, #101)
 
 - **Dieci figure in pixel art originale** sul porto (`scripts/stages/stage-22.ts`): ancora, salvagente, peschereccio, cassa del carico, gru del porto, botte, molo, nave da carico, rimorchiatore e il boss, il porto con faro e veliero (14×14). Foglio di anteprima in `docs/levels/stage-22.png`; nomi IT/EN.
