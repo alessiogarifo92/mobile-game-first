@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Stage 22 "Porto": livelli 211–220, lucchetto e chiave con il marrone (#200, #101)
+
+- **Dieci figure in pixel art originale** sul porto (`scripts/stages/stage-22.ts`): ancora, salvagente, peschereccio, cassa del carico, gru del porto, botte, molo, nave da carico, rimorchiatore e il boss, il porto con faro e veliero (14×14). Foglio di anteprima in `docs/levels/stage-22.png`; nomi IT/EN.
+- **Lucchetto e chiave si combinano con il marrone** (nessun debutto): ogni livello ha chiavi e lucchetti (1 chiave e 2 lucchetti; 2 e 3 nel molo e nel rimorchiatore; 2 e 4 nel boss) accanto a scafi, casse e botti marroni e ai secondari già noti, nessun'altra meccanica. Dal 212 ≥ 30% di pixel secondari o marroni.
+- **Nastro 2, slot 2**: mai sopra la fine dell'universo 2.
+- **Curva** a dente di sega (#88), un po' più dura della Stazione e senza livelli molto facili: vittorie a caso 83 · 77 · 75 · 70 · 78 · 70 · 67 · 71 · 60 · 37%, media 68,5% (stage 21: 74,4%); il boss è il più duro dello stage, sopra il pavimento dell'universo (25%). Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (`tests/stage22.test.ts`: nomi IT/EN, 211–220, tela ≤ 14×14, chiavi e lucchetti ovunque, marrone e ≥ 30% secondari, nastro e slot, curva, media); e2e `e2e/stage-22.spec.ts`: la mappa dell'universo 3 aggiunge lo stage 22 dopo il 210 e il 211 si gioca fino alla vittoria.
+
 ### Universo 3 "Viaggio" e stage 21 "Stazione": livelli 201–210, debutto di lucchetto e chiave (#199, #101)
 
 - **Nasce l'universo 3 "Viaggio"** (IT/EN, tema blu, tela fino a 14×14): si apre completando il livello 200, l'ultimo dell'universo 2, e la mappa e l'album lo mostrano come gli altri. Per ora ha solo lo stage 21 (completo): gli altri arrivano con #101.

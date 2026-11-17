@@ -378,6 +378,18 @@ const en = {
   'level.stationlamp': 'Station lantern',
   'level.tunnel': 'Tunnel',
   'level.centralstation': 'Central station',
+  // Stage 22 — Port (#200)
+  'stage.port': 'Port',
+  'level.anchor': 'Anchor',
+  'level.lifebuoy': 'Lifebuoy',
+  'level.fishingboat': 'Fishing boat',
+  'level.crate': 'Cargo crate',
+  'level.harborcrane': 'Harbor crane',
+  'level.barrel': 'Barrel',
+  'level.pier': 'Pier',
+  'level.cargoship': 'Cargo ship',
+  'level.tugboat': 'Tugboat',
+  'level.harbor': 'Harbor',
 };
 
 export type MessageKey = keyof typeof en;
@@ -760,6 +772,18 @@ const it: Record<MessageKey, string> = {
   'level.stationlamp': 'Lanterna di stazione',
   'level.tunnel': 'Galleria',
   'level.centralstation': 'Stazione centrale',
+  // Stage 22 — Port (#200)
+  'stage.port': 'Porto',
+  'level.anchor': 'Ancora',
+  'level.lifebuoy': 'Salvagente',
+  'level.fishingboat': 'Peschereccio',
+  'level.crate': 'Cassa del carico',
+  'level.harborcrane': 'Gru del porto',
+  'level.barrel': 'Botte',
+  'level.pier': 'Molo',
+  'level.cargoship': 'Nave da carico',
+  'level.tugboat': 'Rimorchiatore',
+  'level.harbor': 'Il porto',
 };
 
 export const DICTIONARIES = { en, it } as const;

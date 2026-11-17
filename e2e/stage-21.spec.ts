@@ -13,15 +13,15 @@ async function start(page: Page, save: object) {
   await waitScene(page, 'menu');
 }
 
-test('after universe 2 the map opens on universe 3, stage 21, with only level 201 playable', async ({ page }) => {
+test('after universe 2 the map opens on universe 3, stage 21 first, with only level 201 playable', async ({ page }) => {
   await start(page, { unlocked: 201, completed: range(1, 200) });
   expect(await mix(page, 'universe')).toBe(3);
   const headers = await mix<{ stage: number; count: number }[]>(page, 'headers');
-  expect(headers.map((h) => [h.stage, h.count])).toEqual([[21, 10]]);
+  expect(headers.map((h) => [h.stage, h.count])).toEqual([[21, 10], [22, 10]]);
   const nodes = await mix<{ id: number; unlocked: boolean; boss: boolean }[]>(page, 'nodes');
-  expect(nodes.map((n) => n.id)).toEqual(range(201, 210));
+  expect(nodes.map((n) => n.id)).toEqual(range(201, 220));
   expect(nodes.filter((n) => n.unlocked).map((n) => n.id)).toEqual([201]);
-  expect(nodes.filter((n) => n.boss).map((n) => n.id)).toEqual([210]);
+  expect(nodes.filter((n) => n.boss).map((n) => n.id)).toEqual([210, 220]);
   if (shots) await page.screenshot({ path: `${shots}/01-mappa-universo-3.png` });
 });
 
