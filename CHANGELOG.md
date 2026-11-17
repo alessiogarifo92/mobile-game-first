@@ -2,6 +2,15 @@
 
 ## Non rilasciato
 
+### Universo 3 "Viaggio" e stage 21 "Stazione": livelli 201–210, debutto di lucchetto e chiave (#199, #101)
+
+- **Nasce l'universo 3 "Viaggio"** (IT/EN, tema blu, tela fino a 14×14): si apre completando il livello 200, l'ultimo dell'universo 2, e la mappa e l'album lo mostrano come gli altri. Per ora ha solo lo stage 21 (completo): gli altri arrivano con #101.
+- **Dieci figure in pixel art originale** sulla stazione (`scripts/stages/stage-21.ts`): biglietto, valigia, orologio della stazione, semaforo, panchina del binario, edicola, locomotiva, lanterna di stazione, galleria e il boss, la stazione centrale (14×14). Foglio di anteprima in `docs/levels/stage-21.png`; nomi IT/EN.
+- **Il 201 è il debutto di lucchetto e chiave** (#96): molto facile (vittorie a caso 100%), una chiave sul bordo e due lucchetti in mezzo al biglietto; il suggerimento compare una volta. Dal 202 ogni livello ha chiavi e lucchetti (1 chiave e 2 lucchetti; 2 e 3 nella locomotiva e nella galleria; 2 e 4 nel boss) accanto al marrone e ai secondari già noti, nessun'altra meccanica.
+- **Nastro 2, slot 2** (3 solo al 201): mai sopra la fine dell'universo 2. Dal 202 ≥ 30% di pixel secondari o marroni.
+- **Curva** a dente di sega (#88): vittorie a caso 100 · 80 · 81 · 78 · 78 · 77 · 72 · 76 · 63 · 41%, media 74,4% (più facile della fine dell'universo 2, 61,4%); il boss è il più duro dello stage, sopra il pavimento dell'universo (25%). Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sull'universo 3, sullo stage e sullo sblocco dopo il 200 (`tests/stage21.test.ts`); e2e `e2e/stage-21.spec.ts`: la mappa si apre sull'universo 3 dopo il 200 e il 201 si gioca fino alla vittoria con la scheda del lucchetto. Il fixture `covered-debut` (`vite.config.ts`) non aggiunge più un universo di troppo ora che lo stage 21 esiste.
+
 ### Fine stage: il nuovo stile si vede e si usa subito (#153)
 
 - **Il pannello vittoria di fine stage mostra lo stile sbloccato** su tre barattoli (rosso, giallo, blu) in una scheda col bordo oro, con **Usalo subito** che lo mette sui secchielli (il bottone diventa "✓ In uso"); il bottone Album e il rimando "Tocca Album per vedere tutti gli stili" restano. Prima il pannello annunciava lo stile senza mostrarlo né applicarlo (playtest agent, F9: "non ho visto nessun cambio"). Direzione A di `docs/design/153-ricompensa-stage.md`, scelta su tre.

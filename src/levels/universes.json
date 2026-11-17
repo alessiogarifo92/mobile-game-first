@@ -10,5 +10,11 @@
   "key": "nature",
   "color": "G",
   "maxCanvas": 14
+ },
+ {
+  "id": 3,
+  "key": "journey",
+  "color": "B",
+  "maxCanvas": 14
  }
 ]

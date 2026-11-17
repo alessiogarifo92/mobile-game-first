@@ -118,5 +118,11 @@
   "key": "volcano",
   "color": 1,
   "complete": true
+ },
+ {
+  "id": 21,
+  "key": "station",
+  "color": 2,
+  "complete": true
  }
 ]
