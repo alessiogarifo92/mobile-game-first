@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import type { Move } from '../src/core/solver';
 import { PANEL_ARM_MS } from '../src/core/panelInput';
+import { winPanelLayout, winPanelTop } from '../src/core/winPanel';
 import { LAST_LEVEL, PANEL_ARM_WAIT, mix, openLevel, play, tap, waitScene } from './helpers';
 
 /**
@@ -110,9 +111,14 @@ test.describe('win panel of the last level (#178)', () => {
     const k = box.width / 720;
     const scroll = await mix<number>(page, 'scrollY');
     const screen = (x: number, y: number) => ({ x: box.x + x * k, y: box.y + (y - scroll) * k });
-    const top = (box.height / k - 760) / 2;
-    const buttons = { next: { x: 360, y: top + 600 }, second: { x: 360, y: top + 700 } };
-    const points = [...slots.map((s) => screen(s.x + s.w / 2, s.y + s.h / 2)), screen(buttons.second.x, buttons.second.y), screen(buttons.next.x, buttons.next.y)];
+    // The last level finishes stage 10, so the panel carries its reward card (#153) and its "use it now" button.
+    const L = winPanelLayout(true);
+    const top = winPanelTop(L, box.height / k);
+    const buttons = { next: { x: 360, y: top + L.next }, second: { x: 360, y: top + L.second }, use: { x: 360, y: top + L.card!.use } };
+    const points = [
+      ...slots.map((s) => screen(s.x + s.w / 2, s.y + s.h / 2)),
+      screen(buttons.second.x, buttons.second.y), screen(buttons.next.x, buttons.next.y), screen(buttons.use.x, buttons.use.y),
+    ];
 
     await play(page, solution.slice(0, -1));
     await watchWin(page);
@@ -126,11 +132,13 @@ test.describe('win panel of the last level (#178)', () => {
     await page.waitForTimeout(300);
     expect(await where(page)).toEqual({ scene: 'play', overlay: 'win' });
     // The points tapped above really were the panel's buttons.
-    const real = await mix<typeof buttons>(page, 'winButtons');
-    for (const key of ['next', 'second'] as const) {
-      expect(real[key].x).toBeCloseTo(buttons[key].x, 0);
-      expect(real[key].y).toBeCloseTo(buttons[key].y, 0);
+    const real = await mix<Record<'next' | 'second' | 'use', Point | null>>(page, 'winButtons');
+    for (const key of ['next', 'second', 'use'] as const) {
+      expect(real[key]!.x).toBeCloseTo(buttons[key].x, 0);
+      expect(real[key]!.y).toBeCloseTo(buttons[key].y, 0);
     }
+    // The early tap on "use it now" was ignored too: the style is not on the buckets.
+    expect(await mix(page, 'skin')).toBe('classic');
     if (shots) await page.screenshot({ path: `${shots}/02-tap-ignorati.png` });
 
     // Once armed, the panel's main button works and opens the universe party.

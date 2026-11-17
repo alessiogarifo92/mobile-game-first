@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  SKINS, UNIVERSE_SKINS, isSkin, newlyCompletedStage, parseSkin, stageProgress, stageSkin, universeSkin, unlockedSkins,
+  SKINS, UNIVERSE_SKINS, isSkin, newlyCompletedStage, parseSkin, stageProgress, stageReward, stageSkin, universeSkin, unlockedSkins,
 } from '../src/core/album';
 
 const levels = Array.from({ length: 25 }, (_, i) => ({ id: i + 1, stage: Math.floor(i / 10) + 1 }));
@@ -86,5 +86,26 @@ describe('universe skins (#92)', () => {
     const levels = game(150);
     expect(unlockedSkins(levels, range(1, 150))).not.toContain('petals');
     expect(unlockedSkins(levels, range(1, 150))).toContain('petals-5');
+  });
+});
+
+describe('stage reward on the win panel (#153)', () => {
+  it('gives the style of the stage just finished, not yet in use', () => {
+    expect(stageReward(1, 'classic')).toEqual({ skin: 'dots', inUse: false });
+    expect(stageReward(10, 'dots')).toEqual({ skin: 'gold', inUse: false });
+  });
+
+  it('says when the style is already on the buckets', () => {
+    expect(stageReward(2, 'stripes')).toEqual({ skin: 'stripes', inUse: true });
+  });
+
+  it('gives a colour variant of the universe skin after universe 1', () => {
+    expect(stageReward(13, 'classic')).toEqual({ skin: 'petals-3', inUse: false });
+  });
+
+  it('gives nothing when no stage was finished or the stage has no style', () => {
+    expect(stageReward(null, 'classic')).toBeNull();
+    expect(stageReward(0, 'classic')).toBeNull();
+    expect(stageReward(99, 'classic')).toBeNull();
   });
 });
