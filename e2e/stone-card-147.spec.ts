@@ -1,4 +1,3 @@
-import { mkdirSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { translate } from '../src/core/i18n';
 import { checkOnScreen, dismissTip, mix, openLevel, tap, waitScene } from './helpers';
@@ -8,13 +7,12 @@ import { checkOnScreen, dismissTip, mix, openLevel, tap, waitScene } from './hel
  * pixel behind blank, and the same pixel painted from the other side. Both screens, both languages, two phones.
  */
 const KEY = 'mix-and-splash/progress/v1';
-const evidence = 'docs/test-evidence/147-stone-card';
+const evidence = process.env.EVIDENCE; // set it to leave screenshots in docs/test-evidence/147-stone-card
+const DIR = 'docs/test-evidence/147-stone-card';
 const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
 const TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'belt', 'brown', 'queue', 'leftover'];
 const SIZES = [{ width: 360, height: 640 }, { width: 412, height: 915 }];
 const LANGS = ['it', 'en'] as const;
-
-mkdirSync(evidence, { recursive: true });
 
 async function start(page: Page, language: string, save: object) {
   await page.addInitScript(([key, value]) => localStorage.setItem(key, value),
@@ -35,7 +33,7 @@ for (const size of SIZES) {
         await page.waitForFunction(() => (window as unknown as { __mix: { tip: string | null } }).__mix.tip === 'stone');
         await page.waitForTimeout(400); // the card's entrance settles
         await checkOnScreen(page, `${tag} stone tip card`);
-        await page.screenshot({ path: `${evidence}/scheda-pietra-${tag}.png` });
+        if (evidence) await page.screenshot({ path: `${DIR}/scheda-pietra-${tag}.png` });
         expect(await dismissTip(page)).toBe('stone');
       });
 
@@ -54,7 +52,7 @@ for (const size of SIZES) {
         await page.waitForTimeout(400); // the page slide settles
         expect(translate(lang, 'howto.5.body')).toMatch(lang === 'it' ? /restano vuoti/ : /stay blank/);
         await checkOnScreen(page, `${tag} how to play page 5`);
-        await page.screenshot({ path: `${evidence}/come-si-gioca-5-${tag}.png` });
+        if (evidence) await page.screenshot({ path: `${DIR}/come-si-gioca-5-${tag}.png` });
       });
     });
   }

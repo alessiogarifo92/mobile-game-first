@@ -5,7 +5,8 @@ import { mix, tap, waitScene } from './helpers';
 /** How to play shows, after its base pages, one "unlocked rule" page per tip card already seen in a level (#183). */
 const KEY = 'mix-and-splash/progress/v1';
 const ALL_TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'hidden', 'lock', 'belt', 'brown', 'stone', 'covered', 'queue', 'leftover'];
-const evidence = 'docs/test-evidence/183-howto-tips';
+const evidence = process.env.EVIDENCE; // set it to leave screenshots in docs/test-evidence/183-howto-tips
+const DIR = 'docs/test-evidence/183-howto-tips';
 
 async function openHowTo(page: Page, seenTips: string[]) {
   await page.addInitScript(([key, value]) => localStorage.setItem(key, value), [KEY, JSON.stringify({ sound: false, language: 'it', unlocked: 1, completed: [], seenTips })] as const);
@@ -28,13 +29,13 @@ test('with no tip seen, How to play keeps exactly its base pages', async ({ page
   await openHowTo(page, []);
   expect(await mix(page, 'pages')).toBe(HOWTO_PAGES);
   expect(await mix(page, 'tip')).toBeNull();
-  await page.screenshot({ path: `${evidence}/01-zero-regole-pagina-1.png` });
+  if (evidence) await page.screenshot({ path: `${DIR}/01-zero-regole-pagina-1.png` });
   for (let i = 1; i < HOWTO_PAGES; i++) {
     await page.keyboard.press('ArrowRight');
     await goTo(page, i);
     expect(await mix(page, 'tip')).toBeNull();
   }
-  await page.screenshot({ path: `${evidence}/02-zero-regole-ultima-pagina.png` });
+  if (evidence) await page.screenshot({ path: `${DIR}/02-zero-regole-ultima-pagina.png` });
   // The last base page is still the end: one more step right does nothing, "Gioca" leaves.
   await page.keyboard.press('ArrowRight');
   await page.waitForTimeout(300);
@@ -47,7 +48,7 @@ test('with no tip seen, How to play keeps exactly its base pages', async ({ page
 test('with every tip seen, the unlocked rules follow the base pages in card order, then "Gioca" leaves', async ({ page }) => {
   await openHowTo(page, ALL_TIPS);
   expect(await mix(page, 'pages')).toBe(HOWTO_PAGES + EXTRA_TIPS.length);
-  await page.screenshot({ path: `${evidence}/03-tutte-regole-pagina-1.png` });
+  if (evidence) await page.screenshot({ path: `${DIR}/03-tutte-regole-pagina-1.png` });
   for (let i = 0; i < EXTRA_TIPS.length; i++) {
     const n = HOWTO_PAGES + i;
     if (i === 0) {
@@ -62,7 +63,7 @@ test('with every tip seen, the unlocked rules follow the base pages in card orde
       await goTo(page, n);
     }
     expect(await mix(page, 'tip')).toBe(EXTRA_TIPS[i]);
-    await page.screenshot({ path: `${evidence}/${String(4 + i).padStart(2, '0')}-regola-${EXTRA_TIPS[i]}.png` });
+    if (evidence) await page.screenshot({ path: `${DIR}/${String(4 + i).padStart(2, '0')}-regola-${EXTRA_TIPS[i]}.png` });
   }
   const next = await mix<{ x: number; y: number }>(page, 'next');
   await tap(page, next.x, next.y);
