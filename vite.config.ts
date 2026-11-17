@@ -66,7 +66,7 @@ function coveredDebut(): Plugin {
   const stage = stages.length + 1;
   stages.push({ ...stages[0]!, id: stage, complete: false });
   levels.push({ ...read('./e2e/fixtures/covered-debut.json'), id: levels.length + 1, stage });
-  universes.push({ ...universes[0]!, id: universes.length + 1 });
+  while (universes.length < Math.ceil(stage / 10)) universes.push({ ...universes[0]!, id: universes.length + 1 }); // 10 = STAGES_PER_UNIVERSE
   return {
     name: 'covered-debut',
     enforce: 'pre',

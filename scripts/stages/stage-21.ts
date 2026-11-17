@@ -1,0 +1,140 @@
+import type { StageSpec } from './types';
+
+/**
+ * Stage 21 — Stazione, primo stage dell'universo 3 "Viaggio" (#101, ticket #199).
+ * Debutto del lucchetto e della chiave (#96): il biglietto (201) è molto facile e insegna senza punire, con una sola
+ * chiave sul bordo e due lucchetti in mezzo al disegno. Dal 202 chiavi e lucchetti stanno in ogni livello, accanto al
+ * marrone e ai secondari già noti; nessun'altra meccanica nello stage.
+ * Nastro 2 e slot 2 (3 solo al debutto): mai sopra la fine dell'universo 2. Media ~74% di vittorie casuali.
+ * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places
+ * keys and locks.
+ */
+const stage: StageSpec = {
+  stage: 21, key: 'station', color: 'Y',
+  complete: true,
+  levels: [
+    { name: 'ticket', columns: 3, ammoChunk: 10, slots: 3, beltCapacity: 2, winRate: [0.95, 1], seed: 21000, image: [
+      '.OOOOOOOOO.',
+      'OOYYYYYYYOO',
+      'OOYYRRRYYOO',
+      'OOYYYYYYYOO',
+      '.OOOOOOOOO.',
+    ], overlay: [
+      '.k.........',
+      '...........',
+      '....l.l....',
+      '...........',
+      '...........',
+    ] },
+    { name: 'suitcase', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { key: 1, lock: 2 }, winRate: [0.76, 0.84], seed: 21037, image: [
+      '...YYYY...',
+      '...Y..Y...',
+      'KKKKKKKKKK',
+      'KRKKKKKKRK',
+      'KRKKYYKKRK',
+      'KRKKYYKKRK',
+      'KKKKKKKKKK',
+      '.Y......Y.',
+    ] },
+    { name: 'stationclock', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { key: 1, lock: 2 }, winRate: [0.76, 0.84], seed: 21074, image: [
+      '...OOOOO...',
+      '..OOOOOOO..',
+      '.OOYYKYYOO.',
+      'OOYYYKYYYOO',
+      'OOYYYKYYYOO',
+      'OOYYYKKKYOO',
+      'OOYYYYYYYOO',
+      'OOYYYYYYYOO',
+      '.OOYYYYYOO.',
+      '..OOOOOOO..',
+      '...OOOOO...',
+    ] },
+    { name: 'semaphore', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { key: 1, lock: 2 }, winRate: [0.7, 0.78], seed: 21111, image: [
+      'KKKKKKK',
+      'KRRRRRK',
+      'KRRRRRK',
+      'KKKKKKK',
+      'KYYYYYK',
+      'KYYYYYK',
+      'KKKKKKK',
+      'KGGGGGK',
+      'KGGGGGK',
+      'KKKKKKK',
+      '..KKK..',
+      '..KKK..',
+      '..KKK..',
+      'OOOOOOO',
+    ] },
+    { name: 'bench', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { key: 1, lock: 2 }, winRate: [0.76, 0.84], seed: 21148, image: [
+      '.KGGGGGGGGGGK.',
+      '.KGGGGGGGGGGK.',
+      '.KKKKKKKKKKKK.',
+      'KGGRRGGGGGGGGK',
+      'KKKKKKKKKKKKKK',
+      '.KK........KK.',
+      '.KK........KK.',
+    ] },
+    { name: 'kiosk', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { key: 1, lock: 2 }, winRate: [0.76, 0.84], seed: 21185, image: [
+      'RRYYRRYYRRYY',
+      'RRYYRRYYRRYY',
+      '.KKKKKKKKKK.',
+      '.KBBBBBBBBK.',
+      '.KBBBBBBBBK.',
+      '.KKKKKKKKKK.',
+      '.KOOOOOOOOK.',
+      '.KOOKOOKOOK.',
+      '.KOOKOOKOOK.',
+      '.KKKKKKKKKK.',
+    ] },
+    { name: 'locomotive', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { key: 2, lock: 3 }, winRate: [0.7, 0.78], seed: 21222, image: [
+      '.........KK...',
+      '.........KK...',
+      '.RRRRR.BBBBBB.',
+      '.RYYYR.BBBBBB.',
+      '.RYYYRBBBBBBBB',
+      '.RRRRRBBBBBBBB',
+      '.KKKKKKKKKKKKK',
+      '.KYKKYKKKYKKYK',
+    ] },
+    { name: 'stationlamp', columns: 4, ammoChunk: 12, slots: 2, beltCapacity: 2, special: { key: 1, lock: 2 }, winRate: [0.76, 0.84], seed: 21259, image: [
+      '...KK...',
+      '..K..K..',
+      '..K..K..',
+      '.KKKKKK.',
+      '.KYYYYK.',
+      '.KYOOYK.',
+      '.KYOOYK.',
+      '.KYYYYK.',
+      '.KKKKKK.',
+      '..K..K..',
+    ] },
+    { name: 'tunnel', columns: 4, ammoChunk: 16, slots: 2, beltCapacity: 2, special: { key: 2, lock: 3 }, winRate: [0.62, 0.7], seed: 21296, image: [
+      '....GGGGG....',
+      '..GGGGGGGGG..',
+      '.GGGGGGGGGGG.',
+      'GGGGKKKKKGGGG',
+      'GGGKKKKKKKGGG',
+      'GGGKKKKKKKGGG',
+      'GGGKKKKKKKGGG',
+      'YYYYYKYKYYYYY',
+    ] },
+    { name: 'centralstation', columns: 4, ammoChunk: 20, slots: 2, beltCapacity: 2, special: { key: 2, lock: 4 }, winRate: [0.4, 0.48], seed: 21333, image: [
+      '......KK......',
+      '.....YYYY.....',
+      '.....YKYY.....',
+      '.....YYYY.....',
+      '..RRRRRRRRRR..',
+      '.RRRRRRRRRRRR.',
+      'OOOOOOOOOOOOOO',
+      'OBBOOGGGGOOBBO',
+      'OBBOOGGGGOOBBO',
+      'OBBOOKKKKOOBBO',
+      'OBBOOKKKKOOBBO',
+      'KKKKKKKKKKKKKK',
+      'YYYYYYYYYYYYYY',
+      'KK.KK.KK.KK.KK',
+    ] },
+  ],
+};
+
+export default stage;

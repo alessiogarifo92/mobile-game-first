@@ -117,6 +117,7 @@ const en = {
   'stage.forest': 'Forest',
   'universe.atelier': 'Atelier',
   'universe.nature': 'Nature',
+  'universe.journey': 'Journey',
   'universe.locked': 'Complete level {n} to open',
   'universes.title': 'Universes',
   'universes.card': 'Universe {n} · {name}',
@@ -365,6 +366,18 @@ const en = {
   'level.hotspring': 'Hot spring',
   'level.lavaflow': 'Lava flow',
   'level.eruption': 'Eruption',
+  // Stage 21 — Station (#199)
+  'stage.station': 'Station',
+  'level.ticket': 'Ticket',
+  'level.suitcase': 'Suitcase',
+  'level.stationclock': 'Station clock',
+  'level.semaphore': 'Signal light',
+  'level.bench': 'Platform bench',
+  'level.kiosk': 'Newsstand',
+  'level.locomotive': 'Locomotive',
+  'level.stationlamp': 'Station lantern',
+  'level.tunnel': 'Tunnel',
+  'level.centralstation': 'Central station',
 };
 
 export type MessageKey = keyof typeof en;
@@ -486,6 +499,7 @@ const it: Record<MessageKey, string> = {
   'stage.forest': 'Bosco',
   'universe.atelier': 'Atelier',
   'universe.nature': 'Natura',
+  'universe.journey': 'Viaggio',
   'universe.locked': 'Completa il livello {n} per aprire',
   'universes.title': 'Universi',
   'universes.card': 'Universo {n} · {name}',
@@ -734,6 +748,18 @@ const it: Record<MessageKey, string> = {
   'level.hotspring': 'Sorgente termale',
   'level.lavaflow': 'Colata di lava',
   'level.eruption': 'Eruzione',
+  // Stage 21 — Station (#199)
+  'stage.station': 'Stazione',
+  'level.ticket': 'Biglietto',
+  'level.suitcase': 'Valigia',
+  'level.stationclock': 'Orologio della stazione',
+  'level.semaphore': 'Semaforo',
+  'level.bench': 'Panchina del binario',
+  'level.kiosk': 'Edicola',
+  'level.locomotive': 'Locomotiva',
+  'level.stationlamp': 'Lanterna di stazione',
+  'level.tunnel': 'Galleria',
+  'level.centralstation': 'Stazione centrale',
 };
 
 export const DICTIONARIES = { en, it } as const;
