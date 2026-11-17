@@ -4,6 +4,14 @@ Data: 17 novembre 2026 · Ticket: #71 (research) · Epic: #70 · Implementazione
 
 Questo report chiude le sei domande di #71. Non cambia codice né altri ticket: la sezione 9 propone gli aggiornamenti di #72 e #73. Dove la scelta spetta all'utente (sezione 7) ci sono opzioni con pro e contro e una raccomandazione.
 
+## Decisioni prese (17 novembre 2026)
+
+L'utente ha delegato la scelta ("scegli te cosa è meglio fare"). Decisioni registrate, tutte reversibili con una riga nella tabella delle soglie o nel ticket UI:
+
+1. **Mostrare la difficoltà: opzione B.** Solo badge "Difficile" e "Boss"; nessun "Facile"/"Normale".
+2. **Soglie: 85 / 65** (set A, §3.2).
+3. **Stage: nessuna etichetta in UI**; al massimo il conteggio "n livelli difficili". Il valore numerico (media) resta interno.
+
 ## 1. Sintesi
 
 | Domanda | Raccomandazione |
