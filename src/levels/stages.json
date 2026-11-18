@@ -142,5 +142,11 @@
   "key": "party",
   "color": 2,
   "complete": true
+ },
+ {
+  "id": 25,
+  "key": "music",
+  "color": 5,
+  "complete": true
  }
 ]

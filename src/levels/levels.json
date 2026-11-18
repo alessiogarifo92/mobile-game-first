@@ -20111,5 +20111,875 @@
   "slots": 2,
   "beltCapacity": 2,
   "specHash": "512a3db3"
+ },
+ {
+  "id": 241,
+  "name": "musicalnote",
+  "stage": 25,
+  "image": [
+   "...PPPPPPPP.",
+   "...PYYYYYYP.",
+   "...PP....PP.",
+   "...PP....PP.",
+   ".BBPP..BBPP.",
+   "BBBBP.BBBBP.",
+   "BBBB..BBBB..",
+   ".BB....BB..."
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 6
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 8
+    }
+   ]
+  ],
+  "slots": 3,
+  "beltCapacity": 2,
+  "specHash": "9dbb0f4c"
+ },
+ {
+  "id": 242,
+  "name": "guitar",
+  "stage": 25,
+  "image": [
+   "....RR.....",
+   "....KK.....",
+   "....KK.....",
+   "....KK.....",
+   "...OOOO....",
+   "..OOOOOO...",
+   "..OOKKOO...",
+   "...OOOO....",
+   "..OOOOOO...",
+   ".OOOOOOOO..",
+   ".OOOYYOOO..",
+   "..OOOOOO..."
+  ],
+  "overlay": [
+   "...........",
+   "....l......",
+   "...........",
+   "...........",
+   "...........",
+   "...........",
+   "...........",
+   "...........",
+   "...........",
+   "...........",
+   ".....l.....",
+   "..k........"
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 8
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 12
+    },
+    {
+     "color": 2,
+     "ammo": 12,
+     "covered": true
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "f5cfb2ca"
+ },
+ {
+  "id": 243,
+  "name": "drum",
+  "stage": 25,
+  "image": [
+   "O..........O",
+   ".O........O.",
+   "KKKKKKKKKKKK",
+   ".RRRRRRRRRR.",
+   ".RGRGRGRGRG.",
+   ".RRRRRRRRRR.",
+   "KKKKKKKKKKKK",
+   ".Y........Y."
+  ],
+  "overlay": [
+   "............",
+   "............",
+   "............",
+   "........l...",
+   "............",
+   "...k.....l..",
+   "............",
+   "............"
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 11
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 15,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 7
+    },
+    {
+     "color": 1,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "83e4a6fb"
+ },
+ {
+  "id": 244,
+  "name": "violin",
+  "stage": 25,
+  "image": [
+   ".....RR.....",
+   ".....KK.....",
+   ".....KK.....",
+   "....OOOO....",
+   "...OOOOOO...",
+   "....OOOO....",
+   "...OOKKOO...",
+   "..OOOKKOOO..",
+   "..OOOKKOOO..",
+   "...OOKKOO...",
+   "....YYYY...."
+  ],
+  "overlay": [
+   "............",
+   "............",
+   "............",
+   "............",
+   "............",
+   "............",
+   "............",
+   "......k.....",
+   ".........l..",
+   "........l...",
+   "............"
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 8
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 12
+    },
+    {
+     "color": 1,
+     "ammo": 20,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "3bcfc129"
+ },
+ {
+  "id": 245,
+  "name": "pianokeys",
+  "stage": 25,
+  "image": [
+   "RRRRRRRRRRRRRR",
+   "KKKKKKKKKKKKKK",
+   "KYYKYYYKYYKYYK",
+   "KYYKYYYKYYKYYK",
+   "KYYKYYYKYYKYYK",
+   "KYYYYYYYYYYYYK",
+   "KYYYYYYYYYYYYK",
+   "KKKKKKKKKKKKKK"
+  ],
+  "overlay": [
+   "..............",
+   "..............",
+   ".........l....",
+   "..............",
+   "..............",
+   ".......k......",
+   "..l...........",
+   ".............."
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 19
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 19
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "f301538b"
+ },
+ {
+  "id": 246,
+  "name": "trumpet",
+  "stage": 25,
+  "image": [
+   "..R..R.....OO.",
+   "..Y..Y....OOOO",
+   "OOOOOOOOOOOOOO",
+   "OOOOOOOOOOOOOO",
+   ".....OO...OOOO",
+   "KKKKK......OO."
+  ],
+  "overlay": [
+   "..............",
+   "..............",
+   ".....k........",
+   "......l.......",
+   ".....l........",
+   ".............."
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 4,
+     "ammo": 5,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 13,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 13
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "99f2f06a"
+ },
+ {
+  "id": 247,
+  "name": "headphones",
+  "stage": 25,
+  "image": [
+   "...BBBBBB...",
+   "..BB....BB..",
+   ".BB......BB.",
+   ".B........B.",
+   ".B........B.",
+   "PPP......PPP",
+   "PRP......PRP",
+   "PRP......PRP",
+   "PRP......PRP",
+   "PPP......PPP"
+  ],
+  "overlay": [
+   "............",
+   "..l......l..",
+   "............",
+   "............",
+   "............",
+   "............",
+   "............",
+   "..l.........",
+   "...........k",
+   ".k.........."
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 5
+    },
+    {
+     "color": 4,
+     "ammo": 7
+    },
+    {
+     "color": 4,
+     "ammo": 5,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 5
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 5
+    },
+    {
+     "color": 1,
+     "ammo": 5,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 5,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 5
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 5
+    },
+    {
+     "color": 1,
+     "ammo": 5,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 5
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 5
+    },
+    {
+     "color": 4,
+     "ammo": 5,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 5
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "07f07925"
+ },
+ {
+  "id": 248,
+  "name": "vinylrecord",
+  "stage": 25,
+  "image": [
+   "...KKKKK...",
+   "..KKKKKKK..",
+   ".KKKGGGKKK.",
+   "KKKGGYGGKKK",
+   "KKKGYYYGKKK",
+   "KKKGGYGGKKK",
+   ".KKKGGGKKK.",
+   "..KKKKKKK..",
+   "...KKKKK..."
+  ],
+  "overlay": [
+   "...........",
+   "...l.......",
+   "...........",
+   "...........",
+   ".......l...",
+   "...........",
+   "..k........",
+   "...........",
+   "..........."
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 14,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 12
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 19
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14,
+     "covered": true
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "63f2689c"
+ },
+ {
+  "id": 249,
+  "name": "microphone",
+  "stage": 25,
+  "image": [
+   "...GGGGG...",
+   "..GYGYGYG..",
+   "..GGYGYGG..",
+   "..GYGYGYG..",
+   "...GGGGG...",
+   "..PPPPPPP..",
+   "...KKKKK...",
+   "....KKK....",
+   "....KKK....",
+   "....KKK....",
+   "...BBBBB...",
+   "..BBBBBBB.."
+  ],
+  "overlay": [
+   "...........",
+   "...........",
+   "...........",
+   "...........",
+   "...l..k....",
+   "...l.......",
+   "...........",
+   ".....k.....",
+   "...........",
+   "....l......",
+   "...........",
+   "..........."
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 8
+    },
+    {
+     "color": 4,
+     "ammo": 16,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 21
+    },
+    {
+     "color": 2,
+     "ammo": 16,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 16
+    },
+    {
+     "color": 4,
+     "ammo": 16
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 13
+    },
+    {
+     "color": 4,
+     "ammo": 16,
+     "covered": true
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "088bdbe2"
+ },
+ {
+  "id": 250,
+  "name": "concert",
+  "stage": 25,
+  "boss": true,
+  "image": [
+   "RRRRRRRRRRRRRR",
+   "RRPRRPRRPRRPRR",
+   "RR..YYYYYY..RR",
+   "RR.YYYYYYYY.RR",
+   "RR..OOOOOO..RR",
+   "RR.OGOGOGOO.RR",
+   "RR.OOOOOOOO.RR",
+   "RR.KKKKKKKK.RR",
+   "RR..K....K..RR",
+   "RRR.K....K.RRR",
+   "KKKKKKKKKKKKKK",
+   "KBBBBBBBBBBBBK",
+   "KKKKKKKKKKKKKK"
+  ],
+  "overlay": [
+   "..............",
+   ".............k",
+   "..............",
+   "............l.",
+   ".........k....",
+   "..........l...",
+   "..............",
+   ".l............",
+   "..............",
+   "..............",
+   ".l............",
+   "..............",
+   ".............."
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 20
+    },
+    {
+     "color": 2,
+     "ammo": 20,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 20,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 20,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 21
+    },
+    {
+     "color": 2,
+     "ammo": 20,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 20
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 20
+    },
+    {
+     "color": 1,
+     "ammo": 20
+    },
+    {
+     "color": 2,
+     "ammo": 18,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 20
+    },
+    {
+     "color": 2,
+     "ammo": 20
+    },
+    {
+     "color": 1,
+     "ammo": 23
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "a79c8648"
  }
 ]

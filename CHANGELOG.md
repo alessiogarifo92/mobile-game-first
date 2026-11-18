@@ -10,6 +10,15 @@
 - **Report**: `scripts/difficulty-report.ts` stampa per stage quanti livelli Facile/Normale/Difficile, la fascia del boss e il valore dello stage, e aggiunge `band` a `docs/reports/curva-difficolta.json`, tutto dalla stessa funzione.
 - Test (`tests/difficulty.test.ts`, soglia di coverage 100% per `difficulty.ts` in `vitest.config.ts`): boundary esatti 0,85 / 0,65, un livello più duro aggiunto non cambia le etichette dei vecchi, monotonia di nastro e slot sul win rate misurato, una leva sola cambia la fascia, stage incompleto, versione nel file salvato, win rate salvato = `levelWinRate`, determinismo. Fuori ambito: UI (#73).
 
+### Stage 25 "Musica": livelli 241–250, debutto del secchiello coperto (#203, #101)
+
+- **Dieci figure in pixel art originale** sulla musica (`scripts/stages/stage-25.ts`): nota, chitarra, tamburo, violino, tasti del pianoforte, tromba, cuffie, disco in vinile, microfono e il boss, il concerto con il suo palco (14×13). Foglio di anteprima in `docs/levels/stage-25.png`; nomi IT/EN.
+- **Debutto del secchiello coperto** (#97): la nota (241) è molto facile (≥ 95% a caso), ha qualche secchiello coperto e nessun lucchetto, e mostra la scheda "Secchielli coperti". Dal 242 ogni livello ha secchielli coperti (30–40% dei secchielli), chiavi e lucchetti, accanto ai secondari e al marrone già noti; niente ghiaccio, pixel nascosti o pietre. Il secchiello coperto non cambia la misura casuale (il dato tiene il colore): la parte coperta si misura col playtest. Dal 242 ≥ 30% di pixel secondari o marroni.
+- **Regola 1 della curva**: `covered` conta tra le meccaniche che la regola 1 riconosce come debutto (`src/core/curve.ts`).
+- **Nastro 2, slot 2** (3 slot solo al debutto): mai sopra la fine dell'universo 2.
+- **Curva** a dente di sega (#88): vittorie a caso 100 · 74 · 76 · 58 · 67 · 69 · 59 · 66 · 57 · 28%, media 65,3% (stage 24: 66,4%); il boss è il più duro dello stage, più duro del 240 (31%) e sopra il pavimento dell'universo (25%). Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (`tests/stage25.test.ts`: nomi IT/EN, 241–250, tela ≤ 14×14, secchielli coperti dal 241 con la scheda, chiavi e lucchetti dal 242, nessun'altra meccanica, ≥ 30% secondari, nastro e slot, curva, media); e2e `e2e/stage-25.spec.ts`: la mappa dell'universo 3 mostra lo stage 25 dopo il 240, il 241 spiega i secchielli coperti e si gioca fino alla vittoria, il 242 con chiave e lucchetti pure.
+
 ### Report della curva di difficoltà aggiornato ai 240 livelli (#215)
 
 - **`docs/reports/curva-difficolta.{json,png}` rigenerati** (240 livelli, universi 1–3, stage 24 compreso): prima fermi ai 200 livelli di #173. Sui livelli già presenti cambiano solo 141, 164, 175 e 195, tutti per le pietre che bloccano la vernice (#147, PR #189).
