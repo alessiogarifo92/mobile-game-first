@@ -456,6 +456,18 @@ const en = {
   'level.swimmer': 'Swimmer',
   'level.medal': 'Medal',
   'level.stadium': 'The stadium',
+  // Stage 27 — Circo (#205)
+  'stage.circus': 'Circus',
+  'level.circusballoon': 'Circus balloon',
+  'level.clownhat': 'Clown hat',
+  'level.popcorn': 'Popcorn',
+  'level.circusticket': 'Circus ticket',
+  'level.cannon': 'Circus cannon',
+  'level.magichat': 'Magic hat',
+  'level.trapeze': 'Trapeze',
+  'level.lion': 'Lion',
+  'level.clownface': 'Clown',
+  'level.bigtop': 'The big top',
 };
 
 export type MessageKey = keyof typeof en;
@@ -916,6 +928,18 @@ const it: Record<MessageKey, string> = {
   'level.swimmer': 'Nuotatore',
   'level.medal': 'Medaglia',
   'level.stadium': 'Lo stadio',
+  // Stage 27 — Circo (#205)
+  'stage.circus': 'Circo',
+  'level.circusballoon': 'Palloncino del circo',
+  'level.clownhat': 'Cappello da clown',
+  'level.popcorn': 'Popcorn',
+  'level.circusticket': 'Biglietto del circo',
+  'level.cannon': 'Cannone del circo',
+  'level.magichat': 'Cilindro magico',
+  'level.trapeze': 'Trapezio',
+  'level.lion': 'Leone',
+  'level.clownface': 'Clown',
+  'level.bigtop': 'Il tendone',
 };
 
 export const DICTIONARIES = { en, it } as const;

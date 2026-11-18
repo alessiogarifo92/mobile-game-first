@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Stage 27 "Circo": livelli 261–270 (#205, #101)
+
+- **Dieci figure in pixel art originale** sul circo (`scripts/stages/stage-27.ts`): palloncino, cappello da clown, popcorn, biglietto, cannone, cilindro magico, trapezio, leone, clown e il boss, il tendone (13×14). Foglio di anteprima in `docs/levels/stage-27.png`; nomi IT/EN.
+- **Lucchetto e secchiello coperto insieme**: ogni livello ha secchielli coperti (30–40%), chiavi e lucchetti, accanto ai secondari; nessun'altra meccanica (niente ghiaccio, pixel nascosti o pietre). Nessun debutto, quindi nessun livello molto facile. ≥ 30% di pixel secondari o marroni dal 262.
+- **Nastro 2, slot 2**: mai sopra la fine dell'universo 2.
+- **Curva** a dente di sega (#88): vittorie a caso 92 · 64 · 63 · 54 · 70 · 70 · 53 · 62 · 56 · 25,5%, media 60,8% (stage 26: 63,4%). Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (`tests/stage27.test.ts`: nomi IT/EN, 261–270, tela ≤ 14×14, secchielli coperti, chiavi e lucchetti, ≥ 30% secondari, nastro e slot, curva, media); e2e `e2e/stage-27.spec.ts`: la mappa dell'universo 3 mostra lo stage 27 dopo il 260, il 261 e il 262 si giocano fino alla vittoria.
+
 ### Stage 26 "Sport": livelli 251–260 (#204, #101)
 
 - **Dieci figure in pixel art originale** sullo sport (`scripts/stages/stage-26.ts`): pallone da calcio, pallone da basket, racchetta, trofeo, scarpa da corsa, occhialini da nuoto, porta, nuotatore, medaglia e il boss, lo stadio (14×13). Foglio di anteprima in `docs/levels/stage-26.png`; nomi IT/EN.
