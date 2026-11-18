@@ -402,6 +402,18 @@ const en = {
   'level.flowers': 'Flowers',
   'level.cart': 'Cart',
   'level.market': 'The market',
+  // Stage 24 — Party (#202)
+  'stage.party': 'Party',
+  'level.partyballoon': 'Party balloon',
+  'level.partyhat': 'Party hat',
+  'level.giftbox': 'Gift box',
+  'level.birthdaycake': 'Birthday cake',
+  'level.paperlantern': 'Paper lantern',
+  'level.sundae': 'Sundae',
+  'level.bunting': 'Bunting',
+  'level.pinata': 'Piñata',
+  'level.carousel': 'Carousel',
+  'level.festival': 'The festival',
 };
 
 export type MessageKey = keyof typeof en;
@@ -808,6 +820,18 @@ const it: Record<MessageKey, string> = {
   'level.flowers': 'Fiori',
   'level.cart': 'Carretto',
   'level.market': 'Il mercato',
+  // Stage 24 — Party (#202)
+  'stage.party': 'Festa',
+  'level.partyballoon': 'Palloncino',
+  'level.partyhat': 'Cappellino',
+  'level.giftbox': 'Pacco regalo',
+  'level.birthdaycake': 'Torta di compleanno',
+  'level.paperlantern': 'Lanterna di carta',
+  'level.sundae': 'Coppa di gelato',
+  'level.bunting': 'Festoni',
+  'level.pinata': 'Piñata',
+  'level.carousel': 'Giostra',
+  'level.festival': 'La festa',
 };
 
 export const DICTIONARIES = { en, it } as const;

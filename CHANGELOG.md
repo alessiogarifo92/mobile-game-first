@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Stage 24 "Festa": livelli 231–240, lucchetto e chiave con ghiaccio e nascosti (#202, #101)
+
+- **Dieci figure in pixel art originale** sulla festa (`scripts/stages/stage-24.ts`): palloncini, cappellino, pacco regalo, torta di compleanno, lanterna di carta, coppa di gelato, festoni, piñata, giostra e il boss, la festa con le sue bandierine (14×12). Foglio di anteprima in `docs/levels/stage-24.png`; nomi IT/EN.
+- **Lucchetto e chiave si combinano con ghiaccio e pixel nascosti** (nessun debutto, niente pietre): ogni livello ha chiavi, lucchetti, pixel ghiacciati e nascosti (1 chiave e 2 lucchetti; 2 e 3 nei festoni e nella giostra; 2 e 4 nel boss), accanto ai secondari e al marrone già noti. Dal 232 ≥ 30% di pixel secondari o marroni.
+- **Nastro 2, slot 2**: mai sopra la fine dell'universo 2.
+- **Curva** a dente di sega (#88), senza livelli molto facili: vittorie a caso 87 · 72 · 72 · 64 · 73 · 72 · 64 · 70 · 61 · 31%, media 66,4% (stage 23: 68,9%); il boss è il più duro dello stage e più duro del 230 (36%), sopra il pavimento dell'universo (25%). Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (`tests/stage24.test.ts`: nomi IT/EN, 231–240, tela ≤ 14×14, chiavi/lucchetti/ghiaccio/nascosti ovunque, ≥ 30% secondari, nastro e slot, curva, media); e2e `e2e/stage-24.spec.ts`: la mappa dell'universo 3 mostra lo stage 24 dopo il 230 e il 231 si gioca fino alla vittoria.
+
 ### Stage 23 "Mercato": livelli 221–230, lucchetto e chiave con la pietra (#201, #101)
 
 - **Dieci figure in pixel art originale** sul mercato (`scripts/stages/stage-23.ts`): fetta di anguria, cesto della spesa, tendone, bilancia, sgombro, formaggio, borsellino, fiori, carretto e il boss, il mercato con le sue bancarelle (14×12). Foglio di anteprima in `docs/levels/stage-23.png`; nomi IT/EN.
