@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Difficoltà di ogni livello e stage, calcolata in core (#72, epic #70)
+
+- **Una sola definizione** in `src/core/difficulty.ts` (pura, niente Phaser/DOM): tabella `DIFFICULTY` con `version` 1 e le soglie congelate del research #71 (Facile ≥ 85%, Normale ≥ 65% e < 85%, Difficile < 65% sul win rate casuale); `levelDifficulty(winRate, level)` → `{ band, boss, veryEasy }` (il boss è un flag, non una fascia; `veryEasy` = `CURVE.veryEasy`, interno); `stageDifficulty(levels)` = media dei win rate dei 10 livelli, `undefined` se lo stage non è completo. Nessuna seconda formula: nastro e slot pesano già nel win rate (#75).
+- **Persistenza in un file affiancato** `src/levels/difficulty.json` (versione della tabella + per livello `specHash`, `winRate`, fascia), non in `levels.json`: le PR degli stage non vanno in conflitto. `npm run gen:levels` misura il win rate solo dei livelli il cui spec è cambiato (incrementale) e ricalcola le fasce; un livello nuovo riceve l'etichetta senza toccare gli altri. `--check` fallisce se il file manca, ha un'altra versione della tabella, una fascia diversa da quella ricalcolata o non copre esattamente i livelli di `levels.json`; in tal caso stampa la tabella dei livelli che cambiano fascia. **I win rate dei livelli esistenti non cambiano** (`levels.json` identico).
+- **CI**: errore se la fascia calcolata contraddice quella dichiarata in `curve.difficulty: { band, why }` nella spec (accanto a `easyBoss`) o se manca il motivo; solo informative: livelli entro 3 punti da una soglia (67 oggi), fasce `winRate` di spec che attraversano una soglia (91) e stage il cui boss ha più nastro o slot dei livelli 2–9 (stage 20).
+- **Report**: `scripts/difficulty-report.ts` stampa per stage quanti livelli Facile/Normale/Difficile, la fascia del boss e il valore dello stage, e aggiunge `band` a `docs/reports/curva-difficolta.json`, tutto dalla stessa funzione.
+- Test (`tests/difficulty.test.ts`, soglia di coverage 100% per `difficulty.ts` in `vitest.config.ts`): boundary esatti 0,85 / 0,65, un livello più duro aggiunto non cambia le etichette dei vecchi, monotonia di nastro e slot sul win rate misurato, una leva sola cambia la fascia, stage incompleto, versione nel file salvato, win rate salvato = `levelWinRate`, determinismo. Fuori ambito: UI (#73).
+
 ### Report della curva di difficoltà aggiornato ai 240 livelli (#215)
 
 - **`docs/reports/curva-difficolta.{json,png}` rigenerati** (240 livelli, universi 1–3, stage 24 compreso): prima fermi ai 200 livelli di #173. Sui livelli già presenti cambiano solo 141, 164, 175 e 195, tutti per le pietre che bloccano la vernice (#147, PR #189).

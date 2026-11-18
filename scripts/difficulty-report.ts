@@ -12,6 +12,7 @@ import { parseLevel, type LevelDef } from '../src/core/level';
 import { levelWinRate, randomWinRate, solve } from '../src/core/solver';
 import { createRng } from '../src/core/rng';
 import { CURVE, checkCurve, curveLevel } from '../src/core/curve';
+import { DIFFICULTY, levelDifficulty, stageDifficulty } from '../src/core/difficulty';
 import { universeOfStage } from '../src/core/universes';
 import { BROWN } from '../src/core/colors';
 import { formatSpan, novelties, noveltyGaps, summarizeStages } from '../src/core/curveReport';
@@ -39,7 +40,7 @@ const rows = (levelsJson as LevelDef[]).map((def) => {
     randomWin: Number(levelWinRate(l).toFixed(3)),
     solutionMoves: solve(l).moves.length,
   };
-});
+}).map((r) => ({ ...r, band: levelDifficulty(r.randomWin, r).band }));
 const dir = new URL('../docs/reports/', import.meta.url).pathname;
 writeFileSync(`${dir}curva-difficolta.json`, JSON.stringify(rows, null, 1) + '\n');
 
@@ -89,6 +90,18 @@ for (const s of summarizeStages(curve)) {
   const boss = s.boss ? `${s.boss.id} ${nameOf(s.boss.id)} ${pct(s.boss.winRate)}` : '-';
   const mech = s.mechanics.map((m) => `${m.name} ${m.levels}`).join(', ') || '-';
   console.log(`| ${s.stage} | ${pct(s.mean)} | ${s.veryEasy} | ${s.hardest.id} ${nameOf(s.hardest.id)} ${pct(s.hardest.winRate)} | ${boss} | ${formatSpan(s.belt)} | ${formatSpan(s.slots)} | ${pct(s.meanSecondary)} | ${s.lowSecondary} | ${mech} |`);
+}
+// Difficulty bands (#72), from the same functions the game and gen:levels use (src/core/difficulty.ts): per stage the mix of
+// levels per band, the boss band and the stage's own value (the mean win rate; none while the stage is incomplete).
+console.log(`\ndifficulty bands (table v${DIFFICULTY.version}: ${DIFFICULTY.bands.slice(0, -1).map((b) => `${b.name} ≥ ${pct(b.min)}`).join(', ')}, hard below):`);
+console.log('| Stage | Facile | Normale | Difficile | Boss | Stage | Media |');
+const bandName = { easy: 'Facile', normal: 'Normale', hard: 'Difficile' } as const;
+for (const st of stageSpans.map((s) => s.stage)) {
+  const ls = rows.filter((r) => r.stage === st);
+  const count = (band: string) => ls.filter((r) => r.band === band).length;
+  const boss = ls.find((r) => r.boss);
+  const agg = stageDifficulty(ls.map((r) => ({ winRate: r.randomWin })));
+  console.log(`| ${st} | ${count('easy')} | ${count('normal')} | ${count('hard')} | ${boss ? bandName[boss.band] : '-'} | ${agg ? bandName[agg.band] : 'incompleto'} | ${agg ? pct(agg.winRate) : '-'} |`);
 }
 const lastId = Math.max(...rows.map((r) => r.id));
 // #77: what each level makes harder than the one before; ▶ = where the game tells the player.

@@ -1,0 +1,1445 @@
+{
+ "version": 1,
+ "levels": [
+  {
+   "id": 1,
+   "specHash": "d690bae0",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 2,
+   "specHash": "3cb72fa1",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 3,
+   "specHash": "97a17d67",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 4,
+   "specHash": "ffd8298e",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 5,
+   "specHash": "9704091f",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 6,
+   "specHash": "9fc83b42",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 7,
+   "specHash": "4d5a3303",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 8,
+   "specHash": "7801d397",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 9,
+   "specHash": "f805171e",
+   "winRate": 0.905,
+   "band": "easy"
+  },
+  {
+   "id": 10,
+   "specHash": "a6d6d396",
+   "winRate": 0.76,
+   "band": "normal"
+  },
+  {
+   "id": 11,
+   "specHash": "febb86e3",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 12,
+   "specHash": "37d138d7",
+   "winRate": 0.92,
+   "band": "easy"
+  },
+  {
+   "id": 13,
+   "specHash": "1e963b7f",
+   "winRate": 0.88,
+   "band": "easy"
+  },
+  {
+   "id": 14,
+   "specHash": "0263c968",
+   "winRate": 0.9,
+   "band": "easy"
+  },
+  {
+   "id": 15,
+   "specHash": "da766aa5",
+   "winRate": 0.915,
+   "band": "easy"
+  },
+  {
+   "id": 16,
+   "specHash": "e6a202bb",
+   "winRate": 0.92,
+   "band": "easy"
+  },
+  {
+   "id": 17,
+   "specHash": "c06e6cef",
+   "winRate": 0.87,
+   "band": "easy"
+  },
+  {
+   "id": 18,
+   "specHash": "2509a759",
+   "winRate": 0.905,
+   "band": "easy"
+  },
+  {
+   "id": 19,
+   "specHash": "0f597397",
+   "winRate": 0.835,
+   "band": "normal"
+  },
+  {
+   "id": 20,
+   "specHash": "f37f323a",
+   "winRate": 0.74,
+   "band": "normal"
+  },
+  {
+   "id": 21,
+   "specHash": "6af39190",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 22,
+   "specHash": "03918ae1",
+   "winRate": 0.915,
+   "band": "easy"
+  },
+  {
+   "id": 23,
+   "specHash": "a3813d56",
+   "winRate": 0.92,
+   "band": "easy"
+  },
+  {
+   "id": 24,
+   "specHash": "6fe0f9e0",
+   "winRate": 0.85,
+   "band": "easy"
+  },
+  {
+   "id": 25,
+   "specHash": "54d91b0b",
+   "winRate": 0.905,
+   "band": "easy"
+  },
+  {
+   "id": 26,
+   "specHash": "d1d7151a",
+   "winRate": 0.925,
+   "band": "easy"
+  },
+  {
+   "id": 27,
+   "specHash": "329d5276",
+   "winRate": 0.86,
+   "band": "easy"
+  },
+  {
+   "id": 28,
+   "specHash": "6a40a1d7",
+   "winRate": 0.91,
+   "band": "easy"
+  },
+  {
+   "id": 29,
+   "specHash": "b3bac9e2",
+   "winRate": 0.77,
+   "band": "normal"
+  },
+  {
+   "id": 30,
+   "specHash": "d102a7aa",
+   "winRate": 0.735,
+   "band": "normal"
+  },
+  {
+   "id": 31,
+   "specHash": "bc9df1d7",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 32,
+   "specHash": "747bf1cd",
+   "winRate": 0.865,
+   "band": "easy"
+  },
+  {
+   "id": 33,
+   "specHash": "c39b0c0d",
+   "winRate": 0.85,
+   "band": "easy"
+  },
+  {
+   "id": 34,
+   "specHash": "bc0a3d84",
+   "winRate": 0.835,
+   "band": "normal"
+  },
+  {
+   "id": 35,
+   "specHash": "3d06132f",
+   "winRate": 0.915,
+   "band": "easy"
+  },
+  {
+   "id": 36,
+   "specHash": "679a0286",
+   "winRate": 0.895,
+   "band": "easy"
+  },
+  {
+   "id": 37,
+   "specHash": "b70fa990",
+   "winRate": 0.89,
+   "band": "easy"
+  },
+  {
+   "id": 38,
+   "specHash": "2d376005",
+   "winRate": 0.895,
+   "band": "easy"
+  },
+  {
+   "id": 39,
+   "specHash": "e9428155",
+   "winRate": 0.78,
+   "band": "normal"
+  },
+  {
+   "id": 40,
+   "specHash": "a42e1e72",
+   "winRate": 0.61,
+   "band": "hard"
+  },
+  {
+   "id": 41,
+   "specHash": "b08547e1",
+   "winRate": 0.975,
+   "band": "easy"
+  },
+  {
+   "id": 42,
+   "specHash": "9bfdb4e7",
+   "winRate": 0.82,
+   "band": "normal"
+  },
+  {
+   "id": 43,
+   "specHash": "e058d95c",
+   "winRate": 0.86,
+   "band": "easy"
+  },
+  {
+   "id": 44,
+   "specHash": "f7fc4ddb",
+   "winRate": 0.79,
+   "band": "normal"
+  },
+  {
+   "id": 45,
+   "specHash": "9c654769",
+   "winRate": 0.75,
+   "band": "normal"
+  },
+  {
+   "id": 46,
+   "specHash": "9edeacd1",
+   "winRate": 0.77,
+   "band": "normal"
+  },
+  {
+   "id": 47,
+   "specHash": "98d7085c",
+   "winRate": 0.785,
+   "band": "normal"
+  },
+  {
+   "id": 48,
+   "specHash": "78017001",
+   "winRate": 0.81,
+   "band": "normal"
+  },
+  {
+   "id": 49,
+   "specHash": "c686655a",
+   "winRate": 0.705,
+   "band": "normal"
+  },
+  {
+   "id": 50,
+   "specHash": "78a4c49a",
+   "winRate": 0.585,
+   "band": "hard"
+  },
+  {
+   "id": 51,
+   "specHash": "ab797b61",
+   "winRate": 0.98,
+   "band": "easy"
+  },
+  {
+   "id": 52,
+   "specHash": "f8e880d7",
+   "winRate": 0.86,
+   "band": "easy"
+  },
+  {
+   "id": 53,
+   "specHash": "8c400dec",
+   "winRate": 0.885,
+   "band": "easy"
+  },
+  {
+   "id": 54,
+   "specHash": "1d2f6bbc",
+   "winRate": 0.825,
+   "band": "normal"
+  },
+  {
+   "id": 55,
+   "specHash": "852e177e",
+   "winRate": 0.67,
+   "band": "normal"
+  },
+  {
+   "id": 56,
+   "specHash": "8b29d0ae",
+   "winRate": 0.83,
+   "band": "normal"
+  },
+  {
+   "id": 57,
+   "specHash": "a09bd9bf",
+   "winRate": 0.745,
+   "band": "normal"
+  },
+  {
+   "id": 58,
+   "specHash": "ba10939a",
+   "winRate": 0.63,
+   "band": "hard"
+  },
+  {
+   "id": 59,
+   "specHash": "e38bcb1f",
+   "winRate": 0.62,
+   "band": "hard"
+  },
+  {
+   "id": 60,
+   "specHash": "68c012fe",
+   "winRate": 0.595,
+   "band": "hard"
+  },
+  {
+   "id": 61,
+   "specHash": "86995198",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 62,
+   "specHash": "8555aa94",
+   "winRate": 0.88,
+   "band": "easy"
+  },
+  {
+   "id": 63,
+   "specHash": "91fb273c",
+   "winRate": 0.805,
+   "band": "normal"
+  },
+  {
+   "id": 64,
+   "specHash": "1eb7f297",
+   "winRate": 0.77,
+   "band": "normal"
+  },
+  {
+   "id": 65,
+   "specHash": "a95143af",
+   "winRate": 0.68,
+   "band": "normal"
+  },
+  {
+   "id": 66,
+   "specHash": "74e7b624",
+   "winRate": 0.765,
+   "band": "normal"
+  },
+  {
+   "id": 67,
+   "specHash": "5d64eca4",
+   "winRate": 0.75,
+   "band": "normal"
+  },
+  {
+   "id": 68,
+   "specHash": "807a3925",
+   "winRate": 0.585,
+   "band": "hard"
+  },
+  {
+   "id": 69,
+   "specHash": "7e048857",
+   "winRate": 0.66,
+   "band": "normal"
+  },
+  {
+   "id": 70,
+   "specHash": "6dfcdd01",
+   "winRate": 0.46,
+   "band": "hard"
+  },
+  {
+   "id": 71,
+   "specHash": "542b8a1e",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 72,
+   "specHash": "fc308640",
+   "winRate": 0.825,
+   "band": "normal"
+  },
+  {
+   "id": 73,
+   "specHash": "e1b0389a",
+   "winRate": 0.685,
+   "band": "normal"
+  },
+  {
+   "id": 74,
+   "specHash": "3460d6ac",
+   "winRate": 0.545,
+   "band": "hard"
+  },
+  {
+   "id": 75,
+   "specHash": "89ba7153",
+   "winRate": 0.735,
+   "band": "normal"
+  },
+  {
+   "id": 76,
+   "specHash": "d30d88a7",
+   "winRate": 0.545,
+   "band": "hard"
+  },
+  {
+   "id": 77,
+   "specHash": "e367af1e",
+   "winRate": 0.68,
+   "band": "normal"
+  },
+  {
+   "id": 78,
+   "specHash": "b4dfcfba",
+   "winRate": 0.715,
+   "band": "normal"
+  },
+  {
+   "id": 79,
+   "specHash": "d52aa990",
+   "winRate": 0.61,
+   "band": "hard"
+  },
+  {
+   "id": 80,
+   "specHash": "e008c9d8",
+   "winRate": 0.43,
+   "band": "hard"
+  },
+  {
+   "id": 81,
+   "specHash": "54b81c86",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 82,
+   "specHash": "dd8d9fec",
+   "winRate": 0.855,
+   "band": "easy"
+  },
+  {
+   "id": 83,
+   "specHash": "a0796d31",
+   "winRate": 0.605,
+   "band": "hard"
+  },
+  {
+   "id": 84,
+   "specHash": "c127dc00",
+   "winRate": 0.63,
+   "band": "hard"
+  },
+  {
+   "id": 85,
+   "specHash": "45b7d109",
+   "winRate": 0.62,
+   "band": "hard"
+  },
+  {
+   "id": 86,
+   "specHash": "8956f8bf",
+   "winRate": 0.57,
+   "band": "hard"
+  },
+  {
+   "id": 87,
+   "specHash": "0217d4fb",
+   "winRate": 0.63,
+   "band": "hard"
+  },
+  {
+   "id": 88,
+   "specHash": "f055f468",
+   "winRate": 0.605,
+   "band": "hard"
+  },
+  {
+   "id": 89,
+   "specHash": "c6d72ddb",
+   "winRate": 0.52,
+   "band": "hard"
+  },
+  {
+   "id": 90,
+   "specHash": "7fc74052",
+   "winRate": 0.415,
+   "band": "hard"
+  },
+  {
+   "id": 91,
+   "specHash": "601246f5",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 92,
+   "specHash": "7c42ef43",
+   "winRate": 0.765,
+   "band": "normal"
+  },
+  {
+   "id": 93,
+   "specHash": "79d5b1a1",
+   "winRate": 0.61,
+   "band": "hard"
+  },
+  {
+   "id": 94,
+   "specHash": "95f9c855",
+   "winRate": 0.615,
+   "band": "hard"
+  },
+  {
+   "id": 95,
+   "specHash": "4a387836",
+   "winRate": 0.84,
+   "band": "normal"
+  },
+  {
+   "id": 96,
+   "specHash": "1fb68349",
+   "winRate": 0.675,
+   "band": "normal"
+  },
+  {
+   "id": 97,
+   "specHash": "c032fc01",
+   "winRate": 0.545,
+   "band": "hard"
+  },
+  {
+   "id": 98,
+   "specHash": "91c1ed96",
+   "winRate": 0.55,
+   "band": "hard"
+  },
+  {
+   "id": 99,
+   "specHash": "a83d4f9e",
+   "winRate": 0.555,
+   "band": "hard"
+  },
+  {
+   "id": 100,
+   "specHash": "00a54e9a",
+   "winRate": 0.375,
+   "band": "hard"
+  },
+  {
+   "id": 101,
+   "specHash": "c31516e6",
+   "winRate": 0.985,
+   "band": "easy"
+  },
+  {
+   "id": 102,
+   "specHash": "daeb2617",
+   "winRate": 0.82,
+   "band": "normal"
+  },
+  {
+   "id": 103,
+   "specHash": "5fabfbc5",
+   "winRate": 0.875,
+   "band": "easy"
+  },
+  {
+   "id": 104,
+   "specHash": "6a41d17d",
+   "winRate": 0.745,
+   "band": "normal"
+  },
+  {
+   "id": 105,
+   "specHash": "b6b23569",
+   "winRate": 0.8,
+   "band": "normal"
+  },
+  {
+   "id": 106,
+   "specHash": "b61dab24",
+   "winRate": 0.825,
+   "band": "normal"
+  },
+  {
+   "id": 107,
+   "specHash": "24639a6e",
+   "winRate": 0.73,
+   "band": "normal"
+  },
+  {
+   "id": 108,
+   "specHash": "53b2d86a",
+   "winRate": 0.825,
+   "band": "normal"
+  },
+  {
+   "id": 109,
+   "specHash": "65967bc6",
+   "winRate": 0.715,
+   "band": "normal"
+  },
+  {
+   "id": 110,
+   "specHash": "77fdf5cc",
+   "winRate": 0.58,
+   "band": "hard"
+  },
+  {
+   "id": 111,
+   "specHash": "a14f2563",
+   "winRate": 0.88,
+   "band": "easy"
+  },
+  {
+   "id": 112,
+   "specHash": "a8d139ff",
+   "winRate": 0.785,
+   "band": "normal"
+  },
+  {
+   "id": 113,
+   "specHash": "6c97661a",
+   "winRate": 0.795,
+   "band": "normal"
+  },
+  {
+   "id": 114,
+   "specHash": "efd73faf",
+   "winRate": 0.68,
+   "band": "normal"
+  },
+  {
+   "id": 115,
+   "specHash": "efb373fc",
+   "winRate": 0.81,
+   "band": "normal"
+  },
+  {
+   "id": 116,
+   "specHash": "d0f5bb2b",
+   "winRate": 0.835,
+   "band": "normal"
+  },
+  {
+   "id": 117,
+   "specHash": "b77106ed",
+   "winRate": 0.73,
+   "band": "normal"
+  },
+  {
+   "id": 118,
+   "specHash": "9a02f0a5",
+   "winRate": 0.805,
+   "band": "normal"
+  },
+  {
+   "id": 119,
+   "specHash": "ba822c22",
+   "winRate": 0.61,
+   "band": "hard"
+  },
+  {
+   "id": 120,
+   "specHash": "e7d26ea0",
+   "winRate": 0.53,
+   "band": "hard"
+  },
+  {
+   "id": 121,
+   "specHash": "cdc51bc1",
+   "winRate": 0.915,
+   "band": "easy"
+  },
+  {
+   "id": 122,
+   "specHash": "aae483ac",
+   "winRate": 0.795,
+   "band": "normal"
+  },
+  {
+   "id": 123,
+   "specHash": "7f272348",
+   "winRate": 0.75,
+   "band": "normal"
+  },
+  {
+   "id": 124,
+   "specHash": "ef6c5255",
+   "winRate": 0.705,
+   "band": "normal"
+  },
+  {
+   "id": 125,
+   "specHash": "cd64a19e",
+   "winRate": 0.815,
+   "band": "normal"
+  },
+  {
+   "id": 126,
+   "specHash": "50446443",
+   "winRate": 0.81,
+   "band": "normal"
+  },
+  {
+   "id": 127,
+   "specHash": "f7910b65",
+   "winRate": 0.74,
+   "band": "normal"
+  },
+  {
+   "id": 128,
+   "specHash": "fdf4028a",
+   "winRate": 0.82,
+   "band": "normal"
+  },
+  {
+   "id": 129,
+   "specHash": "e4aa635b",
+   "winRate": 0.64,
+   "band": "hard"
+  },
+  {
+   "id": 130,
+   "specHash": "7119efd0",
+   "winRate": 0.56,
+   "band": "hard"
+  },
+  {
+   "id": 131,
+   "specHash": "b33ee23d",
+   "winRate": 0.87,
+   "band": "easy"
+  },
+  {
+   "id": 132,
+   "specHash": "9f70d481",
+   "winRate": 0.805,
+   "band": "normal"
+  },
+  {
+   "id": 133,
+   "specHash": "655e7181",
+   "winRate": 0.8,
+   "band": "normal"
+  },
+  {
+   "id": 134,
+   "specHash": "facf6806",
+   "winRate": 0.725,
+   "band": "normal"
+  },
+  {
+   "id": 135,
+   "specHash": "c15d35e2",
+   "winRate": 0.815,
+   "band": "normal"
+  },
+  {
+   "id": 136,
+   "specHash": "d872a9e1",
+   "winRate": 0.765,
+   "band": "normal"
+  },
+  {
+   "id": 137,
+   "specHash": "880ce7df",
+   "winRate": 0.725,
+   "band": "normal"
+  },
+  {
+   "id": 138,
+   "specHash": "35377327",
+   "winRate": 0.8,
+   "band": "normal"
+  },
+  {
+   "id": 139,
+   "specHash": "2a01f0ed",
+   "winRate": 0.66,
+   "band": "normal"
+  },
+  {
+   "id": 140,
+   "specHash": "e8bd3454",
+   "winRate": 0.505,
+   "band": "hard"
+  },
+  {
+   "id": 141,
+   "specHash": "f0ee2cbc",
+   "winRate": 0.855,
+   "band": "easy"
+  },
+  {
+   "id": 142,
+   "specHash": "13d94674",
+   "winRate": 0.79,
+   "band": "normal"
+  },
+  {
+   "id": 143,
+   "specHash": "c1182911",
+   "winRate": 0.745,
+   "band": "normal"
+  },
+  {
+   "id": 144,
+   "specHash": "5f533536",
+   "winRate": 0.7,
+   "band": "normal"
+  },
+  {
+   "id": 145,
+   "specHash": "8e1aa526",
+   "winRate": 0.75,
+   "band": "normal"
+  },
+  {
+   "id": 146,
+   "specHash": "393a7c87",
+   "winRate": 0.75,
+   "band": "normal"
+  },
+  {
+   "id": 147,
+   "specHash": "3bfdc963",
+   "winRate": 0.685,
+   "band": "normal"
+  },
+  {
+   "id": 148,
+   "specHash": "35b23834",
+   "winRate": 0.78,
+   "band": "normal"
+  },
+  {
+   "id": 149,
+   "specHash": "cb6b433c",
+   "winRate": 0.615,
+   "band": "hard"
+  },
+  {
+   "id": 150,
+   "specHash": "de3e5370",
+   "winRate": 0.48,
+   "band": "hard"
+  },
+  {
+   "id": 151,
+   "specHash": "253ab0dd",
+   "winRate": 0.845,
+   "band": "normal"
+  },
+  {
+   "id": 152,
+   "specHash": "7b68961d",
+   "winRate": 0.725,
+   "band": "normal"
+  },
+  {
+   "id": 153,
+   "specHash": "f45b1bdd",
+   "winRate": 0.77,
+   "band": "normal"
+  },
+  {
+   "id": 154,
+   "specHash": "8ca35eb2",
+   "winRate": 0.675,
+   "band": "normal"
+  },
+  {
+   "id": 155,
+   "specHash": "1efa7b83",
+   "winRate": 0.73,
+   "band": "normal"
+  },
+  {
+   "id": 156,
+   "specHash": "4072e926",
+   "winRate": 0.765,
+   "band": "normal"
+  },
+  {
+   "id": 157,
+   "specHash": "f9822d58",
+   "winRate": 0.68,
+   "band": "normal"
+  },
+  {
+   "id": 158,
+   "specHash": "08f3969a",
+   "winRate": 0.73,
+   "band": "normal"
+  },
+  {
+   "id": 159,
+   "specHash": "8b121c8a",
+   "winRate": 0.62,
+   "band": "hard"
+  },
+  {
+   "id": 160,
+   "specHash": "e68028d4",
+   "winRate": 0.4,
+   "band": "hard"
+  },
+  {
+   "id": 161,
+   "specHash": "84c4cc28",
+   "winRate": 0.83,
+   "band": "normal"
+  },
+  {
+   "id": 162,
+   "specHash": "74a31a22",
+   "winRate": 0.705,
+   "band": "normal"
+  },
+  {
+   "id": 163,
+   "specHash": "7042b023",
+   "winRate": 0.73,
+   "band": "normal"
+  },
+  {
+   "id": 164,
+   "specHash": "0bdb2e0b",
+   "winRate": 0.64,
+   "band": "hard"
+  },
+  {
+   "id": 165,
+   "specHash": "a6f890df",
+   "winRate": 0.725,
+   "band": "normal"
+  },
+  {
+   "id": 166,
+   "specHash": "a3845810",
+   "winRate": 0.725,
+   "band": "normal"
+  },
+  {
+   "id": 167,
+   "specHash": "07d0b637",
+   "winRate": 0.63,
+   "band": "hard"
+  },
+  {
+   "id": 168,
+   "specHash": "322570dc",
+   "winRate": 0.715,
+   "band": "normal"
+  },
+  {
+   "id": 169,
+   "specHash": "05d07583",
+   "winRate": 0.56,
+   "band": "hard"
+  },
+  {
+   "id": 170,
+   "specHash": "b97b2286",
+   "winRate": 0.375,
+   "band": "hard"
+  },
+  {
+   "id": 171,
+   "specHash": "6ee06f56",
+   "winRate": 0.86,
+   "band": "easy"
+  },
+  {
+   "id": 172,
+   "specHash": "a70f96d6",
+   "winRate": 0.665,
+   "band": "normal"
+  },
+  {
+   "id": 173,
+   "specHash": "fd67f826",
+   "winRate": 0.66,
+   "band": "normal"
+  },
+  {
+   "id": 174,
+   "specHash": "5f9dd122",
+   "winRate": 0.615,
+   "band": "hard"
+  },
+  {
+   "id": 175,
+   "specHash": "1a6a3650",
+   "winRate": 0.67,
+   "band": "normal"
+  },
+  {
+   "id": 176,
+   "specHash": "74574728",
+   "winRate": 0.67,
+   "band": "normal"
+  },
+  {
+   "id": 177,
+   "specHash": "174d2458",
+   "winRate": 0.63,
+   "band": "hard"
+  },
+  {
+   "id": 178,
+   "specHash": "0105daa4",
+   "winRate": 0.7,
+   "band": "normal"
+  },
+  {
+   "id": 179,
+   "specHash": "638ca894",
+   "winRate": 0.605,
+   "band": "hard"
+  },
+  {
+   "id": 180,
+   "specHash": "3b23515c",
+   "winRate": 0.43,
+   "band": "hard"
+  },
+  {
+   "id": 181,
+   "specHash": "e44a0003",
+   "winRate": 0.78,
+   "band": "normal"
+  },
+  {
+   "id": 182,
+   "specHash": "8a64e469",
+   "winRate": 0.695,
+   "band": "normal"
+  },
+  {
+   "id": 183,
+   "specHash": "699732d0",
+   "winRate": 0.69,
+   "band": "normal"
+  },
+  {
+   "id": 184,
+   "specHash": "40f62ee9",
+   "winRate": 0.65,
+   "band": "normal"
+  },
+  {
+   "id": 185,
+   "specHash": "d5aeadce",
+   "winRate": 0.665,
+   "band": "normal"
+  },
+  {
+   "id": 186,
+   "specHash": "e7df1f45",
+   "winRate": 0.71,
+   "band": "normal"
+  },
+  {
+   "id": 187,
+   "specHash": "f9ceff22",
+   "winRate": 0.6,
+   "band": "hard"
+  },
+  {
+   "id": 188,
+   "specHash": "10c16427",
+   "winRate": 0.66,
+   "band": "normal"
+  },
+  {
+   "id": 189,
+   "specHash": "a5eb38b3",
+   "winRate": 0.52,
+   "band": "hard"
+  },
+  {
+   "id": 190,
+   "specHash": "2b8edc6d",
+   "winRate": 0.355,
+   "band": "hard"
+  },
+  {
+   "id": 191,
+   "specHash": "9ee740a7",
+   "winRate": 0.82,
+   "band": "normal"
+  },
+  {
+   "id": 192,
+   "specHash": "ef4fca64",
+   "winRate": 0.645,
+   "band": "hard"
+  },
+  {
+   "id": 193,
+   "specHash": "b11a6515",
+   "winRate": 0.69,
+   "band": "normal"
+  },
+  {
+   "id": 194,
+   "specHash": "ebece7f5",
+   "winRate": 0.615,
+   "band": "hard"
+  },
+  {
+   "id": 195,
+   "specHash": "4767adcb",
+   "winRate": 0.63,
+   "band": "hard"
+  },
+  {
+   "id": 196,
+   "specHash": "59fe8e27",
+   "winRate": 0.64,
+   "band": "hard"
+  },
+  {
+   "id": 197,
+   "specHash": "f7a556da",
+   "winRate": 0.56,
+   "band": "hard"
+  },
+  {
+   "id": 198,
+   "specHash": "67678a32",
+   "winRate": 0.65,
+   "band": "normal"
+  },
+  {
+   "id": 199,
+   "specHash": "be76d058",
+   "winRate": 0.51,
+   "band": "hard"
+  },
+  {
+   "id": 200,
+   "specHash": "03f7eaa8",
+   "winRate": 0.33,
+   "band": "hard"
+  },
+  {
+   "id": 201,
+   "specHash": "22c28875",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 202,
+   "specHash": "a9e23e08",
+   "winRate": 0.795,
+   "band": "normal"
+  },
+  {
+   "id": 203,
+   "specHash": "35a53c3a",
+   "winRate": 0.805,
+   "band": "normal"
+  },
+  {
+   "id": 204,
+   "specHash": "c1f5b7b3",
+   "winRate": 0.78,
+   "band": "normal"
+  },
+  {
+   "id": 205,
+   "specHash": "c920f671",
+   "winRate": 0.78,
+   "band": "normal"
+  },
+  {
+   "id": 206,
+   "specHash": "d37b00c2",
+   "winRate": 0.765,
+   "band": "normal"
+  },
+  {
+   "id": 207,
+   "specHash": "138b4ace",
+   "winRate": 0.72,
+   "band": "normal"
+  },
+  {
+   "id": 208,
+   "specHash": "22b7bd83",
+   "winRate": 0.76,
+   "band": "normal"
+  },
+  {
+   "id": 209,
+   "specHash": "73b4aeef",
+   "winRate": 0.63,
+   "band": "hard"
+  },
+  {
+   "id": 210,
+   "specHash": "55c0456e",
+   "winRate": 0.41,
+   "band": "hard"
+  },
+  {
+   "id": 211,
+   "specHash": "db155630",
+   "winRate": 0.825,
+   "band": "normal"
+  },
+  {
+   "id": 212,
+   "specHash": "3e4dc9b3",
+   "winRate": 0.765,
+   "band": "normal"
+  },
+  {
+   "id": 213,
+   "specHash": "ae8ea95e",
+   "winRate": 0.75,
+   "band": "normal"
+  },
+  {
+   "id": 214,
+   "specHash": "844549be",
+   "winRate": 0.7,
+   "band": "normal"
+  },
+  {
+   "id": 215,
+   "specHash": "2e6d9e6b",
+   "winRate": 0.775,
+   "band": "normal"
+  },
+  {
+   "id": 216,
+   "specHash": "c1fd841b",
+   "winRate": 0.7,
+   "band": "normal"
+  },
+  {
+   "id": 217,
+   "specHash": "e3916be1",
+   "winRate": 0.665,
+   "band": "normal"
+  },
+  {
+   "id": 218,
+   "specHash": "37156b4e",
+   "winRate": 0.71,
+   "band": "normal"
+  },
+  {
+   "id": 219,
+   "specHash": "85098ae7",
+   "winRate": 0.595,
+   "band": "hard"
+  },
+  {
+   "id": 220,
+   "specHash": "d379aac7",
+   "winRate": 0.37,
+   "band": "hard"
+  },
+  {
+   "id": 221,
+   "specHash": "d7ec1e04",
+   "winRate": 0.775,
+   "band": "normal"
+  },
+  {
+   "id": 222,
+   "specHash": "1f83a946",
+   "winRate": 0.76,
+   "band": "normal"
+  },
+  {
+   "id": 223,
+   "specHash": "7a3a92cc",
+   "winRate": 0.755,
+   "band": "normal"
+  },
+  {
+   "id": 224,
+   "specHash": "08e50faa",
+   "winRate": 0.71,
+   "band": "normal"
+  },
+  {
+   "id": 225,
+   "specHash": "61ca257c",
+   "winRate": 0.78,
+   "band": "normal"
+  },
+  {
+   "id": 226,
+   "specHash": "f65bb933",
+   "winRate": 0.755,
+   "band": "normal"
+  },
+  {
+   "id": 227,
+   "specHash": "9078c079",
+   "winRate": 0.675,
+   "band": "normal"
+  },
+  {
+   "id": 228,
+   "specHash": "884e87ab",
+   "winRate": 0.735,
+   "band": "normal"
+  },
+  {
+   "id": 229,
+   "specHash": "65443d5b",
+   "winRate": 0.585,
+   "band": "hard"
+  },
+  {
+   "id": 230,
+   "specHash": "4d1860d7",
+   "winRate": 0.355,
+   "band": "hard"
+  },
+  {
+   "id": 231,
+   "specHash": "79ba5547",
+   "winRate": 0.865,
+   "band": "easy"
+  },
+  {
+   "id": 232,
+   "specHash": "6ac47d47",
+   "winRate": 0.72,
+   "band": "normal"
+  },
+  {
+   "id": 233,
+   "specHash": "5f859b93",
+   "winRate": 0.72,
+   "band": "normal"
+  },
+  {
+   "id": 234,
+   "specHash": "7d8d0c06",
+   "winRate": 0.64,
+   "band": "hard"
+  },
+  {
+   "id": 235,
+   "specHash": "c92e5eb1",
+   "winRate": 0.73,
+   "band": "normal"
+  },
+  {
+   "id": 236,
+   "specHash": "5bec8c40",
+   "winRate": 0.715,
+   "band": "normal"
+  },
+  {
+   "id": 237,
+   "specHash": "0db15a1e",
+   "winRate": 0.64,
+   "band": "hard"
+  },
+  {
+   "id": 238,
+   "specHash": "8e15ba95",
+   "winRate": 0.695,
+   "band": "normal"
+  },
+  {
+   "id": 239,
+   "specHash": "d11ce997",
+   "winRate": 0.61,
+   "band": "hard"
+  },
+  {
+   "id": 240,
+   "specHash": "512a3db3",
+   "winRate": 0.305,
+   "band": "hard"
+  }
+ ]
+}
