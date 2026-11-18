@@ -16,6 +16,7 @@
     "gen:levels": "tsx scripts/gen-levels.ts",
     "android:sync": "npm run build && cap sync android",
     "preview:levels": "tsx scripts/preview-levels.ts",
+    "changes:levels": "tsx scripts/difficulty-changes.ts",
     "playtest": "tsx scripts/playtest/cli.ts"
   },
   "dependencies": {

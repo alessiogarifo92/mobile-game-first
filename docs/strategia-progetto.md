@@ -49,6 +49,24 @@ Capienza del nastro e slot d'attesa sono **tutte e due leve di difficoltà** e v
 
 Ogni stage inizia con 1–3 livelli "di respiro" e il boss è il livello più duro (eccezione: stage 5, vedi report). La capienza non torna mai a crescere dopo lo stage 8 (test in `tests/levels.test.ts`).
 
+### Cosa comporta ogni passo di difficoltà, e come lo si dice (#77)
+Un livello che fa un passo avanti rispetto al precedente lo dice **una volta**, con una striscia sotto il titolo (icona, il fatto, cosa comporta; si chiude con un tocco o al primo lancio) e poi nella pagina "Quando si fa più duro" di "Come si gioca". Il calcolo è puro (`src/core/levelChanges.ts`, soglie in `CHANGE_RULES`, unit test `tests/levelChanges.test.ts`); i testi sono `change.*` in `src/core/i18n.ts` (IT/EN). Direzione di design: `docs/design/77-novita-difficolta.md`.
+
+| Cambio | Soglia (`CHANGE_RULES`) | Cosa comporta per chi gioca | Come si dice |
+|---|---|---|---|
+| Capienza nastro più bassa | −1 posto | Meno secchielli insieme: bisogna aspettare e pianificare l'ordine (ma meno interferenze tra secchielli) | striscia "Nastro: max N secchielli"; una volta per ogni valore a cui scende |
+| Meno slot d'attesa | −1 slot | Meno posti dove parcheggiare un secchiello che torna: più rischio di ingorgo, conviene finire i secchielli prima di lanciarne altri | striscia "Slot: N"; una volta per valore. Se calano insieme al nastro: **una sola striscia** |
+| Tela più grande | ≥ +25% di pixel | Più colpi e più corsie: più decisioni e più attesa prima di vedere il risultato | striscia "Quadro più grande" |
+| Più colonne | +1 colonna | Più scelte a ogni mossa (ordine delle code) | striscia "Colonne: N" |
+| Secchielli più piccoli (`ammoChunk`) | munizioni medie ≤ 75% | Più secchielli per lo stesso quadro: più ordine da pianificare | striscia "Secchielli più piccoli" |
+| Boss | ultimo livello dello stage | Il più impegnativo dello stage | striscia "Livello boss" |
+| Ghiaccio, pixel nascosto "?", pietra, marrone, lucchetto, secchiello coperto, "+N" in coda | già coperti dalle schede di meccanica (#177, #183), non toccati | Ghiaccio: due colpi col suo colore. Nascosto: blocca la corsia finché un vicino non è completo. | scheda al debutto, una per livello |
+
+- **Confronto**: col livello prima; al primo livello di uno stage col livello d'apertura dello stage precedente (il boss che lo precede è un estremo per costruzione). Il primo livello del gioco non cambia niente.
+- **Una sola striscia per livello**: nastro e slot insieme (una riga), poi il boss, poi un'altra novità; il resto aspetta un livello che lo cambia di nuovo. Con una scheda di meccanica sullo stesso livello la scheda sta sopra e la striscia si ritrova alla chiusura.
+- **Salvataggio**: gli id `chg.<tipo>` (nastro e slot: `chg.belt.2`) stanno in `seenTips` come i suggerimenti; un salvataggio vecchio non ne ha e non perde niente (nessuna migrazione).
+- **Per chi aggiunge un livello**: `npm run changes:levels` (e `npx tsx scripts/difficulty-report.ts`, che stampa le stesse righe) elenca i cambi di ogni livello; `▶` = qui il giocatore, andando in ordine, viene avvisato. Tutto il gioco oggi ha 9 strisce.
+
 ### Primo accesso e lingue (v0.2)
 - **Tutorial interattivo, non testo**: il livello 1 è guidato (colonna evidenziata, mano animata, una riga di testo; i tap fuori dal bersaglio sono ignorati finché il primo secchiello non parte). Poi suggerimenti una tantum quando compare una meccanica nuova: mixing, corsia bloccata, slot d'attesa. "Come si gioca" (3 schede) resta consultabile dalle Impostazioni, con "Rivedi il tutorial". Motivo: negli hybrid-casual si impara giocando, i muri di testo vengono saltati (ticket #20).
 - **Lingue**: inglese di default, italiano disponibile; scelta nelle Impostazioni, salvata nei progressi. Aggiungere una lingua = un dizionario in `src/core/i18n.ts`; un test verifica che abbia tutte le chiavi dell'inglese (ticket #19).

@@ -1,3 +1,4 @@
+import { seenChangeKinds, type ChangeKind } from './levelChanges';
 import type { CardTip } from './onboarding';
 
 /** Pages of "How to play": navigation by swipe, keys or dots. Pure so the rules are unit-tested. */
@@ -40,15 +41,18 @@ export const TIP_PAGE: Readonly<Record<CardTip, number | null>> = {
 /** Tips with no base page, in the order their extra pages follow the base ones (roughly the order they show up). */
 export const EXTRA_TIPS: readonly CardTip[] = (Object.keys(TIP_PAGE) as CardTip[]).filter((id) => TIP_PAGE[id] === null);
 
-export type HowtoPage = { kind: 'base'; index: number } | { kind: 'tip'; tip: CardTip };
+export type HowtoPage = { kind: 'base'; index: number } | { kind: 'tip'; tip: CardTip } | { kind: 'changes'; changes: ChangeKind[] };
 
 /**
  * Pages of "How to play" for a player who has seen `seen` tips: the HOWTO_PAGES base pages, then one page per seen
  * tip that no base page covers, in EXTRA_TIPS order whatever the order they were seen in. Unknown ids, 'guide' and
- * duplicates add nothing.
+ * duplicates add nothing. Last comes one page listing the difficulty changes the player has been told about (#77),
+ * only once there is one.
  */
 export function howtoPages(seen: readonly string[]): HowtoPage[] {
   const pages: HowtoPage[] = Array.from({ length: HOWTO_PAGES }, (_, index) => ({ kind: 'base' as const, index }));
   for (const tip of EXTRA_TIPS) if (seen.includes(tip)) pages.push({ kind: 'tip', tip });
+  const changes = seenChangeKinds(seen);
+  if (changes.length > 0) pages.push({ kind: 'changes', changes });
   return pages;
 }
