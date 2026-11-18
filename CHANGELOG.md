@@ -2,6 +2,15 @@
 
 ## Non rilasciato
 
+### Stage 26 "Sport": livelli 251–260 (#204, #101)
+
+- **Dieci figure in pixel art originale** sullo sport (`scripts/stages/stage-26.ts`): pallone da calcio, pallone da basket, racchetta, trofeo, scarpa da corsa, occhialini da nuoto, porta, nuotatore, medaglia e il boss, lo stadio (14×13). Foglio di anteprima in `docs/levels/stage-26.png`; nomi IT/EN.
+- **Secchielli coperti e marrone insieme**, con chiavi e lucchetti: ogni livello ha secchielli coperti (30–40%), chiavi, lucchetti e pixel marroni, accanto ai secondari; nessun'altra meccanica (niente ghiaccio, pixel nascosti o pietre). Nessun debutto, quindi nessun livello molto facile. ≥ 30% di pixel secondari o marroni dal 252.
+- **`covered` tra le meccaniche del report della curva** (`MECHANICS` in `src/core/curveReport.ts`): con 260 livelli la finestra 241–260 è completa e il test "una novità ogni 20 livelli" (#157) la segnalava vuota; il debutto del secchiello coperto (241) ora conta come novità.
+- **Nastro 2, slot 2**: mai sopra la fine dell'universo 2.
+- **Curva** a dente di sega (#88): vittorie a caso 85 · 69 · 72 · 57 · 70 · 70 · 58 · 69 · 59 · 27%, media 63,4% (stage 25: 65,3%); il boss è il più duro dello stage, più duro del 250 (28%) e sopra il pavimento dell'universo (25%). Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (`tests/stage26.test.ts`: nomi IT/EN, 251–260, tela ≤ 14×14, secchielli coperti, chiavi, lucchetti e marrone, ≥ 30% secondari, nastro e slot, curva, media); e2e `e2e/stage-26.spec.ts`: la mappa dell'universo 3 mostra lo stage 26 dopo il 250, il 251 e il 252 si giocano fino alla vittoria.
+
 ### Stage 25 "Musica": livelli 241–250, debutto del secchiello coperto (#203, #101)
 
 - **Dieci figure in pixel art originale** sulla musica (`scripts/stages/stage-25.ts`): nota, chitarra, tamburo, violino, tasti del pianoforte, tromba, cuffie, disco in vinile, microfono e il boss, il concerto con il suo palco (14×13). Foglio di anteprima in `docs/levels/stage-25.png`; nomi IT/EN.
