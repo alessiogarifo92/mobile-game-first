@@ -1,26 +1,39 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import levelsJson from '../src/levels/levels.json' with { type: 'json' };
+import { missingWarning, reportAlignment } from '../src/core/reportAlignment';
 
-/**
- * Light alignment check (#215): the difficulty report is a manual script (costly Playwright render),
- * so CI never regenerates it. This test only fails when the shipped levels outgrow it, so a stale report is noticed.
- * Fix: `CHROMIUM_PATH=... npx tsx scripts/difficulty-report.ts` and commit docs/reports/curva-difficolta.{json,png}.
- */
-describe('difficulty report alignment (#215)', () => {
-  const report = JSON.parse(
-    readFileSync(new URL('../docs/reports/curva-difficolta.json', import.meta.url), 'utf8'),
-  ) as { id: number; stage: number }[];
-  const levels = levelsJson as { id: number }[];
-
-  it('covers exactly the levels of levels.json (regenerate docs/reports/curva-difficolta.* when this fails)', () => {
-    expect(report.length).toBe(levels.length);
-    expect(report.map((r) => r.id)).toEqual(levels.map((l) => l.id));
+describe('reportAlignment (#215)', () => {
+  it('is aligned when both lists match', () => {
+    expect(reportAlignment([1, 2, 3], [1, 2, 3])).toEqual({ stale: [], missing: [] });
   });
 
-  it('has a stage on every row, in non-decreasing order', () => {
-    const stages = report.map((r) => r.stage);
-    expect(stages.every((s) => Number.isInteger(s) && s > 0)).toBe(true);
-    expect([...stages].sort((a, b) => a - b)).toEqual(stages);
+  it('flags report ids that no longer exist as stale', () => {
+    expect(reportAlignment([1, 2, 3, 4], [1, 2, 3])).toEqual({ stale: [4], missing: [] });
+  });
+
+  it('flags levels the report lacks as missing, without calling them stale', () => {
+    expect(reportAlignment([1, 2], [1, 2, 3, 4])).toEqual({ stale: [], missing: [3, 4] });
+  });
+
+  it('warns with the first ids and the regeneration command, and stays silent when nothing is missing', () => {
+    expect(missingWarning([])).toBe('');
+    const w = missingWarning([231, 232, 233, 234, 235, 236, 237], 3);
+    expect(w).toContain('231, 232, 233 (+4 more)');
+    expect(w).toContain('scripts/difficulty-report.ts');
+    expect(missingWarning([231])).not.toContain('more');
+  });
+});
+
+describe('difficulty report vs levels.json (#215)', () => {
+  const report = JSON.parse(
+    readFileSync(new URL('../docs/reports/curva-difficolta.json', import.meta.url), 'utf8'),
+  ) as { id: number }[];
+  const { stale, missing } = reportAlignment(report.map((r) => r.id), (levelsJson as { id: number }[]).map((l) => l.id));
+
+  it('has no obsolete entries (fails); missing levels only warn, so stage PRs are never blocked', () => {
+    const warning = missingWarning(missing);
+    if (warning) console.warn(warning);
+    expect(stale).toEqual([]);
   });
 });

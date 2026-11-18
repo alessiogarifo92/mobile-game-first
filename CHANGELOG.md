@@ -5,7 +5,7 @@
 ### Report della curva di difficoltà aggiornato ai 230 livelli (#215)
 
 - **`docs/reports/curva-difficolta.{json,png}` rigenerati** (230 livelli, universi 1–3): prima fermi ai 200 livelli di #173. Sui livelli già presenti cambiano solo 141, 164, 175 e 195, tutti per le pietre che bloccano la vernice (#147, PR #189).
-- **Test di allineamento** `tests/difficultyReport.test.ts`: fallisce se il report non copre gli stessi livelli di `levels.json`. Il report resta uno script manuale, non un passo della CI.
+- **Test di allineamento** `tests/difficultyReport.test.ts`: fallisce solo se il report ha livelli che non esistono più in `levels.json`; per i livelli mancanti emette solo un warning con il comando di rigenerazione (nessun blocco per le PR degli stage; logica pura in `src/core/reportAlignment.ts`). Il report resta uno script manuale, non un passo della CI.
 
 ### Spiegare in gioco cosa comporta ogni aumento di difficoltà (#77)
 
