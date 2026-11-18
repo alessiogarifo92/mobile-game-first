@@ -272,10 +272,7 @@ describe('the shipped difficulty file (src/levels/difficulty.json)', () => {
     expect(storedProblems(stored, current)).toEqual([]);
   });
 
-  it('stores exactly the win rate every tool reports (levelWinRate), so labels never silently move', () => {
-    const wrong = defs.filter((d, i) => stored.levels[i]!.winRate !== Number(levelWinRate(parseLevel(d)).toFixed(3)));
-    expect(wrong.map((d) => d.id)).toEqual([]);
-  }, SLOW);
+  // That the stored win rates equal a fresh measurement is checked stage by stage in tests/levels.test.ts.
 
   it('has no band change pending against the current table', () => {
     expect(bandChanges(stored)).toEqual([]);
