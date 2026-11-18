@@ -2,6 +2,11 @@
 
 ## Non rilasciato
 
+### Report della curva di difficoltà aggiornato ai 230 livelli (#215)
+
+- **`docs/reports/curva-difficolta.{json,png}` rigenerati** (230 livelli, universi 1–3): prima fermi ai 200 livelli di #173. Sui livelli già presenti cambiano solo 141, 164, 175 e 195, tutti per le pietre che bloccano la vernice (#147, PR #189).
+- **Test di allineamento** `tests/difficultyReport.test.ts`: fallisce se il report non copre gli stessi livelli di `levels.json`. Il report resta uno script manuale, non un passo della CI.
+
 ### Spiegare in gioco cosa comporta ogni aumento di difficoltà (#77)
 
 - **Una striscia sotto il titolo dice cosa è cambiato e cosa comporta** quando un livello fa un passo avanti: nastro con meno capienza ("Nastro: max 3 secchielli"), meno slot, tela più grande, più colonne, secchielli più piccoli, boss. Icona (forma, non colore), il fatto in grassetto e una riga su cosa comporta; non copre il nastro, gli slot né le colonne (a 360×640 sta sopra il nastro) e si chiude con un tocco o al primo lancio. Direzione A di `docs/design/77-novita-difficolta.md`, scelta su tre.
