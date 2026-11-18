@@ -6,6 +6,7 @@ import type { MessageKey } from '../../core/i18n';
 import { publishDebug } from '../debug';
 import { getProgress, t } from '../store';
 import { PAINT, SYMBOL, THEME } from '../theme';
+import { drawChangeIcon } from '../changeIcon';
 import { TIP_ART_WIDTH, drawTipArt, hasSharedArt } from '../tipArt';
 import { brownPixel, button, keyIcon, label, lockIcon, screenBackground } from '../ui';
 
@@ -60,6 +61,18 @@ export class HowToScene extends Phaser.Scene {
       this.illustrate(art, current.index);
       title = t(`howto.${current.index + 1}.title` as MessageKey);
       body = t(`howto.${current.index + 1}.body` as MessageKey);
+    } else if (current.kind === 'changes') {
+      // #77: one row per change the player has met: its icon, what it is, what it means. Rows stack by their own height.
+      let y = 270;
+      current.changes.forEach((kind) => {
+        const name = label(this, 160, y, t(`change.${kind}.label` as MessageKey), THEME.type.sm).setOrigin(0, 0);
+        const why = label(this, 160, y + name.height, t(`change.${kind}.why` as MessageKey), THEME.type.xs, THEME.subCss, false)
+          .setOrigin(0, 0).setAlign('left').setWordWrapWidth(VIEW.width - 160 - 90);
+        drawChangeIcon(art, kind, 112, y + (name.height + why.height) / 2, 44);
+        y += name.height + why.height + THEME.space.xs;
+      });
+      title = t('howto.changes.title');
+      body = '';
     } else {
       const tip = current.tip;
       if (hasSharedArt(tip)) {
@@ -75,7 +88,7 @@ export class HowToScene extends Phaser.Scene {
     }
     // The illustration sits in the middle of the (taller) card.
     for (const child of this.children.list.slice(first)) (child as Phaser.GameObjects.Text).y += off / 4;
-    if (current.kind === 'tip') this.unlockedBadge();
+    if (current.kind !== 'base') this.unlockedBadge();
 
     label(this, VIEW.width / 2, 820 + off / 2, title, THEME.type.lg);
     label(this, VIEW.width / 2, 900 + off / 2, body, THEME.type.sm, THEME.subCss, false)
@@ -127,6 +140,7 @@ export class HowToScene extends Phaser.Scene {
     });
     publishDebug({
       scene: 'howto', page, pages: count, tip: current.kind === 'tip' ? current.tip : null,
+      changes: current.kind === 'changes' ? current.changes : null,
       offsetY: 0, scrollY: this.cameras.main.scrollY, next: { x: VIEW.width / 2, y: 1170 + off },
     });
   }
