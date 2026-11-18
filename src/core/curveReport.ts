@@ -7,7 +7,7 @@ import { CURVE, type CurveLevel } from './curve';
  */
 
 /** Mechanics that count as "something new"; `mix` (secondaries) is the base game from level 1, not a novelty. */
-export const MECHANICS = ['ice', 'hidden', 'brown', 'stone', 'lock'] as const;
+export const MECHANICS = ['ice', 'hidden', 'brown', 'stone', 'lock', 'covered'] as const;
 
 /** Epic #87: a new mechanic or a new combination at least every this many levels. */
 export const NOVELTY_EVERY = 20;

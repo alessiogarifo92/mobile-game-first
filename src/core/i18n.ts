@@ -444,6 +444,18 @@ const en = {
   'level.vinylrecord': 'Vinyl record',
   'level.microphone': 'Microphone',
   'level.concert': 'The concert',
+  // Stage 26 — Sport (#204)
+  'stage.sport': 'Sport',
+  'level.soccerball': 'Soccer ball',
+  'level.basketball': 'Basketball',
+  'level.tennisracket': 'Tennis racket',
+  'level.trophy': 'Trophy',
+  'level.sneaker': 'Sneaker',
+  'level.goggles': 'Swim goggles',
+  'level.goalpost': 'Goal',
+  'level.swimmer': 'Swimmer',
+  'level.medal': 'Medal',
+  'level.stadium': 'The stadium',
 };
 
 export type MessageKey = keyof typeof en;
@@ -892,6 +904,18 @@ const it: Record<MessageKey, string> = {
   'level.vinylrecord': 'Disco in vinile',
   'level.microphone': 'Microfono',
   'level.concert': 'Il concerto',
+  // Stage 26 — Sport (#204)
+  'stage.sport': 'Sport',
+  'level.soccerball': 'Pallone da calcio',
+  'level.basketball': 'Pallone da basket',
+  'level.tennisracket': 'Racchetta da tennis',
+  'level.trophy': 'Trofeo',
+  'level.sneaker': 'Scarpa da corsa',
+  'level.goggles': 'Occhialini da nuoto',
+  'level.goalpost': 'La porta',
+  'level.swimmer': 'Nuotatore',
+  'level.medal': 'Medaglia',
+  'level.stadium': 'Lo stadio',
 };
 
 export const DICTIONARIES = { en, it } as const;

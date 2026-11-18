@@ -148,5 +148,11 @@
   "key": "music",
   "color": 5,
   "complete": true
+ },
+ {
+  "id": 26,
+  "key": "sport",
+  "color": 6,
+  "complete": true
  }
 ]
