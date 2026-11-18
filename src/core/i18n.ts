@@ -414,6 +414,18 @@ const en = {
   'level.pinata': 'Piñata',
   'level.carousel': 'Carousel',
   'level.festival': 'The festival',
+  // Stage 25 — Music (#203)
+  'stage.music': 'Music',
+  'level.musicalnote': 'Musical note',
+  'level.guitar': 'Guitar',
+  'level.drum': 'Drum',
+  'level.violin': 'Violin',
+  'level.pianokeys': 'Piano keys',
+  'level.trumpet': 'Trumpet',
+  'level.headphones': 'Headphones',
+  'level.vinylrecord': 'Vinyl record',
+  'level.microphone': 'Microphone',
+  'level.concert': 'The concert',
 };
 
 export type MessageKey = keyof typeof en;
@@ -832,6 +844,18 @@ const it: Record<MessageKey, string> = {
   'level.pinata': 'Piñata',
   'level.carousel': 'Giostra',
   'level.festival': 'La festa',
+  // Stage 25 — Music (#203)
+  'stage.music': 'Musica',
+  'level.musicalnote': 'Nota musicale',
+  'level.guitar': 'Chitarra',
+  'level.drum': 'Tamburo',
+  'level.violin': 'Violino',
+  'level.pianokeys': 'Tasti del pianoforte',
+  'level.trumpet': 'Tromba',
+  'level.headphones': 'Cuffie',
+  'level.vinylrecord': 'Disco in vinile',
+  'level.microphone': 'Microfono',
+  'level.concert': 'Il concerto',
 };
 
 export const DICTIONARIES = { en, it } as const;
