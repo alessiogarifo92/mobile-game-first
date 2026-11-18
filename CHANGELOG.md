@@ -2,10 +2,18 @@
 
 ## Non rilasciato
 
-### Report della curva di difficoltà aggiornato ai 230 livelli (#215)
+### Report della curva di difficoltà aggiornato ai 240 livelli (#215)
 
-- **`docs/reports/curva-difficolta.{json,png}` rigenerati** (230 livelli, universi 1–3): prima fermi ai 200 livelli di #173. Sui livelli già presenti cambiano solo 141, 164, 175 e 195, tutti per le pietre che bloccano la vernice (#147, PR #189).
+- **`docs/reports/curva-difficolta.{json,png}` rigenerati** (240 livelli, universi 1–3, stage 24 compreso): prima fermi ai 200 livelli di #173. Sui livelli già presenti cambiano solo 141, 164, 175 e 195, tutti per le pietre che bloccano la vernice (#147, PR #189).
 - **Test di allineamento** `tests/difficultyReport.test.ts`: fallisce solo se il report ha livelli che non esistono più in `levels.json`; per i livelli mancanti emette solo un warning con il comando di rigenerazione (nessun blocco per le PR degli stage; logica pura in `src/core/reportAlignment.ts`). Il report resta uno script manuale, non un passo della CI.
+
+### Stage 24 "Festa": livelli 231–240, lucchetto e chiave con ghiaccio e nascosti (#202, #101)
+
+- **Dieci figure in pixel art originale** sulla festa (`scripts/stages/stage-24.ts`): palloncini, cappellino, pacco regalo, torta di compleanno, lanterna di carta, coppa di gelato, festoni, piñata, giostra e il boss, la festa con le sue bandierine (14×12). Foglio di anteprima in `docs/levels/stage-24.png`; nomi IT/EN.
+- **Lucchetto e chiave si combinano con ghiaccio e pixel nascosti** (nessun debutto, niente pietre): ogni livello ha chiavi, lucchetti, pixel ghiacciati e nascosti (1 chiave e 2 lucchetti; 2 e 3 nei festoni e nella giostra; 2 e 4 nel boss), accanto ai secondari e al marrone già noti. Dal 232 ≥ 30% di pixel secondari o marroni.
+- **Nastro 2, slot 2**: mai sopra la fine dell'universo 2.
+- **Curva** a dente di sega (#88), senza livelli molto facili: vittorie a caso 87 · 72 · 72 · 64 · 73 · 72 · 64 · 70 · 61 · 31%, media 66,4% (stage 23: 68,9%); il boss è il più duro dello stage e più duro del 230 (36%), sopra il pavimento dell'universo (25%). Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (`tests/stage24.test.ts`: nomi IT/EN, 231–240, tela ≤ 14×14, chiavi/lucchetti/ghiaccio/nascosti ovunque, ≥ 30% secondari, nastro e slot, curva, media); e2e `e2e/stage-24.spec.ts`: la mappa dell'universo 3 mostra lo stage 24 dopo il 230 e il 231 si gioca fino alla vittoria.
 
 ### Spiegare in gioco cosa comporta ogni aumento di difficoltà (#77)
 

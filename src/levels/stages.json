@@ -136,5 +136,11 @@
   "key": "market",
   "color": 2,
   "complete": true
+ },
+ {
+  "id": 24,
+  "key": "party",
+  "color": 2,
+  "complete": true
  }
 ]
