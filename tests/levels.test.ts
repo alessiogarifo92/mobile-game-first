@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import levels from '../src/levels/levels.json';
 import stages from '../src/levels/stages.json';
+import difficulty from '../src/levels/difficulty.json';
 import { LEVEL_NAME_KEYS } from '../src/core/i18n';
 import { parseLevel, type LevelDef } from '../src/core/level';
 import { createGame, launchFromColumn, launchFromSlot, step } from '../src/core/sim';
@@ -40,10 +41,21 @@ describe('shipped levels', () => {
     expect(g.status).toBe('won');
   });
 
-  // Heavy (random playouts over every level, computed once): explicit timeouts so a slower CI runner does not fail.
+  // The win rates below are the ones stored in difficulty.json (#72). `gen:levels --check` proves the file matches the levels'
+  // spec hashes but does not play them, so one test per stage re-measures its levels and compares: that keeps the stored
+  // figures honest (a change to sim.ts or the solver that moves a win rate fails here) and splits the heavy work into small tests,
+  // each with its own timeout, instead of one that grows with every stage. Every other test reads the stored figures for free.
   const specs = assignIds(STAGE_SPECS);
-  let rates: number[] | undefined;
-  const winRates = () => (rates ??= defs.map((d) => levelWinRate(parseLevel(d))));
+  const stored = new Map(difficulty.levels.map((l) => [l.id, l.winRate]));
+  const winRates = () => defs.map((d) => stored.get(d.id)!);
+
+  it.each(stages.map((s) => s.id))('stage %i: the win rates stored in difficulty.json are what random playouts measure now', (stage) => {
+    const wrong = defs
+      .filter((d) => d.stage === stage)
+      .filter((d) => Number(levelWinRate(parseLevel(d)).toFixed(3)) !== stored.get(d.id))
+      .map((d) => d.id);
+    expect(wrong).toEqual([]);
+  }, 60_000);
 
   it('every level sits in the difficulty band of its spec, measured with belt and slots', () => {
     const out = defs.filter((_, i) => {
@@ -51,7 +63,7 @@ describe('shipped levels', () => {
       return band && (winRates()[i]! < band[0] || winRates()[i]! > band[1]);
     });
     expect(out.map((d) => `#${d.id} ${d.name}`)).toEqual([]);
-  }, 60_000);
+  });
 
   it('gets harder in universe 1: the introduction is easiest, then stages 3–5, 6–8 and 9–10 get harder in turn', () => {
     const avg = (from: number, to: number) => {
@@ -61,7 +73,7 @@ describe('shipped levels', () => {
     expect(avg(3, 10)).toBeLessThan(avg(1, 2) - 0.1);
     expect(avg(6, 8)).toBeLessThan(avg(3, 5) - 0.05);
     expect(avg(9, 10)).toBeLessThan(avg(6, 8) - 0.05);
-  }, 60_000);
+  });
 
   it('follows the curve rules (#88): errors are exactly the known ones that #89 still has to fix', () => {
     const curve = checkCurve(defs.map((d, i) => curveLevel(parseLevel(d), winRates()[i]!, !!specs[i]!.curve?.easyBoss)));
@@ -70,14 +82,14 @@ describe('shipped levels', () => {
     expect(KNOWN_CURVE_ERRORS.filter((k) => !errors.includes(k))).toEqual([]);
     // Known errors are only rules 1–2 inside universe 1: the universe targets (rules 3–5) and the extremes (rule 8) already hold.
     expect(errors.filter((k) => !/^r[12] /.test(k))).toEqual([]);
-  }, 60_000);
+  });
 
   it('universe 1 is very easy only in the intro and on the first level of each stage (#89)', () => {
     const veryEasy = defs.filter((_, i) => winRates()[i]! >= CURVE.veryEasy).map((d) => d.id);
     const allowed = (id: number) => id <= CURVE.introLevels || id % 10 === 1;
     expect(veryEasy.filter((id) => !allowed(id))).toEqual([]);
     expect(veryEasy.filter((id) => universeOfStage(Math.ceil(id / 10)) === 1).length).toBeLessThanOrEqual(17);
-  }, 60_000);
+  });
 
   it('keeps every band past the intro below "very easy", so a regeneration cannot bring one back (#89)', () => {
     const open = specs.filter((s) => s.id > CURVE.introLevels && s.id % 10 !== 1 && (!s.winRate || s.winRate[1] >= CURVE.veryEasy));
