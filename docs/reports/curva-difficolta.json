@@ -15,7 +15,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 1,
-  "solutionMoves": 4
+  "solutionMoves": 4,
+  "band": "easy"
  },
  {
   "id": 2,
@@ -33,7 +34,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 1,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "easy"
  },
  {
   "id": 3,
@@ -51,7 +53,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 1,
-  "solutionMoves": 7
+  "solutionMoves": 7,
+  "band": "easy"
  },
  {
   "id": 4,
@@ -69,7 +72,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 1,
-  "solutionMoves": 7
+  "solutionMoves": 7,
+  "band": "easy"
  },
  {
   "id": 5,
@@ -87,7 +91,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 1,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "easy"
  },
  {
   "id": 6,
@@ -105,7 +110,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 1,
-  "solutionMoves": 4
+  "solutionMoves": 4,
+  "band": "easy"
  },
  {
   "id": 7,
@@ -123,7 +129,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 1,
-  "solutionMoves": 8
+  "solutionMoves": 8,
+  "band": "easy"
  },
  {
   "id": 8,
@@ -141,7 +148,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 1,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "easy"
  },
  {
   "id": 9,
@@ -159,7 +167,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.905,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "easy"
  },
  {
   "id": 10,
@@ -177,7 +186,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.76,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "normal"
  },
  {
   "id": 11,
@@ -195,7 +205,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 1,
-  "solutionMoves": 4
+  "solutionMoves": 4,
+  "band": "easy"
  },
  {
   "id": 12,
@@ -213,7 +224,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.92,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "easy"
  },
  {
   "id": 13,
@@ -231,7 +243,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.88,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "easy"
  },
  {
   "id": 14,
@@ -249,7 +262,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.9,
-  "solutionMoves": 8
+  "solutionMoves": 8,
+  "band": "easy"
  },
  {
   "id": 15,
@@ -267,7 +281,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.915,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "easy"
  },
  {
   "id": 16,
@@ -285,7 +300,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.92,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "easy"
  },
  {
   "id": 17,
@@ -303,7 +319,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.87,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "easy"
  },
  {
   "id": 18,
@@ -321,7 +338,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.905,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "easy"
  },
  {
   "id": 19,
@@ -339,7 +357,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.835,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "normal"
  },
  {
   "id": 20,
@@ -357,7 +376,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.74,
-  "solutionMoves": 18
+  "solutionMoves": 18,
+  "band": "normal"
  },
  {
   "id": 21,
@@ -375,7 +395,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 1,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "easy"
  },
  {
   "id": 22,
@@ -393,7 +414,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.915,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "easy"
  },
  {
   "id": 23,
@@ -411,7 +433,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.92,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "easy"
  },
  {
   "id": 24,
@@ -429,7 +452,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.85,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "easy"
  },
  {
   "id": 25,
@@ -447,7 +471,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.905,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "easy"
  },
  {
   "id": 26,
@@ -465,7 +490,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.925,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "easy"
  },
  {
   "id": 27,
@@ -483,7 +509,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.86,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "easy"
  },
  {
   "id": 28,
@@ -501,7 +528,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.91,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "easy"
  },
  {
   "id": 29,
@@ -519,7 +547,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.77,
-  "solutionMoves": 23
+  "solutionMoves": 23,
+  "band": "normal"
  },
  {
   "id": 30,
@@ -537,7 +566,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.735,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "normal"
  },
  {
   "id": 31,
@@ -555,7 +585,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 1,
-  "solutionMoves": 7
+  "solutionMoves": 7,
+  "band": "easy"
  },
  {
   "id": 32,
@@ -573,7 +604,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.865,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "easy"
  },
  {
   "id": 33,
@@ -591,7 +623,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.85,
-  "solutionMoves": 6
+  "solutionMoves": 6,
+  "band": "easy"
  },
  {
   "id": 34,
@@ -609,7 +642,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.835,
-  "solutionMoves": 16
+  "solutionMoves": 16,
+  "band": "normal"
  },
  {
   "id": 35,
@@ -627,7 +661,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.915,
-  "solutionMoves": 15
+  "solutionMoves": 15,
+  "band": "easy"
  },
  {
   "id": 36,
@@ -645,7 +680,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.895,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "easy"
  },
  {
   "id": 37,
@@ -663,7 +699,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.89,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "easy"
  },
  {
   "id": 38,
@@ -681,7 +718,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.895,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "easy"
  },
  {
   "id": 39,
@@ -699,7 +737,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.78,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "normal"
  },
  {
   "id": 40,
@@ -717,7 +756,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.61,
-  "solutionMoves": 21
+  "solutionMoves": 21,
+  "band": "hard"
  },
  {
   "id": 41,
@@ -735,7 +775,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.975,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "easy"
  },
  {
   "id": 42,
@@ -753,7 +794,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.82,
-  "solutionMoves": 8
+  "solutionMoves": 8,
+  "band": "normal"
  },
  {
   "id": 43,
@@ -771,7 +813,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.86,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "easy"
  },
  {
   "id": 44,
@@ -789,7 +832,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.79,
-  "solutionMoves": 15
+  "solutionMoves": 15,
+  "band": "normal"
  },
  {
   "id": 45,
@@ -807,7 +851,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.75,
-  "solutionMoves": 16
+  "solutionMoves": 16,
+  "band": "normal"
  },
  {
   "id": 46,
@@ -825,7 +870,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.77,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "normal"
  },
  {
   "id": 47,
@@ -843,7 +889,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.785,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "normal"
  },
  {
   "id": 48,
@@ -861,7 +908,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.81,
-  "solutionMoves": 8
+  "solutionMoves": 8,
+  "band": "normal"
  },
  {
   "id": 49,
@@ -879,7 +927,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.705,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "normal"
  },
  {
   "id": 50,
@@ -897,7 +946,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.585,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "hard"
  },
  {
   "id": 51,
@@ -915,7 +965,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.98,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "easy"
  },
  {
   "id": 52,
@@ -933,7 +984,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.86,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "easy"
  },
  {
   "id": 53,
@@ -951,7 +1003,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.885,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "easy"
  },
  {
   "id": 54,
@@ -969,7 +1022,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.825,
-  "solutionMoves": 19
+  "solutionMoves": 19,
+  "band": "normal"
  },
  {
   "id": 55,
@@ -987,7 +1041,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.67,
-  "solutionMoves": 20
+  "solutionMoves": 20,
+  "band": "normal"
  },
  {
   "id": 56,
@@ -1005,7 +1060,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.83,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "normal"
  },
  {
   "id": 57,
@@ -1023,7 +1079,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.745,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "normal"
  },
  {
   "id": 58,
@@ -1041,7 +1098,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.63,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "hard"
  },
  {
   "id": 59,
@@ -1059,7 +1117,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.62,
-  "solutionMoves": 22
+  "solutionMoves": 22,
+  "band": "hard"
  },
  {
   "id": 60,
@@ -1077,7 +1136,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.595,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "hard"
  },
  {
   "id": 61,
@@ -1095,7 +1155,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 1,
-  "solutionMoves": 8
+  "solutionMoves": 8,
+  "band": "easy"
  },
  {
   "id": 62,
@@ -1113,7 +1174,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.88,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "easy"
  },
  {
   "id": 63,
@@ -1131,7 +1193,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.805,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "normal"
  },
  {
   "id": 64,
@@ -1149,7 +1212,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.77,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "normal"
  },
  {
   "id": 65,
@@ -1167,7 +1231,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.68,
-  "solutionMoves": 21
+  "solutionMoves": 21,
+  "band": "normal"
  },
  {
   "id": 66,
@@ -1185,7 +1250,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.765,
-  "solutionMoves": 15
+  "solutionMoves": 15,
+  "band": "normal"
  },
  {
   "id": 67,
@@ -1203,7 +1269,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.75,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "normal"
  },
  {
   "id": 68,
@@ -1221,7 +1288,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.585,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "hard"
  },
  {
   "id": 69,
@@ -1239,7 +1307,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.66,
-  "solutionMoves": 19
+  "solutionMoves": 19,
+  "band": "normal"
  },
  {
   "id": 70,
@@ -1257,7 +1326,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.46,
-  "solutionMoves": 19
+  "solutionMoves": 19,
+  "band": "hard"
  },
  {
   "id": 71,
@@ -1275,7 +1345,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 1,
-  "solutionMoves": 8
+  "solutionMoves": 8,
+  "band": "easy"
  },
  {
   "id": 72,
@@ -1293,7 +1364,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.825,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "normal"
  },
  {
   "id": 73,
@@ -1311,7 +1383,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.685,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "normal"
  },
  {
   "id": 74,
@@ -1329,7 +1402,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.545,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "hard"
  },
  {
   "id": 75,
@@ -1347,7 +1421,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.735,
-  "solutionMoves": 15
+  "solutionMoves": 15,
+  "band": "normal"
  },
  {
   "id": 76,
@@ -1365,7 +1440,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.545,
-  "solutionMoves": 22
+  "solutionMoves": 22,
+  "band": "hard"
  },
  {
   "id": 77,
@@ -1383,7 +1459,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.68,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "normal"
  },
  {
   "id": 78,
@@ -1401,7 +1478,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.715,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "normal"
  },
  {
   "id": 79,
@@ -1419,7 +1497,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.61,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "hard"
  },
  {
   "id": 80,
@@ -1437,7 +1516,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.43,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "hard"
  },
  {
   "id": 81,
@@ -1455,7 +1535,8 @@
   "brown": 0,
   "stone": 2,
   "randomWin": 1,
-  "solutionMoves": 8
+  "solutionMoves": 8,
+  "band": "easy"
  },
  {
   "id": 82,
@@ -1473,7 +1554,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.855,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "easy"
  },
  {
   "id": 83,
@@ -1491,7 +1573,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.605,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "hard"
  },
  {
   "id": 84,
@@ -1509,7 +1592,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.63,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "hard"
  },
  {
   "id": 85,
@@ -1527,7 +1611,8 @@
   "brown": 0,
   "stone": 3,
   "randomWin": 0.62,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "hard"
  },
  {
   "id": 86,
@@ -1545,7 +1630,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.57,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "hard"
  },
  {
   "id": 87,
@@ -1563,7 +1649,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.63,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "hard"
  },
  {
   "id": 88,
@@ -1581,7 +1668,8 @@
   "brown": 0,
   "stone": 3,
   "randomWin": 0.605,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "hard"
  },
  {
   "id": 89,
@@ -1599,7 +1687,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.52,
-  "solutionMoves": 19
+  "solutionMoves": 19,
+  "band": "hard"
  },
  {
   "id": 90,
@@ -1617,7 +1706,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.415,
-  "solutionMoves": 21
+  "solutionMoves": 21,
+  "band": "hard"
  },
  {
   "id": 91,
@@ -1635,7 +1725,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 1,
-  "solutionMoves": 8
+  "solutionMoves": 8,
+  "band": "easy"
  },
  {
   "id": 92,
@@ -1653,7 +1744,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.765,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "normal"
  },
  {
   "id": 93,
@@ -1671,7 +1763,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.61,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "hard"
  },
  {
   "id": 94,
@@ -1689,7 +1782,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.615,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "hard"
  },
  {
   "id": 95,
@@ -1707,7 +1801,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.84,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "normal"
  },
  {
   "id": 96,
@@ -1725,7 +1820,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.675,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "normal"
  },
  {
   "id": 97,
@@ -1743,7 +1839,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.545,
-  "solutionMoves": 15
+  "solutionMoves": 15,
+  "band": "hard"
  },
  {
   "id": 98,
@@ -1761,7 +1858,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.55,
-  "solutionMoves": 18
+  "solutionMoves": 18,
+  "band": "hard"
  },
  {
   "id": 99,
@@ -1779,7 +1877,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.555,
-  "solutionMoves": 21
+  "solutionMoves": 21,
+  "band": "hard"
  },
  {
   "id": 100,
@@ -1797,7 +1896,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.375,
-  "solutionMoves": 25
+  "solutionMoves": 25,
+  "band": "hard"
  },
  {
   "id": 101,
@@ -1815,7 +1915,8 @@
   "brown": 12,
   "stone": 0,
   "randomWin": 0.985,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "easy"
  },
  {
   "id": 102,
@@ -1833,7 +1934,8 @@
   "brown": 30,
   "stone": 0,
   "randomWin": 0.82,
-  "solutionMoves": 15
+  "solutionMoves": 15,
+  "band": "normal"
  },
  {
   "id": 103,
@@ -1851,7 +1953,8 @@
   "brown": 9,
   "stone": 0,
   "randomWin": 0.875,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "easy"
  },
  {
   "id": 104,
@@ -1869,7 +1972,8 @@
   "brown": 42,
   "stone": 0,
   "randomWin": 0.745,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "normal"
  },
  {
   "id": 105,
@@ -1887,7 +1991,8 @@
   "brown": 4,
   "stone": 0,
   "randomWin": 0.8,
-  "solutionMoves": 15
+  "solutionMoves": 15,
+  "band": "normal"
  },
  {
   "id": 106,
@@ -1905,7 +2010,8 @@
   "brown": 39,
   "stone": 0,
   "randomWin": 0.825,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "normal"
  },
  {
   "id": 107,
@@ -1923,7 +2029,8 @@
   "brown": 61,
   "stone": 0,
   "randomWin": 0.73,
-  "solutionMoves": 20
+  "solutionMoves": 20,
+  "band": "normal"
  },
  {
   "id": 108,
@@ -1941,7 +2048,8 @@
   "brown": 30,
   "stone": 0,
   "randomWin": 0.825,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "normal"
  },
  {
   "id": 109,
@@ -1959,7 +2067,8 @@
   "brown": 20,
   "stone": 0,
   "randomWin": 0.715,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "normal"
  },
  {
   "id": 110,
@@ -1977,7 +2086,8 @@
   "brown": 33,
   "stone": 0,
   "randomWin": 0.58,
-  "solutionMoves": 19
+  "solutionMoves": 19,
+  "band": "hard"
  },
  {
   "id": 111,
@@ -1995,7 +2105,8 @@
   "brown": 20,
   "stone": 0,
   "randomWin": 0.88,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "easy"
  },
  {
   "id": 112,
@@ -2013,7 +2124,8 @@
   "brown": 29,
   "stone": 0,
   "randomWin": 0.785,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "normal"
  },
  {
   "id": 113,
@@ -2031,7 +2143,8 @@
   "brown": 34,
   "stone": 0,
   "randomWin": 0.795,
-  "solutionMoves": 18
+  "solutionMoves": 18,
+  "band": "normal"
  },
  {
   "id": 114,
@@ -2049,7 +2162,8 @@
   "brown": 52,
   "stone": 0,
   "randomWin": 0.68,
-  "solutionMoves": 18
+  "solutionMoves": 18,
+  "band": "normal"
  },
  {
   "id": 115,
@@ -2067,7 +2181,8 @@
   "brown": 19,
   "stone": 0,
   "randomWin": 0.81,
-  "solutionMoves": 18
+  "solutionMoves": 18,
+  "band": "normal"
  },
  {
   "id": 116,
@@ -2085,7 +2200,8 @@
   "brown": 14,
   "stone": 0,
   "randomWin": 0.835,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "normal"
  },
  {
   "id": 117,
@@ -2103,7 +2219,8 @@
   "brown": 29,
   "stone": 0,
   "randomWin": 0.73,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "normal"
  },
  {
   "id": 118,
@@ -2121,7 +2238,8 @@
   "brown": 20,
   "stone": 0,
   "randomWin": 0.805,
-  "solutionMoves": 20
+  "solutionMoves": 20,
+  "band": "normal"
  },
  {
   "id": 119,
@@ -2139,7 +2257,8 @@
   "brown": 51,
   "stone": 0,
   "randomWin": 0.61,
-  "solutionMoves": 18
+  "solutionMoves": 18,
+  "band": "hard"
  },
  {
   "id": 120,
@@ -2157,7 +2276,8 @@
   "brown": 56,
   "stone": 0,
   "randomWin": 0.53,
-  "solutionMoves": 22
+  "solutionMoves": 22,
+  "band": "hard"
  },
  {
   "id": 121,
@@ -2175,7 +2295,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.915,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "easy"
  },
  {
   "id": 122,
@@ -2193,7 +2314,8 @@
   "brown": 10,
   "stone": 0,
   "randomWin": 0.795,
-  "solutionMoves": 15
+  "solutionMoves": 15,
+  "band": "normal"
  },
  {
   "id": 123,
@@ -2211,7 +2333,8 @@
   "brown": 34,
   "stone": 0,
   "randomWin": 0.75,
-  "solutionMoves": 18
+  "solutionMoves": 18,
+  "band": "normal"
  },
  {
   "id": 124,
@@ -2229,7 +2352,8 @@
   "brown": 12,
   "stone": 0,
   "randomWin": 0.705,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "normal"
  },
  {
   "id": 125,
@@ -2247,7 +2371,8 @@
   "brown": 44,
   "stone": 0,
   "randomWin": 0.815,
-  "solutionMoves": 19
+  "solutionMoves": 19,
+  "band": "normal"
  },
  {
   "id": 126,
@@ -2265,7 +2390,8 @@
   "brown": 4,
   "stone": 0,
   "randomWin": 0.81,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "normal"
  },
  {
   "id": 127,
@@ -2283,7 +2409,8 @@
   "brown": 24,
   "stone": 0,
   "randomWin": 0.74,
-  "solutionMoves": 19
+  "solutionMoves": 19,
+  "band": "normal"
  },
  {
   "id": 128,
@@ -2301,7 +2428,8 @@
   "brown": 20,
   "stone": 0,
   "randomWin": 0.82,
-  "solutionMoves": 28
+  "solutionMoves": 28,
+  "band": "normal"
  },
  {
   "id": 129,
@@ -2319,7 +2447,8 @@
   "brown": 23,
   "stone": 0,
   "randomWin": 0.64,
-  "solutionMoves": 16
+  "solutionMoves": 16,
+  "band": "hard"
  },
  {
   "id": 130,
@@ -2337,7 +2466,8 @@
   "brown": 24,
   "stone": 0,
   "randomWin": 0.56,
-  "solutionMoves": 19
+  "solutionMoves": 19,
+  "band": "hard"
  },
  {
   "id": 131,
@@ -2355,7 +2485,8 @@
   "brown": 16,
   "stone": 0,
   "randomWin": 0.87,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "easy"
  },
  {
   "id": 132,
@@ -2373,7 +2504,8 @@
   "brown": 13,
   "stone": 0,
   "randomWin": 0.805,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "normal"
  },
  {
   "id": 133,
@@ -2391,7 +2523,8 @@
   "brown": 20,
   "stone": 0,
   "randomWin": 0.8,
-  "solutionMoves": 16
+  "solutionMoves": 16,
+  "band": "normal"
  },
  {
   "id": 134,
@@ -2409,7 +2542,8 @@
   "brown": 31,
   "stone": 0,
   "randomWin": 0.725,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "normal"
  },
  {
   "id": 135,
@@ -2427,7 +2561,8 @@
   "brown": 14,
   "stone": 0,
   "randomWin": 0.815,
-  "solutionMoves": 16
+  "solutionMoves": 16,
+  "band": "normal"
  },
  {
   "id": 136,
@@ -2445,7 +2580,8 @@
   "brown": 13,
   "stone": 0,
   "randomWin": 0.765,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "normal"
  },
  {
   "id": 137,
@@ -2463,7 +2599,8 @@
   "brown": 48,
   "stone": 0,
   "randomWin": 0.725,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "normal"
  },
  {
   "id": 138,
@@ -2481,7 +2618,8 @@
   "brown": 19,
   "stone": 0,
   "randomWin": 0.8,
-  "solutionMoves": 18
+  "solutionMoves": 18,
+  "band": "normal"
  },
  {
   "id": 139,
@@ -2499,7 +2637,8 @@
   "brown": 41,
   "stone": 0,
   "randomWin": 0.66,
-  "solutionMoves": 18
+  "solutionMoves": 18,
+  "band": "normal"
  },
  {
   "id": 140,
@@ -2517,7 +2656,8 @@
   "brown": 33,
   "stone": 0,
   "randomWin": 0.505,
-  "solutionMoves": 16
+  "solutionMoves": 16,
+  "band": "hard"
  },
  {
   "id": 141,
@@ -2535,7 +2675,8 @@
   "brown": 0,
   "stone": 2,
   "randomWin": 0.855,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "easy"
  },
  {
   "id": 142,
@@ -2553,7 +2694,8 @@
   "brown": 0,
   "stone": 3,
   "randomWin": 0.79,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "normal"
  },
  {
   "id": 143,
@@ -2571,7 +2713,8 @@
   "brown": 0,
   "stone": 4,
   "randomWin": 0.745,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "normal"
  },
  {
   "id": 144,
@@ -2589,7 +2732,8 @@
   "brown": 0,
   "stone": 4,
   "randomWin": 0.7,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "normal"
  },
  {
   "id": 145,
@@ -2607,7 +2751,8 @@
   "brown": 0,
   "stone": 4,
   "randomWin": 0.75,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "normal"
  },
  {
   "id": 146,
@@ -2625,7 +2770,8 @@
   "brown": 0,
   "stone": 4,
   "randomWin": 0.75,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "normal"
  },
  {
   "id": 147,
@@ -2643,7 +2789,8 @@
   "brown": 0,
   "stone": 5,
   "randomWin": 0.685,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "normal"
  },
  {
   "id": 148,
@@ -2661,7 +2808,8 @@
   "brown": 0,
   "stone": 4,
   "randomWin": 0.78,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "normal"
  },
  {
   "id": 149,
@@ -2679,7 +2827,8 @@
   "brown": 0,
   "stone": 5,
   "randomWin": 0.615,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "hard"
  },
  {
   "id": 150,
@@ -2697,7 +2846,8 @@
   "brown": 0,
   "stone": 8,
   "randomWin": 0.48,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "hard"
  },
  {
   "id": 151,
@@ -2715,7 +2865,8 @@
   "brown": 0,
   "stone": 3,
   "randomWin": 0.845,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "normal"
  },
  {
   "id": 152,
@@ -2733,7 +2884,8 @@
   "brown": 0,
   "stone": 4,
   "randomWin": 0.725,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "normal"
  },
  {
   "id": 153,
@@ -2751,7 +2903,8 @@
   "brown": 0,
   "stone": 4,
   "randomWin": 0.77,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "normal"
  },
  {
   "id": 154,
@@ -2769,7 +2922,8 @@
   "brown": 0,
   "stone": 5,
   "randomWin": 0.675,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "normal"
  },
  {
   "id": 155,
@@ -2787,7 +2941,8 @@
   "brown": 0,
   "stone": 5,
   "randomWin": 0.73,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "normal"
  },
  {
   "id": 156,
@@ -2805,7 +2960,8 @@
   "brown": 0,
   "stone": 5,
   "randomWin": 0.765,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "normal"
  },
  {
   "id": 157,
@@ -2823,7 +2979,8 @@
   "brown": 0,
   "stone": 5,
   "randomWin": 0.68,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "normal"
  },
  {
   "id": 158,
@@ -2841,7 +2998,8 @@
   "brown": 0,
   "stone": 5,
   "randomWin": 0.73,
-  "solutionMoves": 16
+  "solutionMoves": 16,
+  "band": "normal"
  },
  {
   "id": 159,
@@ -2859,7 +3017,8 @@
   "brown": 0,
   "stone": 6,
   "randomWin": 0.62,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "hard"
  },
  {
   "id": 160,
@@ -2877,7 +3036,8 @@
   "brown": 0,
   "stone": 9,
   "randomWin": 0.4,
-  "solutionMoves": 19
+  "solutionMoves": 19,
+  "band": "hard"
  },
  {
   "id": 161,
@@ -2895,7 +3055,8 @@
   "brown": 5,
   "stone": 3,
   "randomWin": 0.83,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "normal"
  },
  {
   "id": 162,
@@ -2913,7 +3074,8 @@
   "brown": 36,
   "stone": 4,
   "randomWin": 0.705,
-  "solutionMoves": 22
+  "solutionMoves": 22,
+  "band": "normal"
  },
  {
   "id": 163,
@@ -2931,7 +3093,8 @@
   "brown": 32,
   "stone": 4,
   "randomWin": 0.73,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "normal"
  },
  {
   "id": 164,
@@ -2949,7 +3112,8 @@
   "brown": 46,
   "stone": 5,
   "randomWin": 0.64,
-  "solutionMoves": 24
+  "solutionMoves": 24,
+  "band": "hard"
  },
  {
   "id": 165,
@@ -2967,7 +3131,8 @@
   "brown": 3,
   "stone": 4,
   "randomWin": 0.725,
-  "solutionMoves": 15
+  "solutionMoves": 15,
+  "band": "normal"
  },
  {
   "id": 166,
@@ -2985,7 +3150,8 @@
   "brown": 8,
   "stone": 5,
   "randomWin": 0.725,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "normal"
  },
  {
   "id": 167,
@@ -3003,7 +3169,8 @@
   "brown": 43,
   "stone": 5,
   "randomWin": 0.63,
-  "solutionMoves": 19
+  "solutionMoves": 19,
+  "band": "hard"
  },
  {
   "id": 168,
@@ -3021,7 +3188,8 @@
   "brown": 11,
   "stone": 5,
   "randomWin": 0.715,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "normal"
  },
  {
   "id": 169,
@@ -3039,7 +3207,8 @@
   "brown": 56,
   "stone": 6,
   "randomWin": 0.56,
-  "solutionMoves": 19
+  "solutionMoves": 19,
+  "band": "hard"
  },
  {
   "id": 170,
@@ -3057,7 +3226,8 @@
   "brown": 36,
   "stone": 9,
   "randomWin": 0.375,
-  "solutionMoves": 19
+  "solutionMoves": 19,
+  "band": "hard"
  },
  {
   "id": 171,
@@ -3075,7 +3245,8 @@
   "brown": 7,
   "stone": 3,
   "randomWin": 0.86,
-  "solutionMoves": 16
+  "solutionMoves": 16,
+  "band": "easy"
  },
  {
   "id": 172,
@@ -3093,7 +3264,8 @@
   "brown": 4,
   "stone": 5,
   "randomWin": 0.665,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "normal"
  },
  {
   "id": 173,
@@ -3111,7 +3283,8 @@
   "brown": 11,
   "stone": 5,
   "randomWin": 0.66,
-  "solutionMoves": 27
+  "solutionMoves": 27,
+  "band": "normal"
  },
  {
   "id": 174,
@@ -3129,7 +3302,8 @@
   "brown": 29,
   "stone": 5,
   "randomWin": 0.615,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "hard"
  },
  {
   "id": 175,
@@ -3147,7 +3321,8 @@
   "brown": 56,
   "stone": 5,
   "randomWin": 0.67,
-  "solutionMoves": 25
+  "solutionMoves": 25,
+  "band": "normal"
  },
  {
   "id": 176,
@@ -3165,7 +3340,8 @@
   "brown": 31,
   "stone": 5,
   "randomWin": 0.67,
-  "solutionMoves": 16
+  "solutionMoves": 16,
+  "band": "normal"
  },
  {
   "id": 177,
@@ -3183,7 +3359,8 @@
   "brown": 24,
   "stone": 5,
   "randomWin": 0.63,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "hard"
  },
  {
   "id": 178,
@@ -3201,7 +3378,8 @@
   "brown": 36,
   "stone": 5,
   "randomWin": 0.7,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "normal"
  },
  {
   "id": 179,
@@ -3219,7 +3397,8 @@
   "brown": 10,
   "stone": 6,
   "randomWin": 0.605,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "hard"
  },
  {
   "id": 180,
@@ -3237,7 +3416,8 @@
   "brown": 14,
   "stone": 9,
   "randomWin": 0.43,
-  "solutionMoves": 15
+  "solutionMoves": 15,
+  "band": "hard"
  },
  {
   "id": 181,
@@ -3255,7 +3435,8 @@
   "brown": 22,
   "stone": 3,
   "randomWin": 0.78,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "normal"
  },
  {
   "id": 182,
@@ -3273,7 +3454,8 @@
   "brown": 27,
   "stone": 5,
   "randomWin": 0.695,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "normal"
  },
  {
   "id": 183,
@@ -3291,7 +3473,8 @@
   "brown": 35,
   "stone": 5,
   "randomWin": 0.69,
-  "solutionMoves": 16
+  "solutionMoves": 16,
+  "band": "normal"
  },
  {
   "id": 184,
@@ -3309,7 +3492,8 @@
   "brown": 61,
   "stone": 5,
   "randomWin": 0.65,
-  "solutionMoves": 19
+  "solutionMoves": 19,
+  "band": "normal"
  },
  {
   "id": 185,
@@ -3327,7 +3511,8 @@
   "brown": 25,
   "stone": 5,
   "randomWin": 0.665,
-  "solutionMoves": 15
+  "solutionMoves": 15,
+  "band": "normal"
  },
  {
   "id": 186,
@@ -3345,7 +3530,8 @@
   "brown": 22,
   "stone": 5,
   "randomWin": 0.71,
-  "solutionMoves": 21
+  "solutionMoves": 21,
+  "band": "normal"
  },
  {
   "id": 187,
@@ -3363,7 +3549,8 @@
   "brown": 17,
   "stone": 5,
   "randomWin": 0.6,
-  "solutionMoves": 16
+  "solutionMoves": 16,
+  "band": "hard"
  },
  {
   "id": 188,
@@ -3381,7 +3568,8 @@
   "brown": 44,
   "stone": 5,
   "randomWin": 0.66,
-  "solutionMoves": 23
+  "solutionMoves": 23,
+  "band": "normal"
  },
  {
   "id": 189,
@@ -3399,7 +3587,8 @@
   "brown": 21,
   "stone": 6,
   "randomWin": 0.52,
-  "solutionMoves": 20
+  "solutionMoves": 20,
+  "band": "hard"
  },
  {
   "id": 190,
@@ -3417,7 +3606,8 @@
   "brown": 51,
   "stone": 9,
   "randomWin": 0.355,
-  "solutionMoves": 21
+  "solutionMoves": 21,
+  "band": "hard"
  },
  {
   "id": 191,
@@ -3435,7 +3625,8 @@
   "brown": 6,
   "stone": 3,
   "randomWin": 0.82,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "normal"
  },
  {
   "id": 192,
@@ -3453,7 +3644,8 @@
   "brown": 15,
   "stone": 4,
   "randomWin": 0.645,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "hard"
  },
  {
   "id": 193,
@@ -3471,7 +3663,8 @@
   "brown": 20,
   "stone": 4,
   "randomWin": 0.69,
-  "solutionMoves": 9
+  "solutionMoves": 9,
+  "band": "normal"
  },
  {
   "id": 194,
@@ -3489,7 +3682,8 @@
   "brown": 10,
   "stone": 4,
   "randomWin": 0.615,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "hard"
  },
  {
   "id": 195,
@@ -3507,7 +3701,8 @@
   "brown": 8,
   "stone": 4,
   "randomWin": 0.63,
-  "solutionMoves": 15
+  "solutionMoves": 15,
+  "band": "hard"
  },
  {
   "id": 196,
@@ -3525,7 +3720,8 @@
   "brown": 15,
   "stone": 4,
   "randomWin": 0.64,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "hard"
  },
  {
   "id": 197,
@@ -3543,7 +3739,8 @@
   "brown": 3,
   "stone": 4,
   "randomWin": 0.56,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "hard"
  },
  {
   "id": 198,
@@ -3561,7 +3758,8 @@
   "brown": 26,
   "stone": 4,
   "randomWin": 0.65,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "normal"
  },
  {
   "id": 199,
@@ -3579,7 +3777,8 @@
   "brown": 7,
   "stone": 4,
   "randomWin": 0.51,
-  "solutionMoves": 16
+  "solutionMoves": 16,
+  "band": "hard"
  },
  {
   "id": 200,
@@ -3597,7 +3796,8 @@
   "brown": 11,
   "stone": 9,
   "randomWin": 0.33,
-  "solutionMoves": 19
+  "solutionMoves": 19,
+  "band": "hard"
  },
  {
   "id": 201,
@@ -3615,7 +3815,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 1,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "easy"
  },
  {
   "id": 202,
@@ -3633,7 +3834,8 @@
   "brown": 40,
   "stone": 0,
   "randomWin": 0.795,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "normal"
  },
  {
   "id": 203,
@@ -3651,7 +3853,8 @@
   "brown": 6,
   "stone": 0,
   "randomWin": 0.805,
-  "solutionMoves": 15
+  "solutionMoves": 15,
+  "band": "normal"
  },
  {
   "id": 204,
@@ -3669,7 +3872,8 @@
   "brown": 49,
   "stone": 0,
   "randomWin": 0.78,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "normal"
  },
  {
   "id": 205,
@@ -3687,7 +3891,8 @@
   "brown": 40,
   "stone": 0,
   "randomWin": 0.78,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "normal"
  },
  {
   "id": 206,
@@ -3705,7 +3910,8 @@
   "brown": 44,
   "stone": 0,
   "randomWin": 0.765,
-  "solutionMoves": 27
+  "solutionMoves": 27,
+  "band": "normal"
  },
  {
   "id": 207,
@@ -3723,7 +3929,8 @@
   "brown": 26,
   "stone": 0,
   "randomWin": 0.72,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "normal"
  },
  {
   "id": 208,
@@ -3741,7 +3948,8 @@
   "brown": 28,
   "stone": 0,
   "randomWin": 0.76,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "normal"
  },
  {
   "id": 209,
@@ -3759,7 +3967,8 @@
   "brown": 28,
   "stone": 0,
   "randomWin": 0.63,
-  "solutionMoves": 16
+  "solutionMoves": 16,
+  "band": "hard"
  },
  {
   "id": 210,
@@ -3777,7 +3986,8 @@
   "brown": 35,
   "stone": 0,
   "randomWin": 0.41,
-  "solutionMoves": 25
+  "solutionMoves": 25,
+  "band": "hard"
  },
  {
   "id": 211,
@@ -3795,7 +4005,8 @@
   "brown": 29,
   "stone": 0,
   "randomWin": 0.825,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "normal"
  },
  {
   "id": 212,
@@ -3813,7 +4024,8 @@
   "brown": 4,
   "stone": 0,
   "randomWin": 0.765,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "normal"
  },
  {
   "id": 213,
@@ -3831,7 +4043,8 @@
   "brown": 41,
   "stone": 0,
   "randomWin": 0.75,
-  "solutionMoves": 15
+  "solutionMoves": 15,
+  "band": "normal"
  },
  {
   "id": 214,
@@ -3849,7 +4062,8 @@
   "brown": 44,
   "stone": 0,
   "randomWin": 0.7,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "normal"
  },
  {
   "id": 215,
@@ -3867,7 +4081,8 @@
   "brown": 22,
   "stone": 0,
   "randomWin": 0.775,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "normal"
  },
  {
   "id": 216,
@@ -3885,7 +4100,8 @@
   "brown": 64,
   "stone": 0,
   "randomWin": 0.7,
-  "solutionMoves": 29
+  "solutionMoves": 29,
+  "band": "normal"
  },
  {
   "id": 217,
@@ -3903,7 +4119,8 @@
   "brown": 34,
   "stone": 0,
   "randomWin": 0.665,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "normal"
  },
  {
   "id": 218,
@@ -3921,7 +4138,8 @@
   "brown": 22,
   "stone": 0,
   "randomWin": 0.71,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "normal"
  },
  {
   "id": 219,
@@ -3939,7 +4157,8 @@
   "brown": 43,
   "stone": 0,
   "randomWin": 0.595,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "hard"
  },
  {
   "id": 220,
@@ -3957,7 +4176,8 @@
   "brown": 28,
   "stone": 0,
   "randomWin": 0.37,
-  "solutionMoves": 16
+  "solutionMoves": 16,
+  "band": "hard"
  },
  {
   "id": 221,
@@ -3975,7 +4195,8 @@
   "brown": 3,
   "stone": 2,
   "randomWin": 0.775,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "normal"
  },
  {
   "id": 222,
@@ -3993,7 +4214,8 @@
   "brown": 55,
   "stone": 3,
   "randomWin": 0.76,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "normal"
  },
  {
   "id": 223,
@@ -4011,7 +4233,8 @@
   "brown": 25,
   "stone": 3,
   "randomWin": 0.755,
-  "solutionMoves": 13
+  "solutionMoves": 13,
+  "band": "normal"
  },
  {
   "id": 224,
@@ -4029,7 +4252,8 @@
   "brown": 37,
   "stone": 3,
   "randomWin": 0.71,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "normal"
  },
  {
   "id": 225,
@@ -4047,7 +4271,8 @@
   "brown": 0,
   "stone": 3,
   "randomWin": 0.78,
-  "solutionMoves": 8
+  "solutionMoves": 8,
+  "band": "normal"
  },
  {
   "id": 226,
@@ -4065,7 +4290,8 @@
   "brown": 14,
   "stone": 3,
   "randomWin": 0.755,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "normal"
  },
  {
   "id": 227,
@@ -4083,7 +4309,8 @@
   "brown": 62,
   "stone": 3,
   "randomWin": 0.675,
-  "solutionMoves": 30
+  "solutionMoves": 30,
+  "band": "normal"
  },
  {
   "id": 228,
@@ -4101,7 +4328,8 @@
   "brown": 14,
   "stone": 3,
   "randomWin": 0.735,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "normal"
  },
  {
   "id": 229,
@@ -4119,7 +4347,8 @@
   "brown": 51,
   "stone": 4,
   "randomWin": 0.585,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "hard"
  },
  {
   "id": 230,
@@ -4137,7 +4366,8 @@
   "brown": 42,
   "stone": 5,
   "randomWin": 0.355,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "hard"
  },
  {
   "id": 231,
@@ -4155,7 +4385,8 @@
   "brown": 8,
   "stone": 0,
   "randomWin": 0.865,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "easy"
  },
  {
   "id": 232,
@@ -4173,7 +4404,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.72,
-  "solutionMoves": 12
+  "solutionMoves": 12,
+  "band": "normal"
  },
  {
   "id": 233,
@@ -4191,7 +4423,8 @@
   "brown": 0,
   "stone": 0,
   "randomWin": 0.72,
-  "solutionMoves": 17
+  "solutionMoves": 17,
+  "band": "normal"
  },
  {
   "id": 234,
@@ -4209,7 +4442,8 @@
   "brown": 22,
   "stone": 0,
   "randomWin": 0.64,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "hard"
  },
  {
   "id": 235,
@@ -4227,7 +4461,8 @@
   "brown": 6,
   "stone": 0,
   "randomWin": 0.73,
-  "solutionMoves": 11
+  "solutionMoves": 11,
+  "band": "normal"
  },
  {
   "id": 236,
@@ -4245,7 +4480,8 @@
   "brown": 14,
   "stone": 0,
   "randomWin": 0.715,
-  "solutionMoves": 10
+  "solutionMoves": 10,
+  "band": "normal"
  },
  {
   "id": 237,
@@ -4263,7 +4499,8 @@
   "brown": 29,
   "stone": 0,
   "randomWin": 0.64,
-  "solutionMoves": 14
+  "solutionMoves": 14,
+  "band": "hard"
  },
  {
   "id": 238,
@@ -4281,7 +4518,8 @@
   "brown": 3,
   "stone": 0,
   "randomWin": 0.695,
-  "solutionMoves": 16
+  "solutionMoves": 16,
+  "band": "normal"
  },
  {
   "id": 239,
@@ -4299,7 +4537,8 @@
   "brown": 36,
   "stone": 0,
   "randomWin": 0.61,
-  "solutionMoves": 16
+  "solutionMoves": 16,
+  "band": "hard"
  },
  {
   "id": 240,
@@ -4317,6 +4556,7 @@
   "brown": 54,
   "stone": 0,
   "randomWin": 0.305,
-  "solutionMoves": 22
+  "solutionMoves": 22,
+  "band": "hard"
  }
 ]
