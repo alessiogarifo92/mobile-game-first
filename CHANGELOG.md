@@ -11,6 +11,11 @@
 - **Curva** a dente di sega (#88): vittorie a caso 100 · 74 · 76 · 58 · 67 · 69 · 59 · 66 · 57 · 28%, media 65,3% (stage 24: 66,4%); il boss è il più duro dello stage, più duro del 240 (31%) e sopra il pavimento dell'universo (25%). Ogni livello è dimostrato risolvibile dal solver.
 - Test: unit sullo stage (`tests/stage25.test.ts`: nomi IT/EN, 241–250, tela ≤ 14×14, secchielli coperti dal 241 con la scheda, chiavi e lucchetti dal 242, nessun'altra meccanica, ≥ 30% secondari, nastro e slot, curva, media); e2e `e2e/stage-25.spec.ts`: la mappa dell'universo 3 mostra lo stage 25 dopo il 240, il 241 spiega i secchielli coperti e si gioca fino alla vittoria, il 242 con chiave e lucchetti pure.
 
+### Report della curva di difficoltà aggiornato ai 240 livelli (#215)
+
+- **`docs/reports/curva-difficolta.{json,png}` rigenerati** (240 livelli, universi 1–3, stage 24 compreso): prima fermi ai 200 livelli di #173. Sui livelli già presenti cambiano solo 141, 164, 175 e 195, tutti per le pietre che bloccano la vernice (#147, PR #189).
+- **Test di allineamento** `tests/difficultyReport.test.ts`: fallisce solo se il report ha livelli che non esistono più in `levels.json`; per i livelli mancanti emette solo un warning con il comando di rigenerazione (nessun blocco per le PR degli stage; logica pura in `src/core/reportAlignment.ts`). Il report resta uno script manuale, non un passo della CI.
+
 ### Stage 24 "Festa": livelli 231–240, lucchetto e chiave con ghiaccio e nascosti (#202, #101)
 
 - **Dieci figure in pixel art originale** sulla festa (`scripts/stages/stage-24.ts`): palloncini, cappellino, pacco regalo, torta di compleanno, lanterna di carta, coppa di gelato, festoni, piñata, giostra e il boss, la festa con le sue bandierine (14×12). Foglio di anteprima in `docs/levels/stage-24.png`; nomi IT/EN.
