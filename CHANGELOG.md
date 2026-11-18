@@ -10,6 +10,15 @@
 - Calcolo puro in `src/core/levelChanges.ts` (soglie in `CHANGE_RULES`, testi `change.*` in IT/EN, nessun numero nel codice di gioco); `npm run changes:levels` e `scripts/difficulty-report.ts` elencano i cambi di ogni livello. Cosa comporta ogni cambio: `docs/strategia-progetto.md`.
 - Test: unit (`tests/levelChanges.test.ts`: nessun cambio, uno, più cambi, primo livello, inizio stage, id salvati, testi; `tests/howto.test.ts`); e2e `e2e/novita-77.spec.ts` a 360×640 e 412×915: la striscia compare al livello giusto, una volta, non copre la partita (`checkOnScreen`), si chiude con un tocco e al primo lancio.
 
+### Stage 23 "Mercato": livelli 221–230, lucchetto e chiave con la pietra (#201, #101)
+
+- **Dieci figure in pixel art originale** sul mercato (`scripts/stages/stage-23.ts`): fetta di anguria, cesto della spesa, tendone, bilancia, sgombro, formaggio, borsellino, fiori, carretto e il boss, il mercato con le sue bancarelle (14×12). Foglio di anteprima in `docs/levels/stage-23.png`; nomi IT/EN.
+- **Lucchetto e chiave si combinano con la pietra** (nessun debutto): ogni livello ha chiavi, lucchetti e pietre sulle caselle vuote accanto alla figura (1 chiave e 2 lucchetti; 2 e 3 nel borsellino e nel carretto; 2 e 4 nel boss), accanto ai secondari e al marrone già noti; nessun'altra meccanica. Dal 222 ≥ 30% di pixel secondari o marroni.
+- **Nastro 2, slot 2**: mai sopra la fine dell'universo 2.
+- **Curva** a dente di sega (#88), senza livelli molto facili: vittorie a caso 78 · 76 · 76 · 71 · 78 · 76 · 68 · 74 · 59 · 36%, media 69,2% (stage 22: 68,8%); il boss è il più duro dello stage, sopra il pavimento dell'universo (25%). Ogni livello è dimostrato risolvibile dal solver.
+- **Test più robusti**: `e2e/stage-21.spec.ts` e `e2e/stage-22.spec.ts` non elencano più tutti gli stage e i nodi della mappa dell'universo 3 (controllano le prime intestazioni e i nodi del proprio stage), quindi non si rompono a ogni stage nuovo.
+- Test: unit sullo stage (`tests/stage23.test.ts`: nomi IT/EN, 221–230, tela ≤ 14×14, chiavi, lucchetti e pietre ovunque, ≥ 30% secondari, nastro e slot, curva, media); e2e `e2e/stage-23.spec.ts`: la mappa dell'universo 3 mostra lo stage 23 dopo il 220 e il 221 si gioca fino alla vittoria.
+
 ### Stage 22 "Porto": livelli 211–220, lucchetto e chiave con il marrone (#200, #101)
 
 - **Dieci figure in pixel art originale** sul porto (`scripts/stages/stage-22.ts`): ancora, salvagente, peschereccio, cassa del carico, gru del porto, botte, molo, nave da carico, rimorchiatore e il boss, il porto con faro e veliero (14×14). Foglio di anteprima in `docs/levels/stage-22.png`; nomi IT/EN.

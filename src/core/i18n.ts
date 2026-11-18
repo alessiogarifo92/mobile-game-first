@@ -408,6 +408,18 @@ const en = {
   'level.cargoship': 'Cargo ship',
   'level.tugboat': 'Tugboat',
   'level.harbor': 'Harbor',
+  // Stage 23 — Market (#201)
+  'stage.market': 'Market',
+  'level.melonslice': 'Melon slice',
+  'level.marketbasket': 'Market basket',
+  'level.awning': 'Awning',
+  'level.scales': 'Scales',
+  'level.mackerel': 'Mackerel',
+  'level.cheese': 'Cheese',
+  'level.purse': 'Purse',
+  'level.flowers': 'Flowers',
+  'level.cart': 'Cart',
+  'level.market': 'The market',
 };
 
 export type MessageKey = keyof typeof en;
@@ -820,6 +832,18 @@ const it: Record<MessageKey, string> = {
   'level.cargoship': 'Nave da carico',
   'level.tugboat': 'Rimorchiatore',
   'level.harbor': 'Il porto',
+  // Stage 23 — Market (#201)
+  'stage.market': 'Mercato',
+  'level.melonslice': 'Fetta di anguria',
+  'level.marketbasket': 'Cesto della spesa',
+  'level.awning': 'Tendone',
+  'level.scales': 'Bilancia',
+  'level.mackerel': 'Sgombro',
+  'level.cheese': 'Formaggio',
+  'level.purse': 'Borsellino',
+  'level.flowers': 'Fiori',
+  'level.cart': 'Carretto',
+  'level.market': 'Il mercato',
 };
 
 export const DICTIONARIES = { en, it } as const;

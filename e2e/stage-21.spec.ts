@@ -17,11 +17,12 @@ test('after universe 2 the map opens on universe 3, stage 21 first, with only le
   await start(page, { unlocked: 201, completed: range(1, 200) });
   expect(await mix(page, 'universe')).toBe(3);
   const headers = await mix<{ stage: number; count: number }[]>(page, 'headers');
-  expect(headers.map((h) => [h.stage, h.count])).toEqual([[21, 10], [22, 10]]);
+  expect(headers.slice(0, 2).map((h) => [h.stage, h.count])).toEqual([[21, 10], [22, 10]]);
   const nodes = await mix<{ id: number; unlocked: boolean; boss: boolean }[]>(page, 'nodes');
-  expect(nodes.map((n) => n.id)).toEqual(range(201, 220));
-  expect(nodes.filter((n) => n.unlocked).map((n) => n.id)).toEqual([201]);
-  expect(nodes.filter((n) => n.boss).map((n) => n.id)).toEqual([210, 220]);
+  const mine = nodes.filter((n) => n.id <= 220);
+  expect(mine.map((n) => n.id)).toEqual(range(201, 220));
+  expect(mine.filter((n) => n.unlocked).map((n) => n.id)).toEqual([201]);
+  expect(mine.filter((n) => n.boss).map((n) => n.id)).toEqual([210, 220]);
   if (shots) await page.screenshot({ path: `${shots}/01-mappa-universo-3.png` });
 });
 
