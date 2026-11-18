@@ -79,6 +79,7 @@ export function curveLevel(level: Level, winRate: number, easyBoss?: boolean): C
   if (level.hidden.some(Boolean)) features.push('hidden');
   if (level.stone.some(Boolean)) features.push('stone');
   if (level.locked.some(Boolean)) features.push('lock');
+  if (level.columns.some((c) => c.some((b) => b.covered))) features.push('covered');
   return {
     id: level.id,
     stage: level.stage,
