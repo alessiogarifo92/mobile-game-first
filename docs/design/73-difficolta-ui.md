@@ -123,8 +123,13 @@ EN: [mappa](73-difficolta-ui/map-C-en.png) · [gioco](73-difficolta-ui/play-C-en
 | Testi nuovi | 4 | 1 | 5 |
 | Costo | basso | medio | medio-alto |
 
-## Scelta: A
-**Direzione A scelta dall'utente** (19 nov 2026). I due ritocchi qui sotto erano una proposta e **non sono ancora confermati**: l'implementazione li tratta come domande aperte finché l'utente non risponde.
+## Scelta: A (decisioni)
+**Direzione A scelta dall'utente** (19 nov 2026); i due ritocchi sono **adottati** (confermati dal manager del progetto) e sono implementati in questa PR:
+1. **Boss = solo "★ Boss", qualunque sia la sua fascia** (24 boss su 27 sono difficili: due segni si ripeterebbero). Sulla mappa il boss ha già la ★; in gioco la riga è "★ Boss · nome"; sul pannello vittoria "★ Boss sconfitto" (se il livello non completa anche lo stage). Il rombo ◆ resta solo per i livelli difficili che non sono boss. Il conforto sull'ingorgo vale anche per un boss difficile.
+2. **Nessuna etichetta di fascia sullo stage in mappa.**
+3. Regola comune: **"Facile" non compare mai** in gioco né nei pannelli (e nemmeno sulla mappa: la fascia Facile non ha alcun segno).
+
+Implementazione (#73): selettori puri in `src/core/difficultyMark.ts` (`levelMark`, `bandsById`, `comfortOffered`, testati al 100 %); fascia letta da `src/levels/difficulty.json` (nessun calcolo duplicato; la tabella compatta generata da `gen:levels` resta un'ottimizzazione futura: oggi il JSON pesa 24 KB nel bundle); testi `diff.*` in `src/core/i18n.ts` IT/EN; rombo nel `Graphics` dei nodi di `MenuScene` (nessun oggetto o draw call in più per nodo, il culling non cambia); riga del sottotitolo, riga sul pannello vittoria e riga di conforto sull'ingorgo in `PlayScene`; il conforto riusa il contatore `defeats` già salvato (`hintOffered`), quindi nessun campo nuovo e nessuna migrazione. Quando un livello ha un suggerimento di guida (`levelHint`), il sottotitolo resta quello della guida e non porta il segno (limite noto, i livelli di guida sono i primi e facili).
 
 ### Raccomandazione (prima della scelta)
 Proponevo **A**, per tre motivi:

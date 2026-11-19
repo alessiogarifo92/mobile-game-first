@@ -1,4 +1,6 @@
 import { unlockedSkins, type Skin } from '../core/album';
+import type { DifficultyFile } from '../core/difficulty';
+import { bandsById, levelMark, type LevelMark } from '../core/difficultyMark';
 import { DEFAULT_LANGUAGE, levelName, stageName, translate, universeName, type Language, type MessageKey, type Params } from '../core/i18n';
 import { parseLevel, type Level, type LevelDef } from '../core/level';
 import {
@@ -6,6 +8,7 @@ import {
 } from '../core/progress';
 import type { StageInfo } from '../core/stages';
 import { canOpenLevel, type UniverseInfo } from '../core/universes';
+import difficultyJson from '../levels/difficulty.json';
 import levelsJson from '../levels/levels.json';
 import stagesJson from '../levels/stages.json';
 import universesJson from '../levels/universes.json';
@@ -13,6 +16,13 @@ import universesJson from '../levels/universes.json';
 /** Levels and stages come from the generated data (npm run gen:levels): nothing here assumes how many there are. */
 export const LEVELS: Level[] = (levelsJson as LevelDef[]).map(parseLevel);
 export const STAGES: readonly StageInfo[] = stagesJson as StageInfo[];
+/** Band of each level as `gen:levels` measured it (#72); the label is read, never recomputed. */
+const BANDS = bandsById((difficultyJson as DifficultyFile).levels);
+export const levelBand = (id: number) => BANDS.get(id);
+/** The mark a level carries on the map and in play (#73): "boss", "hard" or none. */
+export function markOf(id: number): LevelMark | null {
+  return levelMark(BANDS.get(id), !!LEVELS[id - 1]?.boss);
+}
 export const UNIVERSES: readonly UniverseInfo[] = universesJson as UniverseInfo[];
 
 function storage(): KeyValueStorage | undefined {
