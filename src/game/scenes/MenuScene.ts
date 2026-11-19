@@ -12,7 +12,7 @@ import { universeLevels, universeOfStage } from '../../core/universes';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
 import { REDUCED_MOTION_QUERY, prefersReducedMotion } from '../../core/motion';
-import { LEVELS, STAGES, UNIVERSES, canOpen, getProgress, levelTitle, markTip, resetTips, setLanguage, setSound, stageTitle, t, universeTitle } from '../store';
+import { LEVELS, STAGES, UNIVERSES, canOpen, getProgress, levelTitle, markOf, markTip, resetTips, setLanguage, setSound, stageTitle, t, universeTitle } from '../store';
 import { PAINT, THEME } from '../theme';
 import { button, label, progressBar } from '../ui';
 
@@ -26,6 +26,8 @@ function dominantColor(targets: number[]): number {
 const DRAG_THRESHOLD = 12;
 /** Universe button in the title bar, under the game title (inside MAP.barHeight). */
 const UNIVERSE_BAR = { y: 186, w: 600, h: 72 } as const;
+/** Half-diagonal of the "hard" diamond on a map node (#73) and of its paper edge. */
+const HARD_MARK = { radius: 13, edge: 17 } as const;
 
 /** Scrolling map of one universe: one section per stage, a fixed title bar with the universe's progress, settings panel. */
 export class MenuScene extends Phaser.Scene {
@@ -148,6 +150,9 @@ export class MenuScene extends Phaser.Scene {
       target.fillCircle(n.x, n.y, r);
       target.lineStyle(isCurrent ? 6 : 3, THEME.ink, open ? 1 : 0.3);
       target.strokeCircle(n.x, n.y, r);
+      // #73: a hard level carries a diamond on the lower right of its ring: a shape, drawn in the same Graphics as the
+      // node (no object or draw call per node, nothing for the culling to track). A boss keeps its star; a locked node fades it.
+      if (markOf(n.id) === 'hard') this.drawHardMark(target, n.x + n.r * 0.78, n.y + n.r * 0.78, open ? 1 : 0.3);
       if (n.boss) this.lazy(n.y, () => label(this, n.x, n.y - r - 18, '★', THEME.type.md, open ? THEME.inkCss : THEME.subCss));
       this.lazy(n.y, () => label(this, n.x, n.y, String(n.id), isCurrent ? THEME.type.md : THEME.type.sm, done ? '#ffffff' : THEME.inkCss)
         .setAlpha(open ? 1 : 0.35));
@@ -156,6 +161,17 @@ export class MenuScene extends Phaser.Scene {
         if (!this.reducedMotion()) this.tweens.add({ targets: target, alpha: 0.75, duration: 700, yoyo: true, repeat: -1 });
       }
     }
+  }
+
+  /** The "hard" diamond: ink with a paper edge, so it stays apart from the ring and the path. */
+  private drawHardMark(g: Phaser.GameObjects.Graphics, x: number, y: number, alpha: number): void {
+    const diamond = (r: number, color: number) => {
+      g.fillStyle(color, alpha);
+      g.fillTriangle(x - r, y, x, y - r, x + r, y);
+      g.fillTriangle(x - r, y, x, y + r, x + r, y);
+    };
+    diamond(HARD_MARK.edge, THEME.paper);
+    diamond(HARD_MARK.radius, THEME.ink);
   }
 
   /**
@@ -383,7 +399,7 @@ export class MenuScene extends Phaser.Scene {
   private publish(): void {
     publishDebug({
       scene: 'menu',
-      nodes: this.layout.nodes.map((n) => ({ id: n.id, x: n.x, y: n.y, unlocked: n.id <= getProgress().unlocked, boss: !!n.boss })),
+      nodes: this.layout.nodes.map((n) => ({ id: n.id, x: n.x, y: n.y, unlocked: n.id <= getProgress().unlocked, boss: !!n.boss, mark: markOf(n.id) })),
       headers: this.layout.headers,
       comingSoon: this.comingSoon,
       universe: this.universe,
