@@ -4,7 +4,7 @@ import difficulty from '../src/levels/difficulty.json' with { type: 'json' };
 import type { LevelDef } from '../src/core/level';
 import type { Move } from '../src/core/solver';
 import { translate } from '../src/core/i18n';
-import { LAST_LEVEL, PANEL_ARM_WAIT, checkOnScreen, jamSequence, mix, openLevel, play, shots, tap, tapLevel, throttleCpu, waitMapSettled, waitScene, waitSim } from './helpers';
+import { LAST_LEVEL, checkOnScreen, jamSequence, mix, openLevel, play, shots, tapLevel, throttleCpu, waitMapSettled, waitScene, waitSim } from './helpers';
 
 /**
  * #73 (direction A, docs/design/73-difficolta-ui.md): a hard level carries a diamond on the map and "◆ Hard" under its title,
@@ -25,6 +25,19 @@ async function start(page: Page, save: Record<string, unknown>) {
   await page.goto('/');
   await waitScene(page, 'menu');
   await throttleCpu(page);
+}
+
+/**
+ * Opens one level on a save whose current level is that one, so the map opens already centred on it and the tap needs
+ * no long scroll (scrolling to the top of the map with real drags took minutes on a loaded CI runner).
+ */
+async function openFresh(page: Page, id: number, language: 'it' | 'en', extra: Record<string, unknown> = {}) {
+  const save = { sound: false, seenTips: ALL_TIPS, unlocked: id, completed: ids.filter((x) => x < id), language, ...extra };
+  await page.evaluate(([k, v]) => localStorage.setItem(k!, v!), [KEY, JSON.stringify(save)]);
+  await page.reload();
+  await waitScene(page, 'menu');
+  await waitMapSettled(page);
+  await openLevel(page, id);
 }
 
 for (const size of [{ width: 360, height: 640 }, { width: 412, height: 915 }]) {
@@ -48,7 +61,7 @@ for (const size of [{ width: 360, height: 640 }, { width: 412, height: 915 }]) {
       await tapLevel(page, 74);
       await waitScene(page, 'play');
       expect(before).not.toBeUndefined();
-      expect(await mix<string>(page, 'subtitle')).toBe(`◆ ${translate('it', 'diff.hard')}  ·  ${await mix<string>(page, 'subtitle').then((s) => s.split('  ·  ')[1])}`);
+      expect(await mix<string>(page, 'subtitle')).toMatch(new RegExp(`^◆ ${translate('it', 'diff.hard')} {2}· {2}\\S`));
     });
 
     test('in play: a hard level says "Hard", a boss says "Boss", and an easy or normal level says nothing', async ({ page }) => {
@@ -56,17 +69,15 @@ for (const size of [{ width: 360, height: 640 }, { width: 412, height: 915 }]) {
       const easy = ids.find((id) => band.get(id) === 'easy' && !isBoss(id) && id > 3)!;
       const normal = ids.find((id) => band.get(id) === 'normal' && !isBoss(id))!;
       const boss = ids.filter(isBoss).at(-1)!;
-      await start(page, { unlocked: LAST_LEVEL, completed: ids.slice(0, LAST_LEVEL - 1), language: 'en' });
+      await start(page, { language: 'en' });
       const seen: Record<string, string> = {};
       for (const [name, id] of Object.entries({ hard, easy, normal, boss })) {
-        await openLevel(page, id);
+        await openFresh(page, id, 'en');
         seen[name] = await mix<string>(page, 'subtitle');
         if (name === 'hard' || name === 'boss') {
           await checkOnScreen(page, `${name} level ${id}`);
           if (shots) await page.screenshot({ path: `${shots}/73-02-gioco-${name}-${size.width}x${size.height}.png` });
         }
-        await page.goto('/');
-        await waitScene(page, 'menu');
       }
       expect(seen.hard).toMatch(/^◆ Hard {2}· {2}\S/);
       expect(seen.boss).toMatch(/^★ Boss {2}· {2}\S/);
@@ -85,42 +96,36 @@ const normalJammer = ids.filter((id) => band.get(id) === 'normal' && !isBoss(id)
 
 test.describe('jam panel comfort', () => {
   test.use({ viewport: { width: 360, height: 640 } });
-  test.setTimeout(180_000);
 
-  for (const language of ['it', 'en'] as const) {
-    test(`a hard level shows the comfort line only from the third defeat on (${language})`, async ({ page }) => {
+  // The counter is already saved (#93), so each test seeds the defeats before the one it plays: a single real defeat per test.
+  for (const [before, language] of [[1, 'it'], [2, 'it'], [2, 'en']] as const) {
+    const defeat = before + 1;
+    test(`a hard level ${defeat < 3 ? 'has no comfort line on' : 'shows the comfort line on'} defeat ${defeat} (${language})`, async ({ page }) => {
       expect(jammer, 'a hard level of universe 1 that can jam').toBeDefined();
-      await start(page, { unlocked: LAST_LEVEL, completed: [], language });
-      await openLevel(page, jammer!.id);
-      for (let defeat = 1; defeat <= 3; defeat++) {
-        await play(page, jammer!.moves);
-        await waitSim(page, () => (window as unknown as { __mix: Mix }).__mix.overlay === 'jam');
-        const comfort = await mix<number | null>(page, 'jamComfort');
-        expect(comfort === null, `defeat ${defeat}`).toBe(defeat < 3);
-        const buttons = await mix<{ continue: { x: number; y: number } | null; hint: { x: number; y: number } | null; retry: { x: number; y: number } }>(page, 'jamButtons');
-        await checkOnScreen(page, `jam ${defeat} ${language}`);
-        // The panel's buttons keep their size (at least 44 CSS px: 88 logical units at 360 px wide) when the line is added.
-        const zones = (await page.evaluate(() => window.__mixBounds!())).filter((o) => o.type === 'Zone' && o.depth >= 10);
-        expect(zones.length).toBeGreaterThan(0);
-        for (const z of zones) expect(Math.min(z.w, z.h), `button ${Math.round(z.x)},${Math.round(z.y)}`).toBeGreaterThanOrEqual(80);
-        if (defeat === 3) {
-          const text = translate(language, 'diff.jamHard');
-          const drawn = (await page.evaluate(() => window.__mixBounds!())).some((o) => o.text === text || (o.text ?? '').startsWith(text.slice(0, 20)));
-          expect(drawn, 'the comfort line is drawn').toBe(true);
-          expect(buttons.hint).not.toBeNull();
-          if (shots) await page.screenshot({ path: `${shots}/73-03-ingorgo-conforto-${language}.png` });
-          break;
-        }
-        await page.waitForTimeout(PANEL_ARM_WAIT);
-        await tap(page, buttons.retry.x, buttons.retry.y);
-        await page.waitForFunction(() => { const m = (window as unknown as { __mix: Mix }).__mix; return m.scene === 'play' && m.overlay === null && m.moves === 0; });
-      }
+      await start(page, { language });
+      await openFresh(page, jammer!.id, language, { defeats: { [String(jammer!.id)]: before } });
+      await play(page, jammer!.moves);
+      await waitSim(page, () => (window as unknown as { __mix: Mix }).__mix.overlay === 'jam');
+      expect(await mix<number>(page, 'defeats')).toBe(defeat);
+      expect((await mix<number | null>(page, 'jamComfort')) === null, `defeat ${defeat}`).toBe(defeat < 3);
+      const buttons = await mix<{ continue: { x: number; y: number } | null; hint: { x: number; y: number } | null; retry: { x: number; y: number } }>(page, 'jamButtons');
+      await checkOnScreen(page, `jam ${defeat} ${language}`);
+      // The panel's buttons keep their size (at least 44 CSS px: 88 logical units at 360 px wide) when the line is added.
+      const zones = (await page.evaluate(() => window.__mixBounds!())).filter((o) => o.type === 'Zone' && o.depth >= 10);
+      expect(zones.length).toBeGreaterThan(0);
+      for (const z of zones) expect(Math.min(z.w, z.h), `button ${Math.round(z.x)},${Math.round(z.y)}`).toBeGreaterThanOrEqual(80);
+      if (defeat < 3) return;
+      const text = translate(language, 'diff.jamHard');
+      const drawn = (await page.evaluate(() => window.__mixBounds!())).some((o) => o.text === text || (o.text ?? '').startsWith(text.slice(0, 20)));
+      expect(drawn, 'the comfort line is drawn').toBe(true);
+      expect(buttons.hint).not.toBeNull();
+      if (shots) await page.screenshot({ path: `${shots}/73-03-ingorgo-conforto-${language}.png` });
     });
   }
 
   test('a normal level never shows it, even after three defeats', async ({ page }) => {
-    await start(page, { unlocked: LAST_LEVEL, completed: [], language: 'en', defeats: { [String(normalJammer.id)]: 2 } });
-    await openLevel(page, normalJammer.id);
+    await start(page, { language: 'en' });
+    await openFresh(page, normalJammer.id, 'en', { defeats: { [String(normalJammer.id)]: 2 } });
     await play(page, normalJammer.moves);
     await waitSim(page, () => (window as unknown as { __mix: Mix }).__mix.overlay === 'jam');
     expect(await mix<number>(page, 'defeats')).toBe(3);
