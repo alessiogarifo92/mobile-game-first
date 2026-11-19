@@ -497,6 +497,18 @@ const en = {
   'level.hangar': 'Hangar',
   'level.jumbojet': 'Jumbo jet',
   'level.terminal': 'The terminal',
+  // Stage 30 — Luna park (#208)
+  'stage.lunapark': 'Funfair',
+  'level.cottoncandy': 'Cotton candy',
+  'level.bumpercars': 'Bumper cars',
+  'level.candyapple': 'Candy apple',
+  'level.balloondarts': 'Balloon darts',
+  'level.teacups': 'Teacups',
+  'level.hauntedhouse': 'Haunted house',
+  'level.rollercoaster': 'Roller coaster',
+  'level.shootinggallery': 'Shooting gallery',
+  'level.pirateship': 'Pirate ship',
+  'level.ferriswheel': 'The Ferris wheel',
 };
 
 export type MessageKey = keyof typeof en;
@@ -998,6 +1010,18 @@ const it: Record<MessageKey, string> = {
   'level.hangar': 'Hangar',
   'level.jumbojet': 'Jumbo jet',
   'level.terminal': 'Il terminal',
+  // Stage 30 — Luna park (#208)
+  'stage.lunapark': 'Luna park',
+  'level.cottoncandy': 'Zucchero filato',
+  'level.bumpercars': 'Autoscontro',
+  'level.candyapple': 'Mela caramellata',
+  'level.balloondarts': 'Palloncini e freccette',
+  'level.teacups': 'Tazze rotanti',
+  'level.hauntedhouse': 'Casa degli spettri',
+  'level.rollercoaster': 'Montagne russe',
+  'level.shootinggallery': 'Tiro a segno',
+  'level.pirateship': 'Nave dei pirati',
+  'level.ferriswheel': 'La ruota panoramica',
 };
 
 export const DICTIONARIES = { en, it } as const;
