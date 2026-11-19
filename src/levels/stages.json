@@ -160,5 +160,11 @@
   "key": "circus",
   "color": 1,
   "complete": true
+ },
+ {
+  "id": 28,
+  "key": "monuments",
+  "color": 5,
+  "complete": true
  }
 ]
