@@ -4,7 +4,7 @@ import difficulty from '../src/levels/difficulty.json' with { type: 'json' };
 import type { LevelDef } from '../src/core/level';
 import type { Move } from '../src/core/solver';
 import { translate } from '../src/core/i18n';
-import { LAST_LEVEL, PANEL_ARM_WAIT, checkOnScreen, jamSequence, mix, openLevel, play, shots, tap, tapLevel, waitMapSettled, waitScene, waitSim } from './helpers';
+import { LAST_LEVEL, PANEL_ARM_WAIT, checkOnScreen, jamSequence, mix, openLevel, play, shots, tap, tapLevel, throttleCpu, waitMapSettled, waitScene, waitSim } from './helpers';
 
 /**
  * #73 (direction A, docs/design/73-difficolta-ui.md): a hard level carries a diamond on the map and "◆ Hard" under its title,
@@ -24,6 +24,7 @@ async function start(page: Page, save: Record<string, unknown>) {
   await page.addInitScript(([k, v]) => { if (!sessionStorage.getItem('seeded')) { sessionStorage.setItem('seeded', '1'); localStorage.setItem(k!, v!); } }, [KEY, JSON.stringify({ sound: false, seenTips: ALL_TIPS, ...save })]);
   await page.goto('/');
   await waitScene(page, 'menu');
+  await throttleCpu(page);
 }
 
 for (const size of [{ width: 360, height: 640 }, { width: 412, height: 915 }]) {
