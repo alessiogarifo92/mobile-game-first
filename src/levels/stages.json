@@ -172,5 +172,11 @@
   "key": "airport",
   "color": 4,
   "complete": true
+ },
+ {
+  "id": 30,
+  "key": "lunapark",
+  "color": 5,
+  "complete": true
  }
 ]

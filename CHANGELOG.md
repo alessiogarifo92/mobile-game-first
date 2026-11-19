@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Stage 30 "Luna park": livelli 291–300, ultimo stage dell'universo 3 (#208, #101)
+
+- **Dieci figure in pixel art originale** sul luna park (`scripts/stages/stage-30.ts`): zucchero filato, autoscontro, mela caramellata, palloncini e freccette, tazze rotanti, casa degli spettri, montagne russe, tiro a segno, nave dei pirati e il boss, la ruota panoramica (14×14, 136 pixel: la figura più grande dell'universo). Foglio di anteprima in `docs/levels/stage-30.png`; nomi IT/EN.
+- **Tutte le meccaniche insieme**: dal 292 ogni livello ha ghiaccio, pixel nascosti, chiavi e lucchetti, pietre e secchielli coperti, con il marrone in ogni disegno; la combinazione completa ice+hidden+brown+stone+lock+covered è comparsa al 282 (stage 29) e riempie anche la finestra di novità 281–300, quindi qui non c'è un debutto e nessun livello è molto facile. Il respiro (291) resta su brown+stone+lock+covered. ≥ 30% di pixel secondari o marroni dal 292.
+- **Boss finale con nastro 1 e 3 slot** (300): come il terminal, mai sopra la fine dell'universo 2 (slot ≤ 3, nastro ≤ 2); gli altri livelli restano a nastro 2 e slot 2.
+- **Curva** a dente di sega (#88): vittorie a caso 83,5 · 63 · 60 · 53,5 · 61 · 62,5 · 52 · 56 · 40 · 26,5%, media 55,8% (obiettivo di fine universo ~56%; stage 29: 58,7%), boss più duro 26,5% (≥ 25%). Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (`tests/stage30.test.ts`: nomi IT/EN, 291–300, tela ≤ 14×14, boss la figura più grande, chiavi, lucchetti, pietre e coperti, combinazione completa e finestra di novità, ≥ 30% secondari, nastro 1 solo sul boss, curva, media); e2e `e2e/stage-30.spec.ts`: la mappa dell'universo 3 mostra lo stage 30 dopo il 290, il 291 e il 292 si giocano fino alla vittoria.
+
 ### Stage 29 "Aeroporto": livelli 281–290 (#207, #101)
 
 - **Dieci figure in pixel art originale** sull'aeroporto (`scripts/stages/stage-29.ts`): bagaglio a mano, carta d'imbarco, manica a vento, torre di controllo, elicottero, turbina, aereo a elica, hangar, jumbo jet e il boss, il terminal (14×13). Foglio di anteprima in `docs/levels/stage-29.png`; nomi IT/EN.
