@@ -114,7 +114,7 @@ const stage: StageSpec = {
       'KK.......KK',
       'KK.......KK',
     ] },
-    { name: 'tajmahal', columns: 4, ammoChunk: 20, slots: 2, beltCapacity: 2, special: { key: 2, lock: 3, stone: 4 }, winRate: [0.5, 0.58], seed: 28296, image: [
+    { name: 'tajmahal', columns: 4, ammoChunk: 16, slots: 2, beltCapacity: 2, special: { key: 2, lock: 3, stone: 4 }, winRate: [0.5, 0.58], seed: 28296, image: [
       '......Y......',
       '.....PPP.....',
       '....PPPPP....',
@@ -128,7 +128,7 @@ const stage: StageSpec = {
       'OOOOOOOOOOOOO',
       'BBBBBBBBBBBBB',
     ] },
-    { name: 'colosseum', columns: 4, ammoChunk: 28, slots: 2, beltCapacity: 2, special: { key: 2, lock: 4, stone: 4 }, winRate: [0.25, 0.3], seed: 28333, image: [
+    { name: 'colosseum', columns: 4, ammoChunk: 24, slots: 2, beltCapacity: 2, special: { key: 2, lock: 4, stone: 4 }, winRate: [0.25, 0.3], seed: 28333, image: [
       '..OOOOOOOOOO..',
       '.OOOOOOOOOOOO.',
       'OKKOKKOKKOKKOO',
