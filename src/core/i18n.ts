@@ -480,6 +480,18 @@ const en = {
   'level.eiffel': 'Eiffel tower',
   'level.tajmahal': 'Taj Mahal',
   'level.colosseum': 'The Colosseum',
+  // Stage 29 — Aeroporto (#207)
+  'stage.airport': 'Airport',
+  'level.carryon': 'Carry-on bag',
+  'level.boardingpass': 'Boarding pass',
+  'level.windsock': 'Windsock',
+  'level.tower': 'Control tower',
+  'level.chopper': 'Helicopter',
+  'level.jetengine': 'Jet engine',
+  'level.propplane': 'Propeller plane',
+  'level.hangar': 'Hangar',
+  'level.jumbojet': 'Jumbo jet',
+  'level.terminal': 'The terminal',
 };
 
 export type MessageKey = keyof typeof en;
@@ -964,6 +976,18 @@ const it: Record<MessageKey, string> = {
   'level.eiffel': 'Torre Eiffel',
   'level.tajmahal': 'Taj Mahal',
   'level.colosseum': 'Il Colosseo',
+  // Stage 29 — Aeroporto (#207)
+  'stage.airport': 'Aeroporto',
+  'level.carryon': 'Bagaglio a mano',
+  'level.boardingpass': 'Carta d\'imbarco',
+  'level.windsock': 'Manica a vento',
+  'level.tower': 'Torre di controllo',
+  'level.chopper': 'Elicottero',
+  'level.jetengine': 'Turbina',
+  'level.propplane': 'Aereo a elica',
+  'level.hangar': 'Hangar',
+  'level.jumbojet': 'Jumbo jet',
+  'level.terminal': 'Il terminal',
 };
 
 export const DICTIONARIES = { en, it } as const;

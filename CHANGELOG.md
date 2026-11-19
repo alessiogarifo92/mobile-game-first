@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Stage 29 "Aeroporto": livelli 281–290 (#207, #101)
+
+- **Dieci figure in pixel art originale** sull'aeroporto (`scripts/stages/stage-29.ts`): bagaglio a mano, carta d'imbarco, manica a vento, torre di controllo, elicottero, turbina, aereo a elica, hangar, jumbo jet e il boss, il terminal (14×13). Foglio di anteprima in `docs/levels/stage-29.png`; nomi IT/EN.
+- **Tutte le meccaniche insieme**: dal 282 ogni livello ha ghiaccio, pixel nascosti, chiavi e lucchetti, pietre e secchielli coperti, con il marrone nel disegno (tranne l'aereo a elica); è la combinazione nuova ice+hidden+brown+stone+lock+covered, mai vista prima. Il respiro (281) resta su brown+stone+lock+covered. Nessun debutto, quindi nessun livello molto facile. ≥ 30% di pixel secondari o marroni dal 282.
+- **Primo boss con nastro 1** (290, mai insieme a slot 1): con nastro 1 e slot 2 il terminal si vinceva a caso circa 0%, quindi ha 3 slot, come il boss dello stage 20 (mai sopra la fine dell'universo 2). Gli altri livelli restano a nastro 2 e slot 2.
+- **Curva** a dente di sega (#88): vittorie a caso 80,5 · 67 · 64 · 54 · 63,5 · 65,5 · 60 · 58 · 45,5 · 28,5%, media 58,7% (stage 28: 59,4%). Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (`tests/stage29.test.ts`: nomi IT/EN, 281–290, tela ≤ 14×14, chiavi, lucchetti, pietre e coperti, combinazione completa dal 282 e finestra di novità, ≥ 30% secondari, nastro 1 solo sul boss, curva, media); e2e `e2e/stage-29.spec.ts`: la mappa dell'universo 3 mostra lo stage 29 dopo il 280, il 281 e il 282 si giocano fino alla vittoria.
+
 ### Stage 28 "Monumenti": livelli 271–280 (#206, #101)
 
 - **Dieci figure in pixel art originale** sui monumenti (`scripts/stages/stage-28.ts`): piramide di Giza, obelisco, torre pendente, moai, Stonehenge, Big Ben, Statua della Libertà, Torre Eiffel, Taj Mahal e il boss, il Colosseo (14×11). Foglio di anteprima in `docs/levels/stage-28.png`; nomi IT/EN.

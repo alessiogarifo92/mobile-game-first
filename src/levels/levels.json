@@ -23798,5 +23798,782 @@
   "slots": 2,
   "beltCapacity": 2,
   "specHash": "819eaddb"
+ },
+ {
+  "id": 281,
+  "name": "carryon",
+  "stage": 29,
+  "image": [
+   "....KKK....",
+   "....K.K....",
+   ".RRRRRRRRR.",
+   ".RYYYYYYYR.",
+   ".RYYYYYYYR.",
+   ".RYYYKYYYR.",
+   ".RYYYYYYYR.",
+   ".RRRRRRRRR.",
+   "..K.....K.."
+  ],
+  "overlay": [
+   "...........",
+   ".s.sl......",
+   "...........",
+   "...........",
+   "....k......",
+   "...........",
+   ".......l...",
+   "...........",
+   "..........."
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 7,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 20
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 8
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "6585c16e"
+ },
+ {
+  "id": 282,
+  "name": "boardingpass",
+  "stage": 29,
+  "image": [
+   ".KKKKKKKKK.",
+   "KOOOOKYYYYK",
+   "KOBBOKYRRYK",
+   "KOOOOKYYYYK",
+   "KGGGGKPPPPK",
+   ".KKKKKKKKK."
+  ],
+  "overlay": [
+   "s.........s",
+   "l....l.....",
+   "k......i...",
+   "......i....",
+   "...h.....h.",
+   "..........s"
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 12
+    },
+    {
+     "color": 1,
+     "ammo": 14,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 19
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 13,
+     "covered": true
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "543799f7"
+ },
+ {
+  "id": 283,
+  "name": "windsock",
+  "stage": 29,
+  "image": [
+   "KKK........",
+   "KRROOYYBBB.",
+   "KRROOYYBBB.",
+   "KRROOYYBB..",
+   "K.ROOYYB...",
+   "K..........",
+   "K..........",
+   "K..........",
+   "KKK........"
+  ],
+  "overlay": [
+   "...........",
+   "...hhl.....",
+   ".........i.",
+   "....k...i..",
+   "l..........",
+   ".ss........",
+   "...........",
+   "...........",
+   "...s......."
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 15,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "49d25f5b"
+ },
+ {
+  "id": 284,
+  "name": "tower",
+  "stage": 29,
+  "image": [
+   "....R....",
+   "..GGGGG..",
+   ".GBBBBBG.",
+   ".GBBBBBG.",
+   "..GGGGG..",
+   "...OKO...",
+   "...OKO...",
+   "...OKO...",
+   "...OKO...",
+   "...OKO...",
+   "..OOKOO..",
+   ".OOOOOOO."
+  ],
+  "overlay": [
+   ".........",
+   ".........",
+   ".....i...",
+   "...i.....",
+   ".......s.",
+   ".........",
+   ".........",
+   ".........",
+   "...l.h...",
+   "..s..h...",
+   ".....k.s.",
+   "....l...."
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 18
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 13
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "1483ff1b"
+ },
+ {
+  "id": 285,
+  "name": "chopper",
+  "stage": 29,
+  "image": [
+   "KKKKKKKKKKKKK",
+   "......K......",
+   "...OOOOOO....",
+   "..OOBBBOOOGGG",
+   ".OOOBBBOOOOGG",
+   ".OOOOOOOOO...",
+   "..OOOOOOO....",
+   "..K.....K....",
+   ".KKKKKKKKKK.."
+  ],
+  "overlay": [
+   "l........l...",
+   ".s...s.......",
+   "......h......",
+   ".s....i......",
+   ".....ii......",
+   ".............",
+   ".....k.......",
+   ".............",
+   ".....h......."
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 12
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 18
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "1b5774f9"
+ },
+ {
+  "id": 286,
+  "name": "jetengine",
+  "stage": 29,
+  "image": [
+   "...KKKKK...",
+   "..KGGGGGK..",
+   ".KGGBBBGGK.",
+   "KGGBBYBBGGK",
+   "KGGBYRYBGGK",
+   "KGGBBYBBGGK",
+   ".KGGBBBGGK.",
+   "..KGGGGGK..",
+   "...KKKKK..."
+  ],
+  "overlay": [
+   "........s..",
+   "........h..",
+   "...........",
+   "..l....i...",
+   "..l..i..k.h",
+   ".......i...",
+   ".......h...",
+   ".s.......s.",
+   "..........."
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 12
+    },
+    {
+     "color": 4,
+     "ammo": 14,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 16,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 16
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "bea1171b"
+ },
+ {
+  "id": 287,
+  "name": "propplane",
+  "stage": 29,
+  "image": [
+   "......O......",
+   ".....RRR.....",
+   ".....RBR.....",
+   ".....OBO.....",
+   "GGGGGOOOGGGGG",
+   ".GGGGGOGGGGG.",
+   ".....RRR.....",
+   ".....OOO.....",
+   "....PPOPP....",
+   "...PPPOPPP..."
+  ],
+  "overlay": [
+   ".....s.s.....",
+   "......i......",
+   ".....i.......",
+   "..s..........",
+   "kl...........",
+   ".............",
+   ".............",
+   ".............",
+   "....l........",
+   "......hkhl..."
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 18,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 18
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 18
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "8c9eb1fb"
+ },
+ {
+  "id": 288,
+  "name": "hangar",
+  "stage": 29,
+  "image": [
+   ".....BBB.....",
+   "...BBBBBBB...",
+   "..BBBBBBBBB..",
+   ".BBPPPPPPPBB.",
+   "BBBPKKKKKPBBB",
+   "BBBPKKKKKPBBB",
+   "BBBPKKKKKPBBB",
+   "YYYYYYYYYYYYY"
+  ],
+  "overlay": [
+   ".....i..s....",
+   ".....k....s..",
+   "...........s.",
+   ".........l...",
+   ".......h.....",
+   "l....h.......",
+   "............h",
+   ".......i...i."
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 16,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14,
+     "covered": true
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "dd3d62ee"
+ },
+ {
+  "id": 289,
+  "name": "jumbojet",
+  "stage": 29,
+  "image": [
+   "..........KK..",
+   ".........KKK..",
+   "........KKK...",
+   "OBOBOBOBOBOBOO",
+   "OOOOOOOOOOOOOO",
+   ".GGGGGGGGGGOO.",
+   "....PPPPPP....",
+   ".....K..K....."
+  ],
+  "overlay": [
+   ".........s..s.",
+   "..............",
+   "............s.",
+   ".....ihi..ki..",
+   "....l.......l.",
+   "......k...h...",
+   ".....hl.......",
+   ".......s......"
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 19
+    },
+    {
+     "color": 1,
+     "ammo": 8
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 16
+    },
+    {
+     "color": 2,
+     "ammo": 12,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 16
+    },
+    {
+     "color": 4,
+     "ammo": 16
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 16
+    },
+    {
+     "color": 1,
+     "ammo": 16,
+     "covered": true
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "df4f8226"
+ },
+ {
+  "id": 290,
+  "name": "terminal",
+  "stage": 29,
+  "boss": true,
+  "image": [
+   ".....RRRR.....",
+   "....OOOOOO....",
+   "....OBBBBO....",
+   "....OOOOOO....",
+   ".....KKKK.....",
+   ".....KOOK.....",
+   "PPPPPPPPPPPPPP",
+   "GGBBGGBBGGBBGG",
+   "GGBBGGBBGGBBGG",
+   "GGGGGGGGGGGGGG",
+   "KKKKKKYYKKKKKK",
+   "KKKKKKKKKKKKKK",
+   "OOOOOOOOOOOOOO"
+  ],
+  "overlay": [
+   "..............",
+   ".........k....",
+   "...s.ii..h....",
+   ".....l..h.s...",
+   ".....k........",
+   "...ss.........",
+   "..........h...",
+   "...........i..",
+   ".....h....i.l.",
+   "l.............",
+   "..............",
+   "........l.....",
+   ".............."
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 24
+    },
+    {
+     "color": 2,
+     "ammo": 24
+    },
+    {
+     "color": 2,
+     "ammo": 24
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 22
+    },
+    {
+     "color": 1,
+     "ammo": 24,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 24
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 32
+    },
+    {
+     "color": 4,
+     "ammo": 24,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 24,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 24
+    },
+    {
+     "color": 4,
+     "ammo": 24
+    }
+   ]
+  ],
+  "slots": 3,
+  "beltCapacity": 1,
+  "specHash": "a1f7106f"
  }
 ]
