@@ -48,7 +48,7 @@ const stage: StageSpec = {
       '.OOOOOO...',
       'GGGGGGGGGG',
     ] },
-    { name: 'moai', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { key: 1, lock: 2, stone: 3 }, winRate: [0.52, 0.6], seed: 28111, image: [
+    { name: 'moai', columns: 4, ammoChunk: 16, slots: 2, beltCapacity: 2, special: { key: 1, lock: 2, stone: 3 }, winRate: [0.52, 0.6], seed: 28111, image: [
       '..KKKKK..',
       '.KKKKKKK.',
       '.KOOKOOK.',
