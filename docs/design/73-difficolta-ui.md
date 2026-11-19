@@ -123,8 +123,11 @@ EN: [mappa](73-difficolta-ui/map-C-en.png) · [gioco](73-difficolta-ui/play-C-en
 | Testi nuovi | 4 | 1 | 5 |
 | Costo | basso | medio | medio-alto |
 
-## Raccomandazione: A, con due ritocchi
-Scelta lasciata all'utente. Io propongo **A**, per tre motivi:
+## Scelta: A
+**Direzione A scelta dall'utente** (19 nov 2026). I due ritocchi qui sotto erano una proposta e **non sono ancora confermati**: l'implementazione li tratta come domande aperte finché l'utente non risponde.
+
+### Raccomandazione (prima della scelta)
+Proponevo **A**, per tre motivi:
 1. **Informa dove serve, tace dove no.** Il 71 % dei livelli (Facile o Normale) non ha nulla di aggiunto, quindi niente rumore e niente frecciate; i difficili e i boss, che sono ciò che il giocatore vuole sapere prima, sono marcati con forma e parola.
 2. **Costa meno e non tocca la fluidità.** Un rombo nel `Graphics` dei nodi, nessuna draw call o `label` per nodo: il culling #46/#60 resta intatto.
 3. **Il tono è già nel disegno.** Conforto solo dopo tre sconfitte e solo su un livello difficile (la stessa soglia che già sblocca il suggerimento): chi perde un livello normale non legge nulla, chi ne perde uno duro legge che è normale riprovarci.
