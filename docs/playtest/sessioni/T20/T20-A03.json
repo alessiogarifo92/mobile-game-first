@@ -1,0 +1,900 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "T20-A03",
+  "agent": {
+    "agentId": "A03",
+    "profileId": "P11"
+  },
+  "turn": 20,
+  "build": {
+    "commit": "644b268c6b8d",
+    "version": "0.5.0",
+    "tag": "playtest-u3-1",
+    "variant": "normale"
+  },
+  "device": {
+    "viewport": "412x915",
+    "language": "en"
+  },
+  "startSave": {
+    "unlocked": 291,
+    "completedThrough": 290,
+    "seenTips": [
+      "guide",
+      "slots",
+      "belt",
+      "queue"
+    ]
+  },
+  "plan": {
+    "packs": [
+      "S30"
+    ],
+    "levelIds": [
+      291,
+      292,
+      293,
+      294,
+      295,
+      296,
+      297,
+      298,
+      299,
+      300
+    ]
+  },
+  "startedAt": "2026-11-19T20:08:09.307Z",
+  "endedAt": "2026-11-19T20:27:43.727Z",
+  "endReason": "piano-finito",
+  "levels": [
+    {
+      "levelId": 291,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 65807,
+          "timeToFirstTapMs": 5839,
+          "ticks": 707,
+          "taps": 11,
+          "offTargetTaps": 0,
+          "launches": 10,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 38,
+          "targets": 38,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 12,
+          "reveals": 2,
+          "tipsShown": [
+            "mixing"
+          ],
+          "tipDismissMs": 5436,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0002.png",
+            "0003.png",
+            "0004.png",
+            "0005.png",
+            "0006.png",
+            "0007.png",
+            "0008.png",
+            "0009.png",
+            "0010.png",
+            "0011.png",
+            "0012.png",
+            "0013.png",
+            "0014.png",
+            "0015.png",
+            "0016.png",
+            "0017.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 2,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "mechanic": {
+          "id": "mixing",
+          "understood": 4,
+          "fairness": 5,
+          "rememberedColors": null
+        },
+        "notUnderstood": "The half-coloured pixels with little dots, and why a bucket went to the waiting slot after painting. The top hint telling me to relaunch/launch first a bucket with no return arrow was cryptic.",
+        "wouldContinue": true,
+        "freeText": "Nice mixing card, clear colour recipes. Won first try mostly by tapping things and relaunching waiting buckets. The final pixel art is cute."
+      }
+    },
+    {
+      "levelId": 292,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 69174,
+          "timeToFirstTapMs": 5622,
+          "ticks": 750,
+          "taps": 11,
+          "offTargetTaps": 0,
+          "launches": 10,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 52,
+          "targets": 52,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 12,
+          "reveals": 2,
+          "tipsShown": [
+            "brown"
+          ],
+          "tipDismissMs": 5260,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0019.png",
+            "0020.png",
+            "0021.png",
+            "0022.png",
+            "0023.png",
+            "0024.png",
+            "0025.png",
+            "0026.png",
+            "0027.png",
+            "0028.png",
+            "0029.png",
+            "0030.png",
+            "0031.png",
+            "0032.png",
+            "0033.png",
+            "0034.png",
+            "0035.png",
+            "0036.png",
+            "0037.png",
+            "0038.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 3,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "mechanic": {
+          "id": "brown",
+          "understood": 4,
+          "fairness": 5,
+          "rememberedColors": null
+        },
+        "notUnderstood": "The top messages (\"No safe launch: if it jams use +1 slot\") appeared but I could not see any +1 slot button. Also what the ice squares with a number do was not obvious.",
+        "wouldContinue": true,
+        "freeText": "Brown card was clear: red+yellow+blue. Won in the first attempt, felt relaxing. Waiting slots filled up quickly though."
+      }
+    },
+    {
+      "levelId": 293,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 92662,
+          "timeToFirstTapMs": 6190,
+          "ticks": 898,
+          "taps": 15,
+          "offTargetTaps": 1,
+          "launches": 11,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 43,
+          "targets": 43,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 20,
+          "reveals": 2,
+          "tipsShown": [
+            "ice"
+          ],
+          "tipDismissMs": 12313,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0041.png",
+            "0042.png",
+            "0043.png",
+            "0044.png",
+            "0045.png",
+            "0046.png",
+            "0047.png",
+            "0048.png",
+            "0049.png",
+            "0050.png",
+            "0051.png",
+            "0052.png",
+            "0053.png",
+            "0054.png",
+            "0055.png",
+            "0056.png",
+            "0057.png",
+            "0058.png",
+            "0059.png",
+            "0060.png",
+            "0061.png",
+            "0062.png",
+            "0063.png",
+            "0064.png",
+            "0065.png",
+            "0066.png",
+            "0067.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 3,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 4,
+        "mechanic": {
+          "id": "ice",
+          "understood": 3,
+          "fairness": 4,
+          "rememberedColors": null
+        },
+        "notUnderstood": "I never really saw the ice at work; the frozen pixel vanished among the orange. Jam came because I launched new buckets instead of relaunching the waiting ones; my fault but the waiting rule is easy to forget.",
+        "wouldContinue": true,
+        "freeText": "The Jam panel with the crossed-out pixels map was clear. +1 slot saved me. Pretty apple at the end."
+      }
+    },
+    {
+      "levelId": 294,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 83419,
+          "timeToFirstTapMs": 5052,
+          "ticks": 884,
+          "taps": 14,
+          "offTargetTaps": 0,
+          "launches": 12,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 53,
+          "targets": 53,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 26,
+          "reveals": 2,
+          "tipsShown": [
+            "hidden"
+          ],
+          "tipDismissMs": 4802,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0069.png",
+            "0070.png",
+            "0071.png",
+            "0072.png",
+            "0073.png",
+            "0074.png",
+            "0075.png",
+            "0076.png",
+            "0077.png",
+            "0078.png",
+            "0079.png",
+            "0080.png",
+            "0081.png",
+            "0082.png",
+            "0083.png",
+            "0084.png",
+            "0085.png",
+            "0086.png",
+            "0087.png",
+            "0088.png",
+            "0089.png",
+            "0090.png",
+            "0091.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 4,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 3,
+        "mechanic": {
+          "id": "hidden",
+          "understood": 3,
+          "fairness": 3,
+          "rememberedColors": null
+        },
+        "notUnderstood": "I could not tell which colour the ? pixels were until they got revealed, and the painting order felt random; the board got messy with half-painted pixels. The top hints (No safe launch) were a bit vague.",
+        "wouldContinue": true,
+        "freeText": "Jammed once, took +1 slot, then it worked out. I mostly relaunched waiting buckets and let it flow. The result with three little trees was cute."
+      }
+    },
+    {
+      "levelId": 295,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 79041,
+          "timeToFirstTapMs": 5572,
+          "ticks": 869,
+          "taps": 13,
+          "offTargetTaps": 0,
+          "launches": 12,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 1,
+          "beltCapacity": 2,
+          "painted": 63,
+          "targets": 63,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 17,
+          "reveals": 3,
+          "tipsShown": [
+            "stone"
+          ],
+          "tipDismissMs": 5277,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0093.png",
+            "0094.png",
+            "0095.png",
+            "0096.png",
+            "0097.png",
+            "0098.png",
+            "0099.png",
+            "0100.png",
+            "0101.png",
+            "0102.png",
+            "0103.png",
+            "0104.png",
+            "0105.png",
+            "0106.png",
+            "0107.png",
+            "0108.png",
+            "0109.png",
+            "0110.png",
+            "0111.png",
+            "0112.png",
+            "0113.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 3,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "mechanic": {
+          "id": "stone",
+          "understood": 3,
+          "fairness": 4,
+          "rememberedColors": null
+        },
+        "notUnderstood": "The stone card made sense but I could not follow in play how painting from the other side happened; the picture just got finished. Odd that the final picture has a lone yellow and blue pixel that looks like a mistake (the teacup centres).",
+        "wouldContinue": true,
+        "freeText": "Won first try with no jam. Rows of paint filling the belt are satisfying. Felt a bit lucky rather than planned."
+      }
+    },
+    {
+      "levelId": 296,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 100403,
+          "timeToFirstTapMs": 6459,
+          "ticks": 1072,
+          "taps": 17,
+          "offTargetTaps": 0,
+          "launches": 15,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 66,
+          "targets": 66,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 21,
+          "reveals": 3,
+          "tipsShown": [
+            "lock"
+          ],
+          "tipDismissMs": 5958,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0115.png",
+            "0116.png",
+            "0117.png",
+            "0118.png",
+            "0119.png",
+            "0120.png",
+            "0121.png",
+            "0122.png",
+            "0123.png",
+            "0124.png",
+            "0125.png",
+            "0126.png",
+            "0127.png",
+            "0128.png",
+            "0129.png",
+            "0130.png",
+            "0131.png",
+            "0132.png",
+            "0133.png",
+            "0134.png",
+            "0135.png",
+            "0136.png",
+            "0137.png",
+            "0138.png",
+            "0139.png",
+            "0140.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 3,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 3,
+        "mechanic": {
+          "id": "lock",
+          "understood": 3,
+          "fairness": 4,
+          "rememberedColors": null
+        },
+        "notUnderstood": "Locks and keys: I never noticed a lock opening, I just tapped. The ice was hard to follow too.",
+        "wouldContinue": true,
+        "freeText": "Jammed once with the waiting slots full, used +1 slot, then finished. Cute haunted house. Nice big picture banner."
+      }
+    },
+    {
+      "levelId": 297,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 95598,
+          "timeToFirstTapMs": 5303,
+          "ticks": 1025,
+          "taps": 16,
+          "offTargetTaps": 0,
+          "launches": 14,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 1,
+          "beltCapacity": 2,
+          "painted": 59,
+          "targets": 59,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 14,
+          "reveals": 3,
+          "tipsShown": [
+            "covered"
+          ],
+          "tipDismissMs": 5023,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0143.png",
+            "0144.png",
+            "0145.png",
+            "0146.png",
+            "0147.png",
+            "0148.png",
+            "0149.png",
+            "0150.png",
+            "0151.png",
+            "0152.png",
+            "0153.png",
+            "0154.png",
+            "0155.png",
+            "0156.png",
+            "0157.png",
+            "0158.png",
+            "0159.png",
+            "0160.png",
+            "0161.png",
+            "0162.png",
+            "0163.png",
+            "0164.png",
+            "0165.png",
+            "0166.png",
+            "0167.png",
+            "0168.png",
+            "0169.png",
+            "0170.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 3,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 3,
+        "mechanic": {
+          "id": "covered",
+          "understood": 4,
+          "fairness": 4,
+          "rememberedColors": 2
+        },
+        "notUnderstood": "I could not tell from the picture what I was painting. The final picture looks like roller coaster humps but I did not grasp the plan while playing.",
+        "wouldContinue": true,
+        "freeText": "Covered bucket card was clear and I barely had to remember anything. Jammed once more with 3 waiting buckets full, +1 slot rescued me. The waiting-slot limit is the thing that bites me every level."
+      }
+    },
+    {
+      "levelId": 298,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 111297,
+          "timeToFirstTapMs": 6533,
+          "ticks": 1218,
+          "taps": 18,
+          "offTargetTaps": 0,
+          "launches": 16,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 69,
+          "targets": 69,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 12,
+          "reveals": 3,
+          "tipsShown": [
+            "leftover"
+          ],
+          "tipDismissMs": 4104,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0173.png",
+            "0174.png",
+            "0175.png",
+            "0176.png",
+            "0177.png",
+            "0178.png",
+            "0179.png",
+            "0180.png",
+            "0181.png",
+            "0182.png",
+            "0183.png",
+            "0184.png",
+            "0185.png",
+            "0186.png",
+            "0187.png",
+            "0188.png",
+            "0189.png",
+            "0190.png",
+            "0191.png",
+            "0192.png",
+            "0193.png",
+            "0194.png",
+            "0195.png",
+            "0196.png",
+            "0197.png",
+            "0198.png",
+            "0199.png",
+            "0200.png",
+            "0201.png",
+            "0202.png",
+            "0203.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 3,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 4,
+        "mechanic": {
+          "id": "belt",
+          "understood": 4,
+          "fairness": 4,
+          "rememberedColors": null
+        },
+        "notUnderstood": "The \"Why it came back\" card appeared only now at level 298; I wish I had seen it much earlier, it explained the arrow badges that confused me for 7 levels.",
+        "wouldContinue": true,
+        "freeText": "Jam again, \"So close!\" with 2 pixels left was a nice touch. +1 slot saved me. Fine flow, slightly long (16 moves)."
+      }
+    },
+    {
+      "levelId": 299,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 107731,
+          "timeToFirstTapMs": 6764,
+          "ticks": 1225,
+          "taps": 15,
+          "offTargetTaps": 0,
+          "launches": 14,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 1,
+          "beltCapacity": 2,
+          "painted": 57,
+          "targets": 57,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 13,
+          "reveals": 2,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0205.png",
+            "0206.png",
+            "0207.png",
+            "0208.png",
+            "0209.png",
+            "0210.png",
+            "0211.png",
+            "0212.png",
+            "0213.png",
+            "0214.png",
+            "0215.png",
+            "0216.png",
+            "0217.png",
+            "0218.png",
+            "0219.png",
+            "0220.png",
+            "0221.png",
+            "0222.png",
+            "0223.png",
+            "0224.png",
+            "0225.png",
+            "0226.png",
+            "0227.png",
+            "0228.png",
+            "0229.png",
+            "0230.png",
+            "0231.png",
+            "0232.png",
+            "0233.png",
+            "0234.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 4,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 3,
+        "mechanic": {
+          "id": "slots",
+          "understood": 4,
+          "fairness": 3,
+          "rememberedColors": null
+        },
+        "notUnderstood": "Waiting slots again and again. Lots of buckets came back with leftover paint, I could not plan which would jam.",
+        "wouldContinue": true,
+        "freeText": "Third jam in a row, needed +1 slot. I won by cycling relaunches. A bit tiring but still okay. I was not sure it was completed, since I saw the map without the Masterpiece panel."
+      }
+    },
+    {
+      "levelId": 300,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 160782,
+          "timeToFirstTapMs": 8618,
+          "ticks": 1890,
+          "taps": 18,
+          "offTargetTaps": 0,
+          "launches": 18,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 3,
+          "slotCount": 3,
+          "maxBeltUsed": 1,
+          "beltCapacity": 1,
+          "painted": 136,
+          "targets": 136,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 26,
+          "reveals": 3,
+          "tipsShown": [],
+          "tipDismissMs": null,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0241.png",
+            "0242.png",
+            "0243.png",
+            "0244.png",
+            "0245.png",
+            "0246.png",
+            "0247.png",
+            "0248.png",
+            "0249.png",
+            "0250.png",
+            "0251.png",
+            "0252.png",
+            "0253.png",
+            "0254.png",
+            "0255.png",
+            "0256.png",
+            "0257.png",
+            "0258.png",
+            "0259.png",
+            "0260.png",
+            "0261.png",
+            "0262.png",
+            "0263.png",
+            "0264.png",
+            "0265.png",
+            "0266.png",
+            "0267.png",
+            "0268.png",
+            "0269.png",
+            "0270.png",
+            "0271.png",
+            "0272.png",
+            "0273.png",
+            "0274.png",
+            "0275.png",
+            "0276.png",
+            "0277.png",
+            "0278.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 3,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "mechanic": {
+          "id": "belt",
+          "understood": 4,
+          "fairness": 5,
+          "rememberedColors": null
+        },
+        "notUnderstood": "The belt of 1 was clear from the banner. I could not see how the centre pixels got finished at the end, I just relaunched everything.",
+        "wouldContinue": true,
+        "freeText": "Boss was easier than expected with belt 1: I launched one at a time and waited, it felt calm and planned. The universe complete screen is a lovely reward."
+      }
+    }
+  ],
+  "session": {
+    "telemetry": {
+      "durationMs": 1174420,
+      "actions": 160,
+      "screens": {
+        "menu": 2,
+        "play": 10,
+        "universeEnd": 1
+      },
+      "languageChanges": 0,
+      "uncaughtErrors": [],
+      "stuckScreens": []
+    },
+    "feedback": {
+      "fun": 4,
+      "wouldReturn": 4,
+      "stoppedBecause": "I reached the end of the plan, the Universe complete screen appeared.",
+      "bestMoment": "The Universe complete skyline picture and the calm belt-of-one boss.",
+      "worstMoment": "Repeated jams from the waiting slots, and the cryptic top hints; the Why it came back card arrived only at level 298.",
+      "freeText": "Relaxing overall. I would like the arrow badge explanation much earlier, and clearer feedback on locks and ice."
+    }
+  },
+  "bugs": []
+}

@@ -2,6 +2,10 @@
 
 ## Non rilasciato
 
+### Playtest agent dell'universo 3 (#68, #101, epic #66)
+
+- **Report del turno T20** in `docs/reports/2026-11-19-playtest-agent-universo-3.md` (3 agent, livelli 241–250, 281–289, 291–300): 29 livelli vinti, 28 al 1° tentativo, 0 bug; confermata da 3 agent su 3 la card "Perché è tornato" troppo tardiva (ticket #225), il resto sono ipotesi. Le tre schede JSON sono in `docs/playtest/sessioni/T20/` (senza screenshot).
+
 ### Stage 30 "Luna park": livelli 291–300, ultimo stage dell'universo 3 (#208, #101)
 
 - **Dieci figure in pixel art originale** sul luna park (`scripts/stages/stage-30.ts`): zucchero filato, autoscontro, mela caramellata, palloncini e freccette, tazze rotanti, casa degli spettri, montagne russe, tiro a segno, nave dei pirati e il boss, la ruota panoramica (14×14, 136 pixel: la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-30.png`; nomi IT/EN.
