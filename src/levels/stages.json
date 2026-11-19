@@ -154,5 +154,11 @@
   "key": "sport",
   "color": 6,
   "complete": true
+ },
+ {
+  "id": 27,
+  "key": "circus",
+  "color": 1,
+  "complete": true
  }
 ]

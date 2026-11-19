@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Stage 27 "Circo": livelli 261–270 (#205, #101)
+
+- **Dieci figure in pixel art originale** sul circo (`scripts/stages/stage-27.ts`): palloncino, cappello da clown, popcorn, biglietto, cannone, cilindro magico, trapezio, leone, clown e il boss, il tendone (13×14). Foglio di anteprima in `docs/levels/stage-27.png`; nomi IT/EN.
+- **Lucchetto e secchiello coperto insieme**: ogni livello ha secchielli coperti (30–40%), chiavi e lucchetti, accanto ai secondari; nessun'altra meccanica (niente ghiaccio, pixel nascosti o pietre). Nessun debutto, quindi nessun livello molto facile. ≥ 30% di pixel secondari o marroni dal 262.
+- **Nastro 2, slot 2**: mai sopra la fine dell'universo 2.
+- **Curva** a dente di sega (#88): vittorie a caso 92 · 64 · 63 · 54 · 70 · 70 · 53 · 62 · 56 · 25,5%, media 60,8% (stage 26: 63,4%). Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (`tests/stage27.test.ts`: nomi IT/EN, 261–270, tela ≤ 14×14, secchielli coperti, chiavi e lucchetti, ≥ 30% secondari, nastro e slot, curva, media); e2e `e2e/stage-27.spec.ts`: la mappa dell'universo 3 mostra lo stage 27 dopo il 260, il 261 e il 262 si giocano fino alla vittoria.
+
 ### Difficoltà di ogni livello e stage, calcolata in core (#72, epic #70)
 
 - **Una sola definizione** in `src/core/difficulty.ts` (pura, niente Phaser/DOM): tabella `DIFFICULTY` con `version` 1 e le soglie congelate del research #71 (Facile ≥ 85%, Normale ≥ 65% e < 85%, Difficile < 65% sul win rate casuale); `levelDifficulty(winRate, level)` → `{ band, boss, veryEasy }` (il boss è un flag, non una fascia; `veryEasy` = `CURVE.veryEasy`, interno); `stageDifficulty(levels)` = media dei win rate dei 10 livelli, `undefined` se lo stage non è completo. Nessuna seconda formula: nastro e slot pesano già nel win rate (#75).
