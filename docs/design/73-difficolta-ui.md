@@ -138,7 +138,7 @@ Proponevo **A**, per tre motivi:
 3. **Il tono è già nel disegno.** Conforto solo dopo tre sconfitte e solo su un livello difficile (la stessa soglia che già sblocca il suggerimento): chi perde un livello normale non legge nulla, chi ne perde uno duro legge che è normale riprovarci.
 
 I ritocchi, da confermare:
-- **Boss difficile = solo "★ Boss"** (il rombo resta per il boss normale): 24 boss su 27 sono difficili e la doppia indicazione è ridondante.
+- **Boss difficile = solo "★ Boss"** (decisione finale: nessun rombo sul boss, qualunque sia la sua fascia): 24 boss su 27 sono difficili e la doppia indicazione è ridondante.
 - **Niente etichetta di stage** (come nella proposta): il dato dice che 18 stage su 27 sono "Normale", e la parola in intestazione non aggiungerebbe nulla. Se in futuro serve una vista d'insieme, **B sull'intestazione soltanto** (tre puntini sotto la riga) è il segno più economico da aggiungere senza toccare il resto.
 
 Cosa **non** risolve A: nei cluster duri (stage 9, 10, 20, 27) il rombo c'è su quasi tutti i nodi. Se i playtest mostrano che lì il segno diventa invisibile, il passo dopo è C solo sul nodo (anello doppio, più forte) e non A+C.
