@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Stage 28 "Monumenti": livelli 271–280 (#206, #101)
+
+- **Dieci figure in pixel art originale** sui monumenti (`scripts/stages/stage-28.ts`): piramide di Giza, obelisco, torre pendente, moai, Stonehenge, Big Ben, Statua della Libertà, Torre Eiffel, Taj Mahal e il boss, il Colosseo (14×11). Foglio di anteprima in `docs/levels/stage-28.png`; nomi IT/EN.
+- **Lucchetto, pietra e marrone insieme**: ogni livello ha chiavi, lucchetti, pietre accanto alla figura e marrone nel disegno; nessun'altra meccanica (niente ghiaccio, pixel nascosti o secchielli coperti). Nessun debutto, quindi nessun livello molto facile. ≥ 30% di pixel secondari o marroni dal 272.
+- **Nastro 2, slot 2**: mai sopra la fine dell'universo 2.
+- **Curva** a dente di sega (#88): vittorie a caso e media in __RATES__. Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sullo stage (`tests/stage28.test.ts`: nomi IT/EN, 271–280, tela ≤ 14×14, chiavi, lucchetti e pietre, marrone, ≥ 30% secondari, nastro e slot, curva, media); e2e `e2e/stage-28.spec.ts`: la mappa dell'universo 3 mostra lo stage 28 dopo il 270, il 271 e il 272 si giocano fino alla vittoria.
+
 ### Stage 27 "Circo": livelli 261–270 (#205, #101)
 
 - **Dieci figure in pixel art originale** sul circo (`scripts/stages/stage-27.ts`): palloncino, cappello da clown, popcorn, biglietto, cannone, cilindro magico, trapezio, leone, clown e il boss, il tendone (13×14). Foglio di anteprima in `docs/levels/stage-27.png`; nomi IT/EN.

@@ -468,6 +468,18 @@ const en = {
   'level.lion': 'Lion',
   'level.clownface': 'Clown',
   'level.bigtop': 'The big top',
+  // Stage 28 — Monumenti (#206)
+  'stage.monuments': 'Monuments',
+  'level.giza': 'Pyramid of Giza',
+  'level.obelisk': 'Obelisk',
+  'level.pisa': 'Leaning tower',
+  'level.moai': 'Moai',
+  'level.stonehenge': 'Stonehenge',
+  'level.bigben': 'Big Ben',
+  'level.liberty': 'Statue of Liberty',
+  'level.eiffel': 'Eiffel tower',
+  'level.tajmahal': 'Taj Mahal',
+  'level.colosseum': 'The Colosseum',
 };
 
 export type MessageKey = keyof typeof en;
@@ -940,6 +952,18 @@ const it: Record<MessageKey, string> = {
   'level.lion': 'Leone',
   'level.clownface': 'Clown',
   'level.bigtop': 'Il tendone',
+  // Stage 28 — Monumenti (#206)
+  'stage.monuments': 'Monumenti',
+  'level.giza': 'Piramide di Giza',
+  'level.obelisk': 'Obelisco',
+  'level.pisa': 'Torre pendente',
+  'level.moai': 'Moai',
+  'level.stonehenge': 'Stonehenge',
+  'level.bigben': 'Big Ben',
+  'level.liberty': 'Statua della Libertà',
+  'level.eiffel': 'Torre Eiffel',
+  'level.tajmahal': 'Taj Mahal',
+  'level.colosseum': 'Il Colosseo',
 };
 
 export const DICTIONARIES = { en, it } as const;
