@@ -166,5 +166,11 @@
   "key": "monuments",
   "color": 5,
   "complete": true
+ },
+ {
+  "id": 29,
+  "key": "airport",
+  "color": 4,
+  "complete": true
  }
 ]
