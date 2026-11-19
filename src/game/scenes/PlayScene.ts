@@ -10,6 +10,7 @@ import { currentLevel } from '../../core/mapLayout';
 import { blockExample, blockerAlpha, blockerSignature, refuseSlotLaunch, unlockColors, type BlockExample } from '../../core/blocked';
 import type { Primary } from '../../core/colors';
 import { missingDots } from '../../core/brownPixel';
+import { comfortOffered } from '../../core/difficultyMark';
 import { escapeKey, forecastLeftover, freeSlots, jamEscape, leftoverHint, type JamEscape, type LeftoverForecast } from '../../core/leftover';
 import { PANEL_ARM_MS, PANEL_FADE_MS, jamHintKey } from '../../core/panelInput';
 import { newlyCompletedUniverse } from '../../core/universeMenu';
@@ -30,7 +31,7 @@ import { pixelRevealFrame, runningReveals } from '../../core/reveal';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
 import {
-  LEVELS, UNIVERSES, canOpen, getProgress, hintAvailable, levelHint, levelTitle, markCompleted, markTip, recordDefeat, setSkin, setSound, t, tipSeen,
+  LEVELS, UNIVERSES, canOpen, getProgress, hintAvailable, levelBand, levelHint, levelTitle, markCompleted, markOf, markTip, recordDefeat, setSkin, setSound, t, tipSeen,
 } from '../store';
 import { BLUE, BROWN, GREEN, ORANGE, PURPLE, RED, YELLOW } from '../../core/colors';
 import { PAINT, SYMBOL, THEME, css } from '../theme';
@@ -52,6 +53,8 @@ const PIP_GAP = 6;
 const MAX_PIPS = 6;
 /** Covered bucket reaching the front of its column: it turns over (squash, swap face, unsquash) in this time. */
 const REVEAL_MS = 420;
+/** Height the jam panel gains for its line of comfort on a hard level (#73): two lines of the small type. */
+const JAM_COMFORT = 64;
 /** Side of the jam panel's picture of what was left (#93). */
 const JAM_CANVAS = 150;
 /** Top of the difficulty-change banner (#77): just under the level title, in the subtitle line. */
@@ -197,6 +200,14 @@ export class PlayScene extends Phaser.Scene {
     this.missingList = [];
   }
 
+  /** The level's name, led by its mark (#73): "★ Boss · …" or "◆ Hard · …"; easy and normal levels show the name alone. */
+  private subtitleText(): string {
+    const mark = markOf(this.level.id);
+    const name = levelTitle(this.level.id);
+    if (mark === 'boss') return `★ ${t('diff.boss')}  ·  ${name}`;
+    return mark === 'hard' ? `◆ ${t('diff.hard')}  ·  ${name}` : name;
+  }
+
   create(): void {
     const { layout } = this;
     screenBackground(this, THEME.bg);
@@ -204,7 +215,7 @@ export class PlayScene extends Phaser.Scene {
     label(this, VIEW.width / 2, 62, t('level.title', { n: this.level.id }), THEME.type.lg);
     const hint = levelHint(this.level.id);
     // The hint takes the subtitle line; the level name is shown again on the win panel.
-    this.subtitle = label(this, VIEW.width / 2, 110, hint ?? levelTitle(this.level.id), hint ? THEME.type.xs : THEME.type.sm, hint ? THEME.inkCss : THEME.subCss, !!hint);
+    this.subtitle = label(this, VIEW.width / 2, 110, hint ?? this.subtitleText(), hint ? THEME.type.xs : THEME.type.sm, hint ? THEME.inkCss : THEME.subCss, !!hint);
     // Top-anchored so a two-line guide text grows down, away from the title.
     this.subtitle.setWordWrapWidth(VIEW.width - 2 * THEME.space.md).setOrigin(0.5, 0).setY(96);
     button(this, 60, 64, 84, 64, '◀', () => this.scene.start('menu'), { fill: THEME.belt, color: THEME.inkCss, name: 'home' });
@@ -1191,10 +1202,14 @@ export class PlayScene extends Phaser.Scene {
     const stageDone = this.completedStage && (stageSkin(this.completedStage) ? t('win.stageComplete') : t('win.stageCompleteNoSkin'));
     // The stage message adds to the name and moves, it does not replace them (#155).
     const summary = t('win.summary', { name: levelTitle(this.level.id), moves: this.moves });
-    this.winText = stageDone ? `${summary}\n${stageDone}` : summary;
+    // #73: with no stage message to say, a hard level or a boss gets one quiet line in the stage line's place.
+    const mark = markOf(this.level.id);
+    const markLine = !stageDone && mark ? (mark === 'boss' ? `★ ${t('diff.winBoss')}` : `◆ ${t('diff.winHard')}`) : '';
+    this.winText = stageDone ? `${summary}\n${stageDone}` : markLine ? `${summary}\n${markLine}` : summary;
     c.add(label(this, VIEW.width / 2, top + L.summary, summary, THEME.type.sm, THEME.subCss, false).setWordWrapWidth(520));
     const stageLabel = stageDone ? label(this, VIEW.width / 2, top + L.stage, stageDone, THEME.type.sm, THEME.inkCss, true).setWordWrapWidth(560) : null;
     if (stageLabel) c.add(stageLabel);
+    else if (markLine) c.add(label(this, VIEW.width / 2, top + L.stage + 10, markLine, THEME.type.sm, THEME.inkCss, true).setWordWrapWidth(560));
     // #153: the new style on three jars, with a button that puts it on the buckets right away.
     const reward = stageReward(this.completedStage, getProgress().skin);
     if (reward && L.card) this.addRewardCard(c, reward.skin, top, L.card);
@@ -1283,17 +1298,19 @@ export class PlayScene extends Phaser.Scene {
    * Where the jam panel puts each line and button (#93), shared with publish so tests tap what is drawn. Offsets are
    * from the panel's top; the hint button shows only after three defeats in a row, and "+1 slot" only once per attempt.
    */
-  private jamLayout(): { height: number; top: number; near: number | null; canvas: number; note: number; continue: number | null; hint: number | null; retry: number } {
+  private jamLayout(): { height: number; top: number; near: number | null; canvas: number; note: number; comfort: number | null; continue: number | null; hint: number | null; retry: number } {
     const near = nearMiss(this.missingList.length) ? 238 : null;
     const canvas = near === null ? 252 : 278;
     const note = canvas + JAM_CANVAS + 34;
-    let y = note + 82;
+    // #73: on a hard level, after three defeats, a line of comfort between the note and the buttons (the panel grows by its height).
+    const comfort = comfortOffered(levelBand(this.level.id), hintAvailable(this.level.id)) ? note + 48 : null;
+    let y = note + 82 + (comfort === null ? 0 : JAM_COMFORT);
     const cont = this.gs.extraSlotUsed ? null : y;
     if (cont !== null) y += 100;
     const hint = hintAvailable(this.level.id) ? y : null;
     if (hint !== null) y += 96;
     const height = y + 70;
-    return { height, top: (this.scale.height - height) / 2, near, canvas, note, continue: cont, hint, retry: y };
+    return { height, top: (this.scale.height - height) / 2, near, canvas, note, comfort, continue: cont, hint, retry: y };
   }
 
   private showJam(): void {
@@ -1307,6 +1324,7 @@ export class PlayScene extends Phaser.Scene {
     c.add(this.missingCanvas(top + L.canvas));
     // #151: say why the panel offers "+1 slot" (once per attempt) or only "Retry".
     c.add(label(this, VIEW.width / 2, top + L.note, t(jamHintKey(this.gs.extraSlotUsed)), THEME.type.xs, THEME.inkCss, false));
+    if (L.comfort !== null) c.add(label(this, VIEW.width / 2, top + L.comfort, t('diff.jamHard'), THEME.type.xs, THEME.inkCss, false).setWordWrapWidth(520));
     if (L.continue !== null) {
       c.add(button(this, VIEW.width / 2, top + L.continue, 420, 88, t('jam.continue'), () => {
         continueWithExtraSlot(this.gs);
@@ -1450,6 +1468,8 @@ export class PlayScene extends Phaser.Scene {
       missingCount: this.missingList.length,
       missingList: this.missingList.slice(),
       nearMiss: jam?.near != null,
+      // #73: where the line of comfort hangs (offset from the panel's top), null when it is not shown.
+      jamComfort: jam?.comfort ?? null,
       defeats: defeatsOn(getProgress(), this.level.id),
       hintMove: this.hintMove,
       hintShown: this.hintLayer !== null,
