@@ -1647,7 +1647,7 @@
   },
   {
    "id": 275,
-   "specHash": "9364c9b7",
+   "specHash": "6da257de",
    "winRate": 0.625,
    "band": "hard"
   },
@@ -1665,9 +1665,9 @@
   },
   {
    "id": 278,
-   "specHash": "b735e898",
-   "winRate": 1,
-   "band": "easy"
+   "specHash": "8eab6478",
+   "winRate": 0.625,
+   "band": "hard"
   },
   {
    "id": 279,
@@ -1677,8 +1677,8 @@
   },
   {
    "id": 280,
-   "specHash": "a21a3587",
-   "winRate": 0.255,
+   "specHash": "819eaddb",
+   "winRate": 0.25,
    "band": "hard"
   }
  ]

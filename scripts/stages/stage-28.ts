@@ -3,8 +3,8 @@ import type { StageSpec } from './types';
 /**
  * Stage 28 — Monumenti, ottavo stage dell'universo 3 "Viaggio" (#101, ticket #206).
  * Lucchetto (#96), pietra (#93) e marrone (#94) insieme: ogni livello ha chiavi, lucchetti e pietre sulle caselle vuote
- * accanto alla figura, e il marrone nei disegni; nessun'altra meccanica (niente ghiaccio, pixel nascosti o secchielli
- * coperti). Nessun debutto, quindi nessun livello molto facile: il respiro (271) resta sotto il 95% e la media scende
+ * accanto alla figura, e il marrone nei disegni; niente ghiaccio né pixel nascosti; i secchielli coperti (#97) compaiono solo a Stonehenge (275), per la
+ * combinazione nuova brown+stone+lock+covered che la finestra di novità (#157) chiede in 261–280. Nessun debutto, quindi nessun livello molto facile: il respiro (271) resta sotto il 95% e la media scende
  * sotto lo stage 27 (curva verso ~56%). Nastro 2 e slot 2: mai sopra la fine dell'universo 2.
  * winRate = difficulty band for a random tapper (see levelWinRate): belt and slots both weigh in; `special` places
  * keys, locks and stones.
@@ -62,7 +62,7 @@ const stage: StageSpec = {
       '.GGGGGGG.',
       'GGGGGGGGG',
     ] },
-    { name: 'stonehenge', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { key: 1, lock: 2, stone: 3 }, winRate: [0.6, 0.68], seed: 28148, image: [
+    { name: 'stonehenge', columns: 4, ammoChunk: 14, slots: 2, beltCapacity: 2, special: { key: 1, lock: 2, stone: 3, covered: 0.3 }, winRate: [0.6, 0.68], seed: 28148, image: [
       'KKKKKKKKKKKK',
       'KOK.KOK.KOK.',
       'KOK.KOK.KOK.',

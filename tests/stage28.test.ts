@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import levels from '../src/levels/levels.json';
 import { BROWN, isPrimary } from '../src/core/colors';
 import { CURVE, checkCurve, curveLevel } from '../src/core/curve';
+import { comboOf, noveltyGaps } from '../src/core/curveReport';
 import { LEVEL_NAME_KEYS, STAGE_NAME_KEYS, translate } from '../src/core/i18n';
 import { parseLevel, type LevelDef } from '../src/core/level';
 import { levelWinRate } from '../src/core/solver';
@@ -43,15 +44,22 @@ describe('stage 28 "Monumenti"', () => {
     expect(pixels[9]).toBe(Math.max(...pixels));
   });
 
-  it('puts keys, locks and stones in every level, and no ice, hidden pixels or covered buckets', () => {
+  it('puts keys, locks and stones in every level, and no ice or hidden pixels', () => {
     for (const l of parsed) {
       expect(l.keys.some(Boolean)).toBe(true);
       expect(l.locked.some(Boolean)).toBe(true);
       expect(l.stone.some(Boolean)).toBe(true);
       expect(l.ice.some((n) => n > 0)).toBe(false);
       expect(l.hidden.some(Boolean)).toBe(false);
-      expect(l.columns.flat().some((s) => s.covered)).toBe(false);
     }
+  });
+
+  it('adds covered buckets only at Stonehenge (275): the new combination of the 261–280 novelty window (#157)', () => {
+    const covered = parsed.filter((l) => l.columns.flat().some((s) => s.covered)).map((l) => l.id);
+    expect(covered).toEqual([275]);
+    for (const l of parsed) for (const column of l.columns) expect(column[0]!.covered).toBeFalsy();
+    expect(comboOf(curveLevel(parsed[4]!, 0.5))).toBe('brown+stone+lock+covered');
+    expect(noveltyGaps(all.map((d) => curveLevel(parseLevel(d), 0.5)), 261, 280)).toEqual([]);
   });
 
   it('draws brown in every picture', () => {
