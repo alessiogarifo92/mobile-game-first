@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { COLUMN_SHOWN, guideAllows, guideStep, needsGuide, needsMapHint, tipOnBlockedTap, tipOnFullBelt, tipAllowed, tipOnLevelStart, tipOnReturn, tipsPresent } from '../src/core/onboarding';
+import { COLUMN_SHOWN, guideAllows, guideStep, needsGuide, needsMapHint, tipOnBlockedTap, tipOnFullBelt, tipAllowed, tipOnLevelStart, tipOnReturn, tipsAnticipated, tipsPresent } from '../src/core/onboarding';
 import { defaultProgress, markTipSeen, sanitize } from '../src/core/progress';
 import { BLUE, RED, YELLOW, level } from './helpers';
+import levelsJson from '../src/levels/levels.json' with { type: 'json' };
+import { parseLevel, type LevelDef } from '../src/core/level';
 
 describe('onboarding', () => {
   const first = level(['RR'], [[[RED, 2]]], { id: 1 });
@@ -138,3 +140,48 @@ describe('onboarding', () => {
     expect(guideAllows('free', null, 0)).toBe(true);
   });
 });
+
+describe('anticipated cards (#225)', () => {
+  const real = (id: number) => parseLevel((levelsJson as LevelDef[]).find((l) => l.id === id)!);
+  const base = ['guide', 'slots', 'belt'];
+
+  it('waits for the slots card, which level 2 shows at the first return', () => {
+    expect(tipsAnticipated(real(2), ['guide'])).toEqual([]);
+    expect(tipOnLevelStart(real(2), ['guide'])).toBeNull();
+    expect(tipOnLevelStart(real(2), [])).toBeNull();
+  });
+
+  it('shows "why it came back" then "lane blocked" at the first levels where the case can happen, once each', () => {
+    expect(tipsAnticipated(real(3), base)).toEqual(['leftover', 'blocked']);
+    expect(tipOnLevelStart(real(3), base)).toBe('leftover');
+    expect(tipOnLevelStart(real(3), [...base, 'leftover'])).toBe('blocked');
+    expect(tipOnLevelStart(real(3), [...base, 'leftover', 'blocked'])).toBeNull();
+    // A level with no blocked case never asks for the blocked card.
+    expect(tipsAnticipated(real(6), base)).toEqual(['leftover']);
+    expect(tipOnLevelStart(real(6), [...base, 'leftover'])).toBeNull();
+  });
+
+  it('keeps a new mechanic card ahead of the anticipated ones', () => {
+    expect(tipOnLevelStart(real(4), base)).toBe('mixing');
+    expect(tipOnLevelStart(real(4), [...base, 'mixing'])).toBe('leftover');
+  });
+
+  it('shows "why it came back" at the first level of universe 3 for a player who never met it', () => {
+    const seen = ['guide', 'slots', 'belt', 'mixing', 'brown', 'ice', 'hidden', 'stone', 'lock', 'covered', 'queue'];
+    for (const id of [244, 287]) expect(tipOnLevelStart(real(id), seen)).toBe('leftover');
+    expect(tipOnLevelStart(real(244), [...seen, 'leftover'])).toBeNull();
+  });
+
+  it('is not needed when the board cannot make a bucket come back or get blocked', () => {
+    expect(tipsAnticipated(real(1), base)).toEqual([]);
+    expect(tipsAnticipated(real(5), base)).toEqual([]);
+    expect(tipOnLevelStart(real(1), base)).toBeNull();
+  });
+
+  it('leaves saves as they are: a card already seen never shows again, and an old save needs no migration', () => {
+    const old = sanitize({ unlocked: 5, completed: [1, 2], seenTips: ['guide', 'slots', 'leftover', 'blocked'] }, []);
+    expect(old.seenTips).toEqual(['guide', 'slots', 'leftover', 'blocked']);
+    expect(tipOnLevelStart(real(3), old.seenTips)).toBeNull();
+  });
+});
+

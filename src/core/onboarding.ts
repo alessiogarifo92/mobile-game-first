@@ -1,5 +1,6 @@
 import { BROWN, isPrimary } from './colors';
 import type { Level } from './level';
+import { levelCases } from './leftover';
 
 /** One-time onboarding tips, shown the first time the mechanic they explain shows up. */
 /** Tips shown as a card; 'guide' is the guided level 1 instead. */
@@ -27,10 +28,26 @@ export function needsGuide(level: Level, seen: readonly string[]): boolean {
 /**
  * Tip to show when a level starts, the first time it contains something new: secondary colours,
  * brown (three primaries), ice, hidden pixels, stones, locked pixels, covered buckets or a column longer than it shows
- * (its "+N", #148). One tip per level start, in that order.
+ * (its "+N", #148). One tip per level start, in that order, then the anticipated ones (`tipsAnticipated`).
  */
 export function tipOnLevelStart(level: Level, seen: readonly string[]): CardTip | null {
-  return tipsPresent(level).find((tip) => !seen.includes(tip)) ?? null;
+  const candidates = [...tipsPresent(level), ...tipsAnticipated(level, seen)];
+  return candidates.find((tip) => !seen.includes(tip)) ?? null;
+}
+
+/**
+ * Cards for a case the level makes possible, shown before it happens (#225) instead of after the first jam: "why it
+ * came back" (a bucket can end its lap with paint left) and "lane blocked" (a bucket could not land a shot). They wait
+ * for the waiting-slots card, which level 2 shows at the first return: that keeps one teaching card per level there
+ * and gives these two the slots they talk about. Cards already seen never come back, so no save needs a migration.
+ */
+export function tipsAnticipated(level: Level, seen: readonly string[]): CardTip[] {
+  if (!seen.includes('slots')) return [];
+  const { canReturn, canBeBlocked } = levelCases(level);
+  const tips: CardTip[] = [];
+  if (canReturn) tips.push('leftover');
+  if (canBeBlocked) tips.push('blocked');
+  return tips;
 }
 
 /** The level-start tips whose mechanic is on the board of `level`, in the order `tipOnLevelStart` shows them. */

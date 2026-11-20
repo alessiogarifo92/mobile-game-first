@@ -5,7 +5,7 @@
  */
 import { sanitize, type LevelRef, type Progress } from '../../src/core/progress';
 import type { Level } from '../../src/core/level';
-import { tipOnLevelStart, tipsPresent } from '../../src/core/onboarding';
+import { tipOnLevelStart, tipsAnticipated, tipsPresent } from '../../src/core/onboarding';
 import { isLanguage } from '../../src/core/i18n';
 import { canOpenLevel } from '../../src/core/universes';
 
@@ -38,7 +38,7 @@ export function tipsMetBefore(levels: readonly Level[], start: number, fresh: re
     const tip = tipOnLevelStart(level, seen);
     if (tip) seen.push(tip);
   }
-  const ahead = new Set<string>(levels.filter((l) => fresh.includes(l.id)).flatMap(tipsPresent));
+  const ahead = new Set<string>(levels.filter((l) => fresh.includes(l.id)).flatMap((l) => [...tipsPresent(l), ...tipsAnticipated(l, ['slots'])]));
   return seen.filter((tip) => !ahead.has(tip));
 }
 
