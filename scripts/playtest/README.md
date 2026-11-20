@@ -9,6 +9,11 @@ the format of #67 (`docs/playtest/scheda.schema.json`, protocol in `docs/playtes
   (`saves.ts`). The second pack of a plan starts from its own save. A mechanic that shows up in the planned levels
   keeps its card unseen even if it debuted earlier (#182): the agent has no memory of the levels it did not play,
   so it meets the card and its drawing at the first planned level with that mechanic (ice in S09).
+- `"seenCards": true` (on the turn, or on one agent, which wins; `false` switches it off) starts from a save that has
+  **every mechanic card already seen** except "why it came back" (`leftover`) and "lane blocked" (`blocked`); a list,
+  e.g. `["leftover", "blocked", "queue"]`, names the cards left to see instead (#230). It is for a turn that measures
+  those cards: without it the queue of the planned levels' cards delays them. Missing: the save is the usual one, so
+  the earlier turns stay reproducible. Level 1 keeps its onboarding.
 - The harness writes the telemetry; the agent sends feedback and bugs; at the end the form is checked against the
   schema (hand-written validator, `jsonSchema.ts`) and written as `<out>/Tnn-Ann.json`, screenshots in `<out>/Tnn-Ann/`.
 

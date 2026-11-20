@@ -5,7 +5,7 @@
  */
 import { sanitize, type LevelRef, type Progress } from '../../src/core/progress';
 import type { Level } from '../../src/core/level';
-import { tipOnLevelStart, tipsAnticipated, tipsPresent } from '../../src/core/onboarding';
+import { tipOnLevelStart, tipsAnticipated, tipsPresent, type CardTip } from '../../src/core/onboarding';
 import { isLanguage } from '../../src/core/i18n';
 import { canOpenLevel } from '../../src/core/universes';
 
@@ -20,6 +20,18 @@ const PLAY_TIPS = ['guide', 'slots', 'belt'];
 /** Packs that are not a whole stage (protocol §8). */
 const NAMED_PACKS: Record<string, [number, number]> = { 'U1-ONB': [1, 10], 'U1-FINE': [95, 100] };
 
+/** Every mechanic card of the game (exhaustive on `CardTip`: a new card fails the type check until it is listed). */
+const CARD_TIPS_ALL: Record<CardTip, true> = {
+  mixing: true, blocked: true, slots: true, ice: true, hidden: true, lock: true, belt: true, brown: true, stone: true, covered: true, queue: true, leftover: true,
+};
+export const CARD_TIPS = Object.keys(CARD_TIPS_ALL) as CardTip[];
+
+/**
+ * Cards a `seenCards` save leaves to see by default (#230): "why it came back" (`leftover`, #172) and "lane blocked"
+ * (`blocked`, #146), the two shown by what happens on the board, which is what the playtest measures.
+ */
+export const DEFAULT_UNSEEN_CARDS: readonly CardTip[] = ['leftover', 'blocked'];
+
 export class SaveError extends Error {}
 
 /**
@@ -30,8 +42,10 @@ export class SaveError extends Error {}
  * unseen even if a real player met it earlier, so the agent, who has no memory of earlier levels, sees its card and
  * its drawing instead of a mechanic it was never shown (ice at 81, debuting at 66).
  */
-export function tipsMetBefore(levels: readonly Level[], start: number, fresh: readonly number[] = []): string[] {
+export function tipsMetBefore(levels: readonly Level[], start: number, fresh: readonly number[] = [], unseen: readonly string[] | null = null): string[] {
   if (start <= 1) return [];
+  // #230: a player who has met every mechanic card already, but for the `unseen` ones (a turn measuring those cards).
+  if (unseen) return [...PLAY_TIPS, ...CARD_TIPS].filter((tip) => !unseen.includes(tip));
   const seen = [...PLAY_TIPS];
   for (const level of levels) {
     if (level.id >= start) continue;
@@ -72,13 +86,16 @@ export function saveStarts(plan: readonly number[]): number[] {
 
 /**
  * The save to start level `start` from, in the game's format (what goes into localStorage). `fresh`: the levels the
- * session will play, whose mechanics keep their card (see `tipsMetBefore`).
+ * session will play, whose mechanics keep their card (see `tipsMetBefore`). `unseen`: the cards a save with every card
+ * already seen leaves out (#230); null keeps the default save.
  */
-export function saveFor(levels: readonly Level[], start: number, language: string, sound = false, fresh: readonly number[] = []): Progress {
+export function saveFor(
+  levels: readonly Level[], start: number, language: string, sound = false, fresh: readonly number[] = [], unseen: readonly string[] | null = null,
+): Progress {
   if (!isLanguage(language)) throw new SaveError(`unknown language "${language}"`);
   if (!levels.some((l) => l.id === start)) throw new SaveError(`the game has no level ${start}`);
   const completed = levels.filter((l) => l.id < start).map((l) => l.id);
-  const save = sanitize({ unlocked: start, completed, sound, language, seenTips: tipsMetBefore(levels, start, fresh) }, levels);
+  const save = sanitize({ unlocked: start, completed, sound, language, seenTips: tipsMetBefore(levels, start, fresh, unseen) }, levels);
   // sanitize drops what a real save could not hold, and the core decides what may be opened.
   if (save.unlocked !== start || !canOpenLevel(levels, save, start)) throw new SaveError(`level ${start} is not reachable from a valid save`);
   return save;

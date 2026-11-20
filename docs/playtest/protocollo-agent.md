@@ -111,6 +111,8 @@ Requisiti: **ogni livello 101–200 visto da ≥ 3 agent**; debutti (101 marrone
 
 **Salvataggio di partenza** (un profilo browser per agent, #68): livelli 1…N−1 completati, livello N aperto, schede di suggerimento già viste = quelle dei debutti prima di N (universo 1: `guide`, `mixing`, `blocked`, `slots`, `belt`, `ice`, `hidden`; poi `brown` se N > 101, `stone` se N > 141). Il secondo pacchetto riparte da un nuovo salvataggio con la stessa regola.
 
+**Opzione `seenCards`** (#230, config del turno o del singolo agent): parte con **tutte le card delle meccaniche già viste**, tranne "Perché è tornato" e "Corsia bloccata" (o le card elencate: `"seenCards": ["leftover", "blocked"]`). Serve ai turni che misurano la posizione di quelle due card (#225): nel salvataggio normale le card dei livelli pianificati restano da vedere e ne finisce una per livello davanti a loro. Senza il campo il salvataggio è quello di sempre; i dati con e senza l'opzione si tengono separati nel report (il valore è nella scheda, `startSave.seenTips`).
+
 **Turni da 4 agent** (il limite d'uso ne regge 4–5 alla volta). Ogni turno è autosufficiente: dopo ogni turno la copertura cresce in modo uniforme e il report parziale si può già scrivere.
 
 | Turno | Agent: pacchetti |

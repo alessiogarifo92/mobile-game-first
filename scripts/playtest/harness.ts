@@ -29,6 +29,8 @@ export interface AgentOptions {
   /** Folder that receives `<sessionId>.json` and the `<sessionId>/` screenshot folder. */
   outDir: string;
   maxAttempts: number | null;
+  /** Cards the save leaves to see (#230); null or missing: the default save. */
+  unseenCards?: string[] | null;
   /** The form's JSON Schema; without it the form is written unchecked (and says so). */
   schema: Schema | null;
   stuckMs?: number;
@@ -75,7 +77,7 @@ export class PlaytestAgent {
     const { header } = opts;
     const [width, height] = header.device.viewport.split('x').map(Number) as [number, number];
     const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
-    const save = saveFor(opts.levels, header.plan.levelIds[0]!, header.device.language, false, header.plan.levelIds);
+    const save = saveFor(opts.levels, header.plan.levelIds[0]!, header.device.language, false, header.plan.levelIds, opts.unseenCards ?? null);
     // Seed once: later reloads keep whatever the agent has played since.
     await context.addInitScript(([key, seeded, value]) => {
       if (localStorage.getItem(seeded)) return;
@@ -382,7 +384,7 @@ export class PlaytestAgent {
   /** Replaces the save with the one that opens `levelId`, as a new install would hold it, and reloads the game. */
   private async loadSave(levelId: number): Promise<void> {
     const plan = this.opts.header.plan.levelIds;
-    const save = JSON.stringify(saveFor(this.opts.levels, levelId, this.opts.header.device.language, false, plan.slice(plan.indexOf(levelId))));
+    const save = JSON.stringify(saveFor(this.opts.levels, levelId, this.opts.header.device.language, false, plan.slice(plan.indexOf(levelId)), this.opts.unseenCards ?? null));
     await this.page.evaluate(([key, value]) => localStorage.setItem(key, value), [STORAGE_KEY, save] as const);
     await this.page.reload();
     await this.waitForGame();
