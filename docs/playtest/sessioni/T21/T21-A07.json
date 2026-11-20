@@ -1,0 +1,942 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "T21-A07",
+  "agent": {
+    "agentId": "A07",
+    "profileId": "P12"
+  },
+  "turn": 21,
+  "build": {
+    "commit": "077a21a3acc2",
+    "version": "0.5.0",
+    "tag": "playtest-u3-2",
+    "variant": "normale"
+  },
+  "device": {
+    "viewport": "360x640",
+    "language": "it"
+  },
+  "startSave": {
+    "unlocked": 291,
+    "completedThrough": 290,
+    "seenTips": [
+      "guide",
+      "slots",
+      "belt",
+      "blocked",
+      "queue"
+    ]
+  },
+  "plan": {
+    "packs": [
+      "S30"
+    ],
+    "levelIds": [
+      291,
+      292,
+      293,
+      294,
+      295,
+      296,
+      297,
+      298,
+      299,
+      300
+    ]
+  },
+  "startedAt": "2026-11-20T12:04:55.196Z",
+  "endedAt": "2026-11-20T12:30:02.951Z",
+  "endReason": "piano-finito",
+  "levels": [
+    {
+      "levelId": 291,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 89225,
+          "timeToFirstTapMs": 8988,
+          "ticks": 911,
+          "taps": 9,
+          "offTargetTaps": 0,
+          "launches": 8,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 1,
+          "beltCapacity": 2,
+          "painted": 38,
+          "targets": 38,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 10,
+          "reveals": 2,
+          "tipsShown": [
+            "mixing"
+          ],
+          "tipDismissMs": 8694,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0002.png",
+            "0003.png",
+            "0004.png",
+            "0005.png",
+            "0006.png",
+            "0007.png",
+            "0008.png",
+            "0009.png",
+            "0010.png",
+            "0011.png",
+            "0012.png",
+            "0013.png",
+            "0014.png",
+            "0015.png",
+            "0016.png",
+            "0017.png",
+            "0018.png",
+            "0019.png",
+            "0020.png",
+            "0021.png",
+            "0022.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "La frase in alto \"Tutti tornerebbero: se si blocca, +1 slot\" non l'ho capita bene; il numero con la freccia ↩ sui secchielli l'ho intuito solo a metà. Non ho capito perché un secchiello blu è finito in attesa da solo.",
+        "wouldContinue": true,
+        "freeText": "Ho tappato a raffica e ho vinto in 8 mosse. La scheda 'Mescola sulla tela' è comparsa subito all'inizio, anche se ormai lo so: l'ho chiusa al volo. Il testo 'Rilancia prima quello in attesa senza ↩' mi è servito, ho seguito l'evidenziazione sul blu. Niente di tagliato."
+      }
+    },
+    {
+      "levelId": 292,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 96743,
+          "timeToFirstTapMs": 7255,
+          "ticks": 930,
+          "taps": 13,
+          "offTargetTaps": 0,
+          "launches": 11,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 52,
+          "targets": 52,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 13,
+          "reveals": 2,
+          "tipsShown": [
+            "brown"
+          ],
+          "tipDismissMs": 7072,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0026.png",
+            "0027.png",
+            "0028.png",
+            "0029.png",
+            "0030.png",
+            "0031.png",
+            "0032.png",
+            "0033.png",
+            "0034.png",
+            "0035.png",
+            "0036.png",
+            "0037.png",
+            "0038.png",
+            "0039.png",
+            "0040.png",
+            "0041.png",
+            "0042.png",
+            "0043.png",
+            "0044.png",
+            "0045.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 4,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 3,
+        "mechanic": {
+          "id": "brown",
+          "understood": 3,
+          "fairness": 4
+        },
+        "notUnderstood": "Non ho capito perché i miei due rossi sono finiti in attesa con vernice avanzata mentre i pixel rossi erano ancora lì. Il marrone l'ho capito dalla scheda ma non ho capito quali secchielli servissero ai pixel marroni. Il ↩ con il numero e il punto esclamativo (↩9!) non mi dice cosa fare.",
+        "wouldContinue": true,
+        "freeText": "Ho tappato veloce e sono finito in ingorgo con 10 pixel mancanti, un po' colpa mia che ho riempito il nastro a caso. Ho preso '+1 slot e continua' senza pensarci e ho vinto. La scheda del marrone è arrivata subito all'apertura, giusta. I testi 'Rilancia prima quello in attesa senza ↩' e 'Tutti tornerebbero: se si blocca +1 slot' cambiavano da soli e li ho letti a metà; il secondo è poco chiaro. Il pannello Ingorgo è chiaro e il +1 slot mi ha salvato. Niente tagliato."
+      }
+    },
+    {
+      "levelId": 293,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 97034,
+          "timeToFirstTapMs": 8325,
+          "ticks": 1019,
+          "taps": 12,
+          "offTargetTaps": 0,
+          "launches": 11,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 2,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 43,
+          "targets": 43,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 22,
+          "reveals": 2,
+          "tipsShown": [
+            "ice"
+          ],
+          "tipDismissMs": 8110,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0049.png",
+            "0050.png",
+            "0051.png",
+            "0052.png",
+            "0053.png",
+            "0054.png",
+            "0055.png",
+            "0056.png",
+            "0057.png",
+            "0058.png",
+            "0059.png",
+            "0060.png",
+            "0061.png",
+            "0062.png",
+            "0063.png",
+            "0064.png",
+            "0065.png",
+            "0066.png",
+            "0067.png",
+            "0068.png",
+            "0069.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 3,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "mechanic": {
+          "id": "ice",
+          "understood": 4,
+          "fairness": 4
+        },
+        "notUnderstood": "Il numero sul ghiaccio l'ho letto solo dopo la scheda; non ho capito subito dove andasse a finire il secchiello giallo rimasto in attesa quando il testo in alto cambiava.",
+        "wouldContinue": true,
+        "freeText": "Vinto al primo colpo in 11 mosse. La scheda del ghiaccio è comparsa subito, al momento giusto, e il disegnino era chiaro. I testi in alto ('Lancia prima uno senza ↩: si svuota') mi hanno guidato bene perché il secchiello evidenziato era quello giusto. Niente tagliato."
+      }
+    },
+    {
+      "levelId": 294,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 105766,
+          "timeToFirstTapMs": 8012,
+          "ticks": 1049,
+          "taps": 15,
+          "offTargetTaps": 0,
+          "launches": 13,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 53,
+          "targets": 53,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 23,
+          "reveals": 2,
+          "tipsShown": [
+            "hidden"
+          ],
+          "tipDismissMs": 7830,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0073.png",
+            "0074.png",
+            "0075.png",
+            "0076.png",
+            "0077.png",
+            "0078.png",
+            "0079.png",
+            "0080.png",
+            "0081.png",
+            "0082.png",
+            "0083.png",
+            "0084.png",
+            "0085.png",
+            "0086.png",
+            "0087.png",
+            "0088.png",
+            "0089.png",
+            "0090.png",
+            "0091.png",
+            "0092.png",
+            "0093.png",
+            "0094.png",
+            "0095.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 3,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 3,
+        "mechanic": {
+          "id": "hidden",
+          "understood": 4,
+          "fairness": 4
+        },
+        "notUnderstood": "Non ho capito perché ero in ingorgo con tre secchielli in attesa, mentre i pixel '?' si scoprivano come marrone: non mi aspettavo marrone. Il numero ↩ sui secchielli non mi dice che cosa devo fare.",
+        "wouldContinue": true,
+        "freeText": "Prima ingorgo (13 pixel mancanti) perché ho tappato a raffica e ho riempito le attese, poi con '+1 slot' ho finito in 13 mosse. La scheda dei pixel nascosti è arrivata subito, al momento giusto, ma mostrava rosso e azzurro, mentre qui sono diventati marroni: un po' fuorviante. Il testo 'Rilancia prima quello in attesa senza ↩' l'ho seguito alla lettera, mi ha salvato. Niente tagliato."
+      }
+    },
+    {
+      "levelId": 295,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 115684,
+          "timeToFirstTapMs": 8306,
+          "ticks": 1151,
+          "taps": 15,
+          "offTargetTaps": 0,
+          "launches": 13,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 1,
+          "beltCapacity": 2,
+          "painted": 63,
+          "targets": 63,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 13,
+          "reveals": 3,
+          "tipsShown": [
+            "stone"
+          ],
+          "tipDismissMs": 8099,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0098.png",
+            "0099.png",
+            "0100.png",
+            "0101.png",
+            "0102.png",
+            "0103.png",
+            "0104.png",
+            "0105.png",
+            "0106.png",
+            "0107.png",
+            "0108.png",
+            "0109.png",
+            "0110.png",
+            "0111.png",
+            "0112.png",
+            "0113.png",
+            "0114.png",
+            "0115.png",
+            "0116.png",
+            "0117.png",
+            "0118.png",
+            "0119.png",
+            "0120.png",
+            "0121.png",
+            "0122.png",
+            "0123.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 3,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 3,
+        "mechanic": {
+          "id": "stone",
+          "understood": 3,
+          "fairness": 4
+        },
+        "notUnderstood": "La scheda delle pietre dice 'dipingilo dal lato opposto del nastro' ma non ho capito bene come si fa a scegliere il lato; ho tappato e basta. Il 'Tutti tornerebbero: se si blocca +1 slot' resta oscuro.",
+        "wouldContinue": true,
+        "freeText": "Altro ingorgo (7 pixel) per i tocchi veloci, risolto col +1 slot, vinto in 13 mosse. La scheda delle pietre è arrivata all'inizio, al momento giusto, ma il disegno è piccolo. Mi piace riempire il nastro a righe: il livello mi è sembrato divertente. Niente tagliato."
+      }
+    },
+    {
+      "levelId": 296,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 140790,
+          "timeToFirstTapMs": 7630,
+          "ticks": 1431,
+          "taps": 17,
+          "offTargetTaps": 0,
+          "launches": 15,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 66,
+          "targets": 66,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 20,
+          "reveals": 3,
+          "tipsShown": [
+            "lock"
+          ],
+          "tipDismissMs": 7263,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0126.png",
+            "0127.png",
+            "0128.png",
+            "0129.png",
+            "0130.png",
+            "0131.png",
+            "0132.png",
+            "0133.png",
+            "0134.png",
+            "0135.png",
+            "0136.png",
+            "0137.png",
+            "0138.png",
+            "0139.png",
+            "0140.png",
+            "0141.png",
+            "0142.png",
+            "0143.png",
+            "0144.png",
+            "0145.png",
+            "0146.png",
+            "0147.png",
+            "0148.png",
+            "0149.png",
+            "0150.png",
+            "0151.png",
+            "0152.png",
+            "0153.png",
+            "0154.png",
+            "0155.png",
+            "0156.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 4,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 3,
+        "mechanic": {
+          "id": "lock",
+          "understood": 3,
+          "fairness": 4
+        },
+        "notUnderstood": "Lucchetti e chiavi: non ho mai capito se avevo aperto un lucchetto, non ho visto il momento in cui si apriva. Non so cosa fossero quegli oggetti 'spettri' sul nastro. Il banner in alto 'Quadro più grande' mi è rimasto sopra il titolo e non ho capito se era un suggerimento o una notifica.",
+        "wouldContinue": true,
+        "freeText": "Terzo ingorgo in quattro livelli (7 pixel mancanti) perché riempio il nastro a raffica; col +1 slot ho vinto in 15 mosse. La scheda Lucchetti e chiavi è comparsa subito, ok, ma il banner 'Quadro più grande' si sovrappone al titolo del livello (finché non lo chiudi). Il numero ↩ sui secchielli ancora non lo uso, mi guida di più il testo evidenziato in alto."
+      }
+    },
+    {
+      "levelId": 297,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 170957,
+          "timeToFirstTapMs": 6431,
+          "ticks": 1629,
+          "taps": 20,
+          "offTargetTaps": 0,
+          "launches": 16,
+          "refusals": 0,
+          "blockedTaps": 2,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 59,
+          "targets": 59,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 19,
+          "reveals": 3,
+          "tipsShown": [
+            "covered"
+          ],
+          "tipDismissMs": 6178,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0160.png",
+            "0161.png",
+            "0162.png",
+            "0163.png",
+            "0164.png",
+            "0165.png",
+            "0166.png",
+            "0167.png",
+            "0168.png",
+            "0169.png",
+            "0170.png",
+            "0171.png",
+            "0172.png",
+            "0173.png",
+            "0174.png",
+            "0175.png",
+            "0176.png",
+            "0177.png",
+            "0178.png",
+            "0179.png",
+            "0180.png",
+            "0181.png",
+            "0182.png",
+            "0183.png",
+            "0184.png",
+            "0185.png",
+            "0186.png",
+            "0187.png",
+            "0188.png",
+            "0189.png",
+            "0190.png",
+            "0191.png",
+            "0192.png",
+            "0193.png",
+            "0194.png",
+            "0195.png",
+            "0196.png",
+            "0197.png",
+            "0198.png",
+            "0199.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 4,
+        "mood": "neutro",
+        "beltRefusalUnderstood": null,
+        "jamFairness": 3,
+        "mechanic": {
+          "id": "covered",
+          "understood": 3,
+          "fairness": 3,
+          "rememberedColors": 2
+        },
+        "notUnderstood": "La scheda 'Secchielli coperti' è comparsa solo adesso, ma i secchielli col '?' li vedo dal livello 291: è arrivata in ritardo. Non ho capito perché un blu ha 'sporcato' di marrone i pixel arancioni. Ancora non uso il ↩.",
+        "wouldContinue": true,
+        "freeText": "Quarto ingorgo su cinque livelli (6 pixel mancanti), poi +1 slot e vinto in 16 mosse. Il testo in alto 'Rilancia prima quello in attesa senza ↩' / 'Lancia prima uno senza ↩: si svuota' mi guida, ma 'Tutti tornerebbero: se si blocca +1 slot' non ha senso per me. Niente tagliato."
+      }
+    },
+    {
+      "levelId": 298,
+      "result": "saltato",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "uscita",
+          "durationMs": 113065,
+          "timeToFirstTapMs": 7597,
+          "ticks": 298,
+          "taps": 11,
+          "offTargetTaps": 7,
+          "launches": 4,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 1,
+          "slotCount": 2,
+          "maxBeltUsed": 1,
+          "beltCapacity": 2,
+          "painted": 11,
+          "targets": 69,
+          "remaining": {
+            "ice": 3,
+            "hidden": 2,
+            "locked": 2,
+            "covered": 1
+          },
+          "stoneSplashes": 4,
+          "reveals": 2,
+          "tipsShown": [
+            "leftover"
+          ],
+          "tipDismissMs": 83797,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0203.png",
+            "0204.png",
+            "0205.png",
+            "0206.png",
+            "0207.png",
+            "0208.png",
+            "0209.png",
+            "0210.png",
+            "0211.png",
+            "0212.png",
+            "0213.png",
+            "0214.png",
+            "0215.png",
+            "0216.png",
+            "0217.png",
+            "0218.png",
+            "0219.png",
+            "0220.png",
+            "0221.png",
+            "0222.png",
+            "0223.png",
+            "0224.png",
+            "0225.png",
+            "0226.png",
+            "0227.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 2,
+        "perceivedDifficulty": 3,
+        "mood": "frustrato",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "Mi è comparsa la scheda 'Perché è tornato' al secondo giro di tocchi: spiega il ↩, ma arriva al livello 298 mentre i numeri ↩ li vedo dal 291, quindi in ritardo. Poi non sono più riuscito a chiuderla.",
+        "wouldContinue": true,
+        "freeText": "La scheda 'Perché è tornato' non si chiude: ho toccato 'Ho capito' più volte (anche a lato, ⟲ e ◀) e lo schermo è rimasto fermo identico. Ho dovuto rinunciare al livello. Non ho potuto giocarlo davvero. Il testo della scheda è chiaro, il '!' sul numero un po' meno."
+      }
+    },
+    {
+      "levelId": 299,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 121506,
+          "timeToFirstTapMs": 6662,
+          "ticks": 1313,
+          "taps": 17,
+          "offTargetTaps": 0,
+          "launches": 15,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 3,
+          "slotCount": 2,
+          "maxBeltUsed": 1,
+          "beltCapacity": 2,
+          "painted": 57,
+          "targets": 57,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 14,
+          "reveals": 2,
+          "tipsShown": [
+            "mixing"
+          ],
+          "tipDismissMs": 3879,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0230.png",
+            "0231.png",
+            "0232.png",
+            "0233.png",
+            "0234.png",
+            "0235.png",
+            "0236.png",
+            "0237.png",
+            "0238.png",
+            "0239.png",
+            "0240.png",
+            "0241.png",
+            "0242.png",
+            "0243.png",
+            "0244.png",
+            "0245.png",
+            "0246.png",
+            "0247.png",
+            "0248.png",
+            "0249.png",
+            "0250.png",
+            "0251.png",
+            "0252.png",
+            "0253.png",
+            "0254.png",
+            "0255.png",
+            "0256.png",
+            "0257.png",
+            "0258.png",
+            "0259.png",
+            "0260.png",
+            "0261.png",
+            "0262.png",
+            "0263.png",
+            "0264.png",
+            "0265.png",
+            "0266.png",
+            "0267.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 3,
+        "mood": "divertito",
+        "beltRefusalUnderstood": null,
+        "jamFairness": null,
+        "notUnderstood": "Il testo 'Tutti tornerebbero: cambia l'ordine' con tre secchielli in attesa e nessuno in colonna: non sapevo che ordine cambiare, ho semplicemente toccato gli slot e ha funzionato.",
+        "wouldContinue": true,
+        "freeText": "Vinto al primo tentativo senza ingorgo, 15 mosse. Il banner 'Quadro più grande' di nuovo sopra il titolo; la scheda 'Mescola sulla tela' ricompare e mi è sembrata inutile. Ho chiuso la scheda al secondo tocco più in basso. Niente tagliato."
+      }
+    },
+    {
+      "levelId": 300,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 211474,
+          "timeToFirstTapMs": 7471,
+          "ticks": 2241,
+          "taps": 25,
+          "offTargetTaps": 1,
+          "launches": 21,
+          "refusals": 0,
+          "blockedTaps": 1,
+          "jams": 1,
+          "extraSlotUsed": true,
+          "maxSlotsUsed": 4,
+          "slotCount": 3,
+          "maxBeltUsed": 1,
+          "beltCapacity": 1,
+          "painted": 136,
+          "targets": 136,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 34,
+          "reveals": 3,
+          "tipsShown": [
+            "brown"
+          ],
+          "tipDismissMs": 7175,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0270.png",
+            "0271.png",
+            "0272.png",
+            "0273.png",
+            "0274.png",
+            "0275.png",
+            "0276.png",
+            "0277.png",
+            "0278.png",
+            "0279.png",
+            "0280.png",
+            "0281.png",
+            "0282.png",
+            "0283.png",
+            "0284.png",
+            "0285.png",
+            "0286.png",
+            "0287.png",
+            "0288.png",
+            "0289.png",
+            "0290.png",
+            "0291.png",
+            "0292.png",
+            "0293.png",
+            "0294.png",
+            "0295.png",
+            "0296.png",
+            "0297.png",
+            "0298.png",
+            "0299.png",
+            "0300.png",
+            "0301.png",
+            "0302.png",
+            "0303.png",
+            "0304.png",
+            "0305.png",
+            "0306.png",
+            "0307.png",
+            "0308.png",
+            "0309.png",
+            "0310.png",
+            "0311.png",
+            "0312.png",
+            "0313.png",
+            "0314.png",
+            "0315.png",
+            "0316.png",
+            "0317.png",
+            "0318.png",
+            "0319.png",
+            "0320.png",
+            "0321.png",
+            "0322.png",
+            "0323.png",
+            "0324.png",
+            "0325.png",
+            "0326.png",
+            "0327.png",
+            "0328.png",
+            "0329.png",
+            "0330.png",
+            "0331.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 5,
+        "mood": "neutro",
+        "beltRefusalUnderstood": 3,
+        "jamFairness": 3,
+        "notUnderstood": "'Nastro: max 1 secchielli' è scritto male e non capivo cosa cambiasse. Con tanti secchielli ↩ non sapevo più quale lanciare: i testi 'Tutti tornerebbero: cambia l'ordine' non mi dicevano quale ordine.",
+        "wouldContinue": true,
+        "freeText": "Boss enorme. Al primo giro ingorgo subito (83 pixel mancanti) perché ho tappato a raffica con nastro da 1; col +1 slot e andando piano, uno alla volta, ho vinto in 21 mosse. Divertente quando ho capito di rallentare. Nella schermata finale la riga 'completato in 21 mosse' si sovrappone al testo 'Stage completato! Nuovo stile dei secchielli': testo tagliato/sovrapposto."
+      }
+    }
+  ],
+  "session": {
+    "telemetry": {
+      "durationMs": 1507755,
+      "actions": 166,
+      "screens": {
+        "menu": 2,
+        "play": 10
+      },
+      "languageChanges": 0,
+      "uncaughtErrors": [],
+      "stuckScreens": []
+    },
+    "feedback": {
+      "fun": 4,
+      "wouldReturn": 4,
+      "stoppedBecause": "Ho finito lo stage: il boss è andato, mi sembra di aver chiuso tutto. Ma ho saltato il 298 perché la scheda non si chiudeva (forse colpa del mio tocco).",
+      "bestMoment": "Vedere il boss 300 riempirsi di cerchi colorati dopo aver rallentato.",
+      "worstMoment": "La scheda 'Perché è tornato' sul 298 che sembrava bloccata; e gli ingorghi continui a raffica.",
+      "freeText": "I testi in alto e il ↩ li capisco solo dopo le schede, che arrivano tardi (Perché è tornato al 298, Secchielli coperti al 297). Il banner 'Quadro più grande' si sovrappone al titolo."
+    }
+  },
+  "bugs": [
+    {
+      "title": "Scheda 'Perché è tornato' non si chiude e blocca il gioco",
+      "severity": "alta",
+      "category": "blocco",
+      "levelId": 298,
+      "steps": [
+        "Giocare il livello 298 e lanciare secchielli finché compare la scheda 'Perché è tornato'",
+        "Toccare 'Ho capito' (più volte, anche fuori dalla scheda)",
+        "Provare ⟲ e ◀"
+      ],
+      "expected": "La scheda si chiude e si torna al livello",
+      "actual": "La scheda resta, schermo identico a ogni tocco; ⟲ e ◀ non fanno nulla; costretto a usare skip",
+      "screenshots": [
+        "0210.png",
+        "0227.png"
+      ],
+      "reproduced": false,
+      "id": "T21-A07-B01"
+    }
+  ]
+}

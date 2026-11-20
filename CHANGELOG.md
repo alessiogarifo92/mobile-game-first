@@ -2,6 +2,10 @@
 
 ## Non rilasciato
 
+### Playtest agent dell'universo 3, turno T21 (#68, #101, epic #66)
+
+- **Report del turno T21** in `docs/reports/2026-11-20-playtest-agent-universo-3-t21.md` (4 agent sulla build con #225: 281–290 ×2, 241–246, 291–300): 34 sessioni·livello vinte, tutte al 1° tentativo, boss 290 senza muro, 0 bug del gioco (due segnalazioni dell'agent riprodotte e scartate: tocco fuori dal pulsante). Il turno non basta per misurare #225 (le card vecchie restano da vedere nei salvataggi dei playtest e ritardano la coda). Schede in `docs/playtest/sessioni/T21/`.
+
 ### Card "Perché è tornato" e "Corsia bloccata" anticipate, suggerimenti degli ingorghi più chiari (#225, epic #66)
 
 - **Le due card arrivano all'inizio del primo livello in cui il caso può succedere**, non dopo il primo ingorgo (T20: 3 agent su 3 vedevano "Perché è tornato" solo dopo averlo subito, ai livelli 246, 287 e 298). `levelCases` (`src/core/leftover.ts`) prevede su ogni secchiello della tela intatta se può tornare con vernice avanzata o restare senza tiri; `tipsAnticipated` (`src/core/onboarding.ts`) le mette dopo le card delle meccaniche nuove, una per livello, e solo dopo la card degli slot (il livello 2 la mostra al primo ritorno e resta a una sola card). Le card già viste restano viste: nessuna migrazione dei salvataggi.
