@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import levelsJson from '../src/levels/levels.json' with { type: 'json' };
 import { parseLevel, type Level, type LevelDef } from '../src/core/level';
-import { tipOnLevelStart, tipsPresent } from '../src/core/onboarding';
+import { tipOnLevelStart, tipsAnticipated, tipsPresent } from '../src/core/onboarding';
 import { sanitize, type LevelRef } from '../src/core/progress';
 import { SchemaError, validate, validateDef, type Schema } from '../scripts/playtest/jsonSchema';
 import { SaveError, offPlanStep, packLevels, planLevels, planStep, saveFor, saveStarts, startSaveOf, tipsMetBefore } from '../scripts/playtest/saves';
@@ -336,11 +336,11 @@ describe('saves and plans', () => {
     expect(startSaveOf(save)).toEqual({ unlocked: 50, completedThrough: 49, seenTips: save.seenTips });
   });
 
-  it('the save of universe 2 matches the protocol of #67 (universe 1 tips, stones included since #157; brown still to come)', () => {
+  it('the save of universe 2 matches the protocol of #67 (universe 1 tips, stones included since #157, the anticipated cards of #225; brown still to come)', () => {
     const start = packLevels(levels, 'S11')[0]!;
     const save = saveFor(levels, start, 'it');
     expect(save.completed).toHaveLength(start - 1);
-    expect([...save.seenTips].sort()).toEqual(['belt', 'guide', 'hidden', 'ice', 'mixing', 'queue', 'slots', 'stone']);
+    expect([...save.seenTips].sort()).toEqual(['belt', 'blocked', 'guide', 'hidden', 'ice', 'leftover', 'mixing', 'queue', 'slots', 'stone']);
   });
 
   it('leaves unseen the cards of the mechanics the planned pack shows (#182: ice at 81, debuting at 66)', () => {
@@ -348,7 +348,7 @@ describe('saves and plans', () => {
     const firstIce = levels.find((l) => tipsPresent(l).includes('ice'))!.id;
     expect(firstIce).toBeLessThan(s09[0]!);
     expect(tipsMetBefore(levels, s09[0]!)).toContain('ice'); // a real player met it before
-    const inPack = new Set(levels.filter((l) => s09.includes(l.id)).flatMap(tipsPresent));
+    const inPack = new Set<string>(levels.filter((l) => s09.includes(l.id)).flatMap((l) => [...tipsPresent(l), ...tipsAnticipated(l, ['slots'])]));
     expect(inPack.has('ice')).toBe(true);
     const save = saveFor(levels, s09[0]!, 'it', false, s09);
     expect(save.seenTips).not.toContain('ice');

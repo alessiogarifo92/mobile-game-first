@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { BLUE, RED, YELLOW, level } from './helpers';
-import { escapeKey, forecastLeftover, jamEscape, leftoverHint } from '../src/core/leftover';
+import { escapeKey, forecastLeftover, jamEscape, leftoverHint, levelCases } from '../src/core/leftover';
 import { createGame, launchFromColumn, step, type GameState } from '../src/core/sim';
 import type { Primary } from '../src/core/colors';
 import levels83 from '../src/levels/levels.json';
@@ -180,5 +180,28 @@ describe('jamEscape (#182)', () => {
     expect(JSON.stringify(g)).toBe(before);
     g.status = 'jammed';
     expect(jamEscape(g)).toBeNull();
+  });
+});
+
+describe('levelCases (#225)', () => {
+  const real = (id: number) => parseLevel((levels83 as LevelDef[]).find((l) => l.id === id)!);
+
+  it('says whether a bucket can come back or be blocked on the starting board, without touching the level', () => {
+    expect(levelCases(real(1))).toEqual({ canReturn: false, canBeBlocked: false });
+    expect(levelCases(real(3))).toEqual({ canReturn: true, canBeBlocked: true });
+    expect(levelCases(real(6))).toEqual({ canReturn: true, canBeBlocked: false });
+    const l = real(3);
+    const before = JSON.stringify(l);
+    levelCases(l);
+    expect(JSON.stringify(l)).toBe(before);
+  });
+
+  it('a bucket with no pixel of its colour in reach is blocked and comes back full', () => {
+    const l = level(['RR'], [[[RED, 2]]]);
+    expect(levelCases(l).canBeBlocked).toBe(false);
+    const g = createGame(l);
+    const f = forecastLeftover(g, BLUE, 1);
+    expect(f.hits).toBe(0);
+    expect(f.returns).toBe(true);
   });
 });

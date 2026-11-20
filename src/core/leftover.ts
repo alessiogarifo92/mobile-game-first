@@ -1,6 +1,7 @@
 import type { Primary } from './colors';
 import type { GameState } from './sim';
-import { beltLength } from './sim';
+import { beltLength, createGame } from './sim';
+import type { Level } from './level';
 import { applyHit, cloneBoard, findTarget, type Board } from './rules';
 
 /** What a bucket launched now would do on one lap of the belt, as if it rode it alone (#145). */
@@ -90,4 +91,16 @@ export function jamEscape(state: GameState): JamEscape | null {
 /** The i18n key of the line that tells the player the way out (`escape.*`). */
 export function escapeKey(e: JamEscape): 'escape.column' | 'escape.slot' | 'escape.extraSlot' | 'escape.order' {
   return e.kind === 'empty' ? (e.from === 'slot' ? 'escape.slot' : 'escape.column') : e.kind === 'extraSlot' ? 'escape.extraSlot' : 'escape.order';
+}
+
+/**
+ * What a level's buckets can do on its starting board, to teach the card before it happens (#225): the forecast of every
+ * bucket of every column on the untouched board. `canReturn` is true when one would come back with paint left over (the
+ * "↩" case, and a fuller board only makes it less likely later); `canBeBlocked` when one would ride a whole lap without
+ * landing a shot (the blocked-lane case, #146).
+ */
+export function levelCases(level: Level): { canReturn: boolean; canBeBlocked: boolean } {
+  const gs = createGame(level);
+  const forecasts = level.columns.flat().map((s) => forecastLeftover(gs, s.color, s.ammo));
+  return { canReturn: forecasts.some((f) => f.returns), canBeBlocked: forecasts.some((f) => f.hits === 0) };
 }

@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Card "Perché è tornato" e "Corsia bloccata" anticipate, suggerimenti degli ingorghi più chiari (#225, epic #66)
+
+- **Le due card arrivano all'inizio del primo livello in cui il caso può succedere**, non dopo il primo ingorgo (T20: 3 agent su 3 vedevano "Perché è tornato" solo dopo averlo subito, ai livelli 246, 287 e 298). `levelCases` (`src/core/leftover.ts`) prevede su ogni secchiello della tela intatta se può tornare con vernice avanzata o restare senza tiri; `tipsAnticipated` (`src/core/onboarding.ts`) le mette dopo le card delle meccaniche nuove, una per livello, e solo dopo la card degli slot (il livello 2 la mostra al primo ritorno e resta a una sola card). Le card già viste restano viste: nessuna migrazione dei salvataggi.
+- **Suggerimenti `escape.*` più chiari** (IT + EN, sempre su una riga): "Lancia prima uno senza ↩: si svuota", "Tutti tornerebbero: …" al posto di "Nessun lancio sicuro"; la card "Perché è tornato" dice anche che senza ↩ il secchiello si svuota.
+- **Salvataggi dei playtest** (`scripts/playtest/saves.ts`): le due card nuove restano non viste per i livelli del pacchetto pianificato, come le altre.
+- **Pietre che bloccano un tiro (punto 3 del ticket)**: non fatto, serve una decisione di design (nessun nuovo asset) ed era solo un'ipotesi; resta una nota nella PR.
+- Test: unit (`tests/onboarding.test.ts`, `tests/leftover.test.ts`: prima occorrenza, ordine, casi limite, salvataggi vecchi; `tests/playtest.test.ts` aggiornato; i18n già coperto dal confronto delle chiavi IT/EN); e2e `e2e/anticipa-card-225.spec.ts`; screenshot 360×640 e 412×915 in `docs/test-evidence/225-anticipa-card/`.
+
 ### Playtest agent dell'universo 3 (#68, #101, epic #66)
 
 - **Report del turno T20** in `docs/reports/2026-11-19-playtest-agent-universo-3.md` (3 agent, livelli 241–250, 281–289, 291–300): 29 livelli vinti, 28 al 1° tentativo, 0 bug; confermata da 3 agent su 3 la card "Perché è tornato" troppo tardiva (ticket #225), il resto sono ipotesi. Le tre schede JSON sono in `docs/playtest/sessioni/T20/` (senza screenshot).
