@@ -20,21 +20,25 @@ export interface WinPanelLayout {
   second: number;
 }
 
+/**
+ * #229: `summary` is the centre of a two-line slot (the name and moves line wraps to two lines on a narrow phone, in
+ * Italian above all), `stage` the centre of the stage message's own two-line slot below it, so the two never overlap.
+ */
 const PLAIN: WinPanelLayout = {
-  height: 760, picture: 140, pictureSize: 240, summary: 412, stage: 460, card: null, hint: null, progress: 538, next: 600, second: 700,
+  height: 812, picture: 140, pictureSize: 240, summary: 430, stage: 512, card: null, hint: null, progress: 590, next: 652, second: 752,
 };
 
 const WITH_REWARD: WinPanelLayout = {
-  height: 940,
+  height: 986,
   picture: 126,
   pictureSize: 180,
-  summary: 338,
-  stage: 392,
-  card: { top: 448, height: 200, jars: 508, jarSize: 84, use: 598 },
-  hint: 662,
-  progress: 722,
-  next: 792,
-  second: 886,
+  summary: 354,
+  stage: 438,
+  card: { top: 494, height: 200, jars: 554, jarSize: 84, use: 644 },
+  hint: 708,
+  progress: 768,
+  next: 838,
+  second: 932,
 };
 
 export function winPanelLayout(withReward: boolean): WinPanelLayout {

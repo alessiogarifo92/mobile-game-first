@@ -7,6 +7,7 @@ const en = {
   'play.belt': 'BELT {used}/{capacity}',
   'win.title': 'Masterpiece!',
   'win.summary': '"{name}" painted in {moves} moves',
+  'win.summary.one': '"{name}" painted in 1 move',
   'win.next': 'Next',
   'win.map': 'Map',
   'jam.title': 'Jam!',
@@ -78,6 +79,7 @@ const en = {
   'tip.lock.body': 'A padlocked pixel blocks its lane.\nFinish every key pixel to open all the padlocks.',
   'tip.belt.title': 'Belt full',
   'tip.belt.body': 'The belt holds only {n} buckets at a time.\nWait for one to finish its loop, then send the next.',
+  'tip.belt.body.one': 'The belt holds only 1 bucket at a time.\nWait for it to finish its loop, then send the next.',
   'tip.stone.title': 'Stones',
   'tip.stone.body': 'A stone stops paint: a pixel behind it stays blank.\nPaint that pixel from the other side of the belt.',
   'tip.covered.title': 'Covered buckets',
@@ -111,6 +113,7 @@ const en = {
   // #77: what a harder level changes, told once in a banner under the title and listed on a "How to play" page.
   'change.belt.label': 'Lower belt capacity',
   'change.belt.fact': 'Belt: max {n} buckets',
+  'change.belt.fact.one': 'Belt: max 1 bucket',
   'change.belt.why': 'Fewer at once: wait and plan the order.',
   'change.slots.label': 'Fewer waiting slots',
   'change.slots.fact': 'Slots: {n}',
@@ -521,6 +524,7 @@ const it: Record<MessageKey, string> = {
   'play.belt': 'NASTRO {used}/{capacity}',
   'win.title': 'Capolavoro!',
   'win.summary': '"{name}" completato in {moves} mosse',
+  'win.summary.one': '"{name}" completato in 1 mossa',
   'win.next': 'Avanti',
   'win.map': 'Mappa',
   'jam.title': 'Ingorgo!',
@@ -592,6 +596,7 @@ const it: Record<MessageKey, string> = {
   'tip.lock.body': 'Un pixel col lucchetto blocca la sua corsia.\nCompleta tutti i pixel chiave per aprire i lucchetti.',
   'tip.belt.title': 'Nastro pieno',
   'tip.belt.body': 'Il nastro regge solo {n} secchielli alla volta.\nAspetta che uno finisca il giro, poi manda il prossimo.',
+  'tip.belt.body.one': 'Il nastro regge solo 1 secchiello alla volta.\nAspetta che finisca il giro, poi manda il prossimo.',
   'tip.stone.title': 'Pietre',
   'tip.stone.body': 'La pietra ferma la vernice: il pixel dietro resta vuoto.\nDipingilo dal lato opposto del nastro.',
   'tip.covered.title': 'Secchielli coperti',
@@ -624,6 +629,7 @@ const it: Record<MessageKey, string> = {
   // #77: cosa cambia in un livello più duro, detto una volta in un banner sotto il titolo e elencato in una pagina di "Come si gioca".
   'change.belt.label': 'Nastro con meno capienza',
   'change.belt.fact': 'Nastro: max {n} secchielli',
+  'change.belt.fact.one': 'Nastro: max 1 secchiello',
   'change.belt.why': 'Meno insieme: aspetta e pianifica l\'ordine.',
   'change.slots.label': 'Meno slot d\'attesa',
   'change.slots.fact': 'Slot: {n}',
@@ -1037,10 +1043,18 @@ export function isLanguage(value: unknown): value is Language {
 
 export type Params = Record<string, string | number>;
 
-/** Looks up a key, falling back to English, and fills `{name}` placeholders (unknown ones stay visible). */
+/**
+ * Looks up a key, falling back to English, and fills `{name}` placeholders (unknown ones stay visible).
+ * Singular (#229): when a count param (`n` or `moves`) is exactly 1 and the dictionary has a `<key>.one` entry, that
+ * entry is used ("max 1 bucket", not "max 1 buckets"); the plural form stays the plain key, so a language or a text
+ * without a `.one` variant is unchanged.
+ */
 export function translate(language: string, key: string, params: Params = {}): string {
   const dict: Record<string, string> = isLanguage(language) ? DICTIONARIES[language] : DICTIONARIES[DEFAULT_LANGUAGE];
-  const template = dict[key] ?? (en as Record<string, string>)[key] ?? key;
+  // The singular comes from the same dictionary as the plural, never from English into another language.
+  const source = key in dict ? dict : (en as Record<string, string>);
+  const singular = params.n === 1 || params.moves === 1;
+  const template = (singular ? source[`${key}.one`] : undefined) ?? source[key] ?? key;
   return template.replace(/\{(\w+)\}/g, (match, name: string) => (name in params ? String(params[name]) : match));
 }
 

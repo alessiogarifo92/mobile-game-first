@@ -32,6 +32,41 @@ describe('i18n', () => {
     expect(translate('it', 'no.such.key')).toBe('no.such.key');
   });
 
+  it('uses the singular when the count is 1, in both languages (#229)', () => {
+    expect(translate('en', 'change.belt.fact', { n: 1 })).toBe('Belt: max 1 bucket');
+    expect(translate('it', 'change.belt.fact', { n: 1 })).toBe('Nastro: max 1 secchiello');
+    expect(translate('en', 'tip.belt.body', { n: 1 })).toContain('only 1 bucket at a time');
+    expect(translate('it', 'tip.belt.body', { n: 1 })).toContain('solo 1 secchiello alla volta');
+    expect(translate('en', 'win.summary', { name: 'Heart', moves: 1 })).toBe('"Heart" painted in 1 move');
+    expect(translate('it', 'win.summary', { name: 'Cuore', moves: 1 })).toBe('"Cuore" completato in 1 mossa');
+  });
+
+  it('keeps the plural for every other count, 0 and 2 included (#229)', () => {
+    for (const n of [0, 2, 3, 12]) {
+      expect(translate('en', 'change.belt.fact', { n })).toBe(`Belt: max ${n} buckets`);
+      expect(translate('it', 'change.belt.fact', { n })).toBe(`Nastro: max ${n} secchielli`);
+    }
+    expect(translate('en', 'win.summary', { name: 'Heart', moves: 21 })).toBe('"Heart" painted in 21 moves');
+    expect(translate('it', 'win.summary', { name: 'Cuore', moves: 21 })).toBe('"Cuore" completato in 21 mosse');
+    // A count given as text is not the number 1: no singular guess.
+    expect(translate('en', 'change.belt.fact', { n: '1' })).toBe('Belt: max 1 buckets');
+  });
+
+  it('keys with no singular variant ignore a count of 1 (#229)', () => {
+    expect(translate('en', 'level.title', { n: 1 })).toBe('Level 1');
+    expect(translate('it', 'change.slots.fact', { n: 1 })).toBe('Slot: 1');
+  });
+
+  it('every singular entry has a plural base and exists in every language (#229)', () => {
+    for (const lang of LANGUAGES) {
+      const dict = DICTIONARIES[lang] as Record<string, string>;
+      for (const key of Object.keys(dict).filter((k) => k.endsWith('.one'))) {
+        expect(dict[key.slice(0, -4)], `${lang} ${key}`).toBeDefined();
+        expect(dict[key]).not.toMatch(/\{n\}|\{moves\}/);
+      }
+    }
+  });
+
   it('validates languages', () => {
     expect(isLanguage('it')).toBe(true);
     expect(isLanguage('xx')).toBe(false);

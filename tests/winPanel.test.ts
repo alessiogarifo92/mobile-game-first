@@ -5,7 +5,7 @@ import { winPanelLayout, winPanelTop } from '../src/core/winPanel';
 describe('win panel layout (#153)', () => {
   it('keeps the layout from before #153 when no stage reward shows', () => {
     const l = winPanelLayout(false);
-    expect(l).toMatchObject({ height: 760, picture: 140, pictureSize: 240, next: 600, second: 700, card: null, hint: null });
+    expect(l).toMatchObject({ height: 812, picture: 140, pictureSize: 240, next: 652, second: 752, card: null, hint: null });
   });
 
   it('adds a reward card between the stage line and the universe progress', () => {
@@ -31,12 +31,22 @@ describe('win panel layout (#153)', () => {
     }
   });
 
+  it('leaves two lines for the summary and two for the stage message, never overlapping (#229)', () => {
+    const LINE = 28 * 1.3; // THEME.type.sm, with the line height Phaser gives it
+    for (const l of [winPanelLayout(false), winPanelLayout(true)]) {
+      expect(l.summary - LINE).toBeGreaterThanOrEqual(l.picture + l.pictureSize); // two lines, centred on `summary`
+      expect(l.summary + LINE).toBeLessThanOrEqual(l.stage - LINE);
+      const below = l.card ? l.card.top : l.progress;
+      expect(l.stage + LINE).toBeLessThanOrEqual(below);
+    }
+  });
+
   it('fits on the shortest screen the game draws', () => {
     for (const l of [winPanelLayout(false), winPanelLayout(true)]) {
       const top = winPanelTop(l, VIEW.height);
       expect(top).toBeGreaterThanOrEqual(0);
       expect(top + l.height).toBeLessThanOrEqual(VIEW.height);
     }
-    expect(winPanelTop(winPanelLayout(false), 1280)).toBe(260);
+    expect(winPanelTop(winPanelLayout(false), 1280)).toBe(234);
   });
 });

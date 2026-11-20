@@ -57,8 +57,8 @@ const REVEAL_MS = 420;
 const JAM_COMFORT = 64;
 /** Side of the jam panel's picture of what was left (#93). */
 const JAM_CANVAS = 150;
-/** Top of the difficulty-change banner (#77): just under the level title, in the subtitle line. */
-const BANNER_TOP = 88;
+/** Gap between the level name (or the hint) and the difficulty-change banner (#77, #229) that hangs under it. */
+const BANNER_GAP = 8;
 const GUIDE_TEXT = { tap: 'guide.tap', watch: 'guide.watch', next: 'guide.next', free: 'guide.free' } as const;
 
 type WinPoint = { x: number; y: number };
@@ -283,23 +283,25 @@ export class PlayScene extends Phaser.Scene {
     const first = shown[0]!;
     const fact = shown.map((c) => (c.kind === 'belt' || c.kind === 'slots' || c.kind === 'columns' ? t(`change.${c.kind}.fact` as const, { n: c.to }) : t(`change.${c.kind}.label` as const))).join(' · ');
     const why = shown.length > 1 ? t('change.limits.why') : t(`change.${first.kind}.why` as const);
+    // #229: under the subtitle line, which holds the level name or the hint, so it covers neither title nor name.
+    const top = Math.ceil(this.subtitle.y + this.subtitle.height) + BANNER_GAP;
     const pad = THEME.space.xs;
     const x = THEME.space.md;
     const w = VIEW.width - 2 * x;
     const iconW = 84;
     const textW = w - iconW - 56;
-    const factText = label(this, x + iconW, BANNER_TOP + pad, fact, THEME.type.xs).setOrigin(0, 0).setWordWrapWidth(textW);
-    const whyText = label(this, x + iconW, BANNER_TOP + pad + factText.height, why, THEME.type.xs, THEME.subCss, false).setOrigin(0, 0).setWordWrapWidth(textW);
+    const factText = label(this, x + iconW, top + pad, fact, THEME.type.xs).setOrigin(0, 0).setWordWrapWidth(textW);
+    const whyText = label(this, x + iconW, top + pad + factText.height, why, THEME.type.xs, THEME.subCss, false).setOrigin(0, 0).setWordWrapWidth(textW);
     const h = Math.ceil(factText.height + whyText.height) + 2 * pad;
     const g = this.add.graphics();
-    g.fillStyle(THEME.paper, 1).fillRoundedRect(x, BANNER_TOP, w, h, THEME.radius.panel);
-    g.lineStyle(3, THEME.ink, 1).strokeRoundedRect(x, BANNER_TOP, w, h, THEME.radius.panel);
-    drawChangeIcon(g, first.kind, x + iconW / 2, BANNER_TOP + h / 2, 40);
-    const close = label(this, x + w - 30, BANNER_TOP + h / 2, '✕', THEME.type.sm);
-    const zone = this.add.zone(x, BANNER_TOP, w, h).setOrigin(0).setInteractive({ useHandCursor: true });
+    g.fillStyle(THEME.paper, 1).fillRoundedRect(x, top, w, h, THEME.radius.panel);
+    g.lineStyle(3, THEME.ink, 1).strokeRoundedRect(x, top, w, h, THEME.radius.panel);
+    drawChangeIcon(g, first.kind, x + iconW / 2, top + h / 2, 40);
+    const close = label(this, x + w - 30, top + h / 2, '✕', THEME.type.sm);
+    const zone = this.add.zone(x, top, w, h).setOrigin(0).setInteractive({ useHandCursor: true });
     const container = this.add.container(0, 0, [g, factText, whyText, close, zone]).setDepth(6);
     zone.on('pointerdown', () => this.hideChangeBanner());
-    this.banner = { container, changes: shown, fact, why, y: BANNER_TOP, h };
+    this.banner = { container, changes: shown, fact, why, y: top, h };
   }
 
   private hideChangeBanner(): void {
