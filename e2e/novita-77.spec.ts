@@ -31,7 +31,8 @@ for (const size of [{ width: 360, height: 640 }, { width: 412, height: 915 }]) {
       // Above the board: the belt and everything the player taps stay clear of it.
       const [belt, columns, slots] = await Promise.all([mix<Rect>(page, 'beltRect'), mix<Rect[]>(page, 'columns'), mix<Rect[]>(page, 'slots')]);
       const bottom = banner!.y + banner!.h;
-      expect(bottom).toBeLessThanOrEqual(belt.y + 24);
+      // #229: the strip hangs under the level name, so its lower edge may sit on the belt's 64 px frame, never on the picture.
+      expect(bottom).toBeLessThanOrEqual(belt.y + 64);
       expect(bottom).toBeLessThan(Math.min(slots[0]!.y, columns[0]!.y));
       await checkOnScreen(page, 'level 4 with the strip');
       if (evidence) await page.screenshot({ path: `${DIR}/${size.width}x${size.height}-04-livello-4.png` });
