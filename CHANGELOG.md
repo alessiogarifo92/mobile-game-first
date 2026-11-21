@@ -9,6 +9,11 @@
 - **Pannello di vittoria**: la riga `win.summary` ("… completato in 21 mosse") va a capo su due righe nei telefoni stretti e si sovrapponeva al messaggio di fine stage (livello 300). `winPanelLayout` ora riserva due righe a ciascuno dei due testi (pannello più alto di 52 px senza ricompensa, 46 con); tutte le posizioni sotto sono slittate di conseguenza.
 - Test: unit (`tests/i18n.test.ts`: singolare e plurale IT/EN, 0/2/12, conteggio come testo, chiavi senza `.one`, parità `.one` tra le lingue; `tests/winPanel.test.ts`: due righe per testo senza sovrapposizioni); e2e `e2e/text-layout-229.spec.ts` (livelli 290, 296, 299, 300 e pannelli di fine stage 10 e 300, 360×640 e 412×915, IT/EN: nessun testo sovrapposto, `checkOnScreen`); screenshot prima/dopo in `docs/test-evidence/229-testi-layout/` (il "prima" del plurale è nei test unit: gli screenshot "prima" dei banner 290/300 non sono stati tenuti perché già col testo corretto).
 
+### Playtest: salvataggio con tutte le card già viste, per misurare #225 (#230, epic #66)
+
+- **Campo `seenCards` nella config del turno** (o del singolo agent, che prevale; `false` lo spegne): `true` parte con tutte le card delle meccaniche già viste tranne "Perché è tornato" e "Corsia bloccata", una lista indica le card da lasciare. Senza il campo il salvataggio è quello di sempre (turni esistenti riproducibili). Il livello 1 mantiene l'onboarding. Errori chiari su card inesistenti o forma sbagliata.
+- Test: unit in `tests/playtest.test.ts` (salvataggio generato, card ancora da vedere, default invariato, config non valida); lo smoke e2e del harness (`e2e/playtest-harness.spec.ts`) copre anche un agent con l'opzione. Docs: `scripts/playtest/README.md`, `docs/playtest/protocollo-agent.md` §8.
+
 ### Playtest agent dell'universo 3, turno T21 (#68, #101, epic #66)
 
 - **Report del turno T21** in `docs/reports/2026-11-20-playtest-agent-universo-3-t21.md` (4 agent sulla build con #225: 281–290 ×2, 241–246, 291–300): 34 sessioni·livello vinte, tutte al 1° tentativo, boss 290 senza muro, 0 bug del gioco (due segnalazioni dell'agent riprodotte e scartate: tocco fuori dal pulsante). Il turno non basta per misurare #225 (le card vecchie restano da vedere nei salvataggi dei playtest e ritardano la coda). Schede in `docs/playtest/sessioni/T21/`.

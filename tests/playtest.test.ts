@@ -5,7 +5,7 @@ import { parseLevel, type Level, type LevelDef } from '../src/core/level';
 import { tipOnLevelStart, tipsAnticipated, tipsPresent } from '../src/core/onboarding';
 import { sanitize, type LevelRef } from '../src/core/progress';
 import { SchemaError, validate, validateDef, type Schema } from '../scripts/playtest/jsonSchema';
-import { SaveError, offPlanStep, packLevels, planLevels, planStep, saveFor, saveStarts, startSaveOf, tipsMetBefore } from '../scripts/playtest/saves';
+import { CARD_TIPS, DEFAULT_UNSEEN_CARDS, SaveError, offPlanStep, packLevels, planLevels, planStep, saveFor, saveStarts, startSaveOf, tipsMetBefore } from '../scripts/playtest/saves';
 import { SCHEMA_VERSION, SessionRecorder, StuckWatch, TOP_BAR, onTarget, visibleColumns, type MixSnapshot, type SessionHeader } from '../scripts/playtest/telemetry';
 import { MAX_AGENTS, TurnError, parseTurnConfig, parseViewport, sessionId } from '../scripts/playtest/turn';
 
@@ -370,6 +370,36 @@ describe('saves and plans', () => {
     expect(tipsPresent(firstIceInPack).filter((t) => !seen.includes(t))).toContain('ice');
   });
 
+  it('a save with every card seen leaves only the listed cards to see (#230)', () => {
+    const s27 = packLevels(levels, 'S29');
+    const start = s27[0]!;
+    const save = saveFor(levels, start, 'it', false, s27, [...DEFAULT_UNSEEN_CARDS]);
+    // "Why it came back" and "lane blocked" are still to see; every other card, and the tips of the play, are seen.
+    expect(DEFAULT_UNSEEN_CARDS).toEqual(['leftover', 'blocked']);
+    expect(save.seenTips).not.toContain('leftover');
+    expect(save.seenTips).not.toContain('blocked');
+    expect([...save.seenTips].sort()).toEqual(['belt', 'guide', 'slots', ...CARD_TIPS.filter((t) => t !== 'leftover' && t !== 'blocked' && t !== 'slots' && t !== 'belt')].sort());
+    // The mechanics of the planned levels are seen too (unlike the default save, which keeps them to see).
+    for (const level of levels.filter((l) => s27.includes(l.id))) for (const tip of tipsPresent(level)) {
+      if (!DEFAULT_UNSEEN_CARDS.includes(tip as never)) expect(save.seenTips).toContain(tip);
+    }
+    expect(sanitize(JSON.parse(JSON.stringify(save)), levels)).toEqual(save); // the game accepts it unchanged
+    // A list names the cards to leave instead; an empty list leaves none.
+    expect(saveFor(levels, start, 'it', false, s27, ['queue']).seenTips).not.toContain('queue');
+    expect(saveFor(levels, start, 'it', false, s27, ['queue']).seenTips).toContain('leftover');
+    expect(saveFor(levels, start, 'it', false, s27, []).seenTips).toEqual(expect.arrayContaining(CARD_TIPS));
+    // Level 1 keeps its onboarding whatever the option.
+    expect(saveFor(levels, 1, 'it', false, [], [...DEFAULT_UNSEEN_CARDS]).seenTips).toEqual([]);
+  });
+
+  it('without the option the save is the one every earlier turn used (#230)', () => {
+    const s09 = packLevels(levels, 'S09');
+    for (const start of [1, 2, 50, s09[0]!]) {
+      expect(saveFor(levels, start, 'en', false, s09, null)).toEqual(saveFor(levels, start, 'en', false, s09));
+      expect(tipsMetBefore(levels, start, s09, null)).toEqual(tipsMetBefore(levels, start, s09));
+    }
+  });
+
   it('rejects an unknown language or level and a level the game would not open', () => {
     expect(() => saveFor(levels, 1, 'xx')).toThrow(/language/);
     expect(() => saveFor(levels, 9999, 'en')).toThrow(/no level/);
@@ -425,8 +455,8 @@ describe('turn config', () => {
   it('reads a turn', () => {
     expect(parseTurnConfig({ turn: 1, tag: 'playtest-u2-1', agents: [agent, { ...agent, agentId: 'A02', model: 'm', viewport: '412x915', maxAttempts: undefined }] })).toEqual({
       turn: 1, tag: 'playtest-u2-1', variant: 'normale', agents: [
-        { agentId: 'A01', profileId: 'P01', viewport: { width: 360, height: 640 }, language: 'it', packs: ['U1-FINE', 'S11'], maxAttempts: 4 },
-        { agentId: 'A02', profileId: 'P01', model: 'm', viewport: { width: 412, height: 915 }, language: 'it', packs: ['U1-FINE', 'S11'], maxAttempts: null },
+        { agentId: 'A01', profileId: 'P01', viewport: { width: 360, height: 640 }, language: 'it', packs: ['U1-FINE', 'S11'], maxAttempts: 4, unseenCards: null },
+        { agentId: 'A02', profileId: 'P01', model: 'm', viewport: { width: 412, height: 915 }, language: 'it', packs: ['U1-FINE', 'S11'], maxAttempts: null, unseenCards: null },
       ],
     });
     expect(parseTurnConfig({ turn: 2, variant: 'senza-copertura', agents: [agent] }).variant).toBe('senza-copertura');
@@ -451,6 +481,24 @@ describe('turn config', () => {
     ['a duplicate agent', { turn: 1, agents: [agent, agent] }],
   ])('rejects %s', (_, config) => {
     expect(() => parseTurnConfig(config)).toThrow(TurnError);
+  });
+
+  it('reads seenCards on the turn and on the agent, the agent winning (#230)', () => {
+    const cards = (config: object) => parseTurnConfig(config as never).agents.map((a) => a.unseenCards);
+    expect(cards({ turn: 1, agents: [agent] })).toEqual([null]); // default: the save every earlier turn used
+    expect(cards({ turn: 1, seenCards: true, agents: [agent] })).toEqual([['leftover', 'blocked']]);
+    expect(cards({ turn: 1, seenCards: ['queue', 'queue'], agents: [agent] })).toEqual([['queue']]);
+    expect(cards({ turn: 1, seenCards: true, agents: [agent, { ...agent, agentId: 'A02', seenCards: false }, { ...agent, agentId: 'A03', seenCards: ['ice'] }] }))
+      .toEqual([['leftover', 'blocked'], null, ['ice']]);
+    expect(cards({ turn: 1, agents: [{ ...agent, seenCards: true }] })).toEqual([['leftover', 'blocked']]);
+  });
+
+  it.each([
+    ['a card that does not exist', { turn: 1, seenCards: ['nope'], agents: [agent] }],
+    ['a seenCards that is not a list', { turn: 1, agents: [{ ...agent, seenCards: 'yes' }] }],
+    ['a list with a non-string', { turn: 1, seenCards: [3], agents: [agent] }],
+  ])('rejects %s in seenCards', (_, config) => {
+    expect(() => parseTurnConfig(config)).toThrow(/seenCards/);
   });
 
   it('accepts only the two phone viewports of the protocol', () => {
