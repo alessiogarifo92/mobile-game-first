@@ -68,7 +68,7 @@ describe('locks and keys: rules', () => {
 
   it('completing the last key opens every lock in the same hit, then the pixel plays normally', () => {
     const b = createBoard(l);
-    expect(applyHit(l, b, 0, RED)).toEqual({ brokeIce: false, completed: true, revealed: [], unlocked: [1] });
+    expect(applyHit(l, b, 0, RED)).toEqual({ brokeIce: false, tore: false, completed: true, revealed: [], unlocked: [1] });
     expect(b.locked).toEqual([false, false, false]);
     expect(findTarget(l, b, rowFromLeft, RED)).toBe(1);
     expect(applyHit(l, b, 1, RED)).toMatchObject({ completed: true, unlocked: [] });
@@ -121,7 +121,7 @@ describe('locks and keys: simulation and solver', () => {
         if (!shooter || !launchFromColumn(g, col)) continue;
         const left = runLoop(l, lanes, board, shooter.color, shooter.ammo);
         while (g.belt.length + g.pending.length > 0 && g.status === 'playing') step(g);
-        expect({ paint: g.paint, ice: g.ice, hidden: g.hidden, locked: g.locked }).toEqual(cloneBoard(board));
+        expect({ paint: g.paint, ice: g.ice, hidden: g.hidden, locked: g.locked, film: g.film }).toEqual(cloneBoard(board));
         expect(g.slots.find((s) => s?.id === shooter.id)?.ammo ?? 0).toBe(left);
         g.slots = g.slots.map(() => null);
       }

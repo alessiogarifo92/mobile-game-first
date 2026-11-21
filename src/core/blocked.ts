@@ -12,6 +12,7 @@ export function cloneGame(state: GameState): GameState {
     ice: state.ice.slice(),
     hidden: state.hidden.slice(),
     locked: state.locked.slice(),
+    film: state.film.slice(),
     queues: state.queues.map((q) => q.map(copy)),
     slots: state.slots.map((s) => (s ? copy(s) : null)),
     pending: state.pending.map(copy),
@@ -45,10 +46,11 @@ export function slotLaunchHits(state: GameState, slot: number): number | null {
   return null;
 }
 
-/** Whether `color` still has work on `cell`: paint it needs, or ice of its colour to break. */
+/** Whether `color` still has work on `cell`: paint it needs, ice of its colour to break, or a film of its colour to tear. */
 function wants(level: Level, board: Board, cell: number, color: Primary): boolean {
   if (level.stone[cell] || cellDone(level, board, cell)) return false;
   const target = level.targets[cell]!;
+  if (board.film[cell]! > 0) return board.film[cell] === color;
   if (board.ice[cell]! > 0) return (target & color) !== 0;
   return accepts(target, board.paint[cell]!, color);
 }
@@ -91,13 +93,14 @@ export function refuseSlotLaunch(state: GameState, slot: number): SlotRefusal | 
 }
 
 /**
- * Colours that would move a blocking `cell` along (#176): the primaries its target still misses, so the board can say
+ * Colours that would move a blocking `cell` along (#176): the colour of its film (#98), else the primaries its target still misses, so the board can say
  * on the circle which colour opens the lane. Empty for what no colour opens (a stone, a hidden or locked pixel, a
  * finished pixel, an empty cell).
  */
 export function unlockColors(level: Level, board: Board, cell: number): Primary[] {
   const target = level.targets[cell] ?? 0;
   if (target === 0 || level.stone[cell] || board.hidden[cell] || board.locked[cell] || cellDone(level, board, cell)) return [];
+  if (board.film[cell]! > 0) return [board.film[cell] as Primary];
   return primariesOf(target & ~board.paint[cell]!);
 }
 
@@ -156,5 +159,5 @@ export function blockerAlpha(since: number): number {
  * revealed or unlocked), since the lane they point at may be open by then.
  */
 export function blockerSignature(board: Board, cells: readonly number[]): string {
-  return cells.map((c) => `${board.paint[c]}.${board.ice[c]}.${board.hidden[c] ? 1 : 0}.${board.locked[c] ? 1 : 0}`).join('|');
+  return cells.map((c) => `${board.paint[c]}.${board.ice[c]}.${board.film[c]}.${board.hidden[c] ? 1 : 0}.${board.locked[c] ? 1 : 0}`).join('|');
 }

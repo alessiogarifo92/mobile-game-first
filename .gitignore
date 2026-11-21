@@ -2,6 +2,7 @@ node_modules/
 dist/
 dist-more-levels/
 dist-covered-debut/
+dist-film-debut/
 dev-dist/
 coverage/
 playwright-report/

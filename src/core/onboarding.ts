@@ -5,7 +5,7 @@ import { levelCases } from './leftover';
 /** One-time onboarding tips, shown the first time the mechanic they explain shows up. */
 /** Tips shown as a card; 'guide' is the guided level 1 instead. */
 export type CardTip =
-  | 'mixing' | 'blocked' | 'slots' | 'ice' | 'hidden' | 'lock' | 'belt' | 'brown' | 'stone' | 'covered' | 'queue' | 'leftover';
+  | 'mixing' | 'blocked' | 'slots' | 'ice' | 'film' | 'hidden' | 'lock' | 'belt' | 'brown' | 'stone' | 'covered' | 'queue' | 'leftover';
 
 /** Buckets a column shows; the rest wait behind, counted by the "+N" under it. */
 export const COLUMN_SHOWN = 3;
@@ -27,7 +27,7 @@ export function needsGuide(level: Level, seen: readonly string[]): boolean {
 
 /**
  * Tip to show when a level starts, the first time it contains something new: secondary colours,
- * brown (three primaries), ice, hidden pixels, stones, locked pixels, covered buckets or a column longer than it shows
+ * brown (three primaries), ice, film (#98), hidden pixels, stones, locked pixels, covered buckets or a column longer than it shows
  * (its "+N", #148). One tip per level start, in that order, then the anticipated ones (`tipsAnticipated`).
  */
 export function tipOnLevelStart(level: Level, seen: readonly string[]): CardTip | null {
@@ -56,6 +56,7 @@ export function tipsPresent(level: Level): CardTip[] {
     ['mixing', level.targets.some((t) => t !== 0 && !isPrimary(t))],
     ['brown', level.targets.includes(BROWN)],
     ['ice', level.ice.some((n) => n > 0)],
+    ['film', level.film.some((f) => f !== 0)],
     ['hidden', level.hidden.some(Boolean)],
     ['stone', level.stone.some(Boolean)],
     ['lock', level.locked.some(Boolean)],

@@ -2,17 +2,17 @@ import Phaser from 'phaser';
 import { BLUE, RED, YELLOW } from '../core/colors';
 import type { CardTip } from '../core/onboarding';
 import { PAINT, THEME, css } from './theme';
-import { drawIce, drawStone, iceCounter, label } from './ui';
+import { drawFilm, drawIce, drawStone, iceCounter, label } from './ui';
 
 /** Tips whose illustration is shared by the in-game card and How to play (#183): the rules How to play has no base page for. */
-export type SharedTipArt = 'ice' | 'belt' | 'hidden' | 'queue' | 'leftover' | 'stone';
+export type SharedTipArt = 'ice' | 'film' | 'belt' | 'hidden' | 'queue' | 'leftover' | 'stone';
 
 export function hasSharedArt(id: CardTip): id is SharedTipArt {
-  return id === 'ice' || id === 'belt' || id === 'hidden' || id === 'queue' || id === 'leftover' || id === 'stone';
+  return id === 'ice' || id === 'film' || id === 'belt' || id === 'hidden' || id === 'queue' || id === 'leftover' || id === 'stone';
 }
 
 /** Horizontal extent of each illustration (belt at 4 buckets), so How to play can scale it to its card. */
-export const TIP_ART_WIDTH: Record<SharedTipArt, number> = { ice: 370, belt: 370, hidden: 390, queue: 320, leftover: 500, stone: 300 };
+export const TIP_ART_WIDTH: Record<SharedTipArt, number> = { ice: 370, film: 400, belt: 370, hidden: 390, queue: 320, leftover: 500, stone: 300 };
 
 /**
  * Draws a tip's illustration around (cx, y0): y0 is the top of the in-game tip card, so the art sits where it always has.
@@ -44,6 +44,17 @@ export function drawTipArt(
     sq(cx + 160, y, PAINT[RED]!);
     add(label(scene, cx - 80, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
     add(label(scene, cx + 80, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
+  } else if (id === 'film') {
+    // A red pixel under a blue film: a blue shot tears the film off, then a red shot paints the pixel (#98).
+    const y = y0 + 200;
+    sq(cx - 170, y, THEME.emptyPixel);
+    sq(cx - 170, y, PAINT[RED]!, 0.3);
+    drawFilm(g, cx - 170 - 24, y - 24, 48, 48, BLUE);
+    add(label(scene, cx - 85, y, '■→', THEME.type.sm, css(PAINT[BLUE]!)));
+    sq(cx, y, THEME.emptyPixel);
+    sq(cx, y, PAINT[RED]!, 0.3);
+    add(label(scene, cx + 85, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
+    sq(cx + 170, y, PAINT[RED]!);
   } else if (id === 'belt') {
     // As many buckets as the belt holds, then one more that cannot board.
     const n = Math.min(beltCapacity, 5);

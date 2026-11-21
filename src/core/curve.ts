@@ -77,6 +77,7 @@ export function curveLevel(level: Level, winRate: number, easyBoss?: boolean): C
   if (pixels.includes(BROWN)) features.push('brown');
   if (level.ice.some((n) => n > 0)) features.push('ice');
   if (level.hidden.some(Boolean)) features.push('hidden');
+  if (level.film.some((f) => f !== 0)) features.push('film');
   if (level.stone.some(Boolean)) features.push('stone');
   if (level.locked.some(Boolean)) features.push('lock');
   if (level.columns.some((c) => c.some((b) => b.covered))) features.push('covered');

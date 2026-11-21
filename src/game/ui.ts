@@ -4,7 +4,8 @@ import { panelArmed } from '../core/panelInput';
 import type { Level } from '../core/level';
 import { brownWedges } from '../core/brownPixel';
 import { iceBadge, iceGlints } from '../core/ice';
-import { PRIMARIES } from '../core/colors';
+import { FILM_DISC, filmDashes, filmGlyph } from '../core/film';
+import { PRIMARIES, type Primary } from '../core/colors';
 import { MURAL_SIDE, TILE_CELLS, tileCells } from '../core/mural';
 import { MURAL_PAINT, PAINT, THEME } from './theme';
 
@@ -179,6 +180,42 @@ export function drawIce(g: Phaser.GameObjects.Graphics, x: number, y: number, w:
 export function iceCounter(scene: Phaser.Scene, x: number, y: number, w: number, h: number, layers = 1): Phaser.GameObjects.Text | null {
   const badge = iceBadge(layers, x, y, w, h);
   return badge ? label(scene, badge.x, badge.y, badge.text, Math.max(badge.r * 1.4, 14), THEME.iceDarkCss) : null;
+}
+
+/** Opacity of a film's veil over the pixel: the colour under it still shows through (#98). */
+export const FILM_ALPHA = 0.55;
+
+/**
+ * A film over a pixel (#98): a translucent veil of the primary that tears it, an ink dashed border like a sticker, and
+ * in the middle a white disc with that primary's shape (● red, ▲ yellow, ■ blue), so it reads without the colour. The
+ * same on the board, the tips and the tear animation.
+ */
+export function drawFilm(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number, color: Primary): void {
+  g.fillStyle(PAINT[color]!, FILM_ALPHA);
+  g.fillRoundedRect(x, y, w, h, THEME.radius.cell);
+  const line = Math.max(2, Math.round(w * 0.06));
+  g.lineStyle(line, THEME.ink, 1);
+  for (const [x1, y1, x2, y2] of filmDashes(x, y, w, h, line / 2)) g.lineBetween(x1, y1, x2, y2);
+  const r = w * FILM_DISC;
+  const cx = x + w / 2, cy = y + h / 2;
+  g.fillStyle(THEME.white, 1);
+  g.fillCircle(cx, cy, r);
+  g.lineStyle(Math.max(1.5, r * 0.16), THEME.ink, 1);
+  g.strokeCircle(cx, cy, r);
+  const glyph = filmGlyph(color, cx, cy, r * 0.62);
+  g.fillStyle(PAINT[color]!, 1);
+  g.lineStyle(Math.max(1, r * 0.12), THEME.ink, 1);
+  if (glyph.kind === 'circle') {
+    g.fillCircle(glyph.x, glyph.y, glyph.r);
+    g.strokeCircle(glyph.x, glyph.y, glyph.r);
+  } else if (glyph.kind === 'square') {
+    g.fillRect(glyph.x, glyph.y, glyph.size, glyph.size);
+    g.strokeRect(glyph.x, glyph.y, glyph.size, glyph.size);
+  } else {
+    const pts = glyph.points.map(([px, py]) => new Phaser.Math.Vector2(px, py));
+    g.fillPoints(pts, true);
+    g.strokePoints(pts, true);
+  }
 }
 
 /**
