@@ -7,7 +7,8 @@ import { parseLevel, type LevelDef } from '../src/core/level';
 import { solve } from '../src/core/solver';
 import { PlaytestAgent } from '../scripts/playtest/harness';
 import type { Schema } from '../scripts/playtest/jsonSchema';
-import { planLevels, saveFor, startSaveOf } from '../scripts/playtest/saves';
+import { DEFAULT_UNSEEN_CARDS, planLevels, saveFor, startSaveOf } from '../scripts/playtest/saves';
+import { STORAGE_KEY } from '../src/core/progress';
 import type { Scheda } from '../scripts/playtest/telemetry';
 import { mix } from './helpers';
 
@@ -86,4 +87,33 @@ test('playtest harness: an agent plays level 1 to a win and the form records it'
   expect(form.session.telemetry).toMatchObject({ uncaughtErrors: [], stuckScreens: [], actions: moves + 2 });
   expect(form.endReason).toBe('soglia-abbandono');
   for (const shot of form.levels[0]!.attempts[0]!.screenshots) expect(existsSync(join(outDir, 'T01-A01', shot))).toBe(true);
+});
+
+// #230: a session started with `seenCards` opens the game from a save where only the listed cards are still to see.
+test('playtest harness: seenCards seeds a save with every card seen but the listed ones', async ({ browser, baseURL }) => {
+  const outDir = mkdtempSync(join(tmpdir(), 'playtest-'));
+  const parsed = (levels as LevelDef[]).map(parseLevel);
+  const plan = planLevels(parsed, ['S29']);
+  const unseen = [...DEFAULT_UNSEEN_CARDS];
+  const save = saveFor(parsed, plan[0]!, 'en', false, plan, unseen);
+  const agent = await PlaytestAgent.start(browser, {
+    header: {
+      sessionId: 'T01-A02', agent: { agentId: 'A02', profileId: 'P02' }, turn: 1,
+      build: { commit: '0000000', version: 'test', variant: 'normale' },
+      device: { viewport: '360x640', language: 'en' },
+      startSave: startSaveOf(save),
+      plan: { packs: ['S29'], levelIds: plan },
+    },
+    levels: parsed, gameUrl: baseURL!, outDir, maxAttempts: 4, unseenCards: unseen, schema: null, pollMs: 100,
+  });
+  try {
+    const stored = JSON.parse((await agent.page.evaluate((key) => localStorage.getItem(key), STORAGE_KEY))!) as { unlocked: number; seenTips: string[] };
+    expect(stored.unlocked).toBe(plan[0]);
+    expect([...stored.seenTips].sort()).toEqual([...save.seenTips].sort());
+    expect(stored.seenTips).not.toContain('leftover');
+    expect(stored.seenTips).not.toContain('blocked');
+    expect(stored.seenTips).toEqual(expect.arrayContaining(['guide', 'mixing', 'ice', 'lock']));
+  } finally {
+    await agent.close();
+  }
 });
