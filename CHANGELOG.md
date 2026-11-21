@@ -2,6 +2,13 @@
 
 ## Non rilasciato
 
+### Testi e layout dal playtest T21: "max 1 secchiello", banner sul titolo, pannello finale (#229, epic #66)
+
+- **Singolare nei testi con un conteggio** (`src/core/i18n.ts`): `translate` usa la variante `<chiave>.one` quando `n` o `moves` vale esattamente 1 (stessa lingua, mai un ripiego in inglese). Nuove voci IT + EN: `change.belt.fact.one` ("Nastro: max 1 secchiello" / "Belt: max 1 bucket", livelli 290 e 300), `tip.belt.body.one` (card "Nastro pieno") e `win.summary.one` ("completato in 1 mossa" / "painted in 1 move"). Gli altri conteggi restano al plurale.
+- **Il banner "Quadro più grande" (e gli altri banner di novità) non copre più il nome del livello** (296 e 299, 360×640): si appende sotto la riga del sottotitolo, a 8 px, invece di partire a y=88.
+- **Pannello di vittoria**: la riga `win.summary` ("… completato in 21 mosse") va a capo su due righe nei telefoni stretti e si sovrapponeva al messaggio di fine stage (livello 300). `winPanelLayout` ora riserva due righe a ciascuno dei due testi (pannello più alto di 52 px senza ricompensa, 46 con); tutte le posizioni sotto sono slittate di conseguenza.
+- Test: unit (`tests/i18n.test.ts`: singolare e plurale IT/EN, 0/2/12, conteggio come testo, chiavi senza `.one`, parità `.one` tra le lingue; `tests/winPanel.test.ts`: due righe per testo senza sovrapposizioni); e2e `e2e/text-layout-229.spec.ts` (livelli 290, 296, 299, 300 e pannelli di fine stage 10 e 300, 360×640 e 412×915, IT/EN: nessun testo sovrapposto, `checkOnScreen`); screenshot prima/dopo in `docs/test-evidence/229-testi-layout/` (il "prima" del plurale è nei test unit: gli screenshot "prima" dei banner 290/300 non sono stati tenuti perché già col testo corretto).
+
 ### Playtest: salvataggio con tutte le card già viste, per misurare #225 (#230, epic #66)
 
 - **Campo `seenCards` nella config del turno** (o del singolo agent, che prevale; `false` lo spegne): `true` parte con tutte le card delle meccaniche già viste tranne "Perché è tornato" e "Corsia bloccata", una lista indica le card da lasciare. Senza il campo il salvataggio è quello di sempre (turni esistenti riproducibili). Il livello 1 mantiene l'onboarding. Errori chiari su card inesistenti o forma sbagliata.
