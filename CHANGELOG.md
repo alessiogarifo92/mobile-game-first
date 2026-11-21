@@ -2,6 +2,11 @@
 
 ## Non rilasciato
 
+### Playtest agent dell'universo 3, turno T22 (#68, #101, #225, epic #66)
+
+- **Report del turno T22** in `docs/reports/2026-11-21-playtest-agent-universo-3-t22.md` (2 agent con `seenCards`, S29 e S30): 20 livelli vinti al 1° tentativo, 0 bug. **La card "Perché è tornato" arriva a inizio del primo livello utile** (281 e 291), non più dopo il primo ritorno come in T20: #225 verificato sul punto principale. Nuove ipotesi sui testi nel report, senza ticket.
+- Schede in `docs/playtest/sessioni/T22/` (solo JSON, senza screenshot).
+
 ### Testi e layout dal playtest T21: "max 1 secchiello", banner sul titolo, pannello finale (#229, epic #66)
 
 - **Singolare nei testi con un conteggio** (`src/core/i18n.ts`): `translate` usa la variante `<chiave>.one` quando `n` o `moves` vale esattamente 1 (stessa lingua, mai un ripiego in inglese). Nuove voci IT + EN: `change.belt.fact.one` ("Nastro: max 1 secchiello" / "Belt: max 1 bucket", livelli 290 e 300), `tip.belt.body.one` (card "Nastro pieno") e `win.summary.one` ("completato in 1 mossa" / "painted in 1 move"). Gli altri conteggi restano al plurale.
