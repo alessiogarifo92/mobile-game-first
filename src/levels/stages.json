@@ -184,5 +184,11 @@
   "key": "beach",
   "color": 2,
   "complete": true
+ },
+ {
+  "id": 32,
+  "key": "reef",
+  "color": 4,
+  "complete": true
  }
 ]
