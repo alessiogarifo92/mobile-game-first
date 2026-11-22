@@ -16,5 +16,11 @@
   "key": "journey",
   "color": "B",
   "maxCanvas": 14
+ },
+ {
+  "id": 4,
+  "key": "seasky",
+  "color": "Y",
+  "maxCanvas": 14
  }
 ]

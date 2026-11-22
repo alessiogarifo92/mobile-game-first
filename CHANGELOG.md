@@ -2,6 +2,15 @@
 
 ## Non rilasciato
 
+### Universo 4 "Mare e cielo" e stage 31 "Spiaggia": livelli 301–310, debutto della pellicola colorata (#236, #102)
+
+- **Nasce l'universo 4 "Mare e cielo"** (IT/EN, tela fino a 14×14): si apre completando il livello 300, l'ultimo dell'universo 3, e la mappa e l'album lo mostrano come gli altri. Per ora ha solo lo stage 31 (completo): gli altri arrivano con #102.
+- **Dieci figure in pixel art originale** sulla spiaggia (`scripts/stages/stage-31.ts`): secchiello, castello di sabbia, ombrellone, pallone, infradito, barca a vela, palma, torre del bagnino, tramonto e il boss, la spiaggia (14×13). Foglio di anteprima in `docs/levels/stage-31.png`; nomi IT/EN.
+- **Il 301 è il debutto della pellicola** (#98): molto facile (vittorie a caso 100%), due pellicole in mezzo al secchiello (gialla su un pixel rosso, blu su un pixel giallo); la card compare una volta, verificata a 360×640 e 412×915. Dal 302 ogni livello ha pellicole (3 nel castello e nell'ombrellone, 4 in pallone e infradito, 7 in barca e torre, 5 nella palma, 6 nel tramonto, 7 nel boss) accanto al marrone e ai secondari già noti, nessun'altra meccanica.
+- **Nastro 2, slot 2** (3 solo al 301): mai sopra la fine dell'universo 3. Dal 302 ≥ 30% di pixel secondari o marroni.
+- **Curva** a dente di sega (#88): vittorie a caso 100 · 71,5 · 72 · 68 · 72,5 · 67,5 · 71 · 71 · 58,5 · 28,5%, media 68,05% (obiettivo ~68%, più facile della fine dell'universo 3, 55,8%); il boss è il più duro dello stage e sopra il pavimento dell'universo (22%). Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit sull'universo 4, sullo stage e sullo sblocco dopo il 300 (`tests/stage31.test.ts`); e2e `e2e/stage-31.spec.ts`: la mappa si apre sull'universo 4 dopo il 300, il 301 mostra la card della pellicola a due formati di telefono e si gioca fino alla vittoria, il 302 si gioca con le pellicole senza card. `tests/film.test.ts`: il 301 è il primo livello con pellicole.
+
 ### Meccanica: pellicola colorata (#98, epic #87)
 
 - **Regola** (`src/core/rules.ts`, condivisa da `sim.ts`, solver, `levelWinRate`, anticipazioni e suggerimenti): un pixel sotto una pellicola di un primario accetta solo un colpo **di quel** primario, che toglie la pellicola e consuma una munizione senza dipingere (`HitResult.tore`, `HitEvent.tore`); poi si dipinge normalmente. La pellicola blocca la corsia come ogni pixel non finito. Lo stato `film[]` sta nel `Board` e nella chiave di memo del solver; `paintNeeds(targets, ice, film)` conta il colpo in più sul colore **della pellicola** (non del pixel).

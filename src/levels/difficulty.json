@@ -1800,6 +1800,66 @@
    "specHash": "77c29c4b",
    "winRate": 0.265,
    "band": "hard"
+  },
+  {
+   "id": 301,
+   "specHash": "46ed7ec4",
+   "winRate": 1,
+   "band": "easy"
+  },
+  {
+   "id": 302,
+   "specHash": "c1b34298",
+   "winRate": 0.715,
+   "band": "normal"
+  },
+  {
+   "id": 303,
+   "specHash": "73ea73ff",
+   "winRate": 0.72,
+   "band": "normal"
+  },
+  {
+   "id": 304,
+   "specHash": "508d81eb",
+   "winRate": 0.68,
+   "band": "normal"
+  },
+  {
+   "id": 305,
+   "specHash": "8c764dd8",
+   "winRate": 0.725,
+   "band": "normal"
+  },
+  {
+   "id": 306,
+   "specHash": "0cb3a548",
+   "winRate": 0.675,
+   "band": "normal"
+  },
+  {
+   "id": 307,
+   "specHash": "74d2b6e7",
+   "winRate": 0.71,
+   "band": "normal"
+  },
+  {
+   "id": 308,
+   "specHash": "d79f8d9c",
+   "winRate": 0.71,
+   "band": "normal"
+  },
+  {
+   "id": 309,
+   "specHash": "2ecd1306",
+   "winRate": 0.585,
+   "band": "hard"
+  },
+  {
+   "id": 310,
+   "specHash": "13655ae4",
+   "winRate": 0.285,
+   "band": "hard"
   }
  ]
 }
