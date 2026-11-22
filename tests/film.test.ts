@@ -330,10 +330,10 @@ describe('film: the generator', () => {
     expect(solve(l).solvable).toBe(true);
   });
 
-  it('none of the shipped levels uses a film yet (the first one is the debut at 301)', () => {
-    for (const def of levels as LevelDef[]) {
-      expect(def.overlay?.some((row) => /[ryb]/.test(row)) ?? false).toBe(false);
-    }
+  it('no level before 301 uses a film, and 301 is the first that does (stage 31, #236)', () => {
+    const withFilm = (levels as LevelDef[]).filter((def) => def.overlay?.some((row) => /[ryb]/.test(row)));
+    expect(withFilm.length).toBeGreaterThan(0);
+    expect(withFilm[0]!.id).toBe(301);
   });
 });
 

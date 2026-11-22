@@ -9,4 +9,5 @@ export const UNIVERSE_SPECS: UniverseInfo[] = [
   { id: 1, key: 'atelier', color: 'R', maxCanvas: 14 },
   { id: 2, key: 'nature', color: 'G', maxCanvas: 14 },
   { id: 3, key: 'journey', color: 'B', maxCanvas: 14 },
+  { id: 4, key: 'seasky', color: 'Y', maxCanvas: 14 },
 ];

@@ -178,5 +178,11 @@
   "key": "lunapark",
   "color": 5,
   "complete": true
+ },
+ {
+  "id": 31,
+  "key": "beach",
+  "color": 2,
+  "complete": true
  }
 ]
