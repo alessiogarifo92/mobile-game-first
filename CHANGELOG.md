@@ -9,6 +9,7 @@
 - **Nastro 2, slot 2**: mai sopra la fine dell'universo 3.
 - **Curva** a dente di sega (#88): vittorie a caso 86,5 · 74,5 · 73,5 · 66,5 · 70 · 73,5 · 67 · 73 · 58,5 · 27,5%, media 67,05% (obiettivo ~66%, un po' più dura dello stage 31, 68,05%); il boss è il più duro dello stage e sopra il pavimento dell'universo (22%). Ogni livello è dimostrato risolvibile dal solver.
 - **Finestre di novità** (#157): `MECHANICS` in `src/core/curveReport.ts` conta ora anche `film`, così il debutto della pellicola al 301 vale come novità della finestra 301–320 (senza, il test «nessuna finestra di 20 livelli senza novità» fallirebbe appena la finestra si completa).
+- `e2e/stage-31.spec.ts` aggiornato: la mappa dell'universo 4 mostra ora anche lo stage 32 (bloccato) e il boss 320.
 - Test: unit in `tests/stage32.test.ts` (chiavi IT/EN, universo e stage, livelli 311–320, tela, pellicole e marrone, nastro e slot, curva, media, boss); e2e `e2e/stage-32.spec.ts`: la mappa mostra lo stage 32 dopo il 310 con solo il 311 giocabile, il 311 si gioca fino alla vittoria a 360×640 e 412×915, il boss 320 si gioca fino alla vittoria.
 
 ### Universo 4 "Mare e cielo" e stage 31 "Spiaggia": livelli 301–310, debutto della pellicola colorata (#236, #102)
