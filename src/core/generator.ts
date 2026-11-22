@@ -1,5 +1,5 @@
 import { BROWN, PRIMARIES, isPrimary, type Primary } from './colors';
-import { buildLanes, paintNeeds, parseImage, parseLevel, parseOverlay, walledIn, type LevelDef, type ShooterSpec } from './level';
+import { buildLanes, checkLocks, paintNeeds, parseImage, parseLevel, parseOverlay, walledIn, type LevelDef, type ShooterSpec } from './level';
 import { createRng, shuffle } from './rng';
 import { levelWinRate, solve } from './solver';
 
@@ -55,6 +55,11 @@ export interface Special {
    * on a plain pixel (not brown, not iced, locked, key or hidden), of a colour the pixel does not hold, picked with `rng`.
    */
   film?: number;
+  /**
+   * Lanes of the belt to put in a tunnel (#99): one contiguous stretch, placed by `placeTunnel` after everything else
+   * and with its own draws, so levels without one keep every earlier draw. It is a field of the level, not of the overlay.
+   */
+  tunnel?: number;
 }
 
 /**
@@ -214,6 +219,31 @@ export function placeSpecial(image: string[], counts: Special, rng: () => number
   return rows();
 }
 
+/**
+ * Picks the lanes of a tunnel of `length` lanes (#99): a contiguous stretch of the belt, starting at a lane chosen with
+ * `rng` among those that leave every pixel (and every key) a lane outside it, given the overlay's stones, locks and keys.
+ * Throws when no stretch of that length works. Returns the lane indices, ascending.
+ */
+export function placeTunnel(image: string[], overlay: string[] | undefined, length: number, rng: () => number): number[] {
+  if (!Number.isInteger(length) || length < 1) throw new Error('tunnel must be a positive number of lanes');
+  const { width, height, targets } = parseImage(image);
+  const { stone, locked, keys } = parseOverlay(overlay, width, targets);
+  const count = 2 * (width + height);
+  if (length >= count) throw new Error(`a tunnel of ${length} lanes would cover the whole belt (${count} lanes)`);
+  const starts = shuffle(Array.from({ length: count - length + 1 }, (_, i) => i), rng);
+  for (const start of starts) {
+    const tunnels = Array.from({ length }, (_, k) => start + k);
+    if (walledIn(width, height, targets, stone, tunnels) >= 0) continue;
+    try {
+      checkLocks(width, height, locked, keys, stone, tunnels);
+    } catch {
+      continue;
+    }
+    return tunnels;
+  }
+  throw new Error(`no stretch of ${length} lanes can be a tunnel: every one leaves a pixel or a key out of reach`);
+}
+
 /** Repaints `count` seeded pixels of the image brown (`K`); pixels already brown are not picked again. */
 export function placeBrown(image: string[], count: number, rng: () => number): string[] {
   const { width, targets } = parseImage(image);
@@ -261,7 +291,9 @@ export function generateLevel(opts: GenerateOptions): { def: LevelDef; seed: num
     // Covered buckets change the columns, not the overlay: a level with only `covered` keeps its hand-drawn overlay.
     const placed: Special = { ...opts.special };
     delete placed.covered;
+    delete placed.tunnel; // a tunnel is a field of the level, placed below
     const overlay = opts.special && Object.keys(placed).length > 0 ? placeSpecial(image, placed, rng) : opts.overlay;
+    const tunnels = opts.special?.tunnel ? placeTunnel(image, overlay, opts.special.tunnel, rng) : [];
     const { ice, film } = parseOverlay(overlay, width, targets);
     const shooters = splitAmmo(paintNeeds(targets, ice, film), opts.ammoChunk);
     if (opts.minShooters && shooters.length < opts.minShooters) {
@@ -277,6 +309,7 @@ export function generateLevel(opts: GenerateOptions): { def: LevelDef; seed: num
       ...(opts.boss ? { boss: true } : {}),
       image,
       ...(overlay ? { overlay } : {}),
+      ...(tunnels.length > 0 ? { tunnels } : {}),
       columns: columns.filter((c) => c.length > 0),
       slots: opts.slots,
       beltCapacity: opts.beltCapacity,

@@ -33,6 +33,7 @@ export const TIP_PAGE: Readonly<Record<CardTip, number | null>> = {
   covered: 6,
   ice: null,
   film: null,
+  tunnel: null,
   hidden: null,
   belt: null,
   queue: null,

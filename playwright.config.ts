@@ -26,5 +26,10 @@ export default defineConfig({
       command: 'npx vite build --mode film-debut --outDir dist-film-debut && npx vite preview --outDir dist-film-debut --port 4176 --strictPort',
       url: 'http://localhost:4176', reuseExistingServer: !process.env.CI, timeout: 120_000,
     },
+    // The game with the blind-lanes debut level after the shipped ones (vite.config.ts), for e2e/tunnel.spec.ts.
+    {
+      command: 'npx vite build --mode tunnel-debut --outDir dist-tunnel-debut && npx vite preview --outDir dist-tunnel-debut --port 4177 --strictPort',
+      url: 'http://localhost:4177', reuseExistingServer: !process.env.CI, timeout: 120_000,
+    },
   ],
 });
