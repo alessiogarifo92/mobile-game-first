@@ -1920,6 +1920,66 @@
    "specHash": "97c7bb15",
    "winRate": 0.275,
    "band": "hard"
+  },
+  {
+   "id": 321,
+   "specHash": "71290fb2",
+   "winRate": 0.885,
+   "band": "easy"
+  },
+  {
+   "id": 322,
+   "specHash": "2e0c3c99",
+   "winRate": 0.695,
+   "band": "normal"
+  },
+  {
+   "id": 323,
+   "specHash": "7eeea39f",
+   "winRate": 0.71,
+   "band": "normal"
+  },
+  {
+   "id": 324,
+   "specHash": "97d4a5a0",
+   "winRate": 0.67,
+   "band": "normal"
+  },
+  {
+   "id": 325,
+   "specHash": "77387118",
+   "winRate": 0.69,
+   "band": "normal"
+  },
+  {
+   "id": 326,
+   "specHash": "8099ca5b",
+   "winRate": 0.645,
+   "band": "hard"
+  },
+  {
+   "id": 327,
+   "specHash": "389c147a",
+   "winRate": 0.615,
+   "band": "hard"
+  },
+  {
+   "id": 328,
+   "specHash": "48f4f6a8",
+   "winRate": 0.73,
+   "band": "normal"
+  },
+  {
+   "id": 329,
+   "specHash": "dec58fda",
+   "winRate": 0.51,
+   "band": "hard"
+  },
+  {
+   "id": 330,
+   "specHash": "7b8477af",
+   "winRate": 0.275,
+   "band": "hard"
   }
  ]
 }
