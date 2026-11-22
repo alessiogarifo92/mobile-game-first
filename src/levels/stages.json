@@ -190,5 +190,11 @@
   "key": "reef",
   "color": 4,
   "complete": true
+ },
+ {
+  "id": 33,
+  "key": "abyss",
+  "color": 5,
+  "complete": true
  }
 ]

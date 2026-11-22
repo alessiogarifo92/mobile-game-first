@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Stage 33 "Abissi": livelli 321–330 (#238, #102)
+
+- **Dieci figure in pixel art originale** sugli abissi (`scripts/stages/stage-33.ts`, terzo stage dell'universo 4, completo): ancora affondata, pesce abissale con la lanterna, medusa degli abissi, calamaro gigante, relitto, forziere, sottomarino, pesce spada, palombaro e il boss, il kraken (14×14, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-33.png`; nomi IT/EN.
+- **Meccaniche**: pellicola (nota dal 301), chiave e lucchetto (noti dal 261) e marrone; nessuna card nuova e nessun'altra meccanica. Pellicole: 3 nell'ancora, 2 nel pesce abissale, 3 in medusa e calamaro, 4 in relitto, pesce spada e palombaro, 5 nel forziere, 6 nel sottomarino, 7 nel boss; ogni livello ha una chiave e 2 lucchetti (il boss 2 chiavi e 3 lucchetti). Nessun livello molto facile (non è un debutto); dal 322 ≥ 30% di pixel secondari o marroni.
+- **Nastro 2, slot 2**: mai sopra la fine dell'universo 3.
+- **Curva** a dente di sega (#88): vittorie a caso 88,5 · 69,5 · 71 · 67 · 69 · 64,5 · 61,5 · 73 · 51 · 27,5%, media 64,25% (obiettivo ~65%, un po' più dura dello stage 32, 67,05%); il boss è il più duro dello stage e sopra il pavimento dell'universo (22%). Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit in `tests/stage33.test.ts` (chiavi IT/EN, universo e stage, livelli 321–330, tela, pellicole, chiavi, lucchetti e marrone, nastro e slot, curva, media, boss, sblocco); e2e `e2e/stage-33.spec.ts`: la mappa mostra lo stage 33 dopo il 320 con solo il 321 giocabile, il 321 si gioca fino alla vittoria a 360×640 e 412×915, il boss 330 si gioca fino alla vittoria; gli e2e degli stage 31 e 32 includono ora anche lo stage 33 nella mappa.
+
 ### Stage 32 "Barriera corallina": livelli 311–320 (#237, #102)
 
 - **Dieci figure in pixel art originale** sulla barriera (`scripts/stages/stage-32.ts`, secondo stage dell'universo 4, completo): alghe, pesce pagliaccio, cavalluccio marino, stella della barriera, tridacna, tartaruga marina, ramo di corallo, polpo, pesce angelo e il boss, la barriera (14×14, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-32.png`; nomi IT/EN.
