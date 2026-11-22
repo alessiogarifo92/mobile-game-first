@@ -1980,6 +1980,66 @@
    "specHash": "7b8477af",
    "winRate": 0.275,
    "band": "hard"
+  },
+  {
+   "id": 331,
+   "specHash": "3dffcefe",
+   "winRate": 0.82,
+   "band": "normal"
+  },
+  {
+   "id": 332,
+   "specHash": "d1848fb8",
+   "winRate": 0.69,
+   "band": "normal"
+  },
+  {
+   "id": 333,
+   "specHash": "549cd963",
+   "winRate": 0.635,
+   "band": "hard"
+  },
+  {
+   "id": 334,
+   "specHash": "866c5b02",
+   "winRate": 0.635,
+   "band": "hard"
+  },
+  {
+   "id": 335,
+   "specHash": "081f8574",
+   "winRate": 0.655,
+   "band": "normal"
+  },
+  {
+   "id": 336,
+   "specHash": "f979675a",
+   "winRate": 0.67,
+   "band": "normal"
+  },
+  {
+   "id": 337,
+   "specHash": "7fd2a7a5",
+   "winRate": 0.575,
+   "band": "hard"
+  },
+  {
+   "id": 338,
+   "specHash": "e0a9711a",
+   "winRate": 0.74,
+   "band": "normal"
+  },
+  {
+   "id": 339,
+   "specHash": "25202d7d",
+   "winRate": 0.525,
+   "band": "hard"
+  },
+  {
+   "id": 340,
+   "specHash": "975f5bf4",
+   "winRate": 0.28,
+   "band": "hard"
   }
  ]
 }
