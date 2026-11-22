@@ -28,6 +28,7 @@ import { bannerFor, changeKey, levelChanges, unseenChanges, type DifficultyChang
 import { defeatsOn } from '../../core/progress';
 import { REDUCED_MOTION_QUERY, prefersReducedMotion } from '../../core/motion';
 import { pixelRevealFrame, runningReveals } from '../../core/reveal';
+import { FILM_PEEL_MS, peelFrame } from '../../core/film';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
 import {
@@ -38,7 +39,7 @@ import { PAINT, SYMBOL, THEME, css } from '../theme';
 import { drawChangeIcon } from '../changeIcon';
 import { drawSkin } from '../skins';
 import { drawTipArt, hasSharedArt } from '../tipArt';
-import { brownPixel, button, drawIce, drawStone, iceCounter, keyIcon, label, lockIcon, progressBar, screenBackground } from '../ui';
+import { brownPixel, button, drawFilm, drawIce, drawStone, iceCounter, keyIcon, label, lockIcon, progressBar, screenBackground } from '../ui';
 
 const TICK_MS = 85;
 const BELT_JAR = 54;
@@ -138,6 +139,8 @@ export class PlayScene extends Phaser.Scene {
   private blockedTaps = 0;
   /** Shots stopped by a stone so far (for tests). */
   private stoneSplashes = 0;
+  /** Films torn off so far this level (#98), for the e2e. */
+  private filmTears = 0;
   /** #93: this attempt was opened from the jam panel's "Hint" button, which marks the first move of a solution. */
   private hint = false;
   private hintMove: Move | null = null;
@@ -193,6 +196,7 @@ export class PlayScene extends Phaser.Scene {
     this.blockers = null;
     this.blockedTaps = 0;
     this.stoneSplashes = 0;
+    this.filmTears = 0;
     this.hint = data.hint === true;
     this.hintMove = null;
     this.hintLayer = null;
@@ -709,6 +713,8 @@ export class PlayScene extends Phaser.Scene {
         // Key: what opens the padlocks, until it is done.
         keyIcon(g, x + w / 2, y + h / 2, w * 0.78);
       }
+      // Film (#98): a veil of the colour that tears it off first, with a dashed border and that colour's shape.
+      if (this.gs.film[i]! > 0) drawFilm(g, x, y, w, h, this.gs.film[i] as Primary);
       // Ice (#150): a block of ice with the hits of its colour that still break it.
       if (this.gs.ice[i]! > 0) {
         drawIce(g, x, y, w, h, this.gs.ice[i]!);
@@ -1087,6 +1093,7 @@ export class PlayScene extends Phaser.Scene {
             onComplete: () => spot.destroy(),
           });
         }
+        if (e.tore) this.tearFilm(r, e.color);
         if (e.brokeIce) {
           for (let k = 0; k < 6; k++) {
             const shard = this.add.rectangle(to.x, to.y, 6, 10, THEME.ice).setDepth(4).setAngle(Math.random() * 180);
@@ -1113,6 +1120,25 @@ export class PlayScene extends Phaser.Scene {
           this.tweens.add({ targets: ring, scale: 1.8, alpha: 0, duration: 320, onComplete: () => ring.destroy() });
         }
       },
+    });
+  }
+
+  /** The tear (#98): the film comes off the pixel it covered, curling up and away; the pixel under it shows at once. */
+  private tearFilm(r: { x: number; y: number; w: number; h: number }, color: Primary): void {
+    this.filmTears += 1;
+    sfx.reveal();
+    const veil = this.add.graphics().setPosition(r.x + r.w / 2, r.y + r.h / 2).setDepth(4);
+    drawFilm(veil, -r.w / 2, -r.h / 2, r.w, r.h, color);
+    const frames = { t: 0 };
+    this.tweens.add({
+      targets: frames,
+      t: 1,
+      duration: FILM_PEEL_MS,
+      onUpdate: () => {
+        const f = peelFrame(frames.t, this.reducedMotion);
+        veil.setPosition(r.x + r.w / 2 + f.dx * r.w, r.y + r.h / 2 + f.dy * r.h).setAngle(f.angle).setScale(f.scale).setAlpha(f.alpha);
+      },
+      onComplete: () => veil.destroy(),
     });
   }
 
@@ -1486,6 +1512,8 @@ export class PlayScene extends Phaser.Scene {
       // Pixels to paint, so playtest telemetry can say how many were missing (#68).
       targets: this.level.targets.filter(Boolean).length,
       ice: gs.ice.reduce((a, b) => a + b, 0),
+      film: gs.film.filter((f) => f !== 0).length,
+      filmTears: this.filmTears,
       // The numbers drawn on frozen pixels (#150), cell → text, so e2e can check they follow the ice.
       iceCounters: Object.fromEntries([...this.iceMarks].map(([cell, t]) => [cell, t.text])),
       hidden: gs.hidden.filter(Boolean).length,

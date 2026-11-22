@@ -14,10 +14,14 @@ export interface Board {
   hidden: boolean[];
   /** Locked pixels block their lane until every key pixel of the level is done. */
   locked: boolean[];
+  /** Film left on each pixel (#98): the primary that tears it, 0 once torn off or when there was none. */
+  film: number[];
 }
 
 export interface HitResult {
   brokeIce: boolean;
+  /** The hit tore a film off the pixel instead of painting it (#98). */
+  tore: boolean;
   completed: boolean;
   /** Hidden pixels revealed because this hit completed their neighbour. */
   revealed: number[];
@@ -26,16 +30,16 @@ export interface HitResult {
 }
 
 export function createBoard(level: Level): Board {
-  return { paint: level.targets.map(() => 0), ice: level.ice.slice(), hidden: level.hidden.slice(), locked: level.locked.slice() };
+  return { paint: level.targets.map(() => 0), ice: level.ice.slice(), hidden: level.hidden.slice(), locked: level.locked.slice(), film: level.film.slice() };
 }
 
 export function cloneBoard(board: Board): Board {
-  return { paint: board.paint.slice(), ice: board.ice.slice(), hidden: board.hidden.slice(), locked: board.locked.slice() };
+  return { paint: board.paint.slice(), ice: board.ice.slice(), hidden: board.hidden.slice(), locked: board.locked.slice(), film: board.film.slice() };
 }
 
 export function cellDone(level: Level, board: Board, cell: number): boolean {
   const target = level.targets[cell]!;
-  return target === 0 || (board.paint[cell] === target && board.ice[cell] === 0 && !board.hidden[cell] && !board.locked[cell]);
+  return target === 0 || (board.paint[cell] === target && board.ice[cell] === 0 && board.film[cell] === 0 && !board.hidden[cell] && !board.locked[cell]);
 }
 
 export function boardDone(level: Level, board: Board): boolean {
@@ -44,7 +48,7 @@ export function boardDone(level: Level, board: Board): boolean {
 
 /**
  * Cell a shot of `color` hits along `laneCells`: paint flies over finished pixels and stops at the
- * first unfinished one, which takes the shot only if it can use it. -1 when the lane is blocked,
+ * first unfinished one, which takes the shot only if it can use it (a film only takes its own colour). -1 when the lane is blocked,
  * also by a stone (paint never passes one).
  */
 export function findTarget(level: Level, board: Board, laneCells: readonly number[], color: Primary): number {
@@ -53,6 +57,8 @@ export function findTarget(level: Level, board: Board, laneCells: readonly numbe
     if (cellDone(level, board, cell)) continue;
     if (board.hidden[cell] || board.locked[cell]) return -1;
     const target = level.targets[cell]!;
+    // A film takes only a shot of its own colour, which tears it off; the pixel under it waits (#98).
+    if (board.film[cell]! > 0) return board.film[cell] === color ? cell : -1;
     if (board.ice[cell]! > 0) return (target & color) !== 0 ? cell : -1;
     return accepts(target, board.paint[cell]!, color) ? cell : -1;
   }
@@ -75,7 +81,11 @@ export function blockingStone(level: Level, board: Board, laneCells: readonly nu
 /** Applies a hit returned by findTarget. */
 export function applyHit(level: Level, board: Board, cell: number, color: Primary): HitResult {
   let brokeIce = false;
-  if (board.ice[cell]! > 0) {
+  let tore = false;
+  if (board.film[cell]! > 0) {
+    board.film[cell] = 0;
+    tore = true;
+  } else if (board.ice[cell]! > 0) {
     board.ice[cell]! -= 1;
     brokeIce = true;
   } else {
@@ -107,7 +117,7 @@ export function applyHit(level: Level, board: Board, cell: number, color: Primar
       unlocked.push(i);
     });
   }
-  return { brokeIce, completed, revealed, unlocked };
+  return { brokeIce, tore, completed, revealed, unlocked };
 }
 
 /**

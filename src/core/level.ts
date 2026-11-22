@@ -1,4 +1,4 @@
-import { COLOR_CODES, PRIMARIES, isPrimary, primariesOf, type Primary } from './colors';
+import { BROWN, COLOR_CODES, PRIMARIES, isPrimary, primariesOf, type Primary } from './colors';
 
 export interface ShooterSpec {
   color: Primary;
@@ -21,7 +21,11 @@ export interface LevelDef {
   /** Hash of the spec this level was generated from (see stages.ts). */
   specHash?: string;
   image: string[];
-  /** Optional layer over the image: `i` = ice, `h` = hidden, `s` = stone (on an empty cell), `k` = key, `l` = lock, `.` = nothing. */
+  /**
+   * Optional layer over the image: `i` = ice, `h` = hidden, `s` = stone (on an empty cell), `k` = key, `l` = lock,
+   * `r`/`y`/`b` = a film of that primary over the pixel (#98), `.` = nothing. A cell takes one code, so a film never
+   * shares a pixel with ice, a lock, a key or a hidden cover.
+   */
   overlay?: string[];
   columns: ShooterSpec[][];
   slots: number;
@@ -41,31 +45,45 @@ export interface Level extends LevelDef {
   /** Locked pixels block their lane until every key pixel is done. */
   locked: boolean[];
   keys: boolean[];
+  /** Film over a pixel (#98): the primary that must tear it off first, 0 where there is none. Never a colour the pixel holds. */
+  film: number[];
 }
 
 export class LevelError extends Error {}
 
-/** Number of hits of each primary needed to complete an image (an iced pixel takes one more). */
-export function paintNeeds(targets: readonly number[], ice: readonly number[] = []): Record<Primary, number> {
+/**
+ * Number of hits of each primary needed to complete an image: an iced pixel takes one more of each of its primaries,
+ * a pixel under a film one more hit of the film's colour (#98), which is never one the pixel holds.
+ */
+export function paintNeeds(targets: readonly number[], ice: readonly number[] = [], film: readonly number[] = []): Record<Primary, number> {
   const needs = { 1: 0, 2: 0, 4: 0 } as Record<Primary, number>;
   targets.forEach((t, i) => {
     for (const p of primariesOf(t)) needs[p] += 1 + (ice[i] ?? 0);
+    const f = film[i] ?? 0;
+    if (f !== 0) needs[f as Primary] += 1;
   });
   return needs;
 }
 
-/** Parses the optional overlay: ice only on primary pixels, stones only on empty cells, nothing else on empty cells. */
+/** Overlay letters of a film, by the primary it tears with. */
+export const FILM_CODES: Readonly<Record<string, Primary>> = { r: 1, y: 2, b: 4 };
+
+/**
+ * Parses the optional overlay: ice only on primary pixels, stones only on empty cells, nothing else on empty cells,
+ * a film (`r`/`y`/`b`) only on a pixel that is not brown and does not hold the film's colour.
+ */
 export function parseOverlay(
   overlay: readonly string[] | undefined,
   width: number,
   targets: readonly number[],
-): { ice: number[]; hidden: boolean[]; stone: boolean[]; locked: boolean[]; keys: boolean[] } {
+): { ice: number[]; hidden: boolean[]; stone: boolean[]; locked: boolean[]; keys: boolean[]; film: number[] } {
   const ice = targets.map(() => 0);
   const hidden = targets.map(() => false);
   const stone = targets.map(() => false);
   const locked = targets.map(() => false);
   const keys = targets.map(() => false);
-  if (!overlay) return { ice, hidden, stone, locked, keys };
+  const film = targets.map(() => 0);
+  if (!overlay) return { ice, hidden, stone, locked, keys, film };
   if (overlay.length * width !== targets.length) throw new LevelError('overlay must have the same rows as the image');
   overlay.forEach((row, y) => {
     if (row.length !== width) throw new LevelError(`overlay row ${y} has length ${row.length}, expected ${width}`);
@@ -77,8 +95,15 @@ export function parseOverlay(
         stone[cell] = true;
         return;
       }
-      if (!'ihkl'.includes(ch)) throw new LevelError(`unknown overlay code "${ch}" in row ${y}`);
+      if (!'ihkl'.includes(ch) && !(ch in FILM_CODES)) throw new LevelError(`unknown overlay code "${ch}" in row ${y}`);
       if (targets[cell] === 0) throw new LevelError(`overlay "${ch}" on an empty cell (${x}, ${y})`);
+      if (ch in FILM_CODES) {
+        const color = FILM_CODES[ch]!;
+        if (targets[cell] === BROWN) throw new LevelError(`film on a brown pixel (${x}, ${y}): brown holds every primary, no colour is left for the film`);
+        if ((targets[cell]! & color) !== 0) throw new LevelError(`film "${ch}" on a pixel that holds its colour (${x}, ${y})`);
+        film[cell] = color;
+        return;
+      }
       if (ch === 'i') {
         if (!isPrimary(targets[cell]!)) throw new LevelError(`ice on a non-primary pixel (${x}, ${y})`);
         ice[cell] = 1;
@@ -88,7 +113,7 @@ export function parseOverlay(
     });
   });
   checkLocks(width, targets.length / width, locked, keys, stone);
-  return { ice, hidden, stone, locked, keys };
+  return { ice, hidden, stone, locked, keys, film };
 }
 
 /** First pixel that no lane reaches before a stone (stones stop paint), or -1 when every pixel can be painted. */
@@ -154,7 +179,7 @@ export function parseImage(image: readonly string[]): { width: number; height: n
 /** Parses and validates a level definition; throws LevelError when it can never be completed. */
 export function parseLevel(def: LevelDef): Level {
   const { width, height, targets } = parseImage(def.image);
-  const { ice, hidden, stone, locked, keys } = parseOverlay(def.overlay, width, targets);
+  const { ice, hidden, stone, locked, keys, film } = parseOverlay(def.overlay, width, targets);
   checkReachable(width, height, targets, stone);
   if (!Number.isInteger(def.slots) || def.slots < 1) throw new LevelError('slots must be a positive integer');
   if (!Number.isInteger(def.beltCapacity) || def.beltCapacity < 1) {
@@ -173,13 +198,13 @@ export function parseLevel(def: LevelDef): Level {
       ammo[s.color] += s.ammo;
     }
   }
-  const needs = paintNeeds(targets, ice);
+  const needs = paintNeeds(targets, ice, film);
   for (const p of PRIMARIES) {
     if (ammo[p] !== needs[p]) {
       throw new LevelError(`ammo for color ${p} is ${ammo[p]} but the image needs ${needs[p]}`);
     }
   }
-  return { ...def, width, height, targets, ice, hidden, stone, locked, keys };
+  return { ...def, width, height, targets, ice, hidden, stone, locked, keys, film };
 }
 
 /**

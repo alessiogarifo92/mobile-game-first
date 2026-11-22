@@ -50,6 +50,11 @@ export interface Special {
    */
   stonePlacement?: 'random' | 'blocking';
   covered?: number;
+  /**
+   * Pixels to put under a film (#98), placed last from the same shuffle so levels without one keep their overlay: each
+   * on a plain pixel (not brown, not iced, locked, key or hidden), of a colour the pixel does not hold, picked with `rng`.
+   */
+  film?: number;
 }
 
 /**
@@ -100,7 +105,7 @@ export function coverShooters(columns: ShooterSpec[][], share: number, rng: () =
  * Places `ice` iced pixels (on primary pixels only), `hidden` pixels (each with at least one
  * orthogonal neighbour that is a visible pixel, so it can be revealed), then `key` key pixels and
  * `lock` locked pixels (skipping any lock that would wall a key in), then `stone` stones (on empty cells next to a pixel,
- * never walling a pixel or a key in). Returns an overlay.
+ * never walling a pixel or a key in), then `film` films (#98). Returns an overlay.
  */
 export function placeSpecial(image: string[], counts: Special, rng: () => number): string[] {
   const { width, height, targets } = parseImage(image);
@@ -195,6 +200,17 @@ export function placeSpecial(image: string[], counts: Special, rng: () => number
     }
   }
   if (stone > 0) throw new Error(`not enough empty cells next to the figure for ${counts.stone} stones`);
+  // Films last of all, and the rng is drawn only for them: a level without one keeps every earlier draw.
+  let film = counts.film ?? 0;
+  const letters: Record<number, string> = { 1: 'r', 2: 'y', 4: 'b' };
+  for (const c of cells) {
+    if (film === 0) break;
+    if (targets[c] === 0 || targets[c] === BROWN || grid[c] !== '.') continue;
+    const colors = PRIMARIES.filter((p) => (targets[c]! & p) === 0);
+    grid[c] = letters[colors[Math.floor(rng() * colors.length)]!]!;
+    film -= 1;
+  }
+  if (film > 0) throw new Error(`not enough plain pixels for ${counts.film} films`);
   return rows();
 }
 
@@ -246,8 +262,8 @@ export function generateLevel(opts: GenerateOptions): { def: LevelDef; seed: num
     const placed: Special = { ...opts.special };
     delete placed.covered;
     const overlay = opts.special && Object.keys(placed).length > 0 ? placeSpecial(image, placed, rng) : opts.overlay;
-    const { ice } = parseOverlay(overlay, width, targets);
-    const shooters = splitAmmo(paintNeeds(targets, ice), opts.ammoChunk);
+    const { ice, film } = parseOverlay(overlay, width, targets);
+    const shooters = splitAmmo(paintNeeds(targets, ice, film), opts.ammoChunk);
     if (opts.minShooters && shooters.length < opts.minShooters) {
       throw new Error(`only ${shooters.length} shooters with ammoChunk ${opts.ammoChunk}, minimum ${opts.minShooters}`);
     }

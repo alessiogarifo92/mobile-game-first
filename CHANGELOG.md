@@ -2,6 +2,16 @@
 
 ## Non rilasciato
 
+### Meccanica: pellicola colorata (#98, epic #87)
+
+- **Regola** (`src/core/rules.ts`, condivisa da `sim.ts`, solver, `levelWinRate`, anticipazioni e suggerimenti): un pixel sotto una pellicola di un primario accetta solo un colpo **di quel** primario, che toglie la pellicola e consuma una munizione senza dipingere (`HitResult.tore`, `HitEvent.tore`); poi si dipinge normalmente. La pellicola blocca la corsia come ogni pixel non finito. Lo stato `film[]` sta nel `Board` e nella chiave di memo del solver; `paintNeeds(targets, ice, film)` conta il colpo in più sul colore **della pellicola** (non del pixel).
+- **Formato livello**: nell'`overlay` `r`/`y`/`b` = pellicola di quel primario (`Level.film`). `parseLevel` rifiuta la pellicola su marrone, su un pixel che contiene già quel colore e su una cella vuota, con errori chiari. Un'unica lettera per cella: la pellicola non può convivere con ghiaccio, lucchetto, chiave o pixel nascosto.
+- **Generatore**: `special: { film: n }` piazza le pellicole per ultime dallo stesso shuffle (colore scelto col seed fra quelli che il pixel non ha), così **nessun livello esistente cambia** (`gen:levels --check` verde, `levels.json` invariato). `curve.ts` conta `film` fra le meccaniche del livello.
+- **Grafica** (`src/core/film.ts`, `drawFilm` in `src/game/ui.ts`, solo token di `theme.ts`, nessun asset): velo traslucido del colore, bordo tratteggiato d'inchiostro e dischetto bianco con la forma del primario (● rosso, ▲ giallo, ■ blu), quindi leggibile anche senza colore; animazione di strappo (`peelFrame`, 380 ms, solo dissolvenza con movimento ridotto).
+- **Suggerimento una tantum** (`onboarding.ts`, card `film`) e pagina "regola sbloccata" in "Come si gioca", con la stessa illustrazione (`tipArt.ts`); testi IT + EN in `i18n.ts`.
+- **Livello di debutto d'esempio** `e2e/fixtures/film-debut.json` (generato da `film-debut.ts`: cuore 8×8, due pellicole, fascia "molto facile"), servito dalla build e2e `--mode film-debut` come farà il livello 301 del ticket #102. Nessun livello di stage nuovo.
+- Test: unit in `tests/film.test.ts` (regole, errori di `parseLevel`, solver con film risolvibile/irrisolvibile e chiave di memo, `runLoop` = simulazione, `levelWinRate`, generatore deterministico e livelli esistenti intatti, onboarding, chiavi IT/EN, geometria e contrasto, blocchi); e2e `e2e/film.spec.ts` (card al debutto, pellicole strappate fino alla vittoria, pagina "Come si gioca", IT, card non ripetuta; 360×640 e 412×915). Screenshot in `docs/test-evidence/98-pellicola/`.
+
 ### Playtest agent dell'universo 3, turno T22 (#68, #101, #225, epic #66)
 
 - **Report del turno T22** in `docs/reports/2026-11-21-playtest-agent-universo-3-t22.md` (2 agent con `seenCards`, S29 e S30): 20 livelli vinti al 1° tentativo, 0 bug. **La card "Perché è tornato" arriva a inizio del primo livello utile** (281 e 291), non più dopo il primo ritorno come in T20: #225 verificato sul punto principale. Nuove ipotesi sui testi nel report, senza ticket.

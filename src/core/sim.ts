@@ -25,6 +25,8 @@ export interface HitEvent {
   paint: number;
   completed: boolean;
   brokeIce: boolean;
+  /** The hit tore a film off (#98): no paint landed. */
+  tore: boolean;
   revealed: number[];
   unlocked: number[];
 }
@@ -36,7 +38,7 @@ export interface StoneEvent {
   cell: number;
 }
 
-/** The game state is a Board (paint, ice, hidden, locked) plus the belt and the shooters. */
+/** The game state is a Board (paint, ice, hidden, locked, film) plus the belt and the shooters. */
 export interface GameState extends Board {
   level: Level;
   lanes: number[][];

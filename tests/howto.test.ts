@@ -34,7 +34,7 @@ describe('how to play pages', () => {
 });
 
 describe('how to play: unlocked rules (#183)', () => {
-  const ALL: CardTip[] = ['mixing', 'blocked', 'slots', 'ice', 'hidden', 'lock', 'belt', 'brown', 'stone', 'covered', 'queue', 'leftover'];
+  const ALL: CardTip[] = ['mixing', 'blocked', 'slots', 'ice', 'film', 'hidden', 'lock', 'belt', 'brown', 'stone', 'covered', 'queue', 'leftover'];
 
   it('with no tip seen it is the base pages only, unchanged', () => {
     const pages = howtoPages([]);
@@ -46,10 +46,10 @@ describe('how to play: unlocked rules (#183)', () => {
     expect(howtoPages(['mixing', 'blocked', 'slots', 'brown', 'stone', 'lock', 'covered', 'guide'])).toHaveLength(HOWTO_PAGES);
   });
 
-  it('with every tip seen it adds the five uncovered ones after the base pages, in a fixed order', () => {
+  it('with every tip seen it adds the six uncovered ones after the base pages, in a fixed order', () => {
     const pages = howtoPages(ALL);
-    expect(pages).toHaveLength(HOWTO_PAGES + 5);
-    expect(pages.slice(HOWTO_PAGES)).toEqual(['ice', 'hidden', 'belt', 'queue', 'leftover'].map((tip) => ({ kind: 'tip', tip })));
+    expect(pages).toHaveLength(HOWTO_PAGES + 6);
+    expect(pages.slice(HOWTO_PAGES)).toEqual(['ice', 'film', 'hidden', 'belt', 'queue', 'leftover'].map((tip) => ({ kind: 'tip', tip })));
   });
 
   it('the order the tips were seen in does not matter', () => {
@@ -71,7 +71,7 @@ describe('how to play: unlocked rules (#183)', () => {
         expect(EXTRA_TIPS).not.toContain(tip);
       }
     }
-    expect(EXTRA_TIPS).toEqual(['ice', 'hidden', 'belt', 'queue', 'leftover']);
+    expect(EXTRA_TIPS).toEqual(['ice', 'film', 'hidden', 'belt', 'queue', 'leftover']);
   });
 
   it('page moves follow the number of pages', () => {
