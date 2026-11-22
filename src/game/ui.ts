@@ -5,6 +5,7 @@ import type { Level } from '../core/level';
 import { brownWedges } from '../core/brownPixel';
 import { iceBadge, iceGlints } from '../core/ice';
 import { FILM_DISC, filmDashes, filmGlyph } from '../core/film';
+import type { TunnelRoof } from '../core/tunnel';
 import { PRIMARIES, type Primary } from '../core/colors';
 import { MURAL_SIDE, TILE_CELLS, tileCells } from '../core/mural';
 import { MURAL_PAINT, PAINT, THEME } from './theme';
@@ -216,6 +217,29 @@ export function drawFilm(g: Phaser.GameObjects.Graphics, x: number, y: number, w
     g.fillPoints(pts, true);
     g.strokePoints(pts, true);
   }
+}
+
+/**
+ * A tunnel over the belt (#99): an opaque roof of grey stone with an ink outline, a lighter ridge down its length and a
+ * tie across every blind lane, and a dark mouth at each end. Buckets slide under it, so it has to hide them completely;
+ * the ridge, the ties and the mouths carry it without its colour. `ties` are the lines across the roof (core/tunnel.ts).
+ */
+export function drawTunnel(g: Phaser.GameObjects.Graphics, roof: TunnelRoof, ties: readonly (readonly number[])[]): void {
+  const edge = 3;
+  g.fillStyle(THEME.ink, 1);
+  for (const r of roof.pieces) g.fillRoundedRect(r.x - edge, r.y - edge, r.w + 2 * edge, r.h + 2 * edge, THEME.radius.jar);
+  g.fillStyle(THEME.stoneDark, 1);
+  for (const r of roof.pieces) g.fillRoundedRect(r.x, r.y, r.w, r.h, THEME.radius.jar - edge);
+  // The ridge: a lighter strip along the middle of each run.
+  g.fillStyle(THEME.stone, 1);
+  for (const r of roof.pieces) {
+    if (r.w >= r.h) g.fillRoundedRect(r.x + r.h * 0.2, r.y + r.h * 0.38, Math.max(0, r.w - r.h * 0.4), r.h * 0.24, 4);
+    else g.fillRoundedRect(r.x + r.w * 0.38, r.y + r.w * 0.2, r.w * 0.24, Math.max(0, r.h - r.w * 0.4), 4);
+  }
+  g.lineStyle(3, THEME.ink, 1);
+  for (const [x1, y1, x2, y2] of ties) g.lineBetween(x1!, y1!, x2!, y2!);
+  g.fillStyle(THEME.ink, 1);
+  for (const m of roof.mouths) g.fillRoundedRect(m.x, m.y, m.w, m.h, 4);
 }
 
 /**

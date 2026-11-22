@@ -29,6 +29,7 @@ import { defeatsOn } from '../../core/progress';
 import { REDUCED_MOTION_QUERY, prefersReducedMotion } from '../../core/motion';
 import { pixelRevealFrame, runningReveals } from '../../core/reveal';
 import { FILM_PEEL_MS, peelFrame } from '../../core/film';
+import { ROOF_DEPTH, roofTies, tunnelRoof } from '../../core/tunnel';
 import { sfx } from '../audio';
 import { publishDebug } from '../debug';
 import {
@@ -39,7 +40,7 @@ import { PAINT, SYMBOL, THEME, css } from '../theme';
 import { drawChangeIcon } from '../changeIcon';
 import { drawSkin } from '../skins';
 import { drawTipArt, hasSharedArt } from '../tipArt';
-import { brownPixel, button, drawFilm, drawIce, drawStone, iceCounter, keyIcon, label, lockIcon, progressBar, screenBackground } from '../ui';
+import { brownPixel, button, drawFilm, drawIce, drawTunnel, drawStone, iceCounter, keyIcon, label, lockIcon, progressBar, screenBackground } from '../ui';
 
 const TICK_MS = 85;
 const BELT_JAR = 54;
@@ -262,6 +263,7 @@ export class PlayScene extends Phaser.Scene {
     this.reducedMotion = prefersReducedMotion(typeof window !== 'undefined' ? window.matchMedia?.(REDUCED_MOTION_QUERY) : null);
     this.createHiddenMarks();
     this.drawPixels();
+    this.drawTunnels();
 
     this.input.on('pointerdown', (p: Phaser.Input.Pointer) => this.tap(p.worldX, p.worldY));
     const seen = getProgress().seenTips;
@@ -850,6 +852,18 @@ export class PlayScene extends Phaser.Scene {
     }
     const p = Math.min((this.time.now - start) / REVEAL_MS, 1);
     return { covered: p < 0.5, squash: Math.abs(Math.cos(p * Math.PI)) };
+  }
+
+  /**
+   * Tunnel (#99): the roof over the blind lanes of the belt, above the buckets (depth 5 holds their ammo) so they slip
+   * under it and come out at the other mouth; the banner and cards (depth 6 and up) still open over it. Static: nothing moves, so there is nothing for reduced motion to cut.
+   */
+  private drawTunnels(): void {
+    const { level, layout } = this;
+    if (level.tunnels.length === 0) return;
+    const roof = tunnelRoof(layout, level.width, level.height, level.tunnels);
+    const g = this.add.graphics().setDepth(ROOF_DEPTH);
+    drawTunnel(g, roof, roofTies(layout, level.width, level.height, level.tunnels));
   }
 
   private drawDynamic(alpha: number): void {
@@ -1507,12 +1521,16 @@ export class PlayScene extends Phaser.Scene {
       // The tip card's vertical extent and the belt it docks under (#177).
       tipBox: this.tipBox,
       beltRect: this.layout.belt,
+      canvasRect: this.layout.canvas,
       guide: this.guide,
       painted: this.level.targets.filter((t, i) => t && cellDone(this.level, gs, i)).length,
       // Pixels to paint, so playtest telemetry can say how many were missing (#68).
       targets: this.level.targets.filter(Boolean).length,
       ice: gs.ice.reduce((a, b) => a + b, 0),
       film: gs.film.filter((f) => f !== 0).length,
+      // Blind lanes (#99) and the roof drawn over them, for the e2e.
+      tunnels: this.level.tunnels.slice(),
+      tunnelRoof: tunnelRoof(this.layout, this.level.width, this.level.height, this.level.tunnels),
       filmTears: this.filmTears,
       // The numbers drawn on frozen pixels (#150), cell → text, so e2e can check they follow the ice.
       iceCounters: Object.fromEntries([...this.iceMarks].map(([cell, t]) => [cell, t.text])),

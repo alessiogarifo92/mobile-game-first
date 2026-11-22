@@ -1,5 +1,5 @@
 import type { Primary } from './colors';
-import { buildLanes, type Level } from './level';
+import { levelLanes, type Level } from './level';
 import { applyHit, blockingStone, boardDone, createBoard, findTarget, type Board } from './rules';
 
 export interface Shooter {
@@ -67,7 +67,7 @@ export function createGame(level: Level, options: { boardGap?: number } = {}): G
   let nextId = 1;
   return {
     level,
-    lanes: buildLanes(level.width, level.height),
+    lanes: levelLanes(level),
     ...createBoard(level),
     queues: level.columns.map((col) => col.map((s) => ({ ...s, id: nextId++, pos: 0, traveled: 0 }))),
     slots: Array.from({ length: level.slots }, () => null),

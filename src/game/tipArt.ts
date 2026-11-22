@@ -2,17 +2,17 @@ import Phaser from 'phaser';
 import { BLUE, RED, YELLOW } from '../core/colors';
 import type { CardTip } from '../core/onboarding';
 import { PAINT, THEME, css } from './theme';
-import { drawFilm, drawIce, drawStone, iceCounter, label } from './ui';
+import { drawFilm, drawIce, drawStone, drawTunnel, iceCounter, label } from './ui';
 
 /** Tips whose illustration is shared by the in-game card and How to play (#183): the rules How to play has no base page for. */
-export type SharedTipArt = 'ice' | 'film' | 'belt' | 'hidden' | 'queue' | 'leftover' | 'stone';
+export type SharedTipArt = 'ice' | 'film' | 'tunnel' | 'belt' | 'hidden' | 'queue' | 'leftover' | 'stone';
 
 export function hasSharedArt(id: CardTip): id is SharedTipArt {
-  return id === 'ice' || id === 'film' || id === 'belt' || id === 'hidden' || id === 'queue' || id === 'leftover' || id === 'stone';
+  return id === 'ice' || id === 'film' || id === 'tunnel' || id === 'belt' || id === 'hidden' || id === 'queue' || id === 'leftover' || id === 'stone';
 }
 
 /** Horizontal extent of each illustration (belt at 4 buckets), so How to play can scale it to its card. */
-export const TIP_ART_WIDTH: Record<SharedTipArt, number> = { ice: 370, film: 400, belt: 370, hidden: 390, queue: 320, leftover: 500, stone: 300 };
+export const TIP_ART_WIDTH: Record<SharedTipArt, number> = { ice: 370, film: 400, tunnel: 420, belt: 370, hidden: 390, queue: 320, leftover: 500, stone: 300 };
 
 /**
  * Draws a tip's illustration around (cx, y0): y0 is the top of the in-game tip card, so the art sits where it always has.
@@ -55,6 +55,27 @@ export function drawTipArt(
     sq(cx, y, PAINT[RED]!, 0.3);
     add(label(scene, cx + 85, y, '●→', THEME.type.sm, css(PAINT[RED]!)));
     sq(cx + 170, y, PAINT[RED]!);
+  } else if (id === 'tunnel') {
+    // A stretch of belt under a roof (#99): the bucket slides in, nothing is shot while it is under there, it comes out
+    // the other side. The ✕ over the roof says the lane is blind.
+    const y = y0 + 200;
+    const band = 56;
+    g.fillStyle(THEME.belt, 1);
+    g.fillRoundedRect(cx - 210, y - band / 2, 420, band, THEME.radius.jar);
+    const roof = { x: cx - 70, y: y - band / 2 + 3, w: 140, h: band - 6 };
+    drawTunnel(g, { pieces: [roof], mouths: [{ x: roof.x - 5, y: y - band / 2, w: 10, h: band }, { x: roof.x + roof.w - 5, y: y - band / 2, w: 10, h: band }] },
+      [-35, 0, 35].map((dx) => [cx + dx, roof.y + 6, cx + dx, roof.y + roof.h - 6]));
+    const jarAt = (bx: number, alpha: number) => {
+      g.fillStyle(PAINT[RED]!, alpha);
+      g.fillRoundedRect(bx - 22, y - 18, 44, 36, THEME.radius.jar / 2);
+      g.lineStyle(2, THEME.ink, alpha);
+      g.strokeRoundedRect(bx - 22, y - 18, 44, 36, THEME.radius.jar / 2);
+    };
+    jarAt(cx - 160, 1);
+    jarAt(cx + 160, 0.55);
+    add(label(scene, cx - 112, y, '→', THEME.type.sm));
+    add(label(scene, cx + 112, y, '→', THEME.type.sm));
+    add(label(scene, cx, y - band / 2 - 26, '✕', THEME.type.md, THEME.inkCss));
   } else if (id === 'belt') {
     // As many buckets as the belt holds, then one more that cannot board.
     const n = Math.min(beltCapacity, 5);
