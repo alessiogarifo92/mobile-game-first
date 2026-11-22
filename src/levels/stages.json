@@ -202,5 +202,11 @@
   "key": "island",
   "color": 5,
   "complete": true
+ },
+ {
+  "id": 35,
+  "key": "pirates",
+  "color": 1,
+  "complete": true
  }
 ]
