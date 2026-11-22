@@ -92,6 +92,7 @@ export default defineConfig(({ mode }) => ({
     mode === 'more-levels' && moreLevels(),
     mode === 'covered-debut' && debutLevel('covered-debut', './e2e/fixtures/covered-debut.json'),
     mode === 'film-debut' && debutLevel('film-debut', './e2e/fixtures/film-debut.json'),
+    mode === 'tunnel-debut' && debutLevel('tunnel-debut', './e2e/fixtures/tunnel-debut.json'),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg', 'icons/*.png'],

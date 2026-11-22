@@ -27,12 +27,20 @@ export interface LevelDef {
    * shares a pixel with ice, a lock, a key or a hidden cover.
    */
   overlay?: string[];
+  /**
+   * Blind lanes (#99): indices of the belt lanes (in `buildLanes` order) that run through a tunnel. A bucket does not
+   * shoot there: the lane is empty, for the game, the solver and `levelWinRate` alike. Contiguous, sorted, never the
+   * whole belt, and every pixel keeps a lane outside the tunnel (see `parseTunnels`).
+   */
+  tunnels?: number[];
   columns: ShooterSpec[][];
   slots: number;
   beltCapacity: number;
 }
 
 export interface Level extends LevelDef {
+  /** Blind lanes, `[]` when the belt has no tunnel (#99). */
+  tunnels: number[];
   width: number;
   height: number;
   /** Row-major target masks; 0 = no pixel. */
@@ -117,10 +125,16 @@ export function parseOverlay(
 }
 
 /** First pixel that no lane reaches before a stone (stones stop paint), or -1 when every pixel can be painted. */
-export function walledIn(width: number, height: number, targets: readonly number[], stone: readonly boolean[]): number {
-  if (!stone.some(Boolean)) return -1;
+export function walledIn(
+  width: number,
+  height: number,
+  targets: readonly number[],
+  stone: readonly boolean[],
+  tunnels: readonly number[] = [],
+): number {
+  if (!stone.some(Boolean) && tunnels.length === 0) return -1;
   const reached = targets.map(() => false);
-  for (const lane of buildLanes(width, height)) {
+  for (const lane of buildLanes(width, height, tunnels)) {
     for (const cell of lane) {
       if (stone[cell]) break;
       reached[cell] = true;
@@ -129,26 +143,66 @@ export function walledIn(width: number, height: number, targets: readonly number
   return targets.findIndex((t, i) => t !== 0 && !reached[i]);
 }
 
-/** Every pixel needs at least one lane that reaches it before any stone; checked before the solver runs. */
-export function checkReachable(width: number, height: number, targets: readonly number[], stone: readonly boolean[]): void {
-  const cell = walledIn(width, height, targets, stone);
+/**
+ * Every pixel needs at least one lane that reaches it before any stone and outside every tunnel (#99); checked before
+ * the solver runs.
+ */
+export function checkReachable(
+  width: number,
+  height: number,
+  targets: readonly number[],
+  stone: readonly boolean[],
+  tunnels: readonly number[] = [],
+): void {
+  const cell = walledIn(width, height, targets, stone, tunnels);
   if (cell >= 0) {
-    throw new LevelError(`pixel (${cell % width}, ${Math.floor(cell / width)}) is walled in: a stone blocks every lane to it`);
+    const by = tunnels.length > 0 ? 'every lane to it is in a tunnel or blocked by a stone' : 'a stone blocks every lane to it';
+    throw new LevelError(`pixel (${cell % width}, ${Math.floor(cell / width)}) is walled in: ${by}`);
   }
+}
+
+/**
+ * Validates the blind lanes of a level (#99) and returns them sorted: whole numbers, each a lane of the belt, no
+ * repeats, one contiguous run (a tunnel is one stretch of the belt, it does not wrap past the entry corner), and at
+ * least one lane left outside, or nothing could shoot.
+ */
+export function parseTunnels(tunnels: readonly number[] | undefined, width: number, height: number): number[] {
+  if (tunnels === undefined) return [];
+  if (!Array.isArray(tunnels)) throw new LevelError('tunnels must be a list of lane indices');
+  const count = 2 * (width + height);
+  for (const lane of tunnels) {
+    if (!Number.isInteger(lane) || lane < 0 || lane >= count) {
+      throw new LevelError(`tunnel lane ${String(lane)} is not a lane of the belt (0 to ${count - 1})`);
+    }
+  }
+  const sorted = [...tunnels].sort((a, b) => a - b);
+  sorted.forEach((lane, i) => {
+    if (i > 0 && lane === sorted[i - 1]) throw new LevelError(`tunnel lane ${lane} is listed twice`);
+    if (i > 0 && lane !== sorted[i - 1]! + 1) throw new LevelError(`tunnel lanes must be contiguous: ${sorted[i - 1]} is followed by ${lane}`);
+  });
+  if (sorted.length >= count) throw new LevelError('a tunnel cannot cover the whole belt: no lane would shoot');
+  return sorted;
 }
 
 /**
  * Locks need keys and keys need locks. Every key must be reachable from some lane without crossing a lock or a stone:
  * all keys open the locks together, so a key walled in by locks would keep the level closed for ever.
  */
-function checkLocks(width: number, height: number, locked: readonly boolean[], keys: readonly boolean[], stone: readonly boolean[]): void {
+export function checkLocks(
+  width: number,
+  height: number,
+  locked: readonly boolean[],
+  keys: readonly boolean[],
+  stone: readonly boolean[],
+  tunnels: readonly number[] = [],
+): void {
   const hasLocks = locked.some(Boolean);
   const hasKeys = keys.some(Boolean);
   if (hasLocks && !hasKeys) throw new LevelError('locked pixels but no key pixel');
   if (hasKeys && !hasLocks) throw new LevelError('key pixels but no locked pixel');
   if (!hasKeys) return;
   const reachable = keys.map(() => false);
-  for (const lane of buildLanes(width, height)) {
+  for (const lane of buildLanes(width, height, tunnels)) {
     for (const cell of lane) {
       if (locked[cell] || stone[cell]) break;
       if (keys[cell]) reachable[cell] = true;
@@ -180,7 +234,10 @@ export function parseImage(image: readonly string[]): { width: number; height: n
 export function parseLevel(def: LevelDef): Level {
   const { width, height, targets } = parseImage(def.image);
   const { ice, hidden, stone, locked, keys, film } = parseOverlay(def.overlay, width, targets);
-  checkReachable(width, height, targets, stone);
+  const tunnels = parseTunnels(def.tunnels, width, height);
+  checkReachable(width, height, targets, stone, tunnels);
+  // A key reachable only through a tunnel would keep its locks closed for ever.
+  if (tunnels.length > 0) checkLocks(width, height, locked, keys, stone, tunnels);
   if (!Number.isInteger(def.slots) || def.slots < 1) throw new LevelError('slots must be a positive integer');
   if (!Number.isInteger(def.beltCapacity) || def.beltCapacity < 1) {
     throw new LevelError('beltCapacity must be a positive integer');
@@ -204,15 +261,16 @@ export function parseLevel(def: LevelDef): Level {
       throw new LevelError(`ammo for color ${p} is ${ammo[p]} but the image needs ${needs[p]}`);
     }
   }
-  return { ...def, width, height, targets, ice, hidden, stone, locked, keys, film };
+  return { ...def, width, height, targets, ice, hidden, stone, locked, keys, film, tunnels };
 }
 
 /**
  * Belt lanes, in belt order: bottom side (left→right, looking up), right side (bottom→top, looking left),
  * top side (right→left, looking down), left side (top→bottom, looking right).
- * Each lane lists cell indices in the order paint travels through them.
+ * Each lane lists cell indices in the order paint travels through them. A lane in `tunnels` (#99) is empty: a bucket
+ * passing it has nothing to hit, so every rule that walks the lanes (`findTarget`, the solver) skips it.
  */
-export function buildLanes(width: number, height: number): number[][] {
+export function buildLanes(width: number, height: number, tunnels: readonly number[] = []): number[][] {
   const lanes: number[][] = [];
   const idx = (x: number, y: number) => y * width + x;
   for (let x = 0; x < width; x++) lanes.push(range(height).map((k) => idx(x, height - 1 - k)));
@@ -225,7 +283,12 @@ export function buildLanes(width: number, height: number): number[][] {
     lanes.push(range(height).map((j) => idx(x, j)));
   }
   for (let y = 0; y < height; y++) lanes.push(range(width).map((j) => idx(j, y)));
-  return lanes;
+  return tunnels.length === 0 ? lanes : lanes.map((lane, i) => (tunnels.includes(i) ? [] : lane));
+}
+
+/** The lanes a level plays on: `buildLanes` with its tunnels (#99). Shared by the game, the solver and the win rate. */
+export function levelLanes(level: Pick<Level, 'width' | 'height' | 'tunnels'>): number[][] {
+  return buildLanes(level.width, level.height, level.tunnels);
 }
 
 function range(n: number): number[] {

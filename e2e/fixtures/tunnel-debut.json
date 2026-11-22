@@ -1,0 +1,73 @@
+{
+  "id": 341,
+  "name": "heart",
+  "stage": 35,
+  "image": [
+    ".RR..RR.",
+    "RRRRRRRR",
+    "RRRYYRRR",
+    ".RRRRRR.",
+    "..RRRR..",
+    "...BB...",
+    "...BB...",
+    "..BBBB.."
+  ],
+  "tunnels": [
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "columns": [
+    [
+      {
+        "color": 1,
+        "ammo": 4
+      },
+      {
+        "color": 4,
+        "ammo": 4
+      },
+      {
+        "color": 2,
+        "ammo": 2
+      },
+      {
+        "color": 4,
+        "ammo": 4
+      }
+    ],
+    [
+      {
+        "color": 1,
+        "ammo": 4
+      },
+      {
+        "color": 1,
+        "ammo": 4
+      },
+      {
+        "color": 1,
+        "ammo": 4
+      }
+    ],
+    [
+      {
+        "color": 1,
+        "ammo": 4
+      },
+      {
+        "color": 1,
+        "ammo": 4
+      },
+      {
+        "color": 1,
+        "ammo": 4
+      }
+    ]
+  ],
+  "slots": 3,
+  "beltCapacity": 3
+}

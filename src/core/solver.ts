@@ -1,5 +1,5 @@
 import type { Primary } from './colors';
-import { buildLanes, type Level } from './level';
+import { levelLanes, type Level } from './level';
 import { createRng } from './rng';
 import { applyHit, boardDone, cloneBoard, createBoard, findTarget, type Board } from './rules';
 import { beltFull, createGame, launchFromColumn, launchFromSlot, step, type GameState } from './sim';
@@ -103,7 +103,7 @@ const startNode = (level: Level): Node => ({
 
 /** Depth-first search from `start`, trying the moves that paint the most pixels first. */
 function search(level: Level, start: Node, nodeBudget: number): SolveResult {
-  const lanes = buildLanes(level.width, level.height);
+  const lanes = levelLanes(level);
   const seen = new Set<string>();
   let nodes = 0;
   let exhausted = false;
@@ -162,7 +162,7 @@ export function solveFrom(state: GameState, nodeBudget = 200_000): SolveResult {
 /** Upper bound on ticks for one random playout: guards against relaunching blocked shooters forever. */
 export function playoutTickLimit(level: Level): number {
   const shooters = level.columns.reduce((n, c) => n + c.length, 0);
-  return shooters * buildLanes(level.width, level.height).length * 30;
+  return shooters * levelLanes(level).length * 30;
 }
 
 /**
@@ -207,7 +207,7 @@ export function levelWinRate(level: Level): number {
  * leftovers it parks in the slots: a level a careful player rarely wins only rewards trial and error.
  */
 export function carefulWinRate(level: Level, playouts: number, rng: () => number): number {
-  const lanes = buildLanes(level.width, level.height);
+  const lanes = levelLanes(level);
   let wins = 0;
   for (let p = 0; p < playouts; p++) {
     let node = startNode(level);

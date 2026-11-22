@@ -3,6 +3,7 @@ dist/
 dist-more-levels/
 dist-covered-debut/
 dist-film-debut/
+dist-tunnel-debut/
 dev-dist/
 coverage/
 playwright-report/
