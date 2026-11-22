@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Stage 34 "Isola": livelli 331–340 (#239, #102)
+
+- **Dieci figure in pixel art originale** sull'isola (`scripts/stages/stage-34.ts`, quarto stage dell'universo 4, completo): palma da cocco, faro, capanna di palma, vulcano, tartaruga verde, granchio di sabbia, mappa del tesoro, amaca, falò e il boss, l'isola (14×12, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-34.png`; nomi IT/EN.
+- **Meccaniche**: pellicola (nota dal 301), pietre (note dal 261), secchielli coperti (noti dal 281) e marrone; nessuna card nuova e nessun'altra meccanica. Pellicole: 2 nella palma, 3 in faro, capanna e tartaruga e granchio, 4 in vulcano, mappa, amaca e falò, 5 nel boss; pietre 2 nei primi tre livelli, 3 dal quarto; secchielli coperti circa il 30%. Nessun livello molto facile (non è un debutto); dal 332 ≥ 30% di pixel secondari o marroni.
+- **Nastro 2, slot 2**: mai sopra la fine dell'universo 3.
+- **Curva** a dente di sega (#88): vittorie a caso 82 · 69 · 63,5 · 63,5 · 65,5 · 67 · 57,5 · 74 · 52,5 · 28%, media 62,25% (obiettivo ~63%, un po' più dura dello stage 33, 64,25%); il boss è il più duro dello stage e sopra il pavimento dell'universo (22%). Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit in `tests/stage34.test.ts` (chiavi IT/EN, universo e stage, livelli 331–340, tela, pellicole, pietre, coperti e marrone, nastro e slot, curva, media, boss, sblocco); e2e `e2e/stage-34.spec.ts`: la mappa mostra lo stage 34 dopo il 330 con solo il 331 giocabile, il 331 si gioca fino alla vittoria a 360×640 e 412×915, il boss 340 si gioca fino alla vittoria; gli e2e degli stage 31, 32 e 33 includono ora anche lo stage 34 nella mappa.
+
 ### Stage 33 "Abissi": livelli 321–330 (#238, #102)
 
 - **Dieci figure in pixel art originale** sugli abissi (`scripts/stages/stage-33.ts`, terzo stage dell'universo 4, completo): ancora affondata, pesce abissale con la lanterna, medusa degli abissi, calamaro gigante, relitto, forziere, sottomarino, pesce spada, palombaro e il boss, il kraken (14×14, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-33.png`; nomi IT/EN.

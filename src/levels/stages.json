@@ -196,5 +196,11 @@
   "key": "abyss",
   "color": 5,
   "complete": true
+ },
+ {
+  "id": 34,
+  "key": "island",
+  "color": 5,
+  "complete": true
  }
 ]
