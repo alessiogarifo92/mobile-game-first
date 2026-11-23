@@ -2,6 +2,15 @@
 
 ## Non rilasciato
 
+### Stage 37 "Uccelli": livelli 361–370, gallerie + pellicola (#242, #102)
+
+- **Dieci figure in pixel art originale** sugli uccelli (`scripts/stages/stage-37.ts`, settimo stage dell'universo 4, completo): gabbiano, pinguino, fenicottero, colibrì, pellicano, pulcinella di mare, cacatua, falco, pavone e il boss, l'uccello di fuoco (14×14, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-37.png`; nomi IT/EN.
+- **Combinazione nuova: gallerie + pellicola** (#99) su ogni livello (galleria di 5–6 corsie, pellicola 2–4), con le meccaniche già note: pietre (1–3, su 8 livelli su 10), secchielli coperti (~30%, su 5) e marrone. Nessuna card nuova (galleria e pellicola si sono già viste) e nessun livello "molto facile". Dal 362 ≥ 30% di pixel secondari o marroni.
+- **Nastro 2, slot 2**: mai sopra la fine dell'universo 3.
+- **Curva** a dente di sega (#88): vittorie a caso 79 · 60,5 · 58 · 61,5 · 64 · 59,5 · 61 · 58,5 · 47,5 · 30,5%, media 58,0% (obiettivo ~57%, un po' più dura dello stage 36, 58,7%); il boss è il più duro dello stage e sopra il pavimento dell'universo (22%). Ogni livello è dimostrato risolvibile dal solver; 369 e boss restano sotto il tetto di sparatori della regola 7.
+- Nessuna modifica a `src/core`.
+- Test: unit in `tests/stage37.test.ts` (chiavi IT/EN, universo e stage, livelli 361–370, tela, galleria e pellicola su ogni livello senza card, pixel secondari, nastro e slot, curva, media, boss, sblocco); e2e `e2e/stage-37.spec.ts`: la mappa mostra lo stage 37 dopo il 360 con solo il 361 giocabile, il 361 si gioca fino alla vittoria a 360×640 e 412×915 senza card, il 367 e il boss 370 si giocano fino alla vittoria; gli e2e degli stage 31–36 includono ora anche lo stage 37 nella mappa (nodi 301–370, boss 310…370). Screenshot in `docs/test-evidence/242-stage-37/`.
+
 ### Stage 36 "Nuvole": livelli 351–360 (#241, #102)
 
 - **Dieci figure in pixel art originale** sul cielo (`scripts/stages/stage-36.ts`, sesto stage dell'universo 4, completo): nuvoletta con il sole, arcobaleno, mongolfiera, aquilone, aereo di linea, uccellino, temporale con fulmine, sole, luna e stelle e il boss, il castello nel cielo (14×14, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-36.png`; nomi IT/EN.
