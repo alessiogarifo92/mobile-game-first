@@ -2,6 +2,15 @@
 
 ## Non rilasciato
 
+### Stage 35 "Pirati": livelli 341–350, debutto delle corsie cieche (#240, #102, #99)
+
+- **Dieci figure in pixel art originale** sui pirati (`scripts/stages/stage-35.ts`, quinto stage dell'universo 4, completo): bandiera pirata, nave nera, bordata di cannone, la X del tesoro, uncino, pappagallo pirata, bussola, forziere, timone e il boss, il capitano (14×14, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-35.png`; nomi IT/EN.
+- **Debutto della galleria sul nastro** (#99): il 341 (la bandiera, 11×9) è l'unico livello molto facile dello stage (100% a caso) e ha una galleria di 6 corsie (`special: { tunnel: 6 }`) senza altre meccaniche, con la card `tunnel` una tantum già implementata; nastro 2 e slot 3 solo al debutto. Dal 342 ogni livello ha una galleria di 5–6 corsie insieme a pellicola, pietre, secchielli coperti e marrone già noti (pellicole 2–4, pietre 2–3, coperti ~30%); nessuna card nuova. Dal 342 ≥ 30% di pixel secondari o marroni.
+- **Nastro 2, slot 2** (3 solo al 341): mai sopra la fine dell'universo 3.
+- **Curva** a dente di sega (#88): vittorie a caso 100 · 60,5 · 62,5 · 59,5 · 61,5 · 60,5 · 60,5 · 67,5 · 47,5 · 29,5%, media 60,95% (obiettivo ~61%, un po' più dura dello stage 34, 62,25%); il boss è il più duro dello stage e sopra il pavimento dell'universo (22%). Ogni livello è dimostrato risolvibile dal solver. Il boss usa secchielli da 16 munizioni: con 24 e la galleria il win rate cadeva sotto il 5%.
+- **Regola condivisa** (`src/core/curveReport.ts`): `tunnel` entra in `MECHANICS` (come era stato per `film`), così la regola "una novità ogni 20 livelli" e le combinazioni della curva trattano la galleria come meccanica; il debutto al 341 chiude la finestra 341–360.
+- Test: unit in `tests/stage35.test.ts` (chiavi IT/EN, universo e stage, livelli 341–350, tela, debutto della galleria e card una tantum, galleria nei livelli seguenti senza card nuove, pixel secondari, nastro e slot, curva, media, boss, finestra di novità, sblocco); `tests/tunnel.test.ts`: 341 è il primo livello con una galleria. E2e `e2e/stage-35.spec.ts`: la mappa mostra lo stage 35 dopo il 340 con solo il 341 giocabile, il 341 mostra la card della galleria a 360×640 e 412×915 e si gioca fino alla vittoria, la card non si ripete, il 342 si gioca senza card, il boss 350 si gioca fino alla vittoria; gli e2e degli stage 31–34 includono ora anche lo stage 35 nella mappa (nodi 301–350, boss 310/320/330/340/350). Screenshot in `docs/test-evidence/240-stage-35/`.
+
 ### Stage 34 "Isola": livelli 331–340 (#239, #102)
 
 - **Dieci figure in pixel art originale** sull'isola (`scripts/stages/stage-34.ts`, quarto stage dell'universo 4, completo): palma da cocco, faro, capanna di palma, vulcano, tartaruga verde, granchio di sabbia, mappa del tesoro, amaca, falò e il boss, l'isola (14×12, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-34.png`; nomi IT/EN.

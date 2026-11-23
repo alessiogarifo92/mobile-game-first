@@ -313,8 +313,10 @@ describe('tunnel: the generator', () => {
     expect(new Set(l.tunnels.map((lane) => laneSide(lane, l.width, l.height))).size).toBeGreaterThan(1);
   });
 
-  it('none of the shipped levels has a tunnel yet (the first one is the debut at 341)', () => {
-    for (const def of levels as LevelDef[]) expect(def).not.toHaveProperty('tunnels');
+  it('no level before 341 has a tunnel, and 341 is the first that does (stage 35, #240)', () => {
+    const withTunnel = (levels as LevelDef[]).filter((def) => 'tunnels' in def);
+    expect(withTunnel.length).toBeGreaterThan(0);
+    expect(withTunnel[0]!.id).toBe(341);
   });
 });
 
