@@ -214,5 +214,11 @@
   "key": "clouds",
   "color": 4,
   "complete": true
+ },
+ {
+  "id": 37,
+  "key": "birds",
+  "color": 4,
+  "complete": true
  }
 ]
