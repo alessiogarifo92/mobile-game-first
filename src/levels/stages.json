@@ -208,5 +208,11 @@
   "key": "pirates",
   "color": 1,
   "complete": true
+ },
+ {
+  "id": 36,
+  "key": "clouds",
+  "color": 4,
+  "complete": true
  }
 ]

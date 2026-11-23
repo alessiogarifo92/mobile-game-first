@@ -2,6 +2,15 @@
 
 ## Non rilasciato
 
+### Stage 36 "Nuvole": livelli 351–360 (#241, #102)
+
+- **Dieci figure in pixel art originale** sul cielo (`scripts/stages/stage-36.ts`, sesto stage dell'universo 4, completo): nuvoletta con il sole, arcobaleno, mongolfiera, aquilone, aereo di linea, uccellino, temporale con fulmine, sole, luna e stelle e il boss, il castello nel cielo (14×14, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-36.png`; nomi IT/EN.
+- **Gallerie su ogni livello** (#99): nessun debutto e nessuna card nuova (la card della galleria si è vista al 341 e non ricompare); ogni livello ha una galleria di 5–6 corsie con le meccaniche già note: pellicola (2–4), pietre (1–3), secchielli coperti (~30%) e marrone. Nessun livello "molto facile". Dal 352 ≥ 30% di pixel secondari o marroni.
+- **Nastro 2, slot 2**: mai sopra la fine dell'universo 3.
+- **Curva** a dente di sega (#88): vittorie a caso 83,5 · 59,5 · 62 · 61 · 58,5 · 63 · 60,5 · 62 · 45,5 · 31,5%, media 58,7% (obiettivo ~59%, un po' più dura dello stage 35, 60,95%); il boss è il più duro dello stage e sopra il pavimento dell'universo (22%). Ogni livello è dimostrato risolvibile dal solver. 359 e boss restano sotto il tetto di sparatori della regola 7 (secchielli da 18 e 16 munizioni).
+- Nessuna modifica a `src/core`.
+- Test: unit in `tests/stage36.test.ts` (chiavi IT/EN, universo e stage, livelli 351–360, tela, galleria e meccaniche note senza card, pixel secondari, nastro e slot, curva, media, boss, sblocco); e2e `e2e/stage-36.spec.ts`: la mappa mostra lo stage 36 dopo il 350 con solo il 351 giocabile, il 351 si gioca fino alla vittoria a 360×640 e 412×915 senza card, il 357 e il boss 360 si giocano fino alla vittoria; gli e2e degli stage 31–35 includono ora anche lo stage 36 nella mappa (nodi 301–360, boss 310…360). Screenshot in `docs/test-evidence/241-stage-36/`.
+
 ### Stage 35 "Pirati": livelli 341–350, debutto delle corsie cieche (#240, #102, #99)
 
 - **Dieci figure in pixel art originale** sui pirati (`scripts/stages/stage-35.ts`, quinto stage dell'universo 4, completo): bandiera pirata, nave nera, bordata di cannone, la X del tesoro, uncino, pappagallo pirata, bussola, forziere, timone e il boss, il capitano (14×14, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-35.png`; nomi IT/EN.
