@@ -19,11 +19,11 @@ test('after level 340 the map shows stage 35 with only level 341 playable', asyn
   await start(page, { unlocked: 341, completed: range(1, 340) });
   expect(await mix(page, 'universe')).toBe(4);
   const headers = await mix<{ stage: number; count: number }[]>(page, 'headers');
-  expect(headers.map((h) => [h.stage, h.count])).toEqual([[31, 10], [32, 10], [33, 10], [34, 10], [35, 10], [36, 10], [37, 10]]);
+  expect(headers.map((h) => [h.stage, h.count])).toEqual([[31, 10], [32, 10], [33, 10], [34, 10], [35, 10], [36, 10], [37, 10], [38, 10]]);
   const nodes = await mix<{ id: number; unlocked: boolean; boss: boolean }[]>(page, 'nodes');
-  expect(nodes.map((n) => n.id)).toEqual(range(301, 370));
+  expect(nodes.map((n) => n.id)).toEqual(range(301, 380));
   expect(nodes.filter((n) => n.unlocked).map((n) => n.id).filter((id) => id > 340)).toEqual([341]);
-  expect(nodes.filter((n) => n.boss).map((n) => n.id)).toEqual([310, 320, 330, 340, 350, 360, 370]);
+  expect(nodes.filter((n) => n.boss).map((n) => n.id)).toEqual([310, 320, 330, 340, 350, 360, 370, 380]);
   if (shots) await page.screenshot({ path: `${shots}/01-mappa-stage-35.png` });
 });
 

@@ -220,5 +220,11 @@
   "key": "birds",
   "color": 4,
   "complete": true
+ },
+ {
+  "id": 38,
+  "key": "hotairballoons",
+  "color": 3,
+  "complete": true
  }
 ]
