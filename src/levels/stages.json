@@ -226,5 +226,11 @@
   "key": "hotairballoons",
   "color": 3,
   "complete": true
+ },
+ {
+  "id": 39,
+  "key": "thunderstorm",
+  "color": 5,
+  "complete": true
  }
 ]
