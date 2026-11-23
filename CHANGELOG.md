@@ -2,6 +2,15 @@
 
 ## Non rilasciato
 
+### Stage 39 "Temporale": livelli 381–390, tutte le meccaniche dell'universo 4 insieme (#244, #102)
+
+- **Dieci figure in pixel art originale** sul temporale (`scripts/stages/stage-39.ts`, nono stage dell'universo 4, completo): nuvola temporalesca, il fulmine, l'ombrello, faro nella tempesta, l'onda, albero nel vento, nave nella tempesta, dopo la pioggia (arcobaleno), nuvola di pioggia e il boss, la tempesta (14×14, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-39.png`; nomi IT/EN.
+- **Novità: tutto.** Gallerie (#99) e lucchetto (1–2 chiavi, 2–3 pixel chiusi) e **marrone** su ogni livello; dal 382 ognuno aggiunge almeno due tra pellicola (7 livelli), pietre (7) e secchielli coperti (~30%, 7); il boss le ha tutte. Nessuna card nuova e nessun livello "molto facile". Dal 382 ≥ 30% di pixel secondari o marroni.
+- **Nastro 2, slot 2**: mai sopra la fine dell'universo 3.
+- **Curva** a dente di sega (#88): vittorie a caso 71 · 56 · 56 · 54,5 · 54,5 · 56,5 · 57 · 55,5 · 41,5 · 23%, media 52,55% (obiettivo ~52–53%, più dura dello stage 38, 55,55%); il boss è il più duro dello stage e sopra il pavimento dell'universo (22%). Ogni livello è dimostrato risolvibile dal solver; 389 e boss restano sotto il tetto di sparatori della regola 7.
+- Nessuna modifica a `src/core` oltre alle chiavi IT/EN in `src/core/i18n.ts`.
+- Test: unit in `tests/stage39.test.ts` (chiavi IT/EN, universo e stage, livelli 381–390, tela, galleria, chiave, lucchetto e marrone su ogni livello senza card, almeno due tra pellicola/pietre/coperti dal 382, pixel secondari, nastro e slot, curva, media, boss, sblocco); e2e `e2e/stage-39.spec.ts`: la mappa mostra lo stage 39 dopo il 380 con solo il 381 giocabile, il 381 si gioca fino alla vittoria a 360×640 e 412×915 senza card, il 387 e il boss 390 si giocano fino alla vittoria con i lucchetti aperti; gli e2e degli stage 31–38 includono ora anche lo stage 39 nella mappa (nodi 301–390, boss 310…390). Screenshot in `docs/test-evidence/244-stage-39/`.
+
 ### Stage 38 "Mongolfiere": livelli 371–380, gallerie + lucchetto + marrone (#243, #102)
 
 - **Dieci figure in pixel art originale** sulle mongolfiere (`scripts/stages/stage-38.ts`, ottavo stage dell'universo 4, completo): mongolfiera a strisce, la cesta, il bruciatore, due mongolfiere, mongolfiera a cuore, tra le nuvole, l'aeronauta, volo notturno, la festa delle mongolfiere e il boss, la grande mongolfiera (14×14, a spicchi, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-38.png`; nomi IT/EN.

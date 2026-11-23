@@ -33220,5 +33220,1162 @@
   "slots": 2,
   "beltCapacity": 2,
   "specHash": "b847068a"
+ },
+ {
+  "id": 381,
+  "name": "stormcloud",
+  "stage": 39,
+  "image": [
+   "...PPPP...",
+   "..PPBBPP..",
+   ".PPBBBBPP.",
+   "PPBBBBBBPP",
+   "PPPPPPPPPP",
+   ".PPPPPPPP.",
+   ".....YY...",
+   "....YY....",
+   "...YYYY...",
+   ".....YY...",
+   "....YY....",
+   "...KK....."
+  ],
+  "overlay": [
+   "..........",
+   "..........",
+   ".......k..",
+   ".....l....",
+   "..........",
+   "..........",
+   "..........",
+   "..........",
+   "....l.....",
+   "..........",
+   "..........",
+   ".........."
+  ],
+  "tunnels": [
+   24,
+   25,
+   26,
+   27,
+   28,
+   29
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 8
+    },
+    {
+     "color": 2,
+     "ammo": 8
+    },
+    {
+     "color": 4,
+     "ammo": 8
+    },
+    {
+     "color": 4,
+     "ammo": 8
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 8
+    },
+    {
+     "color": 4,
+     "ammo": 8
+    },
+    {
+     "color": 4,
+     "ammo": 8
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 8
+    },
+    {
+     "color": 2,
+     "ammo": 6
+    },
+    {
+     "color": 1,
+     "ammo": 8
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 4
+    },
+    {
+     "color": 4,
+     "ammo": 8
+    },
+    {
+     "color": 4,
+     "ammo": 8
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "e89059e3"
+ },
+ {
+  "id": 382,
+  "name": "lightningbolt",
+  "stage": 39,
+  "image": [
+   ".....OOOO.",
+   "....OYYYO.",
+   "....OYYO..",
+   "...OYYO...",
+   "...OYYOOO.",
+   "..OYYYYYO.",
+   "..OOOYYO..",
+   "....OYYO..",
+   "...OYYO...",
+   "...OYO....",
+   "..OYO.....",
+   "..OO......",
+   ".KK......."
+  ],
+  "overlay": [
+   "........b.",
+   "..........",
+   ".......l..",
+   "..........",
+   ".......b..",
+   "....k.....",
+   ".......l..",
+   "..........",
+   "..........",
+   "..........",
+   "..........",
+   ".s..s.....",
+   ".........."
+  ],
+  "tunnels": [
+   16,
+   17,
+   18,
+   19,
+   20
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 12
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 4
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "087e0bea"
+ },
+ {
+  "id": 383,
+  "name": "stormumbrella",
+  "stage": 39,
+  "image": [
+   ".....K.....",
+   "...PPGPP...",
+   "..PPPGPPP..",
+   ".PPPPGPPPP.",
+   "PPPPPGPPPPP",
+   "PP.PPKPP.PP",
+   ".....K.....",
+   "..B..K..B..",
+   ".....K.....",
+   ".B...K...B.",
+   "..K..K.....",
+   "...KK......"
+  ],
+  "overlay": [
+   "...........",
+   "....y..l...",
+   ".....r.....",
+   "..k.....l..",
+   "...........",
+   "...........",
+   "...........",
+   "...........",
+   "...........",
+   "...........",
+   "...........",
+   "..........."
+  ],
+  "tunnels": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 7
+    },
+    {
+     "color": 4,
+     "ammo": 14,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 5
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "792fd4ca"
+ },
+ {
+  "id": 384,
+  "name": "stormlighthouse",
+  "stage": 39,
+  "image": [
+   ".....YY.....",
+   "YY..RRRR..YY",
+   "....RYYR....",
+   "...KKKKKK...",
+   "....RRRR....",
+   "....YYYY....",
+   "....RRRR....",
+   "...YYYYYY...",
+   "...RRRRRR...",
+   "...YYYYYY...",
+   "..KKKKKKKK..",
+   "GB.KKKKKK.BG",
+   "GGBKKKKKKBGG",
+   "BGGBBGGBBGGB"
+  ],
+  "overlay": [
+   "............",
+   "............",
+   ".......l....",
+   "............",
+   "............",
+   "........s...",
+   "....l.......",
+   "............",
+   "............",
+   "............",
+   "s...........",
+   "............",
+   ".....k......",
+   "............"
+  ],
+  "tunnels": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 8
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 6
+    },
+    {
+     "color": 2,
+     "ammo": 12
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "b31e142e"
+ },
+ {
+  "id": 385,
+  "name": "stormwave",
+  "stage": 39,
+  "image": [
+   "....BBBBBB...",
+   "..BBGGGGGGBB.",
+   ".BGGGBBBBGGGB",
+   "BGGBB....BGGB",
+   "BGGB.....BGB.",
+   "BGGB....BGB..",
+   "BGGGB...BB...",
+   "BGGGGB.......",
+   "BBGGGGB....B.",
+   "GBBGGGGBBBBGB",
+   "GGBBGGGGGGBGG",
+   "KKKKGGKKKKGKK"
+  ],
+  "overlay": [
+   ".............",
+   ".s...........",
+   ".....k.......",
+   ".........r...",
+   ".............",
+   ".......s.....",
+   ".............",
+   ".............",
+   ".............",
+   ".............",
+   "r.........l..",
+   ".....l......."
+  ],
+  "tunnels": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 12
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 11
+    },
+    {
+     "color": 1,
+     "ammo": 12
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "83248ce2"
+ },
+ {
+  "id": 386,
+  "name": "windtree",
+  "stage": 39,
+  "image": [
+   "....GGGG....",
+   "..GGGGGGGG.O",
+   ".GGGGGGGGGG.",
+   "GGGGOGGGGGGO",
+   ".GGGGGGGGG..",
+   "..GGGGGGG.O.",
+   ".....KK.....",
+   ".....KK.....",
+   "......KK....",
+   "......KK....",
+   ".....KKK....",
+   "BBBBKKKKKBBB"
+  ],
+  "overlay": [
+   "..s.........",
+   "............",
+   "............",
+   "...........k",
+   ".........l..",
+   "............",
+   "............",
+   "............",
+   "............",
+   "........s...",
+   "............",
+   ".........l.."
+  ],
+  "tunnels": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 8
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 11
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "3ce7b0be"
+ },
+ {
+  "id": 387,
+  "name": "stormship",
+  "stage": 39,
+  "image": [
+   "......KR.....",
+   "......KRR....",
+   "....YYK......",
+   "...YYYKOO....",
+   "..YYYYKOOO...",
+   ".YYYYYKOOOO..",
+   "......K......",
+   "KKKKKKKKKKKKK",
+   ".KKKOKKKOKKK.",
+   "..KKKKKKKKK..",
+   "B.BB..B..BB.B",
+   "BGBBGBBGBBGBB"
+  ],
+  "overlay": [
+   ".............",
+   ".............",
+   ".............",
+   ".............",
+   ".s...........",
+   "sk......bb...",
+   ".............",
+   ".............",
+   ".............",
+   ".............",
+   ".........l...",
+   ".....l......."
+  ],
+  "tunnels": [
+   24,
+   25,
+   26,
+   27,
+   28,
+   29
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 7,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 12
+    },
+    {
+     "color": 1,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "f2996cf7"
+ },
+ {
+  "id": 388,
+  "name": "afterrain",
+  "stage": 39,
+  "image": [
+   "....RRRRRR....",
+   "..RROOOOOORR..",
+   ".ROOYYYYYYOOR.",
+   ".ROYYGGGGYYOR.",
+   "ROYGGBBBBGGYOR",
+   "ROYGBPPPPBGYOR",
+   "ROYGBP..PBGYOR",
+   "ROYGBP..PBGYOR",
+   "KKKKKK..KKKKKK"
+  ],
+  "overlay": [
+   "........b.....",
+   "..............",
+   "..............",
+   "..l...........",
+   "...........k..",
+   "..............",
+   "...........b..",
+   "..............",
+   "........l....."
+  ],
+  "tunnels": [
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 6,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 12
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "6ec411f3"
+ },
+ {
+  "id": 389,
+  "name": "raincloud",
+  "stage": 39,
+  "image": [
+   "...PPP.PPP...",
+   "..PPPPPPPPPP.",
+   ".PPBPPPPPBPP.",
+   "PPBBBPPPBBBPP",
+   "PPPPPPPPPPPPP",
+   ".PPPPPPPPPPP.",
+   "..B..YY..B...",
+   ".B..YY..B..B.",
+   "...YYYY...B..",
+   ".B...YY.B....",
+   "..B.YY..B..B.",
+   "...YO.....B..",
+   "GGKKGGGKKGGGK"
+  ],
+  "overlay": [
+   ".............",
+   ".............",
+   ".............",
+   "........r....",
+   ".............",
+   "........l...s",
+   ".............",
+   ".....l....s..",
+   "...b.........",
+   "........r....",
+   ".............",
+   ".............",
+   "..........k.."
+  ],
+  "tunnels": [
+   44,
+   45,
+   46,
+   47,
+   48,
+   49
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 13,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 8
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 20
+    },
+    {
+     "color": 4,
+     "ammo": 14,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "7fd928d8"
+ },
+ {
+  "id": 390,
+  "name": "thestorm",
+  "stage": 39,
+  "boss": true,
+  "image": [
+   ".PPPP...PPPPP.",
+   "PPBBPP.PPBBBPP",
+   "PBBBBPPPBBBBBP",
+   "PPPPPPPPPPPPPP",
+   ".PPPPYYPPPPPP.",
+   ".B..YY..B..RR.",
+   "...YY..B...YY.",
+   ".B.YYYY...RRRR",
+   ".....YY.B.YYYY",
+   ".B..YY....RRRR",
+   "...YO..B.KKKKK",
+   "BG..BGG..BKKKK",
+   "GGBBGGGBBGGKKB",
+   "BGGGBBGGGBBGGB"
+  ],
+  "overlay": [
+   "....y.........",
+   "........l.....",
+   "........k.....",
+   "..y......l....",
+   "............y.",
+   "..............",
+   "..............",
+   "..............",
+   "...s..........",
+   "..............",
+   "..s...s.......",
+   "..............",
+   ".......k......",
+   ".............l"
+  ],
+  "tunnels": [
+   30,
+   31,
+   32,
+   33,
+   34
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 16
+    },
+    {
+     "color": 1,
+     "ammo": 16,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 16
+    },
+    {
+     "color": 4,
+     "ammo": 16,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 16
+    },
+    {
+     "color": 4,
+     "ammo": 16
+    },
+    {
+     "color": 4,
+     "ammo": 16
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 16
+    },
+    {
+     "color": 1,
+     "ammo": 16,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 16
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 22
+    },
+    {
+     "color": 1,
+     "ammo": 20,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 16
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "8756cac7"
  }
 ]
