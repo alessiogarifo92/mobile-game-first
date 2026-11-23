@@ -2,6 +2,15 @@
 
 ## Non rilasciato
 
+### Stage 38 "Mongolfiere": livelli 371–380, gallerie + lucchetto + marrone (#243, #102)
+
+- **Dieci figure in pixel art originale** sulle mongolfiere (`scripts/stages/stage-38.ts`, ottavo stage dell'universo 4, completo): mongolfiera a strisce, la cesta, il bruciatore, due mongolfiere, mongolfiera a cuore, tra le nuvole, l'aeronauta, volo notturno, la festa delle mongolfiere e il boss, la grande mongolfiera (14×14, a spicchi, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-38.png`; nomi IT/EN.
+- **Combinazione nuova: gallerie + lucchetto** (#99) su ogni livello (galleria di 5–6 corsie, 1–2 chiavi e 2–3 pixel chiusi), con il **marrone** (cesti e funi) su tutte le figure e le meccaniche già note: pellicola (4 livelli), pietre (5) e secchielli coperti (~30%, 4). Nessuna card nuova (galleria e lucchetto si sono già visti) e nessun livello "molto facile". Dal 372 ≥ 30% di pixel secondari o marroni.
+- **Nastro 2, slot 2**: mai sopra la fine dell'universo 3.
+- **Curva** a dente di sega (#88): vittorie a caso 75,5 · 55,5 · 60,5 · 58,5 · 60 · 56,5 · 61 · 59 · 44,5 · 24,5%, media 55,55% (obiettivo ~55–56%, più dura dello stage 37, 58,0%); il boss è il più duro dello stage e sopra il pavimento dell'universo (22%). Ogni livello è dimostrato risolvibile dal solver; 379 e boss restano sotto il tetto di sparatori della regola 7.
+- Nessuna modifica a `src/core` oltre alle chiavi IT/EN in `src/core/i18n.ts`.
+- Test: unit in `tests/stage38.test.ts` (chiavi IT/EN, universo e stage, livelli 371–380, tela, galleria, chiave, lucchetto e marrone su ogni livello senza card, pixel secondari, nastro e slot, curva, media, boss, sblocco); e2e `e2e/stage-38.spec.ts`: la mappa mostra lo stage 38 dopo il 370 con solo il 371 giocabile, il 371 si gioca fino alla vittoria a 360×640 e 412×915 senza card, il 377 e il boss 380 si giocano fino alla vittoria con i lucchetti aperti; gli e2e degli stage 31–37 includono ora anche lo stage 38 nella mappa (nodi 301–380, boss 310…380). Screenshot in `docs/test-evidence/243-stage-38/`.
+
 ### Stage 37 "Uccelli": livelli 361–370, gallerie + pellicola (#242, #102)
 
 - **Dieci figure in pixel art originale** sugli uccelli (`scripts/stages/stage-37.ts`, settimo stage dell'universo 4, completo): gabbiano, pinguino, fenicottero, colibrì, pellicano, pulcinella di mare, cacatua, falco, pavone e il boss, l'uccello di fuoco (14×14, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-37.png`; nomi IT/EN.

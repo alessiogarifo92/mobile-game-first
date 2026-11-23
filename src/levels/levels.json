@@ -32016,5 +32016,1209 @@
   "slots": 2,
   "beltCapacity": 2,
   "specHash": "b3c012fb"
+ },
+ {
+  "id": 371,
+  "name": "stripeballoon",
+  "stage": 38,
+  "image": [
+   "...RYBR...",
+   "..RRYBRR..",
+   ".RRRYBRRR.",
+   ".RRRYBRRR.",
+   "RRRRYBRRRR",
+   "RRRRYBRRRR",
+   ".RRRYBRRR.",
+   "..RRYBRR..",
+   "...RYBR...",
+   "...K..K...",
+   "...KKKK...",
+   "...KKKK..."
+  ],
+  "overlay": [
+   "......l...",
+   "..........",
+   "..........",
+   "....k.....",
+   "..l.......",
+   "..........",
+   "..........",
+   "..........",
+   "..........",
+   "..........",
+   "..........",
+   ".........."
+  ],
+  "tunnels": [
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 11
+    },
+    {
+     "color": 2,
+     "ammo": 11
+    },
+    {
+     "color": 1,
+     "ammo": 8
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 8
+    },
+    {
+     "color": 2,
+     "ammo": 8
+    },
+    {
+     "color": 1,
+     "ammo": 8
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 8
+    },
+    {
+     "color": 1,
+     "ammo": 8
+    },
+    {
+     "color": 1,
+     "ammo": 8
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 8
+    },
+    {
+     "color": 1,
+     "ammo": 8
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "00407826"
+ },
+ {
+  "id": 372,
+  "name": "balloonbasket",
+  "stage": 38,
+  "image": [
+   ".K...YY...K.",
+   ".K..YOOY..K.",
+   "..K.YOOY.K..",
+   "..K..RR..K..",
+   "KKKKKKKKKKKK",
+   "KOKKOKKOKKOK",
+   "KKKKKKKKKKKK",
+   ".KOKKOKKOKK.",
+   ".KKKKKKKKKK.",
+   "..KKKKKKKK.."
+  ],
+  "overlay": [
+   "............",
+   ".l..........",
+   "............",
+   "............",
+   "............",
+   "............",
+   "............",
+   "............",
+   "............",
+   "....lk......"
+  ],
+  "tunnels": [
+   39,
+   40,
+   41,
+   42,
+   43
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 5
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 12
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 8
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "b91a2179"
+ },
+ {
+  "id": 373,
+  "name": "burnerflame",
+  "stage": 38,
+  "image": [
+   ".....R......",
+   "....RR......",
+   "....ROR.....",
+   "...ROOR..R..",
+   "..ROOYOR.R..",
+   "..ROYYOORR..",
+   ".ROOYYYOOR..",
+   ".ROYYYYYOR..",
+   ".ROYYYYYOR..",
+   "..ROYYYOR...",
+   "...KKKKK....",
+   "...KBBBK....",
+   "...KKKKK....",
+   "..K.....K..."
+  ],
+  "overlay": [
+   "............",
+   "............",
+   "............",
+   "............",
+   "......b.....",
+   "............",
+   "..l.........",
+   "..l....r....",
+   "....k.......",
+   "............",
+   "............",
+   "............",
+   "............",
+   "............"
+  ],
+  "tunnels": [
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 12
+    },
+    {
+     "color": 1,
+     "ammo": 6
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 8
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "1460bb73"
+ },
+ {
+  "id": 374,
+  "name": "balloonpair",
+  "stage": 38,
+  "image": [
+   "..PPPP........",
+   ".PPPPPP..GGGG.",
+   "PPYPPYPPGGGGGG",
+   "PPYPPYPPGYGGYG",
+   "PPYPPYPPGYGGYG",
+   ".PYPPYP.GYGGYG",
+   "..PPPP...GGGG.",
+   "..K..K...GGGG.",
+   "..KKKK....GG..",
+   "..KKKK...K..K.",
+   ".........KKKK.",
+   ".........KKKK."
+  ],
+  "overlay": [
+   "..........s...",
+   "..............",
+   "............l.",
+   "..............",
+   "...k..........",
+   "..............",
+   "..............",
+   "..............",
+   "..............",
+   "..............",
+   ".........l....",
+   "........s....."
+  ],
+  "tunnels": [
+   33,
+   34,
+   35,
+   36,
+   37,
+   38
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 6
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 8
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 6
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "b4ffc180"
+ },
+ {
+  "id": 375,
+  "name": "heartballoon",
+  "stage": 38,
+  "image": [
+   ".RRRR..RRRR.",
+   "RROOORROOORR",
+   "ROOOOOOOOOOR",
+   "ROOYOOOOOOOR",
+   "ROOOOOOOOOOR",
+   ".ROOOOOOOOR.",
+   "..ROOOOOOR..",
+   "...ROOOOR...",
+   "....ROOR....",
+   ".....RR.....",
+   "....K..K....",
+   "....KKKK....",
+   "....KKKK...."
+  ],
+  "overlay": [
+   "..k.........",
+   ".....l......",
+   "............",
+   "............",
+   "l...........",
+   "............",
+   "............",
+   "............",
+   "............",
+   "............",
+   "............",
+   "............",
+   "............"
+  ],
+  "tunnels": [
+   40,
+   41,
+   42,
+   43,
+   44
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 5
+    },
+    {
+     "color": 2,
+     "ammo": 6
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "f20970c0"
+ },
+ {
+  "id": 376,
+  "name": "balloonclouds",
+  "stage": 38,
+  "image": [
+   "....GGGGG.....",
+   "...GGYYYGG....",
+   "..GGGYYYGGG...",
+   "..GGGYYYGGG...",
+   "..GGGYYYGGG.B.",
+   "...GGYYYGG.BBB",
+   "BB..GGYGG.BBBB",
+   "BBB..K.K...BB.",
+   "BBBB.KKK......",
+   ".BB..KKK......"
+  ],
+  "overlay": [
+   "....k.........",
+   "..........s...",
+   "..............",
+   "..............",
+   "..............",
+   "..............",
+   "............l.",
+   "l.......s.....",
+   "..............",
+   ".............."
+  ],
+  "tunnels": [
+   24,
+   25,
+   26,
+   27,
+   28
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 8
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "f158788d"
+ },
+ {
+  "id": 377,
+  "name": "balloonpilot",
+  "stage": 38,
+  "image": [
+   "....KKKK....",
+   "...KKKKKK...",
+   "...KOOOOK...",
+   "..BBYOOYBB..",
+   "...OOOOOO...",
+   "....ORRO....",
+   "..PPPPPPPP..",
+   ".PPPPPPPPPP.",
+   "KKKKKKKKKKKK",
+   "KOKKOKKOKKOK",
+   "KKKKKKKKKKKK",
+   ".KKKKKKKKKK."
+  ],
+  "overlay": [
+   "....k.......",
+   "......l.....",
+   "............",
+   "............",
+   "............",
+   ".....y......",
+   "............",
+   "....y.......",
+   "............",
+   "....l.......",
+   "............",
+   "............"
+  ],
+  "tunnels": [
+   26,
+   27,
+   28,
+   29,
+   30,
+   31
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 6,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 12
+    },
+    {
+     "color": 2,
+     "ammo": 6
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "ad8f034e"
+ },
+ {
+  "id": 378,
+  "name": "balloonnight",
+  "stage": 38,
+  "image": [
+   ".YY.......Y...",
+   "YY...PPPP.....",
+   "YY..PPPPPP..Y.",
+   "YY.PPBPPBPP...",
+   ".YYPPBPPBPP...",
+   "...PPBPPBPP...",
+   "....PPBBPP....",
+   ".....PPPP...Y.",
+   ".....K..K.....",
+   ".....KKKK.....",
+   ".....KKKK....."
+  ],
+  "overlay": [
+   ".l....s.......",
+   "......l.......",
+   "....k.........",
+   "..............",
+   "..............",
+   "..............",
+   "..............",
+   ".............s",
+   "..............",
+   "..............",
+   ".............."
+  ],
+  "tunnels": [
+   10,
+   11,
+   12,
+   13,
+   14
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 6
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 13
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "9cfaf569"
+ },
+ {
+  "id": 379,
+  "name": "balloonfiesta",
+  "stage": 38,
+  "image": [
+   ".....OOOO.....",
+   "....OORROO....",
+   ".GGGORRRROPPP.",
+   "GGYGORRRROPYPP",
+   "GYYGGORROPPYYP",
+   "GGYGG.OO.PPYPP",
+   ".GGG..KK..PPP.",
+   "..G...KK...P..",
+   ".KK...KK...KK.",
+   ".KK........KK."
+  ],
+  "overlay": [
+   "..............",
+   "..............",
+   "...r....b.....",
+   "............l.",
+   "...........b..",
+   ".........k....",
+   "..............",
+   "...s..l.......",
+   "..............",
+   ".............s"
+  ],
+  "tunnels": [
+   18,
+   19,
+   20,
+   21,
+   22,
+   23
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 18
+    },
+    {
+     "color": 1,
+     "ammo": 14,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 8
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 13
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 14,
+     "covered": true
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "940576ca"
+ },
+ {
+  "id": 380,
+  "name": "grandballoon",
+  "stage": 38,
+  "boss": true,
+  "image": [
+   ".....RPPR.....",
+   "...ORRPPRRO...",
+   "..OORRPPRROO..",
+   ".GOORRPPRROOG.",
+   ".GOORRPPRROOG.",
+   "GGOORRPPRROOGG",
+   "GGOORRPPRROOGG",
+   ".GOORRPPRROOG.",
+   "..GOORPPROOG..",
+   "...GORPPROG...",
+   "....ORPPRO....",
+   ".....K..K.....",
+   "....KKKKKK....",
+   "....KYKKYK...."
+  ],
+  "overlay": [
+   "...s..........",
+   "...k..........",
+   "....l.....k...",
+   "..............",
+   "....b....b..rs",
+   "..............",
+   "..............",
+   "..............",
+   "...l..........",
+   "..............",
+   "..............",
+   "....s.........",
+   ".......l......",
+   ".............."
+  ],
+  "tunnels": [
+   50,
+   51,
+   52,
+   53,
+   54
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 18
+    },
+    {
+     "color": 1,
+     "ammo": 16
+    },
+    {
+     "color": 4,
+     "ammo": 16
+    },
+    {
+     "color": 1,
+     "ammo": 16,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 22
+    },
+    {
+     "color": 4,
+     "ammo": 16
+    },
+    {
+     "color": 2,
+     "ammo": 16
+    },
+    {
+     "color": 2,
+     "ammo": 16,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 16
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 16,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 16
+    },
+    {
+     "color": 1,
+     "ammo": 16
+    },
+    {
+     "color": 1,
+     "ammo": 16,
+     "covered": true
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "b847068a"
  }
 ]
