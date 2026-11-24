@@ -5,7 +5,7 @@ Data: 24 novembre 2026 · Epic #66 e #102 · Domande di partenza: [curva dell'un
 ## In breve
 - **3 agent sonnet, 1 pacchetto ciascuno**: A07 (P07, over 65 alle prime armi, IT) su S31 (301–310), A03 (P03, puzzle-fan, IT) su S35 (341–350), A11 (P11, giocatore della sera, EN) su S40 (391–400).
 - **30 livelli, 30 vinti al 1° tentativo, 0 saltati, 0 abbandoni.** 5 ingorghi (302, 343, 346, 349, 395), tutti risolti con "+1 slot". 0 rifiuti per nastro pieno.
-- **Le novità si capiscono, ma le card arrivano dopo l'elemento sul tabellone**: tutti e 3 gli agent, in lingue e profili diversi, lo dicono (§2). È il problema che T20 aveva trovato per "Perché è tornato" e che #225 ha risolto solo per quella card.
+- **Le card arrivavano dopo l'elemento sul tabellone, ma è un artefatto dello strumento** (§2): il salvataggio di partenza dell'harness lasciava non viste 6–9 card insieme e il gioco ne mostra una per livello. Un giocatore reale ha ritardo 0 (verifica in #257). Corretto nella stessa PR.
 - **Difficoltà percepita bassa**: 2–4 su 5 (mediana 3). I boss (310, 350, 400) non sono sembrati più duri dei livelli vicini; il 400 ha `randomWin` 0,22 (il più basso) ma capito 5 e difficoltà 2: il finale non ha tensione (§3).
 - **Difetto dello strumento trovato e corretto**: lo schema delle schede non conosceva le card `film` e `tunnel`, quindi `end` rifiutava le schede di tutti e 3 gli agent (§5).
 
@@ -18,7 +18,10 @@ Data: 24 novembre 2026 · Epic #66 e #102 · Domande di partenza: [curva dell'un
 
 Senza `seenCards`: ogni agent parte dal salvataggio di un giocatore che ha completato i livelli prima del suo pacchetto, con una card di inizio livello vista per livello, come nel gioco.
 
-## 2. Le card arrivano dopo l'elemento (3 agent su 3)
+## 2. Le card arrivavano dopo l'elemento (3 agent su 3): artefatto dell'harness, corretto in #257
+
+**Esito della verifica nel codice (#257):** il ritardo non esiste per un giocatore reale (simulato dal livello 1 al 400: ritardo 0, salvo `leftover` e `blocked`, anticipate di proposito da #225). Nasce dal salvataggio di partenza dell'harness (#182), che lasciava non viste tutte le card delle meccaniche presenti nel pack: con una card per livello (#177) le altre slittavano fino a 7 livelli. Anche "Mescola" e "Marrone" che ricomparivano erano un effetto dello stesso salvataggio. Da questo turno in poi il salvataggio è quello di un giocatore reale (`scripts/playtest/saves.ts`); i dati di T23 restano com'erano e vanno letti con questa avvertenza. La tabella sotto è quanto hanno visto gli agent, non un difetto del gioco.
+
 | Elemento già visibile | Card | Agent |
 |---|---|---|
 | marrone (302) | 303 | A07 |
@@ -34,8 +37,7 @@ Senza `seenCards`: ogni agent parte dal salvataggio di un giocatore che ha compl
 | "+3" sotto le colonne (393) | 398 | A11 |
 | ↩ (391) | "Perché è tornato" 399 | A11 |
 
-- Le card di inizio livello seguono la regola "una per livello": la coda delle novità di uno stage si distribuisce su più livelli, mentre l'elemento è già sul tabellone. #225 ha anticipato solo la card "Perché è tornato" (§1 di T22), e qui compare ancora in ritardo (A03 al 347, A11 al 399).
-- **Card già viste che ricompaiono** (A03: "Mescola sulla tela" al 341; A11: "Mescola" e "Marrone" al 391–392): da capire se è la coda del salvataggio dell'agent o un difetto del gioco. Va verificato prima di aprire un ticket.
+- **Card già viste che ricompaiono** (A03: "Mescola sulla tela" al 341; A11: "Mescola" e "Marrone" al 391–392): artefatto del salvataggio dell'harness, non del gioco (`seen` viene salvato).
 - **Le novità dell'universo**: "pellicola" è spiegata ma "non dice che sotto c'è un altro colore" (A07, 301); il secchiello bloccato da una pellicola non dà nessun messaggio (A07). "Galleria sul nastro": la card è chiara (A03, A11) ma in partita "non si nota che cambi qualcosa" (A03 343, A11 394, 398–400). Lucchetti, chiavi e pietre: "non ho visto cosa cambiassero" (A11 392, 395, 396).
 - Testo: la card pellicola ha un a capo spezzato male ("solo un colpo del / suo colore la strappa", A03).
 
@@ -67,7 +69,7 @@ Altri dati: difficoltà percepita A07 2–4, A03 2–4, A11 2–3; tempi di vitt
 - La copertura dell'universo 4 non è un obiettivo dell'aggregatore: restano 106 livelli (95–200) senza agent.
 
 ## 7. Cosa fare
-1. **Verificare in codice** perché le card di inizio livello arrivano dopo l'elemento (`tipOnLevelStart`, `tipsAnticipated`, `tipsPresent` in `src/core/onboarding.ts`) e perché "Mescola" e "Marrone" ricompaiono: 3 agent su 3 concordi, vale un ticket se si conferma che è del gioco e non del salvataggio dell'agent.
+1. **Schede in ritardo (#257)**: verificato, è dell'harness. Corretto: il salvataggio di partenza ora è quello di un giocatore reale. Costo accettato su #182: una meccanica debuttata prima del pack non ha card nel playtest, salvo elencarla in `seenCards`. Resta una fragilità latente nel gioco (una card per livello, #177) se un livello futuro porta più novità insieme: nessun ticket finché non succede.
 2. **Decisione di design (utente)**: i boss non danno tensione (A03, A11: "non più duri dei livelli vicini"); se è voluto per l'universo 4, `#102` può chiudersi; altrimenti serve una passata sulla curva dei boss.
 3. Segnali in partita per le novità che "non si notano" (galleria, pellicola, lucchetti, pietre): ipotesi con 1–2 agent, non ancora ticket.
 4. Mappa: etichetta dello stage 40 sul livello 391 (1 agent, bug minore).

@@ -6,14 +6,26 @@ the format of #67 (`docs/playtest/scheda.schema.json`, protocol in `docs/playtes
 - The agent **looks at screenshots and taps**, like a player. `window.__mix` is read only by the harness, to aim
   `column`/`slot` taps and to record telemetry: no part of it reaches the agent.
 - Each agent starts from a known save: levels 1…N−1 completed, N open, the tips a player meets before N
-  (`saves.ts`). The second pack of a plan starts from its own save. A mechanic that shows up in the planned levels
-  keeps its card unseen even if it debuted earlier (#182): the agent has no memory of the levels it did not play,
-  so it meets the card and its drawing at the first planned level with that mechanic (ice in S09).
+  (`saves.ts`). The second pack of a plan starts from its own save. A mechanic card is left to see only if the
+  mechanic debuts at N or later, so the agent meets each card at the level a real player does, with no delay
+  (#257). "Why it came back" and "lane blocked" stay to see when a planned level can show them (#225), as before.
+  - **Compromise on #182, accepted on #257.** #182 also left to see the card of every mechanic on the planned
+    levels, even one debuted long before (ice in S09, debuting at 31), because the agent has no memory of the
+    levels it did not play. But the game shows one teaching card per level (#177), and a late pack has most
+    mechanics on the board from its first level: the cards queued up and arrived several levels late (S40: lock on
+    the board at 391, card at 396; S35: "+N" from 341, card at 348), and cards a real player met at 4 and 101
+    (mixing, brown) took the pack's first levels. Showing an old card only from its first planned level does not
+    help: the card already waits for a level with its mechanic, and those levels are the same ones. So a mechanic
+    that debuted before the pack now has no card in the playtest, as for a real player who saw it long ago; a turn
+    that measures an old mechanic's card lists it in `seenCards` (below).
 - `"seenCards": true` (on the turn, or on one agent, which wins; `false` switches it off) starts from a save that has
   **every mechanic card already seen** except "why it came back" (`leftover`) and "lane blocked" (`blocked`); a list,
   e.g. `["leftover", "blocked", "queue"]`, names the cards left to see instead (#230). It is for a turn that measures
-  those cards: without it the queue of the planned levels' cards delays them. Missing: the save is the usual one, so
-  the earlier turns stay reproducible. Level 1 keeps its onboarding.
+  those cards: without it the card of a mechanic debuting in the pack comes first and can delay them by a level or
+  two (S31: film at 301, "why it came back" at 303). It is also how a turn measures the card of a mechanic that
+  debuted before the pack, which the usual save counts as seen (#257): list it, e.g. `["leftover", "blocked", "ice"]`
+  for S09. Missing: the save is the usual one. Turns before #257 started from the save of #182; each form keeps the
+  save it used in `startSave.seenTips`. Level 1 keeps its onboarding.
 - The harness writes the telemetry; the agent sends feedback and bugs; at the end the form is checked against the
   schema (hand-written validator, `jsonSchema.ts`) and written as `<out>/Tnn-Ann.json`, screenshots in `<out>/Tnn-Ann/`.
 
