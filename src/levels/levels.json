@@ -34377,5 +34377,1148 @@
   "slots": 2,
   "beltCapacity": 2,
   "specHash": "8756cac7"
+ },
+ {
+  "id": 391,
+  "name": "hillrainbow",
+  "stage": 40,
+  "image": [
+   "..RRRRRR..",
+   ".ROOOOOOR.",
+   "ROYYYYYYOR",
+   "OYGGGGGGYO",
+   "YGB....BGY",
+   "GGGG..GGGG",
+   "KKKKKKKKKK"
+  ],
+  "overlay": [
+   "....k.....",
+   "...l......",
+   "......l...",
+   "..........",
+   "..........",
+   "..........",
+   ".........."
+  ],
+  "tunnels": [
+   27,
+   28,
+   29,
+   30,
+   31,
+   32
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 6
+    },
+    {
+     "color": 2,
+     "ammo": 8
+    },
+    {
+     "color": 1,
+     "ammo": 8
+    },
+    {
+     "color": 2,
+     "ammo": 8
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 6
+    },
+    {
+     "color": 2,
+     "ammo": 8
+    },
+    {
+     "color": 2,
+     "ammo": 8
+    },
+    {
+     "color": 1,
+     "ammo": 8
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 8
+    },
+    {
+     "color": 4,
+     "ammo": 4
+    },
+    {
+     "color": 2,
+     "ammo": 8
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 8
+    },
+    {
+     "color": 4,
+     "ammo": 8
+    },
+    {
+     "color": 1,
+     "ammo": 8
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "a8428766"
+ },
+ {
+  "id": 392,
+  "name": "sunrainbow",
+  "stage": 40,
+  "image": [
+   ".O.O.O......",
+   "..YYY.......",
+   "OYYYYYO.....",
+   "..YYY.......",
+   ".O.O.O......",
+   "..RRRRRRRR..",
+   ".ROOOOOOOOR.",
+   "ROYYYYYYYYOR",
+   "OYGGGGGGGGYO",
+   "YGB......BGY",
+   "GB........BG",
+   "KK........KK"
+  ],
+  "overlay": [
+   "............",
+   "............",
+   "............",
+   "..k.........",
+   "............",
+   "............",
+   "....b...l...",
+   "............",
+   ".l..........",
+   ".r...s......",
+   "............",
+   "..s........."
+  ],
+  "tunnels": [
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 7
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 11
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "01972dd9"
+ },
+ {
+  "id": 393,
+  "name": "potofgold",
+  "stage": 40,
+  "image": [
+   "...ROYGBP...",
+   "...ROYGBP...",
+   "...ROYGBP...",
+   "...ROYGBP...",
+   "..YYYYYYYY..",
+   ".YYOYYYOYYY.",
+   "KKKKKKKKKKKK",
+   ".KKKKKKKKKK.",
+   "KKKKKKKKKKKK",
+   ".KKKKKKKKKK.",
+   "..KKKKKKKK..",
+   "...KKKKKK..."
+  ],
+  "overlay": [
+   "............",
+   "............",
+   "............",
+   "......rl....",
+   ".....l......",
+   ".kb.........",
+   "............",
+   "............",
+   "............",
+   "............",
+   "............",
+   "............"
+  ],
+  "tunnels": [
+   7,
+   8,
+   9,
+   10,
+   11
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 13
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 8
+    },
+    {
+     "color": 4,
+     "ammo": 11
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "421a47d0"
+ },
+ {
+  "id": 394,
+  "name": "rainbowkite",
+  "stage": 40,
+  "image": [
+   ".....R.....",
+   "....ROR....",
+   "...ROYOR...",
+   "..ROYGYOR..",
+   ".ROYGBGYOR.",
+   "ROYGBPBGYOR",
+   ".ROYGBGYOR.",
+   "..ROYGYOR..",
+   "...ROYOR...",
+   "....ROR....",
+   ".....K.....",
+   "....K.P....",
+   ".....K.....",
+   "...O..K...."
+  ],
+  "overlay": [
+   "....s......",
+   "...........",
+   "...........",
+   "...........",
+   "...........",
+   "...........",
+   "......l.k..",
+   "..l........",
+   "...........",
+   "...........",
+   "...........",
+   "...........",
+   "...........",
+   "..s........"
+  ],
+  "tunnels": [
+   14,
+   15,
+   16,
+   17,
+   18,
+   19
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 11,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 12
+    },
+    {
+     "color": 4,
+     "ammo": 8
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "fd134d55"
+ },
+ {
+  "id": 395,
+  "name": "rainbowfish",
+  "stage": 40,
+  "image": [
+   "...ROYGB......",
+   "..RROYGBB...PP",
+   ".RROOYGGBB.PPP",
+   "RKROOYGGBBPPP.",
+   "RRROOYGGBBPPP.",
+   ".RROOYGGBB.PPP",
+   "..RROYGBB...PP",
+   "...ROYGB......",
+   "B..B..B..B..B.",
+   "KGKKGKKGKKGKKG"
+  ],
+  "overlay": [
+   "........s.....",
+   "..l...........",
+   "..............",
+   "..............",
+   "....b......l..",
+   "...k..........",
+   "..............",
+   "s.............",
+   "......r.......",
+   ".............."
+  ],
+  "tunnels": [
+   15,
+   16,
+   17,
+   18,
+   19
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 7
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 13
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "79d1f20d"
+ },
+ {
+  "id": 396,
+  "name": "rainbowheart",
+  "stage": 40,
+  "image": [
+   ".KKK...KKK.",
+   "KRRRK.KRRRK",
+   "KOOOOKOOOOK",
+   "KYYYYYYYYYK",
+   ".KGGGGGGGK.",
+   "..KBBBBBK..",
+   "...KPPPK...",
+   "....KPK....",
+   ".....K....."
+  ],
+  "overlay": [
+   "...........",
+   "....k......",
+   "...........",
+   "...........",
+   "...l.....ls",
+   "...........",
+   "...........",
+   "...........",
+   "......s...."
+  ],
+  "tunnels": [
+   18,
+   19,
+   20,
+   21,
+   22
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 8
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 12
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "6b84ca1d"
+ },
+ {
+  "id": 397,
+  "name": "rainbowsail",
+  "stage": 40,
+  "image": [
+   ".....K......",
+   ".....KR.....",
+   ".....KOR....",
+   ".....KYOR...",
+   ".....KGYOR..",
+   ".....KBGYOR.",
+   ".....KPBGYOR",
+   ".....K......",
+   "KKKKKKKKKKKK",
+   ".KKKKKKKKKK.",
+   "..KKKKKKKK..",
+   "BBGBBGBBGBBG"
+  ],
+  "overlay": [
+   "............",
+   "......ls....",
+   "............",
+   ".....l...s..",
+   "............",
+   "............",
+   ".....k......",
+   "............",
+   "............",
+   "............",
+   "............",
+   "...rr......."
+  ],
+  "tunnels": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 6
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 12
+    },
+    {
+     "color": 2,
+     "ammo": 10,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "80c984be"
+ },
+ {
+  "id": 398,
+  "name": "rainbowbutterfly",
+  "stage": 40,
+  "image": [
+   "....K...K....",
+   ".....K.K.....",
+   "RRRR..K..RRRR",
+   "ROOOR.K.ROOOR",
+   "ROYYORKROYYOR",
+   "ROYGGOKOGGYOR",
+   ".RRRRRKRRRRR.",
+   "..BPPBKBPPB..",
+   "..BGGPKPGGB..",
+   "...BBB.BBB..."
+  ],
+  "overlay": [
+   ".............",
+   ".............",
+   ".............",
+   ".............",
+   "............y",
+   "....r......k.",
+   ".l...........",
+   "......l......",
+   ".............",
+   "............."
+  ],
+  "tunnels": [
+   33,
+   34,
+   35,
+   36,
+   37
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10,
+     "covered": true
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 7,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 10,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "94e18f62"
+ },
+ {
+  "id": 399,
+  "name": "doublerainbow",
+  "stage": 40,
+  "image": [
+   "...RRRRRRR...",
+   ".RROOOOOOORR.",
+   "ROOYYYYYYYOOR",
+   "OYY.......YYO",
+   "Y...PPPPP...Y",
+   "G..PBBBBBP..G",
+   "B.PBGGGGGBP.B",
+   "P.BG.....GB.P",
+   "..GY.....YG..",
+   "..YO.....OY..",
+   "GGGGGGGGGGGGG",
+   "KKKKKKKKKKKKK"
+  ],
+  "overlay": [
+   ".............",
+   ".............",
+   ".............",
+   "....s.......l",
+   ".....l.......",
+   ".............",
+   "....k........",
+   ".s...........",
+   ".............",
+   ".............",
+   "...r..r...r..",
+   "............."
+  ],
+  "tunnels": [
+   40,
+   41,
+   42,
+   43,
+   44,
+   45
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 13
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 17,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 14,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 13,
+     "covered": true
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "1b3f5f08"
+ },
+ {
+  "id": 400,
+  "name": "greatrainbow",
+  "stage": 40,
+  "boss": true,
+  "image": [
+   "....RRRRRR....",
+   "..RROOOOOORR..",
+   ".ROOYYYYYYOOR.",
+   "ROYYGGGGGGYYOR",
+   "ROYGGBBBBGGYOR",
+   "OYGBBPPPPBBGYO",
+   "OYGBP....PBGYO",
+   "YGBP..OO..PBGY",
+   "YGBP.OYYO.PBGY",
+   "GBP.OYYYYO.PBG",
+   "BBBBBBBBBBBBBB",
+   "GBBGBBGBBGBBGB",
+   "BGGBGGBKKKKKBG",
+   "GBBGBBKKKKKKKB"
+  ],
+  "overlay": [
+   "..............",
+   "..............",
+   "......l.......",
+   "..k...........",
+   "..r...........",
+   "..............",
+   ".........y....",
+   ".....s..s.l...",
+   "..............",
+   "...sl.........",
+   ".....k........",
+   "..............",
+   ".r............",
+   ".............."
+  ],
+  "tunnels": [
+   27,
+   28,
+   29,
+   30,
+   31
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 16
+    },
+    {
+     "color": 4,
+     "ammo": 8,
+     "covered": true
+    },
+    {
+     "color": 1,
+     "ammo": 16
+    },
+    {
+     "color": 2,
+     "ammo": 16
+    },
+    {
+     "color": 1,
+     "ammo": 18
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 16
+    },
+    {
+     "color": 2,
+     "ammo": 16
+    },
+    {
+     "color": 2,
+     "ammo": 15
+    },
+    {
+     "color": 4,
+     "ammo": 16,
+     "covered": true
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 16
+    },
+    {
+     "color": 1,
+     "ammo": 16,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 16,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 16
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 16
+    },
+    {
+     "color": 4,
+     "ammo": 16
+    },
+    {
+     "color": 4,
+     "ammo": 16,
+     "covered": true
+    },
+    {
+     "color": 4,
+     "ammo": 16
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "5106aab1"
  }
 ]

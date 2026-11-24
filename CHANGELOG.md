@@ -2,6 +2,17 @@
 
 ## Non rilasciato
 
+### Stage 40 "Arcobaleno": livelli 391–400, fine dell'universo 4 "Mare e cielo" (#245, #102)
+
+- **Dieci figure in pixel art originale** sull'arcobaleno (`scripts/stages/stage-40.ts`, decimo e ultimo stage dell'universo 4, completo): arcobaleno sulle colline, sole e arcobaleno, la pentola d'oro, aquilone arcobaleno, pesce arcobaleno, cuore arcobaleno, la vela arcobaleno, farfalla arcobaleno, doppio arcobaleno (l'arco interno ha i colori invertiti) e il boss finale dell'universo, il grande arcobaleno sul mare al tramonto (14×14, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-40.png`; nomi IT/EN.
+- **Novità: tutto.** Gallerie (#99) e lucchetto (1–2 chiavi, 2–3 pixel chiusi) e **marrone** su ogni livello; dal 392 ognuno aggiunge almeno due tra pellicola (7 livelli), pietre (7) e secchielli coperti (~30%, 7); il boss le ha tutte, con 2 chiavi e 3 lucchetti. Nessuna card nuova e nessun livello "molto facile". Dal 392 ≥ 30% di pixel secondari o marroni.
+- **Nastro 2, slot 2**: mai sopra la fine dell'universo 3.
+- **Curva** a dente di sega (#88): vittorie a caso 69,5 · 52 · 50 · 48 · 52,5 · 52 · 51 · 51,5 · 38,5 · 22%, media 48,7% (obiettivo dell'universo 4: ~50% ± 5); il boss 400 (22%) è il più duro dello stage e **di tutto l'universo 4** (gli altri boss 23–31,5%), sopra il pavimento del 22%. Le regole di fine universo (3 e 5) passano: stage 39–40 al 50,6% contro il 67,6% degli stage 31–32.
+- **Fine universo**: vincere il 400 apre la festa dell'universo 4 con il suo stile di secchiello ("bolle"); l'universo 5 non c'è ancora, quindi la scheda dice che è in arrivo. Nessuna modifica al codice: era già generico.
+- **Report della curva dell'universo 4** in `docs/reports/2026-11-24-curva-universo-4.md`, con i dati per livello e il grafico rigenerati (`docs/reports/curva-difficolta.{json,png}`).
+- Nessuna modifica a `src/core` oltre alle chiavi IT/EN in `src/core/i18n.ts`.
+- Test: unit in `tests/stage40.test.ts` (chiavi IT/EN, universo e stage, livelli 391–400, tela, galleria, chiave, lucchetto e marrone su ogni livello senza card, almeno due tra pellicola/pietre/coperti dal 392, pixel secondari, nastro e slot, curva, media, boss; obiettivi dell'universo 4: primo stage ~68%, ultimo ~50%, 400 boss più duro dell'universo e ≥ 22%; fine universo, stile "bolle", nessun universo 5; sblocco); e2e `e2e/stage-40.spec.ts`: la mappa mostra lo stage 40 dopo il 390 con solo il 391 giocabile, il 391 si gioca fino alla vittoria a 360×640 e 412×915 senza card, il 397 e il boss 400 si giocano fino alla vittoria con i lucchetti aperti, e il 400 apre la festa dell'universo 4; gli e2e degli stage 31–39 includono ora tutto l'universo nella mappa (nodi 301–400, boss 310…400). Screenshot in `docs/test-evidence/245-stage-40/`.
+
 ### Stage 39 "Temporale": livelli 381–390, tutte le meccaniche dell'universo 4 insieme (#244, #102)
 
 - **Dieci figure in pixel art originale** sul temporale (`scripts/stages/stage-39.ts`, nono stage dell'universo 4, completo): nuvola temporalesca, il fulmine, l'ombrello, faro nella tempesta, l'onda, albero nel vento, nave nella tempesta, dopo la pioggia (arcobaleno), nuvola di pioggia e il boss, la tempesta (14×14, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-39.png`; nomi IT/EN.
