@@ -2340,6 +2340,66 @@
    "specHash": "8756cac7",
    "winRate": 0.23,
    "band": "hard"
+  },
+  {
+   "id": 391,
+   "specHash": "a8428766",
+   "winRate": 0.695,
+   "band": "normal"
+  },
+  {
+   "id": 392,
+   "specHash": "01972dd9",
+   "winRate": 0.52,
+   "band": "hard"
+  },
+  {
+   "id": 393,
+   "specHash": "421a47d0",
+   "winRate": 0.5,
+   "band": "hard"
+  },
+  {
+   "id": 394,
+   "specHash": "fd134d55",
+   "winRate": 0.48,
+   "band": "hard"
+  },
+  {
+   "id": 395,
+   "specHash": "79d1f20d",
+   "winRate": 0.525,
+   "band": "hard"
+  },
+  {
+   "id": 396,
+   "specHash": "6b84ca1d",
+   "winRate": 0.52,
+   "band": "hard"
+  },
+  {
+   "id": 397,
+   "specHash": "80c984be",
+   "winRate": 0.51,
+   "band": "hard"
+  },
+  {
+   "id": 398,
+   "specHash": "94e18f62",
+   "winRate": 0.515,
+   "band": "hard"
+  },
+  {
+   "id": 399,
+   "specHash": "1b3f5f08",
+   "winRate": 0.385,
+   "band": "hard"
+  },
+  {
+   "id": 400,
+   "specHash": "5106aab1",
+   "winRate": 0.22,
+   "band": "hard"
   }
  ]
 }

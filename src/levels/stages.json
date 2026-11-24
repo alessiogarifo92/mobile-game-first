@@ -232,5 +232,11 @@
   "key": "thunderstorm",
   "color": 5,
   "complete": true
+ },
+ {
+  "id": 40,
+  "key": "rainbow",
+  "color": 2,
+  "complete": true
  }
 ]
