@@ -2,6 +2,10 @@
 
 ## Non rilasciato
 
+## 0.6.0 — universi 3 e 4, codice di salvataggio corto (24 novembre 2026)
+
+**Duecento livelli nuovi**: l'universo 3 "Viaggio" (201–300) e l'universo 4 "Mare e cielo" (301–400), con la pellicola colorata e le gallerie sul nastro. Ora il gioco ha **400 livelli in 4 universi**. Il codice di salvataggio è molto più corto (circa 5 volte) e si incolla in un pannello nel gioco che funziona anche con la tastiera aperta su telefono: i codici vecchi si importano ancora. L'universo 5 arriverà con un prossimo aggiornamento.
+
 ### Codice di salvataggio corto e incolla nel gioco (#259)
 
 - **Formato `MS2`** (`src/core/saveCode.ts`): i livelli completati diventano intervalli (`"1-166,170"`), le chiavi una lettera, i suggerimenti visti una stringa sola. Un salvataggio da 166 livelli passa da ~1 000 a 193 caratteri; da 500 livelli (tutti i suggerimenti visti) da ~2 850 a 234. I codici `MS1` esportati dalle versioni precedenti si importano ancora; l'esportazione produce `MS2`.
