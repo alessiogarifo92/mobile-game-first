@@ -3,6 +3,7 @@ import { VIEW } from '../../core/layout';
 import type { MessageKey } from '../../core/i18n';
 import { exportSaveCode, importSaveCode, progressScore } from '../../core/saveCode';
 import { sfx } from '../audio';
+import { openCodePanel, type CodePanel, type CodePanelOptions } from '../codePanel';
 import { publishDebug } from '../debug';
 import { LEVELS, getProgress, replaceProgress, resetProgress, t } from '../store';
 import { PAINT, THEME } from '../theme';
@@ -13,6 +14,8 @@ export class DataScene extends Phaser.Scene {
   private overlay: Phaser.GameObjects.Container | null = null;
   private buttons: Record<string, { x: number; y: number }> = {};
   private message: MessageKey | null = null;
+  /** The save code panel (an HTML overlay, #259): kept across a relayout restart, which only rebuilds the canvas. */
+  private panel: CodePanel | null = null;
 
   constructor() {
     super('data');
@@ -59,15 +62,26 @@ export class DataScene extends Phaser.Scene {
     const clipboard = typeof navigator === 'undefined' ? undefined : navigator.clipboard;
     const manual = () => {
       // No clipboard access (older WebView, insecure page): show the code so it can be copied by hand.
-      window.prompt(t('data.copyPrompt'), code);
+      this.openPanel({ title: t('data.copyPrompt'), code, closeLabel: t('data.close') });
     };
     if (!clipboard?.writeText) return manual();
     clipboard.writeText(code).then(() => this.scene.restart({ message: 'data.copied' }), manual);
   }
 
   private paste(): void {
-    const text = window.prompt(t('data.pastePrompt'), '');
-    if (text === null) return; // cancelled
+    this.openPanel({ title: t('data.pastePrompt'), closeLabel: t('data.cancel'), action: { label: t('data.import'), run: (text) => this.importCode(text) } });
+  }
+
+  private openPanel(opts: Omit<CodePanelOptions, 'onClose'>): void {
+    if (this.panel || this.overlay) return;
+    this.panel = openCodePanel({ ...opts, onClose: () => {
+      this.panel = null;
+      this.publish();
+    } });
+    this.publish();
+  }
+
+  private importCode(text: string): void {
     const imported = importSaveCode(text, LEVELS);
     if (!imported) {
       this.scene.restart({ message: 'data.invalid' });
@@ -119,6 +133,7 @@ export class DataScene extends Phaser.Scene {
       buttons: this.buttons,
       message: this.message ? t(this.message) : null,
       overlay: !!this.overlay,
+      codePanel: this.panel?.kind ?? null,
     });
   }
 }

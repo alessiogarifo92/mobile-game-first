@@ -2,6 +2,12 @@
 
 ## Non rilasciato
 
+### Codice di salvataggio corto e incolla nel gioco (#259)
+
+- **Formato `MS2`** (`src/core/saveCode.ts`): i livelli completati diventano intervalli (`"1-166,170"`), le chiavi una lettera, i suggerimenti visti una stringa sola. Un salvataggio da 166 livelli passa da ~1 000 a 193 caratteri; da 500 livelli (tutti i suggerimenti visti) da ~2 850 a 234. I codici `MS1` esportati dalle versioni precedenti si importano ancora; l'esportazione produce `MS2`.
+- **Pannello nel gioco al posto di `window.prompt`** (`src/game/codePanel.ts`, schermata Dati): su Android il dialogo nativo, con un codice lungo, spingeva i pulsanti fuori schermo. Il campo ha un'altezza massima e scorre all'interno; Annulla e Importa restano sempre visibili, anche con la tastiera aperta (il pannello segue la `visualViewport` e resta aperto quando il gioco si riadatta). Senza appunti il codice da copiare compare nello stesso pannello, in sola lettura e già selezionato. Chiavi nuove IT/EN `data.import`, `data.close`.
+- Test: unit in `tests/saveCode.test.ts` (intervalli, round trip con buchi, 500 livelli sotto 300 caratteri, codice `MS1` reale da 166 livelli, codici troncati, checksum errato, forma non valida, spazi e a capo); e2e `e2e/save-code-259.spec.ts` (a 412×915 il codice da 166 livelli si incolla e Importa è sullo schermo senza scorrere; con la "tastiera" i pulsanti restano visibili; copia in sola lettura a 360×640); `e2e/progress.spec.ts` usa ora il pannello invece dei dialoghi nativi.
+
 ### Stage 40 "Arcobaleno": livelli 391–400, fine dell'universo 4 "Mare e cielo" (#245, #102)
 
 - **Dieci figure in pixel art originale** sull'arcobaleno (`scripts/stages/stage-40.ts`, decimo e ultimo stage dell'universo 4, completo): arcobaleno sulle colline, sole e arcobaleno, la pentola d'oro, aquilone arcobaleno, pesce arcobaleno, cuore arcobaleno, la vela arcobaleno, farfalla arcobaleno, doppio arcobaleno (l'arco interno ha i colori invertiti) e il boss finale dell'universo, il grande arcobaleno sul mare al tramonto (14×14, la figura più grande dello stage). Foglio di anteprima in `docs/levels/stage-40.png`; nomi IT/EN.

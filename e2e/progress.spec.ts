@@ -18,6 +18,20 @@ async function openData(page: Page) {
   await waitScene(page, 'data');
 }
 
+/** Taps "Load a save code" and, in the in-game panel (#259), types `code` and imports it, or cancels with null. */
+async function pasteCode(page: Page, code: string | null) {
+  const paste = (await mix<Buttons>(page, 'buttons')).paste!;
+  await tap(page, paste.x, paste.y);
+  const panel = page.locator('#code-panel');
+  await expect(panel).toBeVisible();
+  if (code === null) await panel.getByRole('button').first().click();
+  else {
+    await panel.getByRole('textbox').fill(code);
+    await panel.getByRole('button').last().click();
+  }
+  await expect(panel).toBeHidden();
+}
+
 const saved = (page: Page) => page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? 'null'), KEY);
 
 test.beforeEach(async ({ page }) => {
@@ -31,27 +45,22 @@ test('a save code can be loaded; an invalid one is rejected; an older one asks f
   if (shots) await page.screenshot({ path: `${shots}/16-backup.png` });
 
   // Invalid code: message, nothing changes.
-  page.once('dialog', (d) => d.accept('MS1.garbage.zzz'));
-  await tap(page, (await mix<{ paste: { x: number; y: number } }>(page, 'buttons')).paste.x, (await mix<{ paste: { x: number; y: number } }>(page, 'buttons')).paste.y);
+  await pasteCode(page, 'MS1.garbage.zzz');
   await page.waitForFunction(() => (window as unknown as { __mix: { message: string | null } }).__mix.message === 'That code is not valid');
   expect((await saved(page)).completed).toEqual([1]);
 
-  // Cancelled prompt: nothing happens.
-  page.once('dialog', (d) => d.dismiss());
-  const paste = (await mix<Record<string, { x: number; y: number }>>(page, 'buttons')).paste!;
-  await tap(page, paste.x, paste.y);
+  // Cancelled panel: nothing happens.
+  await pasteCode(page, null);
   expect((await saved(page)).completed).toEqual([1]);
 
   // A more advanced code loads straight away (language included) and persists.
-  page.once('dialog', (d) => d.accept(exportSaveCode(ADVANCED)));
-  await tap(page, paste.x, paste.y);
+  await pasteCode(page, exportSaveCode(ADVANCED));
   await page.waitForFunction(() => (window as unknown as { __mix: { message: string | null } }).__mix.message === 'Progressi caricati');
   expect(await saved(page)).toMatchObject({ unlocked: 6, completed: [1, 2, 3, 4, 5], language: 'it' });
 
   // An older code is behind the current progress: it asks, and Cancel keeps the progress.
   const older = exportSaveCode({ ...defaultProgress(), language: 'it' });
-  page.once('dialog', (d) => d.accept(older));
-  await tap(page, paste.x, paste.y);
+  await pasteCode(page, older);
   await page.waitForFunction(() => (window as unknown as { __mix: { overlay: boolean } }).__mix.overlay);
   let b = await mix<Buttons>(page, 'buttons');
   await tap(page, b.cancel!.x, b.cancel!.y);
@@ -59,8 +68,7 @@ test('a save code can be loaded; an invalid one is rejected; an older one asks f
   expect((await saved(page)).completed).toEqual([1, 2, 3, 4, 5]);
 
   // …and Replace takes it.
-  page.once('dialog', (d) => d.accept(older));
-  await tap(page, paste.x, paste.y);
+  await pasteCode(page, older);
   await page.waitForFunction(() => (window as unknown as { __mix: { overlay: boolean } }).__mix.overlay);
   b = await mix<Buttons>(page, 'buttons');
   await tap(page, b.confirm!.x, b.confirm!.y);
@@ -72,10 +80,13 @@ test('the copy button offers the code when the clipboard is not available, and t
   await page.evaluate(() => Object.defineProperty(navigator, 'clipboard', { value: undefined, configurable: true }));
   await openData(page);
   const copy = (await mix<Buttons>(page, 'buttons')).copy!;
-  const shown = new Promise<string>((resolve) => page.once('dialog', (d) => { const code = d.defaultValue(); void d.dismiss(); resolve(code); }));
   await tap(page, copy.x, copy.y);
-  const code = await shown;
-  expect(code).toMatch(/^MS1\./);
+  // Shown read-only in the in-game panel (#259), in the compact format.
+  const panel = page.locator('#code-panel');
+  const code = await panel.getByRole('textbox').inputValue();
+  expect(code).toMatch(/^MS2\./);
+  await panel.getByRole('button').click();
+  await expect(panel).toBeHidden();
   // The code carries the current progress: loading it after a reset brings it back.
   const b = await mix<Buttons>(page, 'buttons');
   await tap(page, b.reset!.x, b.reset!.y);
@@ -84,9 +95,7 @@ test('the copy button offers the code when the clipboard is not available, and t
   await tap(page, c.confirm!.x, c.confirm!.y);
   await page.waitForFunction(() => (window as unknown as { __mix: { message: string | null } }).__mix.message === 'Progress erased');
   expect(await saved(page)).toMatchObject({ unlocked: 1, completed: [], language: 'en', sound: false });
-  page.once('dialog', (d) => d.accept(code));
-  const paste = (await mix<Buttons>(page, 'buttons')).paste!;
-  await tap(page, paste.x, paste.y);
+  await pasteCode(page, code);
   await page.waitForFunction(() => (window as unknown as { __mix: { message: string | null } }).__mix.message === 'Progress loaded');
   expect(await saved(page)).toMatchObject({ unlocked: 2, completed: [1], seenTips: ['guide'] });
 });
