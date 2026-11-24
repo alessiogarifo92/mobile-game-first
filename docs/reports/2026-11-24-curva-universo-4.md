@@ -47,7 +47,7 @@ Le vittorie a caso, livello per livello (respiro · base · base · base+1 · ba
 
 Il dente di sega è rispettato in tutti e dieci gli stage (regola 2: 0 errori). Nello stage 40 la base (mediana delle posizioni 2, 3, 5, 6, 8) è 52%: i due "base+1" (394 al 48%, 397 al 51%) non sono più facili della base, il duro (399, doppio arcobaleno) è 13,5 punti sotto, e il boss è il più duro dello stage e dell'universo.
 
-I salti più grandi fra due livelli consecutivi: **341 → 342 (−39,5 punti)**, l'uscita dal debutto "molto facile" delle gallerie; poi gli ingressi nei boss 320 (−31), 310 (−30), 340 (−24,5) e 330 (−23,5), e 301 → 302 (−28,5), l'uscita dal debutto della pellicola. Il boss finale 400 si raggiunge con un salto di 16,5 punti (399 → 400), fra i più dolci dei dieci boss perché il 399 è già al 38,5%.
+I salti più grandi fra due livelli consecutivi: **341 → 342 (−39,5 punti)**, l'uscita dal debutto "molto facile" delle gallerie; poi l'ingresso nei boss 320 (−31) e 310 (−30), 301 → 302 (−28,5, l'uscita dal debutto della pellicola), l'ingresso nel boss 340 (−24,5), 351 → 352 (−24) e l'ingresso nel boss 330 (−23,5). Il boss finale 400 si raggiunge con un salto di 16,5 punti (399 → 400), fra i più dolci dei dieci boss perché il 399 è già al 38,5%.
 
 ## Obiettivi di #102 e regole di #88
 | Controllo | Obiettivo | Misura | Esito |
