@@ -354,31 +354,38 @@ describe('saves and plans', () => {
     expect([...save.seenTips].sort()).toEqual(['belt', 'blocked', 'guide', 'hidden', 'ice', 'leftover', 'mixing', 'queue', 'slots', 'stone']);
   });
 
-  it('leaves unseen the cards of the mechanics the planned pack shows (#182: ice at 81, debuting at 66)', () => {
+  it('keeps seen the mechanic cards a real player met before the pack (#257, replacing #182: ice at 81, met at 31)', () => {
     const s09 = packLevels(levels, 'S09');
     const firstIce = levels.find((l) => tipsPresent(l).includes('ice'))!.id;
     expect(firstIce).toBeLessThan(s09[0]!);
     expect(tipsMetBefore(levels, s09[0]!)).toContain('ice'); // a real player met it before
-    const inPack = new Set<string>(levels.filter((l) => s09.includes(l.id)).flatMap((l) => [...tipsPresent(l), ...tipsAnticipated(l, ['slots'])]));
-    expect(inPack.has('ice')).toBe(true);
+    expect(levels.some((l) => s09.includes(l.id) && tipsPresent(l).includes('ice'))).toBe(true);
     const save = saveFor(levels, s09[0]!, 'it', false, s09);
-    expect(save.seenTips).not.toContain('ice');
-    for (const tip of inPack) expect(save.seenTips).not.toContain(tip);
-    // Cards met before but not in the pack stay seen, and so do the cards met in play.
-    expect(save.seenTips).toEqual(tipsMetBefore(levels, s09[0]!).filter((t) => !inPack.has(t as never)));
+    // The cost accepted on #257: ice is on the board of the pack and the agent gets no card for it.
+    expect(save.seenTips).toContain('ice');
+    // Only the anticipated cards the pack can show (#225) are left to see, as before.
+    const anticipated = new Set<string>(levels.filter((l) => s09.includes(l.id)).flatMap((l) => tipsAnticipated(l, ['slots'])));
+    expect([...anticipated].sort()).toEqual(['blocked', 'leftover']);
+    expect(save.seenTips).toEqual(tipsMetBefore(levels, s09[0]!).filter((t) => !anticipated.has(t)));
     expect(save.seenTips).toEqual(expect.arrayContaining(['guide', 'slots', 'belt']));
     expect(sanitize(JSON.parse(JSON.stringify(save)), levels)).toEqual(save);
+    // A mechanic debuting in the pack keeps its card: stone, at its first level, as for a real player.
+    const firstStone = levels.find((l) => tipsPresent(l).includes('stone'))!;
+    expect(s09).toContain(firstStone.id);
+    expect(save.seenTips).not.toContain('stone');
+    expect(tipOnLevelStart(firstStone, save.seenTips)).toBe('stone');
+    // A turn that measures the ice card lists it (#230), and the agent meets it at the pack's first level.
+    const measured = saveFor(levels, s09[0]!, 'it', false, s09, ['leftover', 'blocked', 'ice']).seenTips;
+    expect(tipOnLevelStart(levels.find((l) => l.id === s09[0])!, measured)).toBe('ice');
   });
 
-  it('a pack with no mechanic of its own and the onboarding pack change nothing', () => {
+  it('a pack with no anticipated card and the onboarding pack change nothing', () => {
     expect(saveFor(levels, 1, 'en', false, packLevels(levels, 'U1-ONB')).seenTips).toEqual([]);
     expect(tipsMetBefore(levels, 50, [])).toEqual(tipsMetBefore(levels, 50));
     expect(tipsMetBefore(levels, 50, [9999])).toEqual(tipsMetBefore(levels, 50)); // an id the game does not have
-    // The game then shows the card again at the pack's first level with that mechanic.
-    const s09 = packLevels(levels, 'S09');
-    const seen = saveFor(levels, s09[0]!, 'en', false, s09).seenTips;
-    const firstIceInPack = levels.find((l) => s09.includes(l.id) && tipsPresent(l).includes('ice'))!;
-    expect(tipsPresent(firstIceInPack).filter((t) => !seen.includes(t))).toContain('ice');
+    // A pack whose levels show no anticipated card has the save of a real player.
+    const quiet = levels.find((l) => l.id > 3 && tipsAnticipated(l, ['slots']).length === 0)!;
+    expect(tipsMetBefore(levels, quiet.id, [quiet.id])).toEqual(tipsMetBefore(levels, quiet.id));
   });
 
   it('a save with every card seen leaves only the listed cards to see (#230)', () => {
@@ -408,6 +415,55 @@ describe('saves and plans', () => {
     for (const start of [1, 2, 50, s09[0]!]) {
       expect(saveFor(levels, start, 'en', false, s09, null)).toEqual(saveFor(levels, start, 'en', false, s09));
       expect(tipsMetBefore(levels, start, s09, null)).toEqual(tipsMetBefore(levels, start, s09));
+    }
+  });
+
+  // #257: the cards a pack shows when its save is played in order, one level-start card per level as the game does.
+  const cardsShown = (save: readonly string[], ids: readonly number[]): Map<string, number> => {
+    const seen = [...save];
+    const shown = new Map<string, number>();
+    for (const id of ids) {
+      const tip = tipOnLevelStart(levels.find((l) => l.id === id)!, seen);
+      if (tip) {
+        seen.push(tip);
+        shown.set(tip, id);
+      }
+    }
+    return shown;
+  };
+  // The level where a real player, who played every level from 1 in order, gets each level-start card.
+  const realPlayer = cardsShown([], levels.map((l) => l.id));
+  // Shown as a level starts but triggered by what happens on the board (#225): not measured by the delay.
+  const ANTICIPATED = ['leftover', 'blocked'];
+
+  it('shows each mechanic card of a pack at the first level where the mechanic is on the board (#257)', () => {
+    for (const pack of ['S09', 'S11', 'S31', 'S35', 'S40']) {
+      const ids = packLevels(levels, pack);
+      const shown = cardsShown(saveFor(levels, ids[0]!, 'it', false, ids).seenTips, ids);
+      const byLevel = new Map([...shown].map(([tip, id]) => [id, tip]));
+      for (const [tip, id] of shown) {
+        if (ANTICIPATED.includes(tip)) continue;
+        const first = ids.find((l) => (tipsPresent(levels.find((x) => x.id === l)!) as string[]).includes(tip))!;
+        const delay = id - first;
+        // One teaching card per level (#177): a second card due at the same level waits one level, no more.
+        expect(delay, `${pack}: card ${tip} at ${id}, mechanic on the board from ${first}`).toBeLessThanOrEqual(1);
+        if (delay === 1) expect(byLevel.get(first), `${pack}: ${tip} slipped behind nothing`).toBeDefined();
+        // The agent meets it where a real player does: the mechanic debuts in the pack.
+        expect(realPlayer.get(tip), `${pack}: card ${tip}`).toBe(id);
+      }
+    }
+  });
+
+  it('does not show again the cards a real player met before the pack (#257: mixing at 4, brown at 101)', () => {
+    expect(realPlayer.get('mixing')).toBeLessThan(packLevels(levels, 'S31')[0]!);
+    expect(realPlayer.get('brown')).toBeLessThan(packLevels(levels, 'S31')[0]!);
+    for (const pack of ['S31', 'S35', 'S40']) {
+      const ids = packLevels(levels, pack);
+      const shown = cardsShown(saveFor(levels, ids[0]!, 'it', false, ids).seenTips, ids);
+      expect(shown.has('mixing'), pack).toBe(false);
+      expect(shown.has('brown'), pack).toBe(false);
+      const firstCard = [...shown].sort((a, b) => a[1] - b[1])[0]?.[0];
+      if (firstCard !== undefined) expect(['mixing', 'brown']).not.toContain(firstCard);
     }
   });
 

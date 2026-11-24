@@ -5,7 +5,7 @@
  */
 import { sanitize, type LevelRef, type Progress } from '../../src/core/progress';
 import type { Level } from '../../src/core/level';
-import { tipOnLevelStart, tipsAnticipated, tipsPresent, type CardTip } from '../../src/core/onboarding';
+import { tipOnLevelStart, tipsAnticipated, type CardTip } from '../../src/core/onboarding';
 import { isLanguage } from '../../src/core/i18n';
 import { canOpenLevel } from '../../src/core/universes';
 
@@ -38,9 +38,17 @@ export class SaveError extends Error {}
  * Tips a player who cleared every level before `start` in order has seen: the tips met in play, plus one level-start
  * tip per level, as the game shows them. A mechanic debuting at `start` or later still gets its tip.
  *
- * `fresh` lists the levels the session will play (#182): a level-start tip whose mechanic is on one of them is left
- * unseen even if a real player met it earlier, so the agent, who has no memory of earlier levels, sees its card and
- * its drawing instead of a mechanic it was never shown (ice at 81, debuting at 66).
+ * A mechanic card is unseen only if its mechanic debuts at `start` or later, as for a real player (#257), so the
+ * agent meets each card at the level a real player does. #182 left unseen the card of every mechanic on the planned
+ * levels, but the game shows one level-start card per level (#177) and a late pack has most mechanics on the board
+ * from its first level: the cards queued up and came several levels late (S40: lock on the board at 391, card at
+ * 396), and cards met long before took the first levels (mixing at 391, met at 4). The cost, accepted on #257: a
+ * mechanic that debuted before the pack (ice at 81, met at 31) has no card in the playtest; a turn that measures one
+ * leaves it to see with `unseen` (#230).
+ *
+ * `fresh` lists the levels the session will play: the cards those levels show before their case happens (#225,
+ * `tipsAnticipated`: "why it came back", "lane blocked") stay unseen, so the playtest sees them the first time they
+ * apply.
  */
 export function tipsMetBefore(levels: readonly Level[], start: number, fresh: readonly number[] = [], unseen: readonly string[] | null = null): string[] {
   if (start <= 1) return [];
@@ -52,7 +60,7 @@ export function tipsMetBefore(levels: readonly Level[], start: number, fresh: re
     const tip = tipOnLevelStart(level, seen);
     if (tip) seen.push(tip);
   }
-  const ahead = new Set<string>(levels.filter((l) => fresh.includes(l.id)).flatMap((l) => [...tipsPresent(l), ...tipsAnticipated(l, ['slots'])]));
+  const ahead = new Set<string>(levels.filter((l) => fresh.includes(l.id)).flatMap((l) => tipsAnticipated(l, ['slots'])));
   return seen.filter((tip) => !ahead.has(tip));
 }
 
