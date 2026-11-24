@@ -293,6 +293,17 @@ describe('jsonSchema', () => {
   it.skipIf(!schema || !existsSync(EXAMPLE_FILE))('accepts the example form of #67', () => {
     expect(validate(schema!, JSON.parse(readFileSync(EXAMPLE_FILE, 'utf8')))).toEqual([]);
   });
+
+  // T23: the film and tunnel cards of universe 4 were missing from the schema, so three forms were refused.
+  it.skipIf(!schema)('lists every card of the game as a tip, and every mechanic card as a mechanic', () => {
+    const tipIds = (schema!.$defs as Record<string, { enum: string[] }>).tipId!.enum;
+    expect([...tipIds].sort()).toEqual(['guide', ...CARD_TIPS].sort());
+    for (const tip of ['guide', ...CARD_TIPS]) expect(validateDef(schema!, 'tipId', tip)).toEqual([]);
+    expect(validateDef(schema!, 'tipId', 'map')).toHaveLength(1); // the map hint is not a card
+    // queue and leftover explain what the board shows, not a mechanic a level is built on.
+    const mechanics = (schema!.$defs as Record<string, { enum: string[] }>).mechanic!.enum;
+    expect([...mechanics].sort()).toEqual(CARD_TIPS.filter((t) => t !== 'queue' && t !== 'leftover').sort());
+  });
 });
 
 describe('saves and plans', () => {
