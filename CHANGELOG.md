@@ -2,6 +2,15 @@
 
 ## Non rilasciato
 
+### Universo 5 "Cosmo" e stage 41 "Pianeti": livelli 401–410, la coppia marrone + lucchetto (#265, #103)
+
+- **Nasce l'universo 5 "Cosmo"** (IT/EN, tela fino a 16×16 come da #103): si apre completando il livello 400, l'ultimo dell'universo 4; la festa dell'universo 4 ora porta alla sua mappa, e selettore, murale e album lo mostrano come gli altri. Per ora ha solo lo stage 41.
+- **Dieci figure in pixel art originale** sui pianeti (`scripts/stages/stage-41.ts`): Marte, Mercurio, Venere, la Terra, Giove, Saturno, Urano, Nettuno, Plutone e il boss, il sistema solare (14×14). Foglio di anteprima in `docs/levels/stage-41.png`; nomi IT/EN.
+- **Marrone + lucchetto in ogni livello**: chiavi e lucchetti disegnati a mano, tutti su pixel marroni (la chiave vuole i tre colori prima di aprire); nessun'altra meccanica. Nessuna card nuova e nessun livello molto facile: la coppia è già nota dallo stage 22.
+- **Nastro 2, slot 2**, mai sopra la fine dell'universo 4; tele entro 14×14; dal 402 ≥ 30% di pixel secondari o marroni.
+- **Curva** a dente di sega (#88): vittorie a caso 75,5 · 65 · 62 · 59,5 · 62 · 66,5 · 60,5 · 64,5 · 54 · 38%, media 60,75% (obiettivo ~62%, tra la fine dell'universo 4, 48,7%, e il suo inizio, 68%); il boss è il più duro dello stage. Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit su universo 5, stage, sblocco dopo il 400, selettore/murale/album a cinque universi (`tests/stage41.test.ts`; `tests/stage40.test.ts` ora si aspetta l'universo 5 aperto dopo il 400); e2e `e2e/stage-41.spec.ts`: vincere il 400 porta alla mappa dell'universo 5 con solo il 401 aperto, il selettore mostra cinque universi a 360×640 e 412×915, il 401 e il boss 410 si giocano fino alla vittoria; `e2e/stage-40.spec.ts`: la festa dell'universo 4 indica l'universo 5 come prossimo.
+
 ### Pannello del codice: pulsanti sempre visibili (#263)
 
 - **Pulsanti subito sotto il titolo, pannello in alto** (`src/game/codePanel.ts`): su un Samsung la tastiera copre il basso della pagina senza ridurre la `visualViewport`, quindi il pannello centrato finiva con Annulla e Importa dietro la tastiera. Ora il pannello è ancorato in alto: titolo, pulsanti, poi il campo, alto circa tre righe e fisso, in cui il codice scorre (nessuno lo legge intero) senza spostare nulla. Stesso ordine anche per Tab; il campo ha ancora il fuoco quando si apre per incollare.

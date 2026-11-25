@@ -238,5 +238,11 @@
   "key": "rainbow",
   "color": 2,
   "complete": true
+ },
+ {
+  "id": 41,
+  "key": "planets",
+  "color": 3,
+  "complete": true
  }
 ]
