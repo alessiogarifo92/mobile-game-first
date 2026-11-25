@@ -2,6 +2,11 @@
 
 ## Non rilasciato
 
+### Pannello del codice: pulsanti sempre visibili (#263)
+
+- **Pulsanti subito sotto il titolo, pannello in alto** (`src/game/codePanel.ts`): su un Samsung la tastiera copre il basso della pagina senza ridurre la `visualViewport`, quindi il pannello centrato finiva con Annulla e Importa dietro la tastiera. Ora il pannello è ancorato in alto: titolo, pulsanti, poi il campo, alto circa tre righe e fisso, in cui il codice scorre (nessuno lo legge intero) senza spostare nulla. Stesso ordine anche per Tab; il campo ha ancora il fuoco quando si apre per incollare.
+- Test: e2e in `e2e/save-code-259.spec.ts` (a 412×915 senza riduzione della `visualViewport` titolo, pulsanti e campo stanno nel 40% alto dello schermo e non si spostano con un codice di ~5,5 KB; a 360×500 i pulsanti restano sullo schermo e Importa carica il codice da 166 livelli; Shift+Tab dal campo arriva a Importa e Annulla, Escape chiude senza importare).
+
 ### Release da un workflow, con controlli e prova a secco
 
 - **Input `version` e `dry_run`** nel workflow *Android APK* (`.github/workflows/android.yml`, Run workflow su `main`): pubblica la release `v<version>` con l'APK e le note del `CHANGELOG.md`, e il tag lo crea GitHub stesso, così una release si fa anche da una sessione Claude remota, che non può fare push di tag. Prima di compilare controlla che la versione sia `X.Y.Z` senza suffissi, coincida con `package.json`, abbia una sezione non vuota nel `CHANGELOG.md`, che il tag non esista, che il run sia su `main` e che la CI del commit sia verde (`scripts/release/checks.ts`). `dry_run` è acceso di default: compila e mostra nel riepilogo del run tag, titolo, APK e note, senza creare nulla. Push dei rami, push dei tag `v*` e l'input `prerelease` funzionano come prima.

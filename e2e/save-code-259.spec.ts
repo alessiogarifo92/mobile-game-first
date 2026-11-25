@@ -92,6 +92,95 @@ test('with the keyboard open the buttons stay on screen, and the panel survives 
   expect((await saved(page)).completed).toEqual([1]);
 });
 
+/**
+ * #263: on a Samsung the keyboard covers the bottom of the page without shrinking the visual viewport, so a panel
+ * centred in it put its buttons behind the keyboard. The panel now sits at the top, buttons right under the title and
+ * a small fixed-height field below them, so nothing the code does can move the buttons.
+ */
+test.describe('#263 buttons at the top, whatever is pasted', () => {
+  // Far longer than any real code (about 5.5 KB): only the layout is under test with it, it does not import.
+  const HUGE = REAL_MS1.repeat(4);
+  const boxes = async (panel: Locator) => ({
+    title: (await panel.getByRole('heading').boundingBox())!,
+    cancel: (await panel.getByRole('button', { name: 'Cancel' }).boundingBox())!,
+    import: (await panel.getByRole('button', { name: 'Import' }).boundingBox())!,
+    field: (await panel.getByRole('textbox').boundingBox())!,
+  });
+  async function openPaste(page: Page) {
+    await openData(page);
+    const paste = (await mix<Buttons>(page, 'buttons')).paste!;
+    await tap(page, paste.x, paste.y);
+    const panel = page.getByRole('dialog', { name: 'Paste your save code' });
+    await expect(panel).toBeVisible();
+    return panel;
+  }
+
+  test('with the visual viewport left whole by the keyboard, the buttons stay in the top of the screen', async ({ page }) => {
+    const panel = await openPaste(page);
+    const field = panel.getByRole('textbox');
+    await expect(field).toBeFocused();
+    const empty = await boxes(panel);
+    await field.fill(HUGE);
+    // Neither the buttons nor the field move or grow with the code: it scrolls inside the field.
+    expect(await boxes(panel)).toEqual(empty);
+    expect(await field.evaluate((e) => e.scrollHeight > e.clientHeight)).toBe(true);
+    // Title, then the buttons, then the field, from the top of the page.
+    const h = await page.evaluate(() => window.visualViewport!.height);
+    expect(empty.title.y).toBeLessThan(h * 0.1);
+    expect(empty.cancel.y).toBeGreaterThan(empty.title.y + empty.title.height);
+    expect(empty.import.y).toBe(empty.cancel.y);
+    expect(empty.field.y).toBeGreaterThan(empty.import.y + empty.import.height);
+    // A keyboard that covers the lower half of a 915 px screen leaves buttons and field in sight.
+    expect(empty.import.y + empty.import.height).toBeLessThan(h * 0.3);
+    expect(empty.field.y + empty.field.height).toBeLessThan(h * 0.4);
+    await expectOnScreen(page, panel.getByRole('button', { name: 'Import' }));
+    if (shots) await page.screenshot({ path: `${shots}/263-paste-412x915.png` });
+    await field.fill(REAL_MS1);
+    await press(page, panel.getByRole('button', { name: 'Import' }));
+    await expect(panel).toBeHidden();
+    await page.waitForFunction(() => (window as unknown as { __mix: { message: string | null } }).__mix.message === 'Progress loaded');
+    expect((await saved(page)).completed).toHaveLength(166);
+  });
+
+  test('on a short 360x500 screen a huge code leaves the buttons on screen and clickable', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 500 });
+    const panel = await openPaste(page);
+    const field = panel.getByRole('textbox');
+    await field.fill(HUGE);
+    await expectOnScreen(page, panel.getByRole('button', { name: 'Cancel' }));
+    await expectOnScreen(page, panel.getByRole('button', { name: 'Import' }));
+    await expectOnScreen(page, field);
+    // About three lines of code are shown, never the whole of it.
+    const lines = await field.evaluate((e) => {
+      const s = getComputedStyle(e);
+      return (e.clientHeight - parseFloat(s.paddingTop) - parseFloat(s.paddingBottom)) / parseFloat(s.lineHeight);
+    });
+    expect(lines).toBeGreaterThan(2.5);
+    expect(lines).toBeLessThan(3.5);
+    if (shots) await page.screenshot({ path: `${shots}/263-paste-360x500.png` });
+    await field.fill(REAL_MS1);
+    await press(page, panel.getByRole('button', { name: 'Import' }));
+    await expect(panel).toBeHidden();
+    await page.waitForFunction(() => (window as unknown as { __mix: { message: string | null } }).__mix.message === 'Progress loaded');
+    expect((await saved(page)).completed).toHaveLength(166);
+  });
+
+  test('Shift+Tab from the field reaches the buttons, and Escape closes without importing', async ({ page }) => {
+    const panel = await openPaste(page);
+    const field = panel.getByRole('textbox');
+    await field.fill(REAL_MS1);
+    await expect(field).toBeFocused();
+    await page.keyboard.press('Shift+Tab');
+    await expect(panel.getByRole('button', { name: 'Import' })).toBeFocused();
+    await page.keyboard.press('Shift+Tab');
+    await expect(panel.getByRole('button', { name: 'Cancel' })).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(panel).toBeHidden();
+    expect(await mix<string | null>(page, 'codePanel')).toBeNull();
+    expect((await saved(page)).completed).toEqual([1]);
+  });
+});
+
 test('without a clipboard the code is shown read-only in the same panel, Close on screen', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 640 });
   await page.evaluate(() => Object.defineProperty(navigator, 'clipboard', { value: undefined, configurable: true }));
