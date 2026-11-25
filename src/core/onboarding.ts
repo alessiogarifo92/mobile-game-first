@@ -5,7 +5,18 @@ import { levelCases } from './leftover';
 /** One-time onboarding tips, shown the first time the mechanic they explain shows up. */
 /** Tips shown as a card; 'guide' is the guided level 1 instead. */
 export type CardTip =
-  | 'mixing' | 'blocked' | 'slots' | 'ice' | 'film' | 'tunnel' | 'hidden' | 'lock' | 'belt' | 'brown' | 'stone' | 'covered' | 'queue' | 'leftover';
+  | 'mixing' | 'blocked' | 'slots' | 'ice' | 'film' | 'tunnel' | 'hidden' | 'lock' | 'belt' | 'brown' | 'stone' | 'covered' | 'queue' | 'leftover'
+  | PairTip;
+
+/**
+ * Pairs of mechanics first met together in universe 5 (#103): no new rule, but a new combination, so each pair debuts
+ * with its own card (the cards of its two mechanics were seen long before) and a very easy level. The curve counts the
+ * pair as a mechanic of its own (`curveLevel`), so that level is a legal debut (#88 rule 1). One entry per pair.
+ */
+export const PAIR_TIPS = {
+  iceFilm: ['ice', 'film'],
+} as const satisfies Record<string, readonly [string, string]>;
+export type PairTip = keyof typeof PAIR_TIPS;
 
 /** Buckets a column shows; the rest wait behind, counted by the "+N" under it. */
 export const COLUMN_SHOWN = 3;
@@ -50,7 +61,7 @@ export function tipsAnticipated(level: Level, seen: readonly string[]): CardTip[
   return tips;
 }
 
-/** The level-start tips whose mechanic is on the board of `level`, in the order `tipOnLevelStart` shows them. */
+/** The level-start tips whose mechanic (or pair of mechanics, `PAIR_TIPS`) is on the board of `level`, in the order `tipOnLevelStart` shows them. */
 export function tipsPresent(level: Level): CardTip[] {
   const present: [CardTip, boolean][] = [
     ['mixing', level.targets.some((t) => t !== 0 && !isPrimary(t))],
@@ -64,7 +75,10 @@ export function tipsPresent(level: Level): CardTip[] {
     ['covered', level.columns.some((column) => column.some((s) => s.covered))],
     ['queue', level.columns.some((column) => column.length > COLUMN_SHOWN)],
   ];
-  return present.filter(([, here]) => here).map(([tip]) => tip);
+  const tips = present.filter(([, here]) => here).map(([tip]) => tip);
+  // A pair card comes after the cards of its two mechanics: a player who meets both for the first time learns each alone.
+  const pairs = (Object.keys(PAIR_TIPS) as PairTip[]).filter((pair) => PAIR_TIPS[pair].every((m) => tips.includes(m)));
+  return [...tips, ...pairs];
 }
 
 /**

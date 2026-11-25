@@ -122,4 +122,22 @@ describe('curveLevel', () => {
     });
     expect(curveLevel({ ...level, ice: [0, 0], hidden: [false, false], targets: [1, 0] }, 1)).toMatchObject({ features: [], secondaryShare: 0 });
   });
+
+  it('counts a pair with its own debut card as a mechanic of its own, only when both halves are on the board (#268)', () => {
+    const both = parseLevel({
+      id: 421, name: 'x', stage: 43, image: ['RO'], overlay: ['ib'],
+      columns: [[{ color: 1, ammo: 3 }], [{ color: 2, ammo: 1 }], [{ color: 4, ammo: 1 }]], slots: 2, beltCapacity: 2,
+    });
+    expect(curveLevel(both, 1).features).toEqual(['mix', 'ice', 'film', 'ice+film']);
+    expect(curveLevel({ ...both, film: [0, 0] }, 1).features).toEqual(['mix', 'ice']);
+    expect(curveLevel({ ...both, ice: [0, 0] }, 1).features).toEqual(['mix', 'film']);
+  });
+
+  it('rule 1: a pair debut may be very easy once, the same pair again may not (#268)', () => {
+    const g = set(set(game([U1, U2]), 115, { features: ['mix', 'ice', 'film', 'ice+film'], winRate: 0.97 }), 15, { features: ['mix', 'ice', 'film'] });
+    expect(keys(g)).not.toContain('r1 #115');
+    expect(keys(set(g, 116, { features: ['mix', 'ice', 'film', 'ice+film'], winRate: 0.97 }))).toContain('r1 #116');
+    // Ice and film each seen before, never together: without the pair the level is no debut.
+    expect(keys(set(g, 115, { features: ['mix', 'ice', 'film'] }))).toContain('r1 #115');
+  });
 });

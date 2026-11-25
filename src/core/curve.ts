@@ -1,5 +1,6 @@
 import { BROWN, isPrimary } from './colors';
 import type { Level } from './level';
+import { PAIR_TIPS } from './onboarding';
 import { LEVELS_PER_STAGE } from './stages';
 import { STAGES_PER_UNIVERSE, universeOfStage } from './universes';
 
@@ -53,7 +54,7 @@ export interface CurveLevel {
   secondaryShare: number;
   beltCapacity: number;
   slots: number;
-  /** Mechanics the level uses (e.g. `mix`, `brown`, `ice`, `hidden`); a level that uses one first is its debut. */
+  /** Mechanics the level uses (e.g. `mix`, `brown`, `ice`, `hidden`, and pairs with a card such as `ice+film`); a level that uses one first is its debut. */
   features: readonly string[];
   /** Declared in the spec: this boss is allowed not to be the hardest level of its stage. */
   easyBoss?: boolean;
@@ -82,6 +83,8 @@ export function curveLevel(level: Level, winRate: number, easyBoss?: boolean): C
   if (level.tunnels.length > 0) features.push('tunnel');
   if (level.locked.some(Boolean)) features.push('lock');
   if (level.columns.some((c) => c.some((b) => b.covered))) features.push('covered');
+  // A pair with its own debut card (#103) is a mechanic of its own here, e.g. `ice+film`: its first level may be very easy.
+  for (const pair of Object.values(PAIR_TIPS)) if (pair.every((m) => features.includes(m))) features.push(pair.join('+'));
   return {
     id: level.id,
     stage: level.stage,
