@@ -123,13 +123,14 @@ describe('universe 4 "Mare e cielo" closes (#102)', () => {
     expect(mean(storedOf(idsOfStages(39, 40)))).toBeLessThan(mean(storedOf(idsOfStages(31, 32))) - CURVE.tolerance);
   });
 
-  it('finishing level 400 finishes the universe and gives its bucket style; no universe 5 opens yet', () => {
+  it('finishing level 400 finishes the universe, gives its bucket style and opens universe 5 (#265)', () => {
     const completed = Array.from({ length: 400 }, (_, i) => i + 1);
     expect(isUniverseFinished(all, completed.slice(0, -1), 4)).toBe(false);
     expect(isUniverseFinished(all, completed, 4)).toBe(true);
     expect(universeSkin(4)).toBe('bubbles');
-    expect(isUniverseUnlocked(all, completed, 5)).toBe(false);
-    expect(openUniverse(all, completed)).toBe(4);
+    expect(isUniverseUnlocked(all, completed.slice(0, -1), 5)).toBe(false);
+    expect(isUniverseUnlocked(all, completed, 5)).toBe(true);
+    expect(openUniverse(all, completed)).toBe(5);
   });
 });
 

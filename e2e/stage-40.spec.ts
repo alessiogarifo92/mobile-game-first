@@ -66,7 +66,7 @@ test('level 397, the rainbow sail, keeps a tunnel and padlocks on the board with
   await playLevel(page, 397, '04-vela-arcobaleno.png');
 });
 
-test('level 400, the final boss, plays to a win and finishes universe 4 with its party and bucket style', async ({ page }) => {
+test('level 400, the final boss, plays to a win and finishes universe 4 with its party, its bucket style and universe 5 next', async ({ page }) => {
   test.setTimeout(240_000);
   await start(page, { unlocked: 400, completed: range(1, 399) });
   await playLevel(page, 400, '05-grande-arcobaleno-boss.png');
@@ -78,7 +78,7 @@ test('level 400, the final boss, plays to a win and finishes universe 4 with its
   await tap(page, buttons.next.x, buttons.next.y);
   await waitScene(page, 'universeEnd');
   expect(await mix(page, 'universe')).toBe(4);
-  expect(await mix(page, 'next')).toBeNull();
+  expect(await mix(page, 'next')).toBe(5); // universe 5 "Cosmo" opens (#265)
   await page.waitForFunction(() => (window as unknown as { __mix: { done: boolean } }).__mix.done);
   expect(await mix(page, 'newSkin')).toBe('bubbles');
   await checkOnScreen(page, 'universe 4 party');

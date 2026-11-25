@@ -22,5 +22,11 @@
   "key": "seasky",
   "color": "Y",
   "maxCanvas": 14
+ },
+ {
+  "id": 5,
+  "key": "cosmos",
+  "color": "P",
+  "maxCanvas": 16
  }
 ]

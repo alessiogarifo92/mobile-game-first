@@ -10,4 +10,6 @@ export const UNIVERSE_SPECS: UniverseInfo[] = [
   { id: 2, key: 'nature', color: 'G', maxCanvas: 14 },
   { id: 3, key: 'journey', color: 'B', maxCanvas: 14 },
   { id: 4, key: 'seasky', color: 'Y', maxCanvas: 14 },
+  // Universe 5 (#103): tele fino a 16×16, ma solo dagli stage 45–46; lo stage 41 resta entro 14×14.
+  { id: 5, key: 'cosmos', color: 'P', maxCanvas: 16 },
 ];
