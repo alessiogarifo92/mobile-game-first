@@ -8,15 +8,27 @@ on:
   workflow_dispatch:
     inputs:
       prerelease:
-        description: 'Version tag of a test pre-release to publish with the APK (e.g. v0.3.0-rc.1); empty = APK artifact only'
+        description: 'Version tag of a test pre-release to publish with the APK (e.g. v0.3.0-rc.1); empty = APK artifact only. For a normal release use version'
         required: false
         default: ''
+      # A normal release, from main only: checked before anything is built (scripts/release/cli.ts check).
+      version:
+        description: 'Version of a release to publish from main (e.g. 0.6.1, without v; tag v0.6.1): must match package.json and CHANGELOG.md, be a new tag, with green CI; empty = no release'
+        required: false
+        type: string
+        default: ''
+      dry_run:
+        description: 'With a version: run the checks and the build and show what would be published, without creating the tag or the release'
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   apk:
     runs-on: ubuntu-latest
     permissions:
       contents: write # only used by the release step
+      actions: read # the release checks read the CI runs of the commit
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -29,6 +41,14 @@ jobs:
           java-version: 21
           cache: gradle
       - run: npm ci
+      - name: Release checks
+        # Before the build: a release run that fails a check stops here, with nothing created.
+        if: inputs.version != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+          PRERELEASE: ${{ inputs.prerelease }}
+        run: npx tsx scripts/release/cli.ts check "$VERSION"
       - run: npm run build
       - run: npx cap sync android
       - name: Build debug APK
@@ -39,20 +59,38 @@ jobs:
           name: mix-and-splash-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
-      - name: Publish release with the APK
-        if: startsWith(github.ref, 'refs/tags/v') || inputs.prerelease != ''
+      - name: Publish release with the APK (on a dry run, show it instead)
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.prerelease != '' || inputs.version != ''
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ inputs.prerelease != '' && inputs.prerelease || github.ref_name }}
+          TAG: ${{ inputs.version != '' && format('v{0}', inputs.version) || inputs.prerelease != '' && inputs.prerelease || github.ref_name }}
+          # Only a version run has a dry run, and it publishes only when dry_run is explicitly false.
+          DRY_RUN: ${{ inputs.version != '' && format('{0}', inputs.dry_run) != 'false' }}
         run: |
           VERSION="${TAG#v}"
           APK="mix-and-splash-${TAG}-debug.apk"
           cp android/app/build/outputs/apk/debug/app-debug.apk "$APK"
           # Release notes: the CHANGELOG section of this version (without the -rc suffix).
-          awk -v v="## ${VERSION%%-*}" 'index($0, v) == 1 {on=1; next} /^## / {on=0} on' CHANGELOG.md > notes.md
+          npx tsx scripts/release/cli.ts notes "${VERSION%%-*}" > notes.md
           printf '\n---\nBuild di test (debug): per installarla, apri il file .apk dal telefono e consenti le origini sconosciute.\n' >> notes.md
           # A tag with a suffix (v0.3.0-rc.1) is a test pre-release; a plain version tag (v0.3.0) is a normal, latest release.
           if [[ "$TAG" == *-* ]]; then FLAGS=(--prerelease); TITLE="Mix & Splash ${TAG} (test)"; else FLAGS=(--latest); TITLE="Mix & Splash ${TAG}"; fi
+          if [[ "$DRY_RUN" == true ]]; then
+            {
+              echo '### Dry run: nothing was created'
+              echo
+              echo 'With `dry_run` off, this run would create:'
+              echo
+              echo "- tag \`${TAG}\` on commit \`${GITHUB_SHA}\`"
+              echo "- release **${TITLE}** (${FLAGS[*]})"
+              echo "- APK \`${APK}\`"
+              echo
+              echo '#### Release notes'
+              echo
+              cat notes.md
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
           if gh release view "$TAG" >/dev/null 2>&1; then
             # Re-running for an existing release updates it instead of failing.
             gh release edit "$TAG" --title "$TITLE" --notes-file notes.md "${FLAGS[@]}"

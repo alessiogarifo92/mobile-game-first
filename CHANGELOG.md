@@ -2,6 +2,12 @@
 
 ## Non rilasciato
 
+### Release da un workflow, con controlli e prova a secco
+
+- **Input `version` e `dry_run`** nel workflow *Android APK* (`.github/workflows/android.yml`, Run workflow su `main`): pubblica la release `v<version>` con l'APK e le note del `CHANGELOG.md`, e il tag lo crea GitHub stesso, così una release si fa anche da una sessione Claude remota, che non può fare push di tag. Prima di compilare controlla che la versione sia `X.Y.Z` senza suffissi, coincida con `package.json`, abbia una sezione non vuota nel `CHANGELOG.md`, che il tag non esista, che il run sia su `main` e che la CI del commit sia verde (`scripts/release/checks.ts`). `dry_run` è acceso di default: compila e mostra nel riepilogo del run tag, titolo, APK e note, senza creare nulla. Push dei rami, push dei tag `v*` e l'input `prerelease` funzionano come prima.
+- Le note della release si leggono ora con `scripts/release/cli.ts notes` invece di `awk`: stesso testo per ogni versione già rilasciata, ma la `0.6.1` non prenderebbe più le note di una `0.6.10`.
+- Test: unit in `tests/release.test.ts` (forma della versione con `v`, suffissi, spazi e vuota; sezione del changelog esatta, ultima sezione, sezione mancante o vuota, il `CHANGELOG.md` vero; ogni controllo da solo e tutti insieme; CI assente, in corso, fallita, annullata), nella coverage.
+
 ## 0.6.0 — universi 3 e 4, codice di salvataggio corto (24 novembre 2026)
 
 **Duecento livelli nuovi**: l'universo 3 "Viaggio" (201–300) e l'universo 4 "Mare e cielo" (301–400), con la pellicola colorata e le gallerie sul nastro. Ora il gioco ha **400 livelli in 4 universi**. Il codice di salvataggio è molto più corto (circa 5 volte) e si incolla in un pannello nel gioco che funziona anche con la tastiera aperta su telefono: i codici vecchi si importano ancora. L'universo 5 arriverà con un prossimo aggiornamento.
