@@ -244,5 +244,11 @@
   "key": "planets",
   "color": 3,
   "complete": true
+ },
+ {
+  "id": 42,
+  "key": "stars",
+  "color": 4,
+  "complete": true
  }
 ]

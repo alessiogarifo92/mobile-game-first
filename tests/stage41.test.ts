@@ -139,7 +139,8 @@ describe('universe 5 unlock (#90)', () => {
     const before = universeCards(universes, all, completedTo(399));
     expect(before.map((c) => [c.id, c.open, c.unlockLevel ?? null])).toEqual([[1, true, null], [2, true, null], [3, true, null], [4, true, null], [5, false, 400]]);
     const after = universeCards(universes, all, completedTo(400));
-    expect(after[4]).toMatchObject({ id: 5, key: 'cosmos', open: true, done: 0, total: 10, complete: false, firstLevel: 401 });
+    // Universe 5 holds every stage shipped so far (stage 42, #267, makes it twenty levels).
+    expect(after[4]).toMatchObject({ id: 5, key: 'cosmos', open: true, done: 0, total: all.filter((d) => universeOfStage(d.stage) === 5).length, complete: false, firstLevel: 401 });
     // The mural of universe 5 gets its gift tile when it opens, and a tile per level won.
     expect(paintedTiles(all, completedTo(399), 5).some(Boolean)).toBe(false);
     expect(paintedTiles(all, completedTo(400), 5).filter(Boolean)).toHaveLength(1);
