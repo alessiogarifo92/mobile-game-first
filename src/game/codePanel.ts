@@ -21,7 +21,9 @@ export interface CodePanel {
 /**
  * Save code panel (#259): an HTML overlay above the canvas, in place of `window.prompt`, whose native dialog on the
  * Android WebView grew with a long code until its buttons left the screen. The panel follows the visual viewport (the
- * part the keyboard leaves free) and only the text field shrinks and scrolls, so its buttons are always on screen.
+ * part the keyboard leaves free) and sits at its top, buttons right under the title and a small fixed-height field
+ * below them (#263): a Samsung keyboard covers the bottom of the page without shrinking the visual viewport, so only
+ * the top is sure to stay in sight, and the code, never read whole, scrolls inside the field without moving anything.
  * It lives outside Phaser, so a relayout of the scene (the keyboard resizes the game) does not close it.
  */
 export function openCodePanel(opts: CodePanelOptions): CodePanel {
@@ -33,9 +35,10 @@ export function openCodePanel(opts: CodePanelOptions): CodePanel {
   const overlay = document.createElement('div');
   overlay.id = 'code-panel';
   // Above the "rotate your phone" screen (z-index 10 in index.html): a keyboard that shrinks the WebView makes the
-  // window wider than tall, and that screen would otherwise cover the field being typed in.
+  // window wider than tall, and that screen would otherwise cover the field being typed in. Anchored at the top, not
+  // centred: a keyboard that does not shrink the visual viewport covers its bottom half (#263).
   Object.assign(overlay.style, {
-    position: 'fixed', zIndex: '20', display: 'flex', alignItems: 'center', justifyContent: 'center',
+    position: 'fixed', zIndex: '20', display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
     boxSizing: 'border-box', padding: px(THEME.space.md, 12), background: `${css(THEME.ink)}73`,
   });
   const panel = document.createElement('div');
@@ -44,7 +47,7 @@ export function openCodePanel(opts: CodePanelOptions): CodePanel {
   panel.setAttribute('aria-labelledby', 'code-panel-title');
   Object.assign(panel.style, {
     display: 'flex', flexDirection: 'column', gap: px(THEME.space.md, 12), boxSizing: 'border-box',
-    width: `min(100%, ${px(600)})`, maxHeight: '100%', padding: px(THEME.space.lg, 16),
+    width: `min(100%, ${px(600)})`, maxHeight: '100%', overflowY: 'auto', padding: px(THEME.space.lg, 16),
     background: THEME.bgCss, color: THEME.inkCss, borderRadius: px(THEME.radius.panel, 12), fontFamily: THEME.font,
   });
   const title = document.createElement('h2');
@@ -62,10 +65,11 @@ export function openCodePanel(opts: CodePanelOptions): CodePanel {
     field.value = opts.code;
     field.readOnly = true;
   }
-  // The only part that shrinks: a long code scrolls inside it, the buttons below keep their place.
+  // About three lines, whatever the code: nobody reads it whole, so it scrolls inside and the buttons never move.
+  const pad = px(THEME.space.sm, 8);
   Object.assign(field.style, {
-    flex: '0 1 9em', minHeight: '2.6em', boxSizing: 'border-box', width: '100%', margin: '0', resize: 'none',
-    overflowY: 'auto', wordBreak: 'break-all', overflowWrap: 'anywhere', padding: px(THEME.space.sm, 8),
+    flex: 'none', height: `calc(3.9em + 2 * ${pad} + 4px)`, boxSizing: 'border-box', width: '100%', margin: '0',
+    resize: 'none', overflowY: 'auto', wordBreak: 'break-all', overflowWrap: 'anywhere', padding: pad,
     fontFamily: 'ui-monospace, monospace', fontSize: px(THEME.type.sm, 16), lineHeight: '1.3', color: THEME.inkCss,
     background: css(THEME.paper), border: `2px solid ${css(THEME.belt)}`, borderRadius: px(THEME.radius.jar, 8),
     userSelect: 'text', webkitUserSelect: 'text', touchAction: 'pan-y',
@@ -116,7 +120,8 @@ export function openCodePanel(opts: CodePanelOptions): CodePanel {
     close();
     action.run(text);
   });
-  panel.append(title, field, row);
+  // Buttons before the field in the page too, so Tab follows what is seen (Shift+Tab from the field reaches them).
+  panel.append(title, row, field);
   overlay.append(panel);
   overlay.addEventListener('keydown', onKey);
   vv?.addEventListener('resize', fit);
