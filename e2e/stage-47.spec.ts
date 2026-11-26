@@ -88,7 +88,8 @@ test('level 462, the amphora, keeps hidden pixels and films with padlocks, witho
 
 for (const size of SIZES) {
   test(`level 470, the hydra boss (16×16), opens its padlocks and plays to a win at ${size.width}x${size.height}, finishing stage 47`, async ({ page }) => {
-    test.setTimeout(240_000);
+    // A long solution on a 16×16 board: about 4 minutes on the loaded CI runner (#272), 2.5 locally.
+    test.setTimeout(360_000);
     await page.setViewportSize(size);
     const tag = `${size.width}x${size.height}`;
     await start(page, { unlocked: 470, completed: range(1, 469), seenTips: [...TIPS, 'hiddenFilm'] });
