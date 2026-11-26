@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Stage 44 "Laboratorio": livelli 431–440 dell'universo 5 "Cosmo" (#269, #103)
+
+- **Dieci figure in pixel art originale** sul laboratorio (`scripts/stages/stage-44.ts`): la provetta, l'elisir, il magnete, il microscopio, l'atomo, la lampadina, il DNA, il becher, l'alambicco e il boss, l'esperimento (14×14, un pallone che bolle sul fornello). Foglio di anteprima in `docs/levels/stage-44.png`; nomi IT/EN corti (≤ 11 caratteri, #277).
+- **Nessuna coppia nuova, nessuna card, nessun livello molto facile**: ogni livello ripete una combinazione già vista prima del 431 (marrone + lucchetto con pellicole e pietre come negli stage 41–42, ghiaccio + pellicola con o senza marrone come nello stage 43). La novità della finestra 421–440 (#157) resta la coppia ghiaccio + pellicola del 421. Chiavi e lucchetti tutti su pixel marroni (nove livelli su dieci; il boss ha più lucchetti di tutti), ghiaccio solo su primari, pellicole mai sul marrone, pietre su celle vuote.
+- **Nastro 2, slot 2**, mai sopra la fine dell'universo 4; tele entro 14×14; ≥ 30% di pixel secondari o marroni su ogni livello.
+- **Curva** a dente di sega (#88): vittorie a caso 73 · 60,5 · 61 · 55,5 · 58,5 · 60,5 · 56,5 · 55 · 51 · 29,5%, media 56,1% (stage 43: 57,4%); il boss è il più duro dello stage. Ogni livello è dimostrato risolvibile dal solver.
+- Test: unit `tests/stage44.test.ts` (nomi, tele, meccaniche per livello e loro posizioni, nessuna combinazione nuova, nessuna card, risolvibilità, curva, sblocco dopo il 430); e2e `e2e/stage-44.spec.ts`: mappa dopo il 430, la provetta (431, a 360×640 e 412×915), il magnete (433) e il boss 440 vinti senza card. Aggiornati i test degli stage 41–43 (lo stage 44 sulla mappa e nel selettore).
+
 ### Stage 43 "Robot": livelli 421–430 e la coppia nuova ghiaccio + pellicola (#268, #103)
 
 - **Dieci figure in pixel art originale** sui robot (`scripts/stages/stage-43.ts`): il bullone, la rotella, la testa robot, la pila, il chip, il drone, il cane robot, il rover, l'androide e il boss, il robottone (14×14). Foglio di anteprima in `docs/levels/stage-43.png`; nomi IT/EN corti (≤ 11 caratteri, per non sovrapporsi al nodo sulla mappa, #277).
