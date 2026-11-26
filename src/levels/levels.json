@@ -42273,5 +42273,1184 @@
   "slots": 2,
   "beltCapacity": 2,
   "specHash": "cc7adad6"
+ },
+ {
+  "id": 461,
+  "name": "lyre",
+  "stage": 47,
+  "image": [
+   "OO.....OO",
+   "O.......O",
+   "OOOOOOOOO",
+   ".O.Y.Y.O.",
+   ".O.Y.Y.O.",
+   "..OY.YO..",
+   "..OYYYO..",
+   "...OOO...",
+   "..RRRRR.."
+  ],
+  "overlay": [
+   ".........",
+   ".........",
+   "....b....",
+   ".........",
+   ".h.......",
+   ".........",
+   ".........",
+   "....h....",
+   "......y.."
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 1
+    },
+    {
+     "color": 1,
+     "ammo": 12
+    },
+    {
+     "color": 2,
+     "ammo": 12
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 12
+    },
+    {
+     "color": 1,
+     "ammo": 7
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 12
+    },
+    {
+     "color": 2,
+     "ammo": 12
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "5c705c23"
+ },
+ {
+  "id": 462,
+  "name": "amphora",
+  "stage": 47,
+  "image": [
+   "...OOOO...",
+   "....OO....",
+   ".KKOOOOKK.",
+   "K..OOOO..K",
+   ".KOOOOOOK.",
+   "OOOOOOOOOO",
+   "OKOKOKOKOK",
+   "OOOOOOOOOO",
+   ".OOYYYYOO.",
+   "..OOOOOO..",
+   "...KKKK..."
+  ],
+  "overlay": [
+   "....b.....",
+   "..........",
+   "..........",
+   "k.........",
+   ".....h....",
+   "..........",
+   ".........l",
+   "..........",
+   "..h.b.....",
+   "..........",
+   "....l....."
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 4,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 2,
+     "ammo": 13
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "48313f5e"
+ },
+ {
+  "id": 463,
+  "name": "pegasus",
+  "stage": 47,
+  "image": [
+   ".YY.........",
+   "YYYY....PP..",
+   ".YYYY..PPPP.",
+   "..YYYYPPPBPP",
+   "...YYPPPP...",
+   "..PPPPPPP...",
+   ".PPPPPPPP...",
+   "PPPPPPPPP...",
+   "P.P....P.P..",
+   "P.P....P.P..",
+   "O.O....O.O.."
+  ],
+  "overlay": [
+   "............",
+   "..r.....h...",
+   "............",
+   "............",
+   "............",
+   ".....h......",
+   "...y........",
+   "............",
+   ".......h....",
+   "............",
+   "..b........."
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 4,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 12
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 7
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 13
+    },
+    {
+     "color": 4,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 9
+    },
+    {
+     "color": 4,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "42a885e6"
+ },
+ {
+  "id": 464,
+  "name": "trident",
+  "stage": 47,
+  "image": [
+   "OO..OOO..OO",
+   "OO..OOO..OO",
+   "OO..OOO..OO",
+   "OOO.OOO.OOO",
+   ".OOOOOOOOO.",
+   "..OOOOOOO..",
+   "....OOO....",
+   "....OYO....",
+   "....OOO....",
+   "BB..OOO..BB",
+   "BBBBOOOBBBB",
+   "GBGBGBGBGBG",
+   "BGBGBGBGBGB"
+  ],
+  "overlay": [
+   ".....b.....",
+   "...........",
+   ".b.........",
+   "...........",
+   "........b..",
+   "...........",
+   "...........",
+   ".....h.....",
+   "...........",
+   "...........",
+   ".........h.",
+   "r..........",
+   ".....h....."
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 4,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 4,
+     "ammo": 9
+    },
+    {
+     "color": 4,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 7
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "979b0400"
+ },
+ {
+  "id": 465,
+  "name": "laurel",
+  "stage": 47,
+  "image": [
+   "...GGGGGG...",
+   "..GGGGGGGG..",
+   ".GGYOOOOYGG.",
+   "GGYOOOOOOYGG",
+   "GGOOOYYOOOGG",
+   "GYOOYOOYOOYG",
+   "GGOOOYYOOOGG",
+   "GGYOOOOOOYGG",
+   ".GGYOOOOYGG.",
+   "..GGGRRGGG..",
+   "...RRRRRR...",
+   "..RR....RR.."
+  ],
+  "overlay": [
+   "............",
+   ".....r......",
+   "......b.....",
+   "............",
+   ".....h......",
+   "r...........",
+   "..h.........",
+   "............",
+   "........h...",
+   "............",
+   "......b.....",
+   "............"
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 4,
+     "ammo": 12
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 4,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 4,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 9
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    },
+    {
+     "color": 1,
+     "ammo": 7
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    },
+    {
+     "color": 2,
+     "ammo": 9
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "2f5f0dbe"
+ },
+ {
+  "id": 466,
+  "name": "minotaur",
+  "stage": 47,
+  "image": [
+   "Y...........Y",
+   "YY.........YY",
+   ".YY.KKKKK.YY.",
+   "..YKKKKKKKY..",
+   "...KKKKKKK...",
+   "..KKRKKKRKK..",
+   "..KKKKKKKKK..",
+   "...KKKKKKK...",
+   "...KOOOOOK...",
+   "...KOKOKOK...",
+   "....OOOOO....",
+   ".....YYY.....",
+   "......Y......"
+  ],
+  "overlay": [
+   ".............",
+   ".............",
+   "......k......",
+   ".............",
+   ".............",
+   "....b...h....",
+   ".............",
+   ".............",
+   "......b......",
+   ".....l...l...",
+   ".....h.......",
+   "......r......",
+   "............."
+  ],
+  "columns": [
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 7
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "9094f4a5"
+ },
+ {
+  "id": 467,
+  "name": "mermaid",
+  "stage": 47,
+  "image": [
+   "....OOOO.....",
+   "...OOOOOO....",
+   "..OOYYYYOO...",
+   "..OYBYYBYO...",
+   "..OYYYYYYO...",
+   "..OOYRRYOO...",
+   "...OOYYOO....",
+   "....PPPP.....",
+   "...YPPPPY....",
+   "....GGGG.....",
+   ".....GGGG....",
+   "......GGG....",
+   ".......GG.GG.",
+   "........GGGG."
+  ],
+  "overlay": [
+   ".....b.......",
+   ".............",
+   ".............",
+   "...r.........",
+   "......h......",
+   "..b..........",
+   ".............",
+   ".....h.......",
+   ".............",
+   "......r......",
+   ".............",
+   ".......h.....",
+   ".............",
+   "..........r.."
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 11
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 5
+    },
+    {
+     "color": 1,
+     "ammo": 9
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "2f005e06"
+ },
+ {
+  "id": 468,
+  "name": "griffin",
+  "stage": 47,
+  "image": [
+   "...YYY........",
+   "..YYYYY.......",
+   ".RYBYYY.......",
+   "RR.YYYY..GG...",
+   "....YYY.GGGG..",
+   "....OOOGGGGGG.",
+   "...OOOOOGGGGG.",
+   "..OOOOOOOGG...",
+   ".OOOOOOOOO..O.",
+   ".OOOOOOOOOOOO.",
+   ".O.O....O.O...",
+   ".O.O....O.O...",
+   "KK.KK..KK.KK.."
+  ],
+  "overlay": [
+   "..............",
+   "....h.........",
+   "..............",
+   ".....r........",
+   "..........r...",
+   "..............",
+   ".....b........",
+   "..............",
+   "........h.....",
+   "...h........b.",
+   "..............",
+   "..............",
+   "k...l...l....."
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 11
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 10
+    },
+    {
+     "color": 1,
+     "ammo": 8
+    },
+    {
+     "color": 2,
+     "ammo": 10
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "510c2b6b"
+ },
+ {
+  "id": 469,
+  "name": "cyclops",
+  "stage": 47,
+  "image": [
+   "...KKKKKKKK...",
+   "..KKKKKKKKKK..",
+   ".KKOOOOOOOOKK.",
+   ".KOOOOOOOOOOK.",
+   ".KOOBBBBBBOOK.",
+   ".KOBBBYYBBBOK.",
+   "OKOBBYKKYBBOKO",
+   ".KOBBBYYBBBOK.",
+   ".KOOBBBBBBOOK.",
+   ".KOOOOOOOOOOK.",
+   "..KOOOOROOOK..",
+   "..KKORRRRRKK..",
+   "...KKOOOOKK...",
+   "....KKKKKK...."
+  ],
+  "overlay": [
+   ".....h........",
+   "..............",
+   "..............",
+   ".......b......",
+   "....r.........",
+   "......h.......",
+   ".k...........b",
+   "..............",
+   ".........y....",
+   "...h..........",
+   "..........h...",
+   "..l...........",
+   "..............",
+   "......l......."
+  ],
+  "columns": [
+   [
+    {
+     "color": 1,
+     "ammo": 19
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 1,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 19
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "59bec30e"
+ },
+ {
+  "id": 470,
+  "name": "hydra",
+  "stage": 47,
+  "boss": true,
+  "image": [
+   ".GG.....GG...GG.",
+   "GRGG...GRGG.GRGG",
+   ".GGGY...GGGY.GGG",
+   "..GG.....GG...GG",
+   "..GG.....GG..GG.",
+   "...GG....GG.GG..",
+   "....GG..GG.GG...",
+   ".....GGGGGGGG...",
+   "....GGPGGPGGG...",
+   "...GGGGGGGGGGG..",
+   "..GGPGGPGGPGGGG.",
+   "..GGGGGGGGGGGGG.",
+   ".BBGGGGGGGGGGGBB",
+   "BBBBBBBBBBBBBBBB",
+   "KKKKBBKKKKBBKKKK",
+   "KKKKKKKKKKKKKKKK"
+  ],
+  "overlay": [
+   "..r.............",
+   ".........h......",
+   "..............r.",
+   "................",
+   "...h............",
+   "..........h.....",
+   "................",
+   "................",
+   "........r.......",
+   ".....h..........",
+   ".......y........",
+   ".............r..",
+   "................",
+   "....y.......h...",
+   "..l.....l......k",
+   "kl...l....l..l.."
+  ],
+  "columns": [
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 12
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    }
+   ],
+   [
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 11
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 2,
+     "ammo": 14
+    },
+    {
+     "color": 4,
+     "ammo": 14
+    },
+    {
+     "color": 1,
+     "ammo": 14
+    }
+   ]
+  ],
+  "slots": 2,
+  "beltCapacity": 2,
+  "specHash": "53216b55"
  }
 ]

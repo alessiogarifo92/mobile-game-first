@@ -143,6 +143,16 @@ describe('curveLevel', () => {
     expect(curveLevel({ ...both, ice: [0, 0, 0, 0] }, 1).features).toEqual(['tunnel']);
   });
 
+  it('counts hidden + film as a pair of its own (#272)', () => {
+    const both = parseLevel({
+      id: 461, name: 'x', stage: 47, image: ['RR', 'RR'], overlay: ['hb', '..'],
+      columns: [[{ color: 1, ammo: 4 }], [{ color: 4, ammo: 1 }]], slots: 2, beltCapacity: 2,
+    });
+    expect(curveLevel(both, 1).features).toEqual(['hidden', 'film', 'hidden+film']);
+    expect(curveLevel({ ...both, film: [0, 0, 0, 0] }, 1).features).toEqual(['hidden']);
+    expect(curveLevel({ ...both, hidden: [false, false, false, false] }, 1).features).toEqual(['film']);
+  });
+
   it('rule 1: a pair debut may be very easy once, the same pair again may not (#268)', () => {
     const g = set(set(game([U1, U2]), 115, { features: ['mix', 'ice', 'film', 'ice+film'], winRate: 0.97 }), 15, { features: ['mix', 'ice', 'film'] });
     expect(keys(g)).not.toContain('r1 #115');

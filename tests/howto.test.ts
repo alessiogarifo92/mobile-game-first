@@ -34,7 +34,7 @@ describe('how to play pages', () => {
 });
 
 describe('how to play: unlocked rules (#183)', () => {
-  const ALL: CardTip[] = ['mixing', 'blocked', 'slots', 'ice', 'film', 'tunnel', 'hidden', 'lock', 'belt', 'brown', 'stone', 'covered', 'queue', 'leftover', 'iceFilm', 'iceTunnel'];
+  const ALL: CardTip[] = ['mixing', 'blocked', 'slots', 'ice', 'film', 'tunnel', 'hidden', 'lock', 'belt', 'brown', 'stone', 'covered', 'queue', 'leftover', 'iceFilm', 'iceTunnel', 'hiddenFilm'];
 
   it('with no tip seen it is the base pages only, unchanged', () => {
     const pages = howtoPages([]);
@@ -46,10 +46,10 @@ describe('how to play: unlocked rules (#183)', () => {
     expect(howtoPages(['mixing', 'blocked', 'slots', 'brown', 'stone', 'lock', 'covered', 'guide'])).toHaveLength(HOWTO_PAGES);
   });
 
-  it('with every tip seen it adds the nine uncovered ones after the base pages, in a fixed order (the pairs last: ice + film #268, ice + tunnel #270)', () => {
+  it('with every tip seen it adds the ten uncovered ones after the base pages, in a fixed order (the pairs last: ice + film #268, ice + tunnel #270, hidden + film #272)', () => {
     const pages = howtoPages(ALL);
-    expect(pages).toHaveLength(HOWTO_PAGES + 9);
-    expect(pages.slice(HOWTO_PAGES)).toEqual(['ice', 'film', 'tunnel', 'hidden', 'belt', 'queue', 'leftover', 'iceFilm', 'iceTunnel'].map((tip) => ({ kind: 'tip', tip })));
+    expect(pages).toHaveLength(HOWTO_PAGES + 10);
+    expect(pages.slice(HOWTO_PAGES)).toEqual(['ice', 'film', 'tunnel', 'hidden', 'belt', 'queue', 'leftover', 'iceFilm', 'iceTunnel', 'hiddenFilm'].map((tip) => ({ kind: 'tip', tip })));
   });
 
   it('the order the tips were seen in does not matter', () => {
@@ -71,7 +71,7 @@ describe('how to play: unlocked rules (#183)', () => {
         expect(EXTRA_TIPS).not.toContain(tip);
       }
     }
-    expect(EXTRA_TIPS).toEqual(['ice', 'film', 'tunnel', 'hidden', 'belt', 'queue', 'leftover', 'iceFilm', 'iceTunnel']);
+    expect(EXTRA_TIPS).toEqual(['ice', 'film', 'tunnel', 'hidden', 'belt', 'queue', 'leftover', 'iceFilm', 'iceTunnel', 'hiddenFilm']);
   });
 
   it('page moves follow the number of pages', () => {
