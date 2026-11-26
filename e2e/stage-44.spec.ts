@@ -40,11 +40,12 @@ test('after level 430 the map of universe 5 shows stage 44 with only level 431 p
   await start(page, { unlocked: 431, completed: range(1, 430) });
   expect(await mix(page, 'universe')).toBe(5);
   const headers = await mix<{ stage: number; count: number }[]>(page, 'headers');
-  expect(headers.map((h) => [h.stage, h.count])).toEqual([[41, 10], [42, 10], [43, 10], [44, 10]]);
+  // Stage 45 (#270) is on the map too, still locked.
+  expect(headers.map((h) => [h.stage, h.count])).toEqual([[41, 10], [42, 10], [43, 10], [44, 10], [45, 10]]);
   const nodes = await mix<{ id: number; unlocked: boolean; boss: boolean }[]>(page, 'nodes');
-  expect(nodes.map((n) => n.id)).toEqual(range(401, 440));
+  expect(nodes.map((n) => n.id)).toEqual(range(401, 450));
   expect(nodes.filter((n) => n.unlocked).map((n) => n.id)).toEqual(range(401, 431));
-  expect(nodes.filter((n) => n.boss).map((n) => n.id)).toEqual([410, 420, 430, 440]);
+  expect(nodes.filter((n) => n.boss).map((n) => n.id)).toEqual([410, 420, 430, 440, 450]);
   if (shots) await page.screenshot({ path: `${shots}/01-mappa-stage-44.png` });
 });
 

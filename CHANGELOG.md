@@ -2,6 +2,15 @@
 
 ## Non rilasciato
 
+### Stage 45 "Sogni": livelli 441–450, la coppia nuova ghiaccio + galleria e le prime tele 16×16 (#270, #103)
+
+- **Dieci figure in pixel art originale** sui sogni (`scripts/stages/stage-45.ts`): il cuscino, la pecorella, la luna, l'orsetto, il lumino, la nuvoletta, l'unicorno, il berretto da notte, il castello (16×15) e il boss, il sognatore (16×16, un bambino che dorme sotto luna e stelle). Foglio di anteprima in `docs/levels/stage-45.png`; nomi IT/EN corti (≤ 11 caratteri, #277).
+- **Coppia nuova: ghiaccio + galleria**, mai insieme prima, in ogni livello: ghiaccio solo su primari (disegnato in `overlay`), una galleria di 4–6 corsie sul nastro (`special.tunnel`). Il solver prova che regge: tutti i livelli sono dimostrati risolvibili al primo giro di taratura, senza sostituire la coppia. Marrone con chiavi e lucchetti (tutti su pixel marroni) su metà dei livelli, il boss con più lucchetti; nessuna pellicola, così nessun livello somma due coppie.
+- **Card di debutto della coppia** (#77, una card per livello) al cuscino (441), molto facile (100% di vittorie a caso): "Ghiaccio e galleria" / "Ice and tunnel together", con l'illustrazione condivisa da card e "Come si gioca" (dove diventa una regola sbloccata). Seconda voce di `PAIR_TIPS` (`iceTunnel`), contata dalla curva come `ice+tunnel`.
+- **Prime tele 16×16 dell'universo 5** (`maxCanvas` 16): castello e sognatore, verificati leggibili a 360×640 (screenshot in `docs/test-evidence/270-stage-45/`). **Nastro 2, slot 2**, mai sopra la fine dell'universo 4; dal 442 ≥ 30% di pixel secondari o marroni.
+- **Curva** a dente di sega (#88): vittorie a caso 100 · 52 · 51 · 48,5 · 56,5 · 52,5 · 49 · 54,5 · 42,5 · 26%, media 53,3% (stage 44: 56,1%); il boss è il più duro dello stage.
+- Test: unit `tests/stage45.test.ts` (nomi, tele 16×16, ghiaccio + galleria ovunque, lucchetti sul marrone, debutto della coppia al 441, risolvibilità, card una sola volta, curva, sblocco dopo il 440) e casi della coppia in `tests/onboarding.test.ts`, `tests/curve.test.ts` e `tests/howto.test.ts`; e2e `e2e/stage-45.spec.ts`: mappa dopo il 440, la card al 441 (360×640 e 412×915) e il livello vinto, il castello a schermo, il 442 senza card, il boss 450 vinto alle due misure. Aggiornati i test degli stage 41–44, di "Come si gioca" e lo schema della scheda di playtest (la card `iceTunnel`).
+
 ### Stage 44 "Laboratorio": livelli 431–440 dell'universo 5 "Cosmo" (#269, #103)
 
 - **Dieci figure in pixel art originale** sul laboratorio (`scripts/stages/stage-44.ts`): la provetta, l'elisir, il magnete, il microscopio, l'atomo, la lampadina, il DNA, il becher, l'alambicco e il boss, l'esperimento (14×14, un pallone che bolle sul fornello). Foglio di anteprima in `docs/levels/stage-44.png`; nomi IT/EN corti (≤ 11 caratteri, #277).
