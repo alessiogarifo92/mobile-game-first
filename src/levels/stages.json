@@ -250,5 +250,11 @@
   "key": "stars",
   "color": 4,
   "complete": true
+ },
+ {
+  "id": 43,
+  "key": "robots",
+  "color": 6,
+  "complete": true
  }
 ]

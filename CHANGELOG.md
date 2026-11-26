@@ -2,6 +2,15 @@
 
 ## Non rilasciato
 
+### Stage 43 "Robot": livelli 421–430 e la coppia nuova ghiaccio + pellicola (#268, #103)
+
+- **Dieci figure in pixel art originale** sui robot (`scripts/stages/stage-43.ts`): il bullone, la rotella, la testa robot, la pila, il chip, il drone, il cane robot, il rover, l'androide e il boss, il robottone (14×14). Foglio di anteprima in `docs/levels/stage-43.png`; nomi IT/EN corti (≤ 11 caratteri, per non sovrapporsi al nodo sulla mappa, #277).
+- **Coppia nuova: ghiaccio + pellicola**, mai insieme prima, in ogni livello. Il solver prova che regge: tutti i livelli sono dimostrati risolvibili (ogni seme provato durante la taratura lo era). Dal 424 tornano marrone, chiavi e lucchetti (tutti su pixel marroni) su metà dei livelli.
+- **Card di debutto della coppia** (#77, una card per livello) al bullone (421), molto facile (100% di vittorie a caso): "Ghiaccio e pellicola" / "Ice and film together", con l'illustrazione condivisa da card e "Come si gioca" (dove diventa una regola sbloccata). Le coppie con card stanno in `PAIR_TIPS` (`src/core/onboarding.ts`): la curva le conta come meccanica a sé (`ice+film`), così il debutto molto facile rispetta la regola 1 di #88; pronta per le coppie degli stage 45, 47 e 49.
+- **Nastro 2, slot 2**, mai sopra la fine dell'universo 4; tele entro 14×14; dal 422 ≥ 30% di pixel secondari o marroni.
+- **Curva** a dente di sega (#88): vittorie a caso 100 · 57,5 · 57,5 · 56 · 60 · 57 · 53,5 · 55,5 · 45,5 · 31,5%, media 57,4% (stage 42: 57,75%); il boss è il più duro dello stage.
+- Test: unit `tests/stage43.test.ts` (nomi, tele, ghiaccio + pellicola ovunque, lucchetti sul marrone, debutto della coppia al 421, risolvibilità, card una sola volta, curva, sblocco dopo il 420) e casi della coppia in `tests/onboarding.test.ts` e `tests/curve.test.ts`; e2e `e2e/stage-43.spec.ts`: mappa dopo il 420, la card al 421 (360×640 e 412×915) e il livello vinto, il 422 senza card, il boss 430 vinto. Aggiornati i test degli stage 41–42, di "Come si gioca" e lo schema della scheda di playtest (la card `iceFilm`).
+
 ### Stage 42 "Stelle": livelli 411–420 dell'universo 5 "Cosmo" (#267, #103)
 
 - **Dieci figure in pixel art originale** su stelle e cielo notturno (`scripts/stages/stage-42.ts`): la stellina, la stella cadente, la falce di luna, l'osservatorio, la cometa di Halley, il telescopio, la supernova, la nebulosa, la galassia a spirale e il boss, il cielo stellato (14×14, con il Grande Carro). Foglio di anteprima in `docs/levels/stage-42.png`; nomi IT/EN.
