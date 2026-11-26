@@ -274,5 +274,11 @@
   "key": "crystals",
   "color": 5,
   "complete": true
+ },
+ {
+  "id": 47,
+  "key": "myth",
+  "color": 3,
+  "complete": true
  }
 ]

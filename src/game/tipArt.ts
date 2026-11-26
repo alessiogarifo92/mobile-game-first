@@ -5,14 +5,14 @@ import { PAINT, THEME, css } from './theme';
 import { drawFilm, drawIce, drawStone, drawTunnel, iceCounter, label } from './ui';
 
 /** Tips whose illustration is shared by the in-game card and How to play (#183): the rules How to play has no base page for. */
-export type SharedTipArt = 'ice' | 'film' | 'tunnel' | 'belt' | 'hidden' | 'queue' | 'leftover' | 'stone' | 'iceFilm' | 'iceTunnel';
+export type SharedTipArt = 'ice' | 'film' | 'tunnel' | 'belt' | 'hidden' | 'queue' | 'leftover' | 'stone' | 'iceFilm' | 'iceTunnel' | 'hiddenFilm';
 
 export function hasSharedArt(id: CardTip): id is SharedTipArt {
-  return id === 'ice' || id === 'film' || id === 'tunnel' || id === 'belt' || id === 'hidden' || id === 'queue' || id === 'leftover' || id === 'stone' || id === 'iceFilm' || id === 'iceTunnel';
+  return id === 'ice' || id === 'film' || id === 'tunnel' || id === 'belt' || id === 'hidden' || id === 'queue' || id === 'leftover' || id === 'stone' || id === 'iceFilm' || id === 'iceTunnel' || id === 'hiddenFilm';
 }
 
 /** Horizontal extent of each illustration (belt at 4 buckets), so How to play can scale it to its card. */
-export const TIP_ART_WIDTH: Record<SharedTipArt, number> = { ice: 370, film: 400, tunnel: 420, belt: 370, hidden: 390, queue: 320, leftover: 500, stone: 300, iceFilm: 400, iceTunnel: 420 };
+export const TIP_ART_WIDTH: Record<SharedTipArt, number> = { ice: 370, film: 400, tunnel: 420, belt: 370, hidden: 390, queue: 320, leftover: 500, stone: 300, iceFilm: 400, iceTunnel: 420, hiddenFilm: 420 };
 
 /**
  * Draws a tip's illustration around (cx, y0): y0 is the top of the in-game tip card, so the art sits where it always has.
@@ -87,6 +87,20 @@ export function drawTipArt(
     drawTunnel(g, { pieces: [roof], mouths: [{ x: roof.x - 5, y: y - band / 2, w: 10, h: band }, { x: roof.x + roof.w - 5, y: y - band / 2, w: 10, h: band }] },
       [-25, 0, 25].map((dx) => [cx + 110 + dx, roof.y + 6, cx + 110 + dx, roof.y + roof.h - 6]));
     add(label(scene, cx + 110, y + 60, '✕', THEME.type.md, THEME.inkCss));
+  } else if (id === 'hiddenFilm') {
+    // The pair of stage 47 (#272): a "?" beside a red pixel (finish the red one, the "?" opens) + a red pixel under a
+    // blue film (a blue hit tears it, then red paints it).
+    const y = y0 + 180;
+    sq(cx - 175, y, PAINT[RED]!, 0.3);
+    sq(cx - 115, y, THEME.hidden);
+    add(label(scene, cx - 115, y, '?', THEME.type.md, '#ffffff'));
+    add(label(scene, cx - 145, y + 60, '●→?', THEME.type.sm, css(PAINT[RED]!)));
+    add(label(scene, cx - 20, y, '+', THEME.type.md));
+    sq(cx + 130, y, THEME.emptyPixel);
+    sq(cx + 130, y, PAINT[RED]!, 0.3);
+    drawFilm(g, cx + 130 - 24, y - 24, 48, 48, BLUE);
+    add(label(scene, cx + 115, y + 60, '■', THEME.type.sm, css(PAINT[BLUE]!)));
+    add(label(scene, cx + 145, y + 60, '●', THEME.type.sm, css(PAINT[RED]!)));
   } else if (id === 'tunnel') {
     // A stretch of belt under a roof (#99): the bucket slides in, nothing is shot while it is under there, it comes out
     // the other side. The ✕ over the roof says the lane is blind.

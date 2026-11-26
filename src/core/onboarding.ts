@@ -16,6 +16,7 @@ export type CardTip =
 export const PAIR_TIPS = {
   iceFilm: ['ice', 'film'],
   iceTunnel: ['ice', 'tunnel'],
+  hiddenFilm: ['hidden', 'film'],
 } as const satisfies Record<string, readonly [string, string]>;
 export type PairTip = keyof typeof PAIR_TIPS;
 

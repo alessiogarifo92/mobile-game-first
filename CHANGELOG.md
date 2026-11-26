@@ -2,6 +2,15 @@
 
 ## Non rilasciato
 
+### Stage 47 "Mito": livelli 461–470 dell'universo 5 "Cosmo", la coppia nuova pixel nascosti + pellicola (#272, #103)
+
+- **Dieci figure in pixel art originale** sul mito (`scripts/stages/stage-47.ts`): la lira, l'anfora, Pegaso, il tridente, la corona d'alloro, il minotauro, la sirena, il grifone, il ciclope (14×14) e il boss, l'idra (16×16). Foglio di anteprima in `docs/levels/stage-47.png`; nomi IT/EN corti (≤ 11 caratteri, #277).
+- **Coppia nuova pixel nascosti + pellicola**, mai vista insieme prima: in ogni livello pixel "?" e pellicole, disegnati a mano. Il solver dimostra risolvibili tutti e dieci i livelli, quindi la coppia regge. La lira (461) è il debutto, molto facile, con la sua card (`hiddenFilm`, #77, una card per livello) e la pagina in Come si gioca dopo le altre coppie.
+- **Niente ghiaccio e niente gallerie**, così nessun livello somma due coppie; marrone con chiavi e lucchetti (tutti su pixel marroni) su cinque livelli, il boss con più lucchetti (6). Pellicole mai sul marrone né sul loro colore; ogni pixel nascosto ha accanto un pixel visibile.
+- **Nastro 2, slot 2**, mai sopra la fine dell'universo 4; tela entro 16×16, l'idra leggibile a 360×640 (screenshot in `docs/test-evidence/272-stage-47/`); ≥ 30% di pixel secondari o marroni su ogni livello, debutto compreso.
+- **Curva** a dente di sega (#88): vittorie a caso 100 · 52 · 49,5 · 48,5 · 47,5 · 51 · 50 · 50,5 · 43,5 · 20,5%, media 51,3% (stage 46: 52,9%); solo il debutto è molto facile, il boss è il più duro dello stage e sopra il minimo dell'universo (20%).
+- Test: unit `tests/stage47.test.ts` (nomi, card, tele, meccaniche per livello, lucchetti sul marrone, debutto della coppia, risolvibilità, curva, sblocco dopo il 460) e casi della coppia in `tests/onboarding.test.ts`, `tests/curve.test.ts`, `tests/howto.test.ts`; e2e `e2e/stage-47.spec.ts`: mappa dopo il 460, card della coppia al 461 a schermo e livello vinto (360×640 e 412×915), anfora vinta senza card, boss 470 vinto alle due misure. Aggiornati gli e2e degli stage 41–46 (mappa con lo stage 47), di Come si gioca e lo schema della scheda di playtest.
+
 ### Stage 46 "Cristalli": livelli 451–460 dell'universo 5 "Cosmo" (#271, #103)
 
 - **Dieci figure in pixel art originale** sui cristalli (`scripts/stages/stage-46.ts`): il quarzo, lo smeraldo, il diamante, l'anello, la geode, il fiocco di neve, il diadema, l'ametista, la grotta (14×13) e il boss, il golem di cristallo (16×16). Foglio di anteprima in `docs/levels/stage-46.png`; nomi IT/EN corti (≤ 11 caratteri, #277).
