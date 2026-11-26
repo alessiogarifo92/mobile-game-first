@@ -54,12 +54,12 @@ test('winning level 400 opens universe 5: the party leads to its map, with only 
   await waitScene(page, 'menu');
   expect(await mix(page, 'universe')).toBe(5);
   const headers = await mix<{ stage: number; count: number }[]>(page, 'headers');
-  // Stages 42 (#267) and 43 (#268) are on the map too, still locked.
-  expect(headers.map((h) => [h.stage, h.count])).toEqual([[41, 10], [42, 10], [43, 10]]);
+  // Stages 42 (#267), 43 (#268) and 44 (#269) are on the map too, still locked.
+  expect(headers.map((h) => [h.stage, h.count])).toEqual([[41, 10], [42, 10], [43, 10], [44, 10]]);
   const nodes = await mix<{ id: number; unlocked: boolean; boss: boolean }[]>(page, 'nodes');
-  expect(nodes.map((n) => n.id)).toEqual(range(401, 430));
+  expect(nodes.map((n) => n.id)).toEqual(range(401, 440));
   expect(nodes.filter((n) => n.unlocked).map((n) => n.id)).toEqual([401]);
-  expect(nodes.filter((n) => n.boss).map((n) => n.id)).toEqual([410, 420, 430]);
+  expect(nodes.filter((n) => n.boss).map((n) => n.id)).toEqual([410, 420, 430, 440]);
   if (shots) await page.screenshot({ path: `${shots}/02-mappa-universo-5.png` });
 });
 
@@ -74,7 +74,7 @@ for (const size of SIZES) {
       await tap(page, button.x, button.y);
       await waitScene(page, 'universes');
       const cards = await mix<{ id: number; open: boolean; done: number; total: number; x: number; y: number }[]>(page, 'cards');
-      expect(cards.map((c) => [c.id, c.open, c.done, c.total])).toEqual([[1, true, 100, 100], [2, true, 100, 100], [3, true, 100, 100], [4, true, 100, 100], [5, true, 0, 30]]);
+      expect(cards.map((c) => [c.id, c.open, c.done, c.total])).toEqual([[1, true, 100, 100], [2, true, 100, 100], [3, true, 100, 100], [4, true, 100, 100], [5, true, 0, 40]]);
       await checkOnScreen(page, `${tag} selector with five universes`);
       if (shots) await page.screenshot({ path: `${shots}/03-selettore-5-universi-${tag}.png` });
       await tap(page, cards[4]!.x, cards[4]!.y);

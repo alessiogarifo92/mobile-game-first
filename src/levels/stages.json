@@ -256,5 +256,11 @@
   "key": "robots",
   "color": 6,
   "complete": true
+ },
+ {
+  "id": 44,
+  "key": "lab",
+  "color": 5,
+  "complete": true
  }
 ]
