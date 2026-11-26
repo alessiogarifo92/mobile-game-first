@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Stage 46 "Cristalli": livelli 451–460 dell'universo 5 "Cosmo" (#271, #103)
+
+- **Dieci figure in pixel art originale** sui cristalli (`scripts/stages/stage-46.ts`): il quarzo, lo smeraldo, il diamante, l'anello, la geode, il fiocco di neve, il diadema, l'ametista, la grotta (14×13) e il boss, il golem di cristallo (16×16). Foglio di anteprima in `docs/levels/stage-46.png`; nomi IT/EN corti (≤ 11 caratteri, #277).
+- **Nessuna coppia nuova e nessuna card**: ogni livello ripete una combinazione già vista prima del 451 (marrone + lucchetto; marrone + pietra + lucchetto + pellicola; ghiaccio + pellicola e ghiaccio + galleria, con o senza marrone e lucchetti), mai due coppie nello stesso livello. La novità della finestra 441–460 (#157) resta la coppia ghiaccio + galleria del 441. Chiavi e lucchetti sempre su pixel marroni, il boss con più lucchetti (5).
+- **Nastro 2, slot 2**, mai sopra la fine dell'universo 4; tela entro 16×16, il golem leggibile a 360×640 (screenshot in `docs/test-evidence/271-stage-46/`); ≥ 30% di pixel secondari o marroni su ogni livello, respiro compreso.
+- **Curva** a dente di sega (#88), senza livelli molto facili: vittorie a caso 64,5 · 53,5 · 59 · 52 · 56,5 · 58,5 · 51,5 · 57,5 · 47 · 28,5%, media 52,9% (stage 45: 53,3%); il boss è il più duro dello stage.
+- Test: unit `tests/stage46.test.ts` (nomi, tele, meccaniche per livello, lucchetti sul marrone, nessuna combinazione nuova, nessuna card, risolvibilità, curva, sblocco dopo il 450); e2e `e2e/stage-46.spec.ts`: mappa dopo il 450, il quarzo a schermo e vinto (360×640 e 412×915), smeraldo e geode vinti senza card, il boss 460 vinto alle due misure. Aggiornati gli e2e degli stage 41–45 (mappa con lo stage 46).
+
 ### Stage 45 "Sogni": livelli 441–450, la coppia nuova ghiaccio + galleria e le prime tele 16×16 (#270, #103)
 
 - **Dieci figure in pixel art originale** sui sogni (`scripts/stages/stage-45.ts`): il cuscino, la pecorella, la luna, l'orsetto, il lumino, la nuvoletta, l'unicorno, il berretto da notte, il castello (16×15) e il boss, il sognatore (16×16, un bambino che dorme sotto luna e stelle). Foglio di anteprima in `docs/levels/stage-45.png`; nomi IT/EN corti (≤ 11 caratteri, #277).
