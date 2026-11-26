@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+### Stage 48 "Galassia": livelli 471–480 dell'universo 5 "Cosmo" (#273, #103)
+
+- **Dieci figure in pixel art originale** sulla galassia (`scripts/stages/stage-48.ts`): la spirale, la pulsar, la Via Lattea, il buco nero, la quasar, Orione, la meteora, l'eclissi, il wormhole (14×13) e il boss, Andromeda (16×16). Foglio di anteprima in `docs/levels/stage-48.png`; nomi IT/EN corti (≤ 11 caratteri, #277).
+- **Nessuna coppia nuova e nessuna card**: ogni livello ripete una combinazione già vista prima del 471 (marrone + lucchetto; marrone + pietra + lucchetto + pellicola; ghiaccio + pellicola e ghiaccio + galleria, con o senza marrone e lucchetti; pixel nascosti + pellicola con marrone e lucchetti), mai due coppie nello stesso livello. La novità della finestra 461–480 (#157) resta la coppia nascosti + pellicola del 461. Chiavi e lucchetti sempre su pixel marroni, il boss con più lucchetti (6).
+- **Nastro 2, slot 2**, mai sopra la fine dell'universo 4; tela entro 16×16, Andromeda leggibile a 360×640 (screenshot in `docs/test-evidence/273-stage-48/`); ≥ 30% di pixel secondari o marroni su ogni livello, respiro compreso.
+- **Curva** a dente di sega (#88), senza livelli molto facili: vittorie a caso 61,5 · 55,5 · 52 · 46 · 55 · 50 · 50 · 53,5 · 42 · 22,5%, media 48,8% (stage 47: 51,3%); il boss è il più duro dello stage e sopra il minimo dell'universo (20%).
+- Test: unit `tests/stage48.test.ts` (nomi, tele, meccaniche per livello, lucchetti sul marrone, nessuna combinazione nuova, nessuna card, risolvibilità, curva, sblocco dopo il 470); e2e `e2e/stage-48.spec.ts`: mappa dopo il 470, la spirale a schermo e vinta (360×640 e 412×915), Via Lattea e Orione vinti senza card, il boss 480 vinto alle due misure (limite 360 s, come i boss 460 e 470). Aggiornati gli e2e degli stage 41–47 (mappa con lo stage 48).
+
 ### Stage 47 "Mito": livelli 461–470 dell'universo 5 "Cosmo", la coppia nuova pixel nascosti + pellicola (#272, #103)
 
 - **Dieci figure in pixel art originale** sul mito (`scripts/stages/stage-47.ts`): la lira, l'anfora, Pegaso, il tridente, la corona d'alloro, il minotauro, la sirena, il grifone, il ciclope (14×14) e il boss, l'idra (16×16). Foglio di anteprima in `docs/levels/stage-47.png`; nomi IT/EN corti (≤ 11 caratteri, #277).
