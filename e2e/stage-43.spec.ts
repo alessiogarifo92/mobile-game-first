@@ -67,7 +67,7 @@ for (const size of SIZES) {
 }
 
 test('level 422, the cog, keeps ice and films without showing the card again, and plays to a win', async ({ page }) => {
-  test.setTimeout(180_000);
+  test.setTimeout(240_000); // the cog plays a long solution: about 3 minutes on the CI runner (#270)
   await start(page, { unlocked: 422, completed: range(1, 421), seenTips: [...TIPS, 'iceFilm'] });
   await openLevel(page, 422);
   await page.waitForTimeout(800);
