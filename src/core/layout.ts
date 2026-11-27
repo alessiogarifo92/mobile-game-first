@@ -40,6 +40,8 @@ const JAR = 84;
 export const SLOT_HIT_PAD = 8;
 /** Smallest comfortable touch target, in real CSS pixels. */
 export const MIN_TOUCH_PX = 44;
+/** The same target in logical units on the narrowest supported phone (360 CSS px wide): 88. */
+export const MIN_TOUCH = MIN_TOUCH_PX * (VIEW.width / 360);
 
 /**
  * `screenHeight` is the real height of the game in logical units (1280 on a 16:9 phone, up to ~1900 on tall ones).
@@ -175,4 +177,13 @@ export function placeTipCard(beltBottom: number, screenH: number, cardH: number,
   const scale = Math.max(minScale, room / cardH);
   const h = cardH * scale;
   return { top: Math.max(gap, Math.min(dock, screenH - gap - h)), scale };
+}
+
+/**
+ * #286: the smallest touch target, in the card's own (unscaled) units, so that it is still `minTouch` once the card is
+ * drawn at `scale`. A card shrunk to 0.8 on a 360x640 phone turned the 88-unit target of its "Got it" button into 70
+ * (35 CSS px), and taps on the line just above it fell on the shade.
+ */
+export function tipMinTouch(scale: number, minTouch: number = MIN_TOUCH): number {
+  return minTouch / Math.min(1, scale);
 }
