@@ -74,7 +74,7 @@ for (const size of SIZES) {
       await tap(page, button.x, button.y);
       await waitScene(page, 'universes');
       const cards = await mix<{ id: number; open: boolean; done: number; total: number; x: number; y: number }[]>(page, 'cards');
-      expect(cards.map((c) => [c.id, c.open, c.done, c.total])).toEqual([[1, true, 100, 100], [2, true, 100, 100], [3, true, 100, 100], [4, true, 100, 100], [5, true, 0, 80]]);
+      expect(cards.map((c) => [c.id, c.open, c.done, c.total])).toEqual([[1, true, 100, 100], [2, true, 100, 100], [3, true, 100, 100], [4, true, 100, 100], [5, true, 0, 90]]);
       await checkOnScreen(page, `${tag} selector with five universes`);
       if (shots) await page.screenshot({ path: `${shots}/03-selettore-5-universi-${tag}.png` });
       await tap(page, cards[4]!.x, cards[4]!.y);
