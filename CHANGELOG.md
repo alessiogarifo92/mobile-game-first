@@ -2,6 +2,16 @@
 
 ## Non rilasciato
 
+### Stage 50 "Finale": livelli 491–500, l'ultimo stage dell'universo 5 "Cosmo" e del gioco, tutte le coppie insieme (#275, #103)
+
+- **Dieci figure in pixel art originale** sul gran finale (`scripts/stages/stage-50.ts`): il sipario, il big bang, il podio, la fanfara, il riflettore, il bis, i coriandoli, il teatro, i fuochi d'artificio e il boss finale del gioco, il gran finale (16×16). Foglio di anteprima in `docs/levels/stage-50.png`; nomi IT/EN corti (≤ 11 caratteri, #277).
+- **Tutte le coppie insieme**: in ogni livello ghiaccio, pellicola, pixel nascosti e una galleria nello stesso quadro, cioè le quattro coppie dell'universo 5. Il solver dimostra risolvibili tutti e dieci i livelli, quindi la combinazione regge e non è servito sostituirla. Il sipario (491) è il debutto, molto facile, con la sua card "Tutto insieme" (`allPairs`, #77) e la pagina in Come si gioca dopo le altre coppie.
+- **Per restare giusta**: un solo segno per pixel, ghiaccio solo sui primari, pellicole mai sul marrone né sul loro colore, ogni "?" con accanto un pixel visibile, niente pietre e niente secchielli coperti; marrone con chiavi e lucchetti (tutti su pixel marroni) su cinque livelli, il boss con più lucchetti (6).
+- **Universo 5 completo**: lo stage 50 è segnato `complete`, la mappa non dice più "Altri livelli in arrivo" e la scheda dell'universo 5 risulta completa (100 livelli). Vincere il 500 mostra la festa dell'universo già esistente; la festa finale e il murale sono #91.
+- **Nastro 2, slot 2**, mai sopra la fine dell'universo 4; tela entro 16×16, il gran finale leggibile a 360×640 (screenshot in `docs/test-evidence/275-stage-50/`); ≥ 30% di pixel secondari o marroni su ogni livello.
+- **Curva** a dente di sega (#88): vittorie a caso 100 · 46,5 · 41,5 · 41 · 42,5 · 47 · 43,5 · 43,5 · 34 · 23%, media 46,3% (stage 49: 47,1%; obiettivo dell'universo 45%); solo il debutto è molto facile, il boss 500 è il più duro dello stage e sopra il 20%. Il boss più duro dell'universo resta il 470 (20,5%), differenza dentro il rumore. Report dell'universo in `docs/reports/2026-11-27-curva-universo-5.md`.
+- Test: unit `tests/stage50.test.ts` (nomi, card, tele, le quattro meccaniche su ogni livello, un segno per pixel, gallerie, lucchetti sul marrone, debutto, risolvibilità, curva, universo completo, sblocco dopo il 490) e casi della combinazione in `tests/onboarding.test.ts`, `tests/curve.test.ts`, `tests/howto.test.ts`; e2e `e2e/stage-50.spec.ts`: mappa dopo il 490 senza "in arrivo", card al 491 a schermo e livello vinto (360×640 e 412×915), big bang vinto senza card, boss 500 vinto alle due misure (limite 360 s). Aggiornati gli e2e e gli unit degli stage 41–49 (mappa con lo stage 50, universo 5 completo), di Come si gioca e lo schema della scheda di playtest.
+
 ### Stage 49 "Buchi neri": livelli 481–490 dell'universo 5 "Cosmo", la coppia nuova pixel nascosti + galleria (#274, #103)
 
 - **Dieci figure in pixel art originale** sui buchi neri (`scripts/stages/stage-49.ts`): l'orizzonte degli eventi, il disco di accrescimento, il vortice, il getto, la singolarità, la sonda, la stella "a spaghetti", la lente gravitazionale, i gemelli (14×11) e il boss, il divoratore (16×16). Foglio di anteprima in `docs/levels/stage-49.png`; nomi IT/EN corti (≤ 11 caratteri, #277), tutti diversi dal "buco nero" dello stage 48.

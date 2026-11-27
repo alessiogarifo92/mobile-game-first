@@ -5,14 +5,14 @@ import { PAINT, THEME, css } from './theme';
 import { drawFilm, drawIce, drawStone, drawTunnel, iceCounter, label } from './ui';
 
 /** Tips whose illustration is shared by the in-game card and How to play (#183): the rules How to play has no base page for. */
-export type SharedTipArt = 'ice' | 'film' | 'tunnel' | 'belt' | 'hidden' | 'queue' | 'leftover' | 'stone' | 'iceFilm' | 'iceTunnel' | 'hiddenFilm' | 'hiddenTunnel';
+export type SharedTipArt = 'ice' | 'film' | 'tunnel' | 'belt' | 'hidden' | 'queue' | 'leftover' | 'stone' | 'iceFilm' | 'iceTunnel' | 'hiddenFilm' | 'hiddenTunnel' | 'allPairs';
 
 export function hasSharedArt(id: CardTip): id is SharedTipArt {
-  return id === 'ice' || id === 'film' || id === 'tunnel' || id === 'belt' || id === 'hidden' || id === 'queue' || id === 'leftover' || id === 'stone' || id === 'iceFilm' || id === 'iceTunnel' || id === 'hiddenFilm' || id === 'hiddenTunnel';
+  return id === 'ice' || id === 'film' || id === 'tunnel' || id === 'belt' || id === 'hidden' || id === 'queue' || id === 'leftover' || id === 'stone' || id === 'iceFilm' || id === 'iceTunnel' || id === 'hiddenFilm' || id === 'hiddenTunnel' || id === 'allPairs';
 }
 
 /** Horizontal extent of each illustration (belt at 4 buckets), so How to play can scale it to its card. */
-export const TIP_ART_WIDTH: Record<SharedTipArt, number> = { ice: 370, film: 400, tunnel: 420, belt: 370, hidden: 390, queue: 320, leftover: 500, stone: 300, iceFilm: 400, iceTunnel: 420, hiddenFilm: 420, hiddenTunnel: 440 };
+export const TIP_ART_WIDTH: Record<SharedTipArt, number> = { ice: 370, film: 400, tunnel: 420, belt: 370, hidden: 390, queue: 320, leftover: 500, stone: 300, iceFilm: 400, iceTunnel: 420, hiddenFilm: 420, hiddenTunnel: 440, allPairs: 460 };
 
 /**
  * Draws a tip's illustration around (cx, y0): y0 is the top of the in-game tip card, so the art sits where it always has.
@@ -117,6 +117,30 @@ export function drawTipArt(
     drawTunnel(g, { pieces: [roof], mouths: [{ x: roof.x - 5, y: y - band / 2, w: 10, h: band }, { x: roof.x + roof.w - 5, y: y - band / 2, w: 10, h: band }] },
       [-25, 0, 25].map((dx) => [cx + 110 + dx, roof.y + 6, cx + 110 + dx, roof.y + roof.h - 6]));
     add(label(scene, cx + 110, y + 60, '✕', THEME.type.md, THEME.inkCss));
+  } else if (id === 'allPairs') {
+    // The finale of stage 50 (#275): the four obstacles of the pairs side by side, an iced pixel, a pixel under a film,
+    // a "?" and a stretch of belt under a tunnel; each keeps its own rule.
+    const y = y0 + 180;
+    sq(cx - 190, y, THEME.emptyPixel);
+    sq(cx - 190, y, PAINT[RED]!, 0.3);
+    drawIce(g, cx - 190 - 24, y - 24, 48, 48);
+    const counter = iceCounter(scene, cx - 190 - 24, y - 24, 48, 48);
+    if (counter) add(counter);
+    add(label(scene, cx - 190, y + 60, '●●', THEME.type.sm, css(PAINT[RED]!)));
+    sq(cx - 100, y, THEME.emptyPixel);
+    sq(cx - 100, y, PAINT[RED]!, 0.3);
+    drawFilm(g, cx - 100 - 24, y - 24, 48, 48, BLUE);
+    add(label(scene, cx - 100, y + 60, '■●', THEME.type.sm, css(PAINT[BLUE]!)));
+    sq(cx - 10, y, THEME.hidden);
+    add(label(scene, cx - 10, y, '?', THEME.type.md, '#ffffff'));
+    add(label(scene, cx - 10, y + 60, '→?', THEME.type.sm, THEME.inkCss));
+    const band = 56;
+    g.fillStyle(THEME.belt, 1);
+    g.fillRoundedRect(cx + 50, y - band / 2, 180, band, THEME.radius.jar);
+    const roof = { x: cx + 90, y: y - band / 2 + 3, w: 100, h: band - 6 };
+    drawTunnel(g, { pieces: [roof], mouths: [{ x: roof.x - 5, y: y - band / 2, w: 10, h: band }, { x: roof.x + roof.w - 5, y: y - band / 2, w: 10, h: band }] },
+      [-25, 0, 25].map((dx) => [cx + 140 + dx, roof.y + 6, cx + 140 + dx, roof.y + roof.h - 6]));
+    add(label(scene, cx + 140, y + 60, '✕', THEME.type.md, THEME.inkCss));
   } else if (id === 'tunnel') {
     // A stretch of belt under a roof (#99): the bucket slides in, nothing is shot while it is under there, it comes out
     // the other side. The ✕ over the roof says the lane is blind.

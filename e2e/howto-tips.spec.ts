@@ -4,7 +4,7 @@ import { mix, tap, waitScene } from './helpers';
 
 /** How to play shows, after its base pages, one "unlocked rule" page per tip card already seen in a level (#183). */
 const KEY = 'mix-and-splash/progress/v1';
-const ALL_TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'film', 'tunnel', 'hidden', 'lock', 'belt', 'brown', 'stone', 'covered', 'queue', 'leftover', 'iceFilm', 'iceTunnel', 'hiddenFilm', 'hiddenTunnel'];
+const ALL_TIPS = ['guide', 'mixing', 'blocked', 'slots', 'ice', 'film', 'tunnel', 'hidden', 'lock', 'belt', 'brown', 'stone', 'covered', 'queue', 'leftover', 'iceFilm', 'iceTunnel', 'hiddenFilm', 'hiddenTunnel', 'allPairs'];
 const evidence = process.env.EVIDENCE; // set it to leave screenshots in docs/test-evidence/183-howto-tips
 const DIR = 'docs/test-evidence/183-howto-tips';
 

@@ -153,7 +153,7 @@ describe('stage 42 unlock', () => {
   it('counts the levels of universe 5 on the selector and gives the second colour of its bucket style', () => {
     const cards = universeCards(universes, all, completedTo(410));
     // Universe 5 holds every stage shipped so far (stage 43, #268, makes it thirty levels).
-    expect(cards[4]).toMatchObject({ id: 5, open: true, done: 10, total: all.filter((d) => universeOfStage(d.stage) === 5).length, complete: false, firstLevel: 401 });
+    expect(cards[4]).toMatchObject({ id: 5, open: true, done: 10, total: all.filter((d) => universeOfStage(d.stage) === 5).length, complete: true, firstLevel: 401 }); // built to the end since stage 50 (#275)
     expect(stageSkin(42)).toBe('orbits-2');
   });
 });

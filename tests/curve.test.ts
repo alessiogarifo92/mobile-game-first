@@ -163,6 +163,17 @@ describe('curveLevel', () => {
     expect(curveLevel({ ...both, hidden: [false, false, false, false] }, 1).features).toEqual(['tunnel']);
   });
 
+  it('counts all four mechanics of the pairs together as a combination of its own, on top of the four pairs (#275)', () => {
+    const all = parseLevel({
+      id: 491, name: 'x', stage: 50, image: ['RR', 'RY'], overlay: ['ib', 'h.'], tunnels: [0],
+      columns: [[{ color: 1, ammo: 4 }], [{ color: 2, ammo: 1 }, { color: 4, ammo: 1 }]], slots: 2, beltCapacity: 2,
+    });
+    expect(curveLevel(all, 1).features).toEqual(['ice', 'hidden', 'film', 'tunnel', 'ice+film', 'ice+tunnel', 'hidden+film', 'hidden+tunnel', 'ice+film+hidden+tunnel']);
+    // Three of the four are not enough: the finale combination needs every one.
+    expect(curveLevel({ ...all, tunnels: [] }, 1).features).not.toContain('ice+film+hidden+tunnel');
+    expect(curveLevel({ ...all, ice: all.ice.map(() => 0) }, 1).features).not.toContain('ice+film+hidden+tunnel');
+  });
+
   it('rule 1: a pair debut may be very easy once, the same pair again may not (#268)', () => {
     const g = set(set(game([U1, U2]), 115, { features: ['mix', 'ice', 'film', 'ice+film'], winRate: 0.97 }), 15, { features: ['mix', 'ice', 'film'] });
     expect(keys(g)).not.toContain('r1 #115');

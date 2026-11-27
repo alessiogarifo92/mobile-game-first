@@ -201,7 +201,7 @@ describe('stage 49 unlock', () => {
 
   it('counts the levels of universe 5 on the selector and gives the ninth colour of its bucket style', () => {
     const cards = universeCards(universes, all, completedTo(480));
-    expect(cards[4]).toMatchObject({ id: 5, open: true, done: 80, total: all.filter((d) => universeOfStage(d.stage) === 5).length, complete: false, firstLevel: 401 });
+    expect(cards[4]).toMatchObject({ id: 5, open: true, done: 80, total: all.filter((d) => universeOfStage(d.stage) === 5).length, complete: true, firstLevel: 401 }); // built to the end since stage 50 (#275)
     expect(stageSkin(49)).toBe('orbits-9');
   });
 });

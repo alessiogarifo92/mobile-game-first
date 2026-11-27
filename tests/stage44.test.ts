@@ -173,7 +173,7 @@ describe('stage 44 unlock', () => {
 
   it('counts the levels of universe 5 on the selector and gives the fourth colour of its bucket style', () => {
     const cards = universeCards(universes, all, completedTo(430));
-    expect(cards[4]).toMatchObject({ id: 5, open: true, done: 30, total: all.filter((d) => universeOfStage(d.stage) === 5).length, complete: false, firstLevel: 401 });
+    expect(cards[4]).toMatchObject({ id: 5, open: true, done: 30, total: all.filter((d) => universeOfStage(d.stage) === 5).length, complete: true, firstLevel: 401 }); // built to the end since stage 50 (#275)
     expect(stageSkin(44)).toBe('orbits-4');
   });
 });
