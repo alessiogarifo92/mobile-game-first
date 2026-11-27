@@ -4,7 +4,7 @@ import { winPanelLayout, winPanelTop, type WinPanelLayout } from '../../core/win
 import { primariesOf } from '../../core/colors';
 import { cellDone, colorShown } from '../../core/rules';
 import type { StoneEvent } from '../../core/sim';
-import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, placeTipCard, slotAt, tipMinTouch, type Layout } from '../../core/layout';
+import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, placeTipCard, slotAt, tipMinTouch, tipOkBand, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
 import { currentLevel } from '../../core/mapLayout';
 import { blockExample, blockerAlpha, blockerSignature, refuseSlotLaunch, unlockColors, type BlockExample } from '../../core/blocked';
@@ -618,13 +618,13 @@ export class PlayScene extends Phaser.Scene {
       this.tip = null;
       this.publish();
     };
-    // #286: a tap anywhere on the card means "Got it" too (a tap just above the shrunk button fell on the shade and
-    // nothing happened), armed like the end panels so a tap already on its way when the card opens mid-play does not
-    // close it unread. The button itself answers at once, and keeps a full-size touch target however much the card
-    // shrank.
-    const body = this.add.zone(x0, y0, w, h).setOrigin(0);
-    onTap(this, body, dismiss, PANEL_ARM_MS);
-    inner.add(body);
+    // #286: the button keeps a full-size touch target however much the card shrank, and the band around it (from just
+    // above the last text line to the card's foot) answers too, at once like the button. The rest of the card still
+    // swallows taps: on a short phone it lies over the columns, and a launch tap must not close it unread.
+    const band = tipOkBand(text.y + text.height, h, pad);
+    const foot = this.add.zone(x0, y0 + band.y, w, band.h).setOrigin(0);
+    onTap(this, foot, dismiss);
+    inner.add(foot);
     inner.add(button(this, VIEW.width / 2, okY, 300, 80, t('tip.gotIt'), dismiss, { name: 'tip-ok', minTouch: tipMinTouch(scale) }));
     inner.setScale(scale);
     inner.x = (VIEW.width / 2) * (1 - scale);

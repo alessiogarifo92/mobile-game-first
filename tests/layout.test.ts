@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MIN_TOUCH, MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, placeTipCard, tipMinTouch } from '../src/core/layout';
+import { MIN_TOUCH, MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, placeTipCard, tipMinTouch, tipOkBand } from '../src/core/layout';
 
 describe('layout', () => {
   const l = computeLayout(8, 6, 3, 2);
@@ -102,5 +102,24 @@ describe('tipMinTouch (#286)', () => {
 
   it('scales with any custom minimum', () => {
     expect(tipMinTouch(0.5, 40)).toBe(80);
+  });
+});
+
+describe('tipOkBand (#286)', () => {
+  it('runs from pad above the end of the text to the foot of the card', () => {
+    // A card whose text ends at 500: then pad, the 80-high button, pad → 628 high.
+    expect(tipOkBand(500, 628, 24)).toEqual({ y: 476, h: 152 });
+  });
+
+  it('holds the whole button and a little of the last text line', () => {
+    const band = tipOkBand(500, 628, 24);
+    const okY = 628 - 24 - 40;
+    expect(band.y).toBeLessThan(okY - 40);
+    expect(band.y + band.h).toBe(628);
+  });
+
+  it('stays inside the card', () => {
+    expect(tipOkBand(10, 100, 24)).toEqual({ y: 0, h: 100 });
+    expect(tipOkBand(200, 100, 24)).toEqual({ y: 100, h: 0 });
   });
 });

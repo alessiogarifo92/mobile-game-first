@@ -187,3 +187,14 @@ export function placeTipCard(beltBottom: number, screenH: number, cardH: number,
 export function tipMinTouch(scale: number, minTouch: number = MIN_TOUCH): number {
   return minTouch / Math.min(1, scale);
 }
+
+/**
+ * #286: the band at the foot of a tip card that also means "Got it", in the card's own units: from `pad` above the end
+ * of the body text down to the card's bottom edge, full width. It forgives a tap that lands just above the button (the
+ * playtest agent's taps hit the last text line) while the rest of the card, which on a short phone lies over the
+ * columns, still swallows taps so a launch on its way does not close the card unread.
+ */
+export function tipOkBand(textBottom: number, cardH: number, pad: number): { y: number; h: number } {
+  const y = Math.max(0, Math.min(cardH, textBottom - pad));
+  return { y, h: cardH - y };
+}
