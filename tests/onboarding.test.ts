@@ -124,6 +124,22 @@ describe('onboarding', () => {
     expect(tipAllowed('hiddenTunnel', ['belt'])).toBe(true);
   });
 
+  it('shows the all-pairs card of the finale once all four pair cards are known, after them (#275)', () => {
+    const all = level(['RR', 'RY'], [[[RED, 4]], [[YELLOW, 1], [BLUE, 1]]], { id: 491, overlay: ['ib', 'h.'], tunnels: [0] });
+    expect(tipsPresent(all)).toEqual(['ice', 'film', 'tunnel', 'hidden', 'iceFilm', 'iceTunnel', 'hiddenFilm', 'hiddenTunnel', 'allPairs']);
+    const halves = ['ice', 'film', 'tunnel', 'hidden'];
+    const pairs = ['iceFilm', 'iceTunnel', 'hiddenFilm', 'hiddenTunnel'];
+    expect(tipOnLevelStart(all, halves)).toBe('iceFilm');
+    expect(tipOnLevelStart(all, [...halves, ...pairs])).toBe('allPairs');
+    expect(tipOnLevelStart(all, [...halves, ...pairs, 'allPairs'])).toBeNull();
+    // Three of the four mechanics are no finale.
+    expect(tipsPresent(level(['RR', 'RY'], [[[RED, 4]], [[YELLOW, 1], [BLUE, 1]]], { overlay: ['ib', 'h.'] }))).not.toContain('allPairs');
+    expect(tipsPresent(level(['RR', 'RY'], [[[RED, 3]], [[YELLOW, 1], [BLUE, 1]]], { overlay: ['.b', 'h.'], tunnels: [0] }))).not.toContain('allPairs');
+    // It teaches, so it obeys the one-card-per-level rule (#177).
+    expect(tipAllowed('allPairs', ['iceFilm'])).toBe(false);
+    expect(tipAllowed('allPairs', ['belt'])).toBe(true);
+  });
+
   it('lists every level-start mechanic on the board, in the order the tips show (#182)', () => {
     const iced = level(['RO'], [[[RED, 3]], [[YELLOW, 1]]], { id: 31, overlay: ['i.'] });
     expect(tipsPresent(iced)).toEqual(['mixing', 'ice']);

@@ -12,13 +12,16 @@ export type CardTip =
  * Pairs of mechanics first met together in universe 5 (#103): no new rule, but a new combination, so each pair debuts
  * with its own card (the cards of its two mechanics were seen long before) and a very easy level. The curve counts the
  * pair as a mechanic of its own (`curveLevel`), so that level is a legal debut (#88 rule 1). One entry per pair.
+ * The last one is not a pair but the finale of the game (stage 50, #275): all four mechanics of the pairs above in one
+ * picture, so all four pairs at once, with its own card and debut like a pair.
  */
 export const PAIR_TIPS = {
   iceFilm: ['ice', 'film'],
   iceTunnel: ['ice', 'tunnel'],
   hiddenFilm: ['hidden', 'film'],
   hiddenTunnel: ['hidden', 'tunnel'],
-} as const satisfies Record<string, readonly [string, string]>;
+  allPairs: ['ice', 'film', 'hidden', 'tunnel'],
+} as const satisfies Record<string, readonly string[]>;
 export type PairTip = keyof typeof PAIR_TIPS;
 
 /** Buckets a column shows; the rest wait behind, counted by the "+N" under it. */

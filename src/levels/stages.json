@@ -292,5 +292,11 @@
   "key": "blackholes",
   "color": 5,
   "complete": true
+ },
+ {
+  "id": 50,
+  "key": "finale",
+  "color": 1,
+  "complete": true
  }
 ]
