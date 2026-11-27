@@ -280,5 +280,11 @@
   "key": "myth",
   "color": 3,
   "complete": true
+ },
+ {
+  "id": 48,
+  "key": "galaxy",
+  "color": 4,
+  "complete": true
  }
 ]
