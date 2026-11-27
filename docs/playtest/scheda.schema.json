@@ -78,8 +78,8 @@
     "levelId": { "type": "integer", "minimum": 1, "maximum": 500 },
     "score": { "type": "integer", "minimum": 1, "maximum": 5 },
     "scoreOrNull": { "type": ["integer", "null"], "minimum": 1, "maximum": 5 },
-    "tipId": { "enum": ["guide", "mixing", "blocked", "slots", "ice", "film", "tunnel", "hidden", "lock", "belt", "brown", "stone", "covered", "queue", "leftover", "iceFilm", "iceTunnel", "hiddenFilm"] },
-    "mechanic": { "enum": ["mixing", "blocked", "slots", "belt", "ice", "film", "tunnel", "hidden", "brown", "stone", "lock", "covered", "iceFilm", "iceTunnel", "hiddenFilm"] },
+    "tipId": { "enum": ["guide", "mixing", "blocked", "slots", "ice", "film", "tunnel", "hidden", "lock", "belt", "brown", "stone", "covered", "queue", "leftover", "iceFilm", "iceTunnel", "hiddenFilm", "hiddenTunnel"] },
+    "mechanic": { "enum": ["mixing", "blocked", "slots", "belt", "ice", "film", "tunnel", "hidden", "brown", "stone", "lock", "covered", "iceFilm", "iceTunnel", "hiddenFilm", "hiddenTunnel"] },
     "attemptOutcome": {
       "enum": ["vinto", "ingorgo", "riprova", "uscita", "budget"],
       "description": "vinto; ingorgo = pannello di ingorgo e Riprova; riprova = restart a metà; uscita = torna alla mappa a metà (abbandono del livello); budget = l'harness chiude il tentativo per budget di azioni."

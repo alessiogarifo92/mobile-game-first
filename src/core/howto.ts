@@ -41,6 +41,7 @@ export const TIP_PAGE: Readonly<Record<CardTip, number | null>> = {
   iceFilm: null,
   iceTunnel: null,
   hiddenFilm: null,
+  hiddenTunnel: null,
 };
 
 /** Tips with no base page, in the order their extra pages follow the base ones (roughly the order they show up). */

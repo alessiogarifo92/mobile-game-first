@@ -2,6 +2,15 @@
 
 ## Non rilasciato
 
+### Stage 49 "Buchi neri": livelli 481–490 dell'universo 5 "Cosmo", la coppia nuova pixel nascosti + galleria (#274, #103)
+
+- **Dieci figure in pixel art originale** sui buchi neri (`scripts/stages/stage-49.ts`): l'orizzonte degli eventi, il disco di accrescimento, il vortice, il getto, la singolarità, la sonda, la stella "a spaghetti", la lente gravitazionale, i gemelli (14×11) e il boss, il divoratore (16×16). Foglio di anteprima in `docs/levels/stage-49.png`; nomi IT/EN corti (≤ 11 caratteri, #277), tutti diversi dal "buco nero" dello stage 48.
+- **Coppia nuova pixel nascosti + galleria**, mai vista insieme prima: in ogni livello pixel "?" disegnati a mano e una galleria sul nastro piazzata dal generatore. Il solver dimostra risolvibili tutti e dieci i livelli, quindi la coppia regge. L'orizzonte (481) è il debutto, molto facile, con la sua card (`hiddenTunnel`, #77, una card per livello) e la pagina in Come si gioca dopo le altre coppie.
+- **Niente ghiaccio e niente pellicole**, così nessun livello somma due coppie; marrone con chiavi e lucchetti (tutti su pixel marroni) su cinque livelli, il boss con più lucchetti (6). Ogni pixel nascosto ha accanto un pixel visibile.
+- **Nastro 2, slot 2**, mai sopra la fine dell'universo 4; tela entro 16×16, il divoratore leggibile a 360×640 (screenshot in `docs/test-evidence/274-stage-49/`); ≥ 30% di pixel secondari o marroni su ogni livello, debutto compreso.
+- **Curva** a dente di sega (#88): vittorie a caso 97 · 47 · 46 · 40 · 43,5 · 48 · 45 · 45,5 · 36,5 · 22,5%, media 47,1% (stage 48: 48,8%); solo il debutto è molto facile, il boss è il più duro dello stage e sopra il minimo dell'universo (20%).
+- Test: unit `tests/stage49.test.ts` (nomi, card, tele, meccaniche per livello, galleria, lucchetti sul marrone, debutto della coppia, risolvibilità, curva, sblocco dopo il 480) e casi della coppia in `tests/onboarding.test.ts`, `tests/curve.test.ts`, `tests/howto.test.ts`; e2e `e2e/stage-49.spec.ts`: mappa dopo il 480, card della coppia al 481 a schermo e livello vinto (360×640 e 412×915), disco vinto senza card, boss 490 vinto alle due misure (limite 360 s). Aggiornati gli e2e degli stage 41–48 (mappa con lo stage 49), di Come si gioca e lo schema della scheda di playtest.
+
 ### Stage 48 "Galassia": livelli 471–480 dell'universo 5 "Cosmo" (#273, #103)
 
 - **Dieci figure in pixel art originale** sulla galassia (`scripts/stages/stage-48.ts`): la spirale, la pulsar, la Via Lattea, il buco nero, la quasar, Orione, la meteora, l'eclissi, il wormhole (14×13) e il boss, Andromeda (16×16). Foglio di anteprima in `docs/levels/stage-48.png`; nomi IT/EN corti (≤ 11 caratteri, #277).

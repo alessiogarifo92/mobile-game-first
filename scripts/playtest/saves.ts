@@ -23,7 +23,7 @@ const NAMED_PACKS: Record<string, [number, number]> = { 'U1-ONB': [1, 10], 'U1-F
 /** Every mechanic card of the game (exhaustive on `CardTip`: a new card fails the type check until it is listed). */
 const CARD_TIPS_ALL: Record<CardTip, true> = {
   mixing: true, blocked: true, slots: true, ice: true, film: true, tunnel: true, hidden: true, lock: true, belt: true, brown: true, stone: true, covered: true, queue: true, leftover: true,
-  iceFilm: true, iceTunnel: true, hiddenFilm: true,
+  iceFilm: true, iceTunnel: true, hiddenFilm: true, hiddenTunnel: true,
 };
 export const CARD_TIPS = Object.keys(CARD_TIPS_ALL) as CardTip[];
 

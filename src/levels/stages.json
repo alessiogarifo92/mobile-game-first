@@ -286,5 +286,11 @@
   "key": "galaxy",
   "color": 4,
   "complete": true
+ },
+ {
+  "id": 49,
+  "key": "blackholes",
+  "color": 5,
+  "complete": true
  }
 ]
