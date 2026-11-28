@@ -2,6 +2,14 @@
 
 ## Non rilasciato
 
+## 0.7.0 — universo 5 "Cosmo", 500 livelli (28 novembre 2026)
+
+**Cento livelli nuovi**: l'universo 5 "Cosmo" (401–500), con le coppie di meccaniche mai viste insieme (ghiaccio + pellicola, ghiaccio + galleria, pixel nascosti + pellicola, pixel nascosti + galleria) e un gran finale con tutte le coppie nello stesso quadro. Ora il gioco ha **500 livelli in 5 universi**, completo. Corretto un blocco sugli schermi piccoli (360×640): la scheda "Perché è tornato" e le altre schede di suggerimento ora si chiudono al primo tocco su "Ho capito" (#286).
+
+### La scheda di suggerimento si chiude anche su schermo piccolo (#286)
+
+- Su schermi bassi la scheda viene rimpicciolita e con lei "Ho capito": la zona di tocco scendeva a 35 px, sotto il minimo di 44. Ora il pulsante tiene sempre almeno 44 px reali e anche la fascia al piede della scheda vale "Ho capito". Test unit (`tests/layout.test.ts`) ed e2e a 360×640 (`e2e/tip-dismiss-286.spec.ts`). Trovato dal playtest agent T24, verificato dal T25.
+
 ### Stage 50 "Finale": livelli 491–500, l'ultimo stage dell'universo 5 "Cosmo" e del gioco, tutte le coppie insieme (#275, #103)
 
 - **Dieci figure in pixel art originale** sul gran finale (`scripts/stages/stage-50.ts`): il sipario, il big bang, il podio, la fanfara, il riflettore, il bis, i coriandoli, il teatro, i fuochi d'artificio e il boss finale del gioco, il gran finale (16×16). Foglio di anteprima in `docs/levels/stage-50.png`; nomi IT/EN corti (≤ 11 caratteri, #277).
