@@ -1,0 +1,578 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "T24-A09",
+  "agent": {
+    "agentId": "A09",
+    "profileId": "P09"
+  },
+  "turn": 24,
+  "build": {
+    "commit": "062c4bf100e5",
+    "version": "0.6.0",
+    "tag": "playtest-u5-1",
+    "variant": "normale"
+  },
+  "device": {
+    "viewport": "360x640",
+    "language": "it"
+  },
+  "startSave": {
+    "unlocked": 421,
+    "completedThrough": 420,
+    "seenTips": [
+      "guide",
+      "slots",
+      "belt",
+      "mixing",
+      "queue",
+      "ice",
+      "hidden",
+      "stone",
+      "brown",
+      "lock",
+      "covered",
+      "film",
+      "tunnel"
+    ]
+  },
+  "plan": {
+    "packs": [
+      "S43"
+    ],
+    "levelIds": [
+      421,
+      422,
+      423,
+      424,
+      425,
+      426,
+      427,
+      428,
+      429,
+      430
+    ]
+  },
+  "startedAt": "2026-11-27T18:32:41.670Z",
+  "endedAt": "2026-11-27T18:39:34.383Z",
+  "endReason": "soglia-abbandono",
+  "levels": [
+    {
+      "levelId": 421,
+      "result": "vinto",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "vinto",
+          "durationMs": 35057,
+          "timeToFirstTapMs": 6820,
+          "ticks": 320,
+          "taps": 7,
+          "offTargetTaps": 0,
+          "launches": 6,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 0,
+          "slotCount": 2,
+          "maxBeltUsed": 1,
+          "beltCapacity": 2,
+          "painted": 41,
+          "targets": 41,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "iceFilm"
+          ],
+          "tipDismissMs": 6397,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0003.png",
+            "0004.png",
+            "0005.png",
+            "0006.png",
+            "0007.png",
+            "0008.png",
+            "0009.png",
+            "0010.png",
+            "0011.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 4,
+        "perceivedDifficulty": 2,
+        "mood": "divertito",
+        "mechanic": {
+          "id": "ice",
+          "understood": 3,
+          "fairness": 5
+        },
+        "notUnderstood": "La scheda dice ghiaccio+pellicola nello stesso quadro, ma in partita non ho notato bene cosa cambiasse: ho solo toccato le colonne in ordine e il quadro si è riempito. Non ho visto la differenza tra i due effetti.",
+        "wouldContinue": true,
+        "freeText": "Facile, vinto in 6 mosse al primo colpo. La scheda si legge bene ma gli esempi con i pallini sono un po piccoli."
+      }
+    },
+    {
+      "levelId": 422,
+      "result": "saltato",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "uscita",
+          "durationMs": 55012,
+          "timeToFirstTapMs": 5348,
+          "ticks": 3,
+          "taps": 8,
+          "offTargetTaps": 8,
+          "launches": 0,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 0,
+          "slotCount": 2,
+          "maxBeltUsed": 0,
+          "beltCapacity": 2,
+          "painted": 0,
+          "targets": 81,
+          "remaining": {
+            "ice": 4,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "leftover"
+          ],
+          "tipDismissMs": 54587,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0013.png",
+            "0014.png",
+            "0015.png",
+            "0016.png",
+            "0017.png",
+            "0018.png",
+            "0019.png",
+            "0020.png",
+            "0021.png",
+            "0022.png",
+            "0023.png",
+            "0024.png",
+            "0025.png",
+            "0026.png",
+            "0027.png",
+            "0028.png",
+            "0029.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 1,
+        "perceivedDifficulty": 3,
+        "mood": "frustrato",
+        "notUnderstood": "Non ho potuto giocare: la scheda Perché è tornato non si chiudeva con nessun tocco.",
+        "wouldContinue": true,
+        "freeText": "Schermo bloccato sulla scheda, livello saltato con skip senza aver mosso nulla."
+      }
+    },
+    {
+      "levelId": 423,
+      "result": "saltato",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "uscita",
+          "durationMs": 23420,
+          "timeToFirstTapMs": 6972,
+          "ticks": 3,
+          "taps": 2,
+          "offTargetTaps": 2,
+          "launches": 0,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 0,
+          "slotCount": 2,
+          "maxBeltUsed": 0,
+          "beltCapacity": 2,
+          "painted": 0,
+          "targets": 79,
+          "remaining": {
+            "ice": 4,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "leftover"
+          ],
+          "tipDismissMs": 21410,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0033.png",
+            "0034.png",
+            "0035.png",
+            "0036.png",
+            "0037.png",
+            "0038.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 1,
+        "perceivedDifficulty": 3,
+        "mood": "frustrato",
+        "notUnderstood": "Non posso giocare, la scheda non si chiude.",
+        "wouldContinue": true,
+        "freeText": "Bloccato come il livello prima, saltato."
+      }
+    },
+    {
+      "levelId": 424,
+      "result": "saltato",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "uscita",
+          "durationMs": 87599,
+          "timeToFirstTapMs": 7387,
+          "ticks": 797,
+          "taps": 24,
+          "offTargetTaps": 1,
+          "launches": 23,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 1,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 78,
+          "targets": 104,
+          "remaining": {
+            "ice": 0,
+            "hidden": 0,
+            "locked": 2,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "leftover"
+          ],
+          "tipDismissMs": 13685,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0042.png",
+            "0043.png",
+            "0044.png",
+            "0045.png",
+            "0046.png",
+            "0047.png",
+            "0048.png",
+            "0049.png",
+            "0050.png",
+            "0051.png",
+            "0052.png",
+            "0053.png",
+            "0054.png",
+            "0055.png",
+            "0056.png",
+            "0057.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 3,
+        "mood": "frustrato",
+        "jamFairness": null,
+        "notUnderstood": "Non ho capito a cosa servono le chiavi e i lucchetti, e perché la vernice finiva sui bordi marroni. Poi la scheda del secchiello tornato mi ha bloccato.",
+        "wouldContinue": true,
+        "freeText": "Il quadro si riempiva bene dal basso, ero quasi alla fine, poi tutto fermo per la scheda. Livello saltato."
+      }
+    },
+    {
+      "levelId": 425,
+      "result": "saltato",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "uscita",
+          "durationMs": 14482,
+          "timeToFirstTapMs": 6718,
+          "ticks": 3,
+          "taps": 1,
+          "offTargetTaps": 1,
+          "launches": 0,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 0,
+          "slotCount": 2,
+          "maxBeltUsed": 0,
+          "beltCapacity": 2,
+          "painted": 0,
+          "targets": 106,
+          "remaining": {
+            "ice": 2,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "leftover"
+          ],
+          "tipDismissMs": 12198,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0060.png",
+            "0061.png",
+            "0062.png",
+            "0063.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 1,
+        "perceivedDifficulty": 3,
+        "mood": "frustrato",
+        "notUnderstood": "La scheda Perché è tornato è già lì all apertura e non si chiude.",
+        "wouldContinue": true,
+        "freeText": "Non ho potuto nemmeno iniziare. Saltato. Comincio a perdere la voglia."
+      }
+    },
+    {
+      "levelId": 426,
+      "result": "saltato",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "uscita",
+          "durationMs": 16222,
+          "timeToFirstTapMs": 7916,
+          "ticks": 3,
+          "taps": 1,
+          "offTargetTaps": 1,
+          "launches": 0,
+          "refusals": 0,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 0,
+          "slotCount": 2,
+          "maxBeltUsed": 0,
+          "beltCapacity": 2,
+          "painted": 0,
+          "targets": 84,
+          "remaining": {
+            "ice": 5,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "leftover"
+          ],
+          "tipDismissMs": 13878,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0066.png",
+            "0067.png",
+            "0068.png",
+            "0069.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 1,
+        "perceivedDifficulty": 3,
+        "mood": "frustrato",
+        "notUnderstood": "Di nuovo la scheda che non si chiude, non ho potuto giocare.",
+        "wouldContinue": false,
+        "freeText": "Quinto livello di fila in cui lo schermo si blocca. Mi sono stufato."
+      }
+    },
+    {
+      "levelId": 427,
+      "result": "abbandonato",
+      "attempts": [
+        {
+          "attempt": 1,
+          "outcome": "uscita",
+          "durationMs": 61094,
+          "timeToFirstTapMs": 7288,
+          "ticks": 423,
+          "taps": 15,
+          "offTargetTaps": 1,
+          "launches": 13,
+          "refusals": 1,
+          "blockedTaps": 0,
+          "jams": 0,
+          "extraSlotUsed": false,
+          "maxSlotsUsed": 1,
+          "slotCount": 2,
+          "maxBeltUsed": 2,
+          "beltCapacity": 2,
+          "painted": 27,
+          "targets": 60,
+          "remaining": {
+            "ice": 1,
+            "hidden": 0,
+            "locked": 0,
+            "covered": 0
+          },
+          "stoneSplashes": 0,
+          "reveals": 0,
+          "tipsShown": [
+            "leftover"
+          ],
+          "tipDismissMs": 15431,
+          "consoleErrors": 0,
+          "screenshots": [
+            "0071.png",
+            "0072.png",
+            "0073.png",
+            "0074.png",
+            "0075.png",
+            "0076.png",
+            "0077.png",
+            "0078.png",
+            "0079.png",
+            "0080.png",
+            "0081.png",
+            "0082.png"
+          ]
+        }
+      ],
+      "feedback": {
+        "understood": 3,
+        "perceivedDifficulty": 3,
+        "mood": "frustrato",
+        "jamFairness": null,
+        "notUnderstood": "Perché la vernice finisce sui sassi e sui bordi invece che sul disegno; e poi la scheda blocca tutto.",
+        "wouldContinue": false,
+        "freeText": "Questo si poteva giocare ma la scheda del secchiello tornato ha fermato tutto. Non lo apro più stasera."
+      }
+    }
+  ],
+  "session": {
+    "telemetry": {
+      "durationMs": 412713,
+      "actions": 66,
+      "screens": {
+        "menu": 6,
+        "play": 7
+      },
+      "languageChanges": 0,
+      "uncaughtErrors": [],
+      "stuckScreens": []
+    },
+    "feedback": {
+      "fun": 2,
+      "wouldReturn": 2,
+      "stoppedBecause": "Ogni volta che compare la scheda del secchiello tornato lo schermo si pianta e non posso più toccare niente. Ho dovuto saltare quasi tutto. Mi sono stufato.",
+      "bestMoment": "Il 421: capito subito, vinto in 6 mosse, bel disegno del bullone.",
+      "worstMoment": "Il 424 quasi finito e poi tutto bloccato dalla scheda.",
+      "freeText": "Non ho potuto giocare 422-426 e 427 si è bloccato. Non ho perso nessuna partita davvero, ma non ho potuto andare avanti."
+    }
+  },
+  "bugs": [
+    {
+      "title": "Livello 422: scheda Perché è tornato non si chiude, gioco bloccato",
+      "severity": "alta",
+      "category": "blocco",
+      "levelId": 422,
+      "steps": [
+        "Vinco il 421 e premo Avanti/apro il 422",
+        "Compaiono il banner Quadro più grande e la scheda Perché è tornato",
+        "Tocco Ho capito più volte, tocco fuori, uso restart, menu e freccia indietro"
+      ],
+      "expected": "La scheda si chiude e posso giocare",
+      "actual": "La scheda resta sempre uguale, nessun tocco fa nulla, lo schermo non cambia mai; la scheda parla di un secchiello tornato ma non ho ancora lanciato niente",
+      "screenshots": [
+        "0014.png",
+        "0029.png"
+      ],
+      "reproduced": true,
+      "id": "T24-A09-B01"
+    },
+    {
+      "title": "Livello 423: stessa scheda Perché è tornato che non si chiude",
+      "severity": "alta",
+      "category": "blocco",
+      "levelId": 423,
+      "steps": [
+        "Apro il livello 423",
+        "Compare la scheda Perché è tornato",
+        "Tocco Ho capito e poi una colonna"
+      ],
+      "expected": "La scheda si chiude",
+      "actual": "Schermo identico, nessuna risposta ai tocchi",
+      "screenshots": [
+        "0034.png",
+        "0038.png"
+      ],
+      "reproduced": true,
+      "id": "T24-A09-B02"
+    },
+    {
+      "title": "Livello 424: la scheda Perché è tornato compare a metà partita e blocca tutto",
+      "severity": "alta",
+      "category": "blocco",
+      "levelId": 424,
+      "steps": [
+        "Gioco il 424 toccando le colonne in ordine",
+        "Un secchiello rosso torna indietro",
+        "Compare la scheda Perché è tornato",
+        "Tocco Ho capito"
+      ],
+      "expected": "La scheda si chiude e continuo",
+      "actual": "Schermo fisso, nessun tocco risponde, non posso né finire né perdere il livello",
+      "screenshots": [
+        "0055.png",
+        "0057.png"
+      ],
+      "reproduced": true,
+      "id": "T24-A09-B03"
+    },
+    {
+      "title": "Livello 427: scheda Perché è tornato blocca la partita a metà",
+      "severity": "alta",
+      "category": "blocco",
+      "levelId": 427,
+      "steps": [
+        "Gioco il 427 toccando le colonne",
+        "Un secchiello rosso torna indietro",
+        "Compare la scheda e tocco Ho capito"
+      ],
+      "expected": "Si chiude e continuo",
+      "actual": "Schermo fermo, nessun tocco risponde",
+      "screenshots": [
+        "0080.png",
+        "0082.png"
+      ],
+      "reproduced": true,
+      "id": "T24-A09-B04"
+    }
+  ]
+}

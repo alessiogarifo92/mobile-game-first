@@ -1,0 +1,10 @@
+{
+  "turn": 24,
+  "tag": "playtest-u5-1",
+  "variant": "normale",
+  "agents": [
+    { "agentId": "A09", "profileId": "P09", "viewport": "360x640", "language": "it", "packs": ["S43"], "maxAttempts": 2 },
+    { "agentId": "A08", "profileId": "P08", "viewport": "360x640", "language": "en", "packs": ["S47"], "maxAttempts": 5 },
+    { "agentId": "A11", "profileId": "P11", "viewport": "412x915", "language": "en", "packs": ["S50"], "maxAttempts": 6 }
+  ]
+}
