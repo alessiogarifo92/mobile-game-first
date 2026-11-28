@@ -4,7 +4,7 @@ import { winPanelLayout, winPanelTop, type WinPanelLayout } from '../../core/win
 import { primariesOf } from '../../core/colors';
 import { cellDone, colorShown } from '../../core/rules';
 import type { StoneEvent } from '../../core/sim';
-import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, placeTipCard, slotAt, type Layout } from '../../core/layout';
+import { MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, placeTipCard, slotAt, tipMinTouch, tipOkBand, type Layout } from '../../core/layout';
 import type { Level } from '../../core/level';
 import { currentLevel } from '../../core/mapLayout';
 import { blockExample, blockerAlpha, blockerSignature, refuseSlotLaunch, unlockColors, type BlockExample } from '../../core/blocked';
@@ -40,7 +40,7 @@ import { PAINT, SYMBOL, THEME, css } from '../theme';
 import { drawChangeIcon } from '../changeIcon';
 import { drawSkin } from '../skins';
 import { drawTipArt, hasSharedArt } from '../tipArt';
-import { brownPixel, button, drawFilm, drawIce, drawTunnel, drawStone, iceCounter, keyIcon, label, lockIcon, progressBar, screenBackground } from '../ui';
+import { brownPixel, button, drawFilm, drawIce, drawTunnel, drawStone, iceCounter, keyIcon, label, lockIcon, onTap, progressBar, screenBackground } from '../ui';
 
 const TICK_MS = 85;
 const BELT_JAR = 54;
@@ -608,16 +608,24 @@ export class PlayScene extends Phaser.Scene {
     bg.fillStyle(THEME.bg, 1);
     bg.fillRoundedRect(x0, y0, w, h, THEME.radius.panel);
     const okY = h - pad - 40;
-    inner.add(button(this, VIEW.width / 2, okY, 300, 80, t('tip.gotIt'), () => {
-      markTip(id);
-      card.destroy();
-      this.tip = null;
-      this.publish();
-    }, { name: 'tip-ok' }));
     const belt = this.layout.belt;
     // Docked under the belt; on short screens the card shrinks a little first, and rises over the belt only as a last
     // resort (#177). The scale is centred on the view, so the card stays centred horizontally.
     const { top, scale } = placeTipCard(belt.y + belt.h, this.scale.height, h, THEME.space.xs);
+    const dismiss = () => {
+      markTip(id);
+      card.destroy();
+      this.tip = null;
+      this.publish();
+    };
+    // #286: the button keeps a full-size touch target however much the card shrank, and the band around it (from just
+    // above the last text line to the card's foot) answers too, at once like the button. The rest of the card still
+    // swallows taps: on a short phone it lies over the columns, and a launch tap must not close it unread.
+    const band = tipOkBand(text.y + text.height, h, pad);
+    const foot = this.add.zone(x0, y0 + band.y, w, band.h).setOrigin(0);
+    onTap(this, foot, dismiss);
+    inner.add(foot);
+    inner.add(button(this, VIEW.width / 2, okY, 300, 80, t('tip.gotIt'), dismiss, { name: 'tip-ok', minTouch: tipMinTouch(scale) }));
     inner.setScale(scale);
     inner.x = (VIEW.width / 2) * (1 - scale);
     inner.y = top;

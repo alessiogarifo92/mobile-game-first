@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { VIEW } from '../core/layout';
+import { MIN_TOUCH, VIEW } from '../core/layout';
 import { panelArmed } from '../core/panelInput';
 import type { Level } from '../core/level';
 import { brownWedges } from '../core/brownPixel';
@@ -10,8 +10,6 @@ import { PRIMARIES, type Primary } from '../core/colors';
 import { MURAL_SIDE, TILE_CELLS, tileCells } from '../core/mural';
 import { MURAL_PAINT, PAINT, THEME } from './theme';
 
-const MIN_TOUCH = 88;
-
 export interface ButtonOptions {
   fill?: number;
   color?: string;
@@ -19,6 +17,32 @@ export interface ButtonOptions {
   name?: string;
   /** Ignore taps for this many ms after the button appears, and taps that started before it was armed (#161). */
   armMs?: number;
+  /** Smallest side of the touch area, in the button's own units (default MIN_TOUCH); larger inside a shrunk card (#286). */
+  minTouch?: number;
+}
+
+/**
+ * Makes `zone` call `onClick` on a tap released over it. With `armMs`, taps in the first `armMs` after it appears, and
+ * taps that started before then, are ignored (#161).
+ */
+export function onTap(scene: Phaser.Scene, zone: Phaser.GameObjects.Zone, onClick: () => void, armMs?: number): void {
+  zone.setInteractive({ useHandCursor: true });
+  // #178: the game loop's clock, not scene.time.now, which in the create() of a restarted scene still holds the
+  // time that scene last ran, so a button built there would count as armed on its first frame.
+  const now = () => scene.game.loop.time;
+  const shownAt = now();
+  let pressed = false;
+  zone.on('pointerdown', () => {
+    pressed = armMs === undefined || panelArmed(now(), shownAt, armMs);
+  });
+  zone.on('pointerout', () => {
+    pressed = false;
+  });
+  zone.on('pointerup', (_p: Phaser.Input.Pointer, _x: number, _y: number, e: Phaser.Types.Input.EventData) => {
+    e.stopPropagation();
+    if (armMs !== undefined && !(pressed && panelArmed(now(), shownAt, armMs))) return;
+    onClick();
+  });
 }
 
 /** Pill button: rounded rect + label + hit zone. Returns the container so callers can show/hide it. */
@@ -44,23 +68,9 @@ export function button(
     })
     .setOrigin(0.5);
   // Touch area is at least 88 logical units (44 px on a 360 px wide phone) even when the drawing is smaller.
-  const zone = scene.add.zone(0, 0, Math.max(w, MIN_TOUCH), Math.max(h, MIN_TOUCH)).setInteractive({ useHandCursor: true });
-  // #178: the game loop's clock, not scene.time.now, which in the create() of a restarted scene still holds the
-  // time that scene last ran, so a button built there would count as armed on its first frame.
-  const now = () => scene.game.loop.time;
-  const shownAt = now();
-  let pressed = false;
-  zone.on('pointerdown', () => {
-    pressed = opts.armMs === undefined || panelArmed(now(), shownAt, opts.armMs);
-  });
-  zone.on('pointerout', () => {
-    pressed = false;
-  });
-  zone.on('pointerup', (_p: Phaser.Input.Pointer, _x: number, _y: number, e: Phaser.Types.Input.EventData) => {
-    e.stopPropagation();
-    if (opts.armMs !== undefined && !(pressed && panelArmed(now(), shownAt, opts.armMs))) return;
-    onClick();
-  });
+  const touch = opts.minTouch ?? MIN_TOUCH;
+  const zone = scene.add.zone(0, 0, Math.max(w, touch), Math.max(h, touch));
+  onTap(scene, zone, onClick, opts.armMs);
   const container = scene.add.container(x, y, [g, text, zone]);
   if (opts.name) container.setName(opts.name);
   return container;

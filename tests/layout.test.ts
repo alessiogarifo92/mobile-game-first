@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { VIEW, beltPoint, cellRect, computeLayout, contains, placeTipCard } from '../src/core/layout';
+import { MIN_TOUCH, MIN_TOUCH_PX, VIEW, beltPoint, cellRect, computeLayout, contains, placeTipCard, tipMinTouch, tipOkBand } from '../src/core/layout';
 
 describe('layout', () => {
   const l = computeLayout(8, 6, 3, 2);
@@ -72,5 +72,54 @@ describe('placeTipCard (#177)', () => {
 
   it('never goes above the top of the screen', () => {
     expect(placeTipCard(750, 1280, 2000, 8, 0.85)).toEqual({ top: 8, scale: 0.85 });
+  });
+});
+
+describe('tipMinTouch (#286)', () => {
+  it('is the 44 CSS px target in logical units on a 360 px wide phone', () => {
+    expect(MIN_TOUCH).toBe(88);
+    expect(MIN_TOUCH * (360 / VIEW.width)).toBe(MIN_TOUCH_PX);
+  });
+
+  it('keeps an unscaled card at the plain minimum', () => {
+    expect(tipMinTouch(1)).toBe(MIN_TOUCH);
+  });
+
+  it('never goes below the minimum, even for a scale above 1', () => {
+    expect(tipMinTouch(1.2)).toBe(MIN_TOUCH);
+  });
+
+  // Level 422 on a 360x640 phone: belt bottom 745, the "Why it came back" card about 650 tall, shrunk to 0.8.
+  it('grows inside a shrunk card so the drawn target is still 44 CSS px', () => {
+    const { scale } = placeTipCard(745, 1280, 650, 8);
+    expect(scale).toBe(0.8);
+    const touch = tipMinTouch(scale);
+    expect(touch).toBeCloseTo(110);
+    expect(touch * scale).toBeCloseTo(MIN_TOUCH);
+    // The 88-unit zone the button had before (#286) is 35 CSS px once shrunk: below the minimum.
+    expect(MIN_TOUCH * scale * (360 / VIEW.width)).toBeLessThan(MIN_TOUCH_PX);
+  });
+
+  it('scales with any custom minimum', () => {
+    expect(tipMinTouch(0.5, 40)).toBe(80);
+  });
+});
+
+describe('tipOkBand (#286)', () => {
+  it('runs from pad above the end of the text to the foot of the card', () => {
+    // A card whose text ends at 500: then pad, the 80-high button, pad → 628 high.
+    expect(tipOkBand(500, 628, 24)).toEqual({ y: 476, h: 152 });
+  });
+
+  it('holds the whole button and a little of the last text line', () => {
+    const band = tipOkBand(500, 628, 24);
+    const okY = 628 - 24 - 40;
+    expect(band.y).toBeLessThan(okY - 40);
+    expect(band.y + band.h).toBe(628);
+  });
+
+  it('stays inside the card', () => {
+    expect(tipOkBand(10, 100, 24)).toEqual({ y: 0, h: 100 });
+    expect(tipOkBand(200, 100, 24)).toEqual({ y: 100, h: 0 });
   });
 });
