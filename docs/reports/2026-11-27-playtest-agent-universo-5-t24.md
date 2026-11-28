@@ -42,3 +42,10 @@ Un solo agente per livello; nessun profilo P01/P05; coppie ice+tunnel (441) e hi
 1. Ticket bug (figlio di #66, `bug`, `sev: alta`): scheda "Perché è tornato" (e probabilmente ogni scheda con `placeTipCard`) non chiudibile su 360×640; poi rigiocare 422–427 con A09.
 2. Proporre all'utente: ticket UX su chiavi/lucchetti/"?" (2 agenti → da confermare con più agenti), curva 461–465, finale del boss 500.
 3. Il playtest umano (#42) resta quello che misura il divertimento vero.
+
+## 8. Verifica dopo la correzione (turno T25, #286 → PR #290)
+A09 (P09, 360×640, it) ha rigiocato 422–427 su build con la correzione. Scheda in `docs/playtest/sessioni/T25/`.
+- La scheda "Perché è tornato" (422) e "Corsia bloccata" (423) si chiudono al primo tocco sul pulsante disegnato (`tipDismissMs` ≈ 4 s, era 54 s). Nessun bug aperto: **#286 verificato**.
+- 422, 424, 425, 426, 427 vinti al primo tentativo; 423 vinto al secondo (un ingorgo: l'attesa si riempie di rossi con "↩"; difficoltà 4/5, il più duro). Divertimento 4/5.
+- Dubbi di comprensione (1 agente, ipotesi, coerenti con #288): lucchetto e chiave a 424 e 427 si sbloccano da soli senza che si capisca come.
+- Limite: un solo agente, un solo schermo.
