@@ -52,12 +52,12 @@ Ogni colore ha anche un simbolo (● rosso, ▲ giallo, ■ blu), così il gioco
 ## Installare e provare
 
 ### APK Android
-- **Dalla Release (consigliato)**: GitHub → **Releases** → l'ultima release (es. `v0.6.0`) → scarica `mix-and-splash-…-debug.apk` direttamente dal telefono e aprilo.
+- **Dalla Release (consigliato)**: GitHub → **Releases** → l'ultima release (es. `v0.7.0`) → scarica `mix-and-splash-…-debug.apk` direttamente dal telefono e aprilo.
 - **Da ogni push**: GitHub → **Actions** → *Android APK* → **Artifacts** → `mix-and-splash-debug-apk` (uno zip con `app-debug.apk`).
 
 Android chiederà di consentire l'installazione da "origini sconosciute" per l'app usata (Files o Chrome): consentila solo per questa installazione.
 
-Per pubblicare una nuova pre-release: GitHub → Actions → *Android APK* → **Run workflow**, scegli il branch e scrivi la versione nel campo `prerelease` (es. `v0.6.0-rc.1`); in alternativa pusha un tag di versione. Il workflow compila l'APK e crea la release con le note della sezione corrispondente di `CHANGELOG.md`.
+Per pubblicare una nuova pre-release: GitHub → Actions → *Android APK* → **Run workflow**, scegli il branch e scrivi la versione nel campo `prerelease` (es. `v0.7.0-rc.1`); in alternativa pusha un tag di versione. Il workflow compila l'APK e crea la release con le note della sezione corrispondente di `CHANGELOG.md`.
 
 Per pubblicare una release normale senza creare il tag a mano: GitHub → Actions → *Android APK* → **Run workflow** sul branch `main`, scrivi la versione nel campo `version` (es. `0.6.1`, senza la `v`) e lascia `dry_run` acceso per la prova. Prima di compilare, il workflow controlla che la versione sia nella forma `X.Y.Z` (i suffissi come `-rc.1` restano al campo `prerelease`), che coincida con `package.json`, che `CHANGELOG.md` abbia una sezione `## 0.6.1` non vuota, che il tag `v0.6.1` non esista già, che il run sia su `main` e che la CI (`ci.yml`) di quel commit sia finita verde; se un controllo fallisce si ferma con il motivo e non crea nulla. Con `dry_run` acceso compila l'APK e scrive nel riepilogo del run il tag, il titolo, il nome dell'APK e le note che pubblicherebbe, senza creare né tag né release; rilancialo con `dry_run` spento per creare la release `v0.6.1` (l'ultima, "latest") sul commit compilato, con l'APK e le note del `CHANGELOG.md`. Il tag lo crea GitHub stesso, quindi il percorso funziona anche dalle sessioni Claude remote, che non possono fare push di tag: lì si lancia con il tool dei workflow del server GitHub (`actions_run_trigger`, workflow `android.yml`, ref `main`, input `version` e `dry_run`).
 
